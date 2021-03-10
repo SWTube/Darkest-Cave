@@ -9,8 +9,8 @@
 # CaveEngine core library
 ############################################################
 
-# # define header and source files for the library
-# file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+# define header and source files for the library
+file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 # list(APPEND HEADER_FILES
 #     ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h
 #     ${PROJECT_BINARY_DIR}/include/OgreComponents.h
@@ -36,6 +36,8 @@
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreZip.cpp"
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSearchOps.cpp"
 # )
+
+add_subdirectory(Container)
 
 # # Add platform specific files
 # if (EMSCRIPTEN)
@@ -129,7 +131,7 @@
 
 # list(APPEND HEADER_FILES ${THREAD_HEADER_FILES})
 
-set(LIBRARIES)
+# set(LIBRARIES)
 
 # if (OGRE_CONFIG_THREADS)
 #   list(APPEND LIBRARIES ${OGRE_THREAD_LIBRARIES})

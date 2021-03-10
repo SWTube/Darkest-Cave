@@ -139,7 +139,7 @@ add_subdirectory(ResourceManager)
 
 # list(APPEND HEADER_FILES ${THREAD_HEADER_FILES})
 
-set(LIBRARIES)
+# set(LIBRARIES)
 
 # if (OGRE_CONFIG_THREADS)
 #   list(APPEND LIBRARIES ${OGRE_THREAD_LIBRARIES})
