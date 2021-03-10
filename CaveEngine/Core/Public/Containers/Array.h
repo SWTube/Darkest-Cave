@@ -15,6 +15,8 @@
 template<typename T, typename Allocator = std::allocator<T>>
 class TArray
 {
+    template<typename T, typename Alloc>
+    friend constexpr bool operator==(const std::TArray<T, Alloc>& lhs, const std::TArray<T, Alloc>& rhs);
 public:
     constexpr explicit TArray(const Allocator& alloc) noexcept
         : mElements(alloc)
@@ -149,7 +151,146 @@ public:
         return mElements.data();
     }
 
-    // Iterator
+    // Iterators
+    constexpr iterator GetBeginIterator() noexcept
+    {
+        return mElements.begin();
+    }
+
+    constexpr const_iterator GetBeginConstIterator() const noexcept
+    {
+        return mElements.cbegin();
+    }
+
+    constexpr iterator GetEndIterator() noexcept
+    {
+        return mElements.end();
+    }
+
+    constexpr const_iterator GetEndConstIterator() const noexcept
+    {
+        return mElements.cend();
+    }
+
+    constexpr reverse_iterator GetReverseBeginIterator() noexcept
+    {
+        return mElements.rbegin();
+    }
+
+    constexpr const_reverse_iterator GetReverseBeginConstIterator() const noexcept
+    {
+        return mElements.crbegin();
+    }
+
+    constexpr reverse_iterator GetReverseEndIterator() noexcept
+    {
+        return mElements.rend();
+    }
+
+    constexpr const_reverse_iterator GetReverseEndConstIterator() const noexcept
+    {
+        return mElements.crend();
+    }
+
+    // Capacity
+    [[nodiscard]] constexpr bool IsEmpty() const noexcept
+    {
+        return mElements.empty();
+    }
+
+    constexpr size_type GetSize() const noexcept
+    {
+        return mElements.size();
+    }
+
+    constexpr size_type GetMaxSize() const noexcept
+    {
+        return mElements.max_size();
+    }
+
+    constexpr void SetCapacity(size_type newCapacity)
+    {
+        mElements.reserve(newCapacity);
+    }
+
+    constexpr size_type GetCapacity() const noexcept
+    {
+        return mElements.capacity();
+    }
+
+    constexpr void ShrinkToFit()
+    {
+        mElements.shrink_to_fit();
+    }
+
+    // Modifier
+    constexpr void Clear() noexcept
+    {
+        mElements.clear();
+    }
+
+    constexpr iterator Insert(const_iterator pos, const T& value)
+    {
+        return mElements.insert(pos, value);
+    }
+
+    constexpr iterator Insert(const_iterator pos, T&& value)
+    {
+        return mElements.insert(pos, std::move(value));
+    }
+
+    constexpr iterator Insert(const_iterator pos, size_type count, const T& value)
+    {
+        return mElements.insert(pos, count, value);
+    }
+
+    template< class InputIt >
+    constexpr iterator Insert(const_iterator pos, InputIt first, InputIt last)
+    {
+        return mElements.insert(pos, first, last);
+    }
+
+    constexpr iterator Erase(const_iterator pos)
+    {
+        return mElements.erase(pos);
+    }
+
+    constexpr iterator Erase(const_iterator first, const_iterator last)
+    {
+        return mElements.erase(first, last);
+    }
+
+    constexpr void PushBack(const T& value)
+    {
+        mElements.push_back(value);
+    }
+
+    constexpr void PushBack(T&& value)
+    {
+        mElements.push_back(std::move(value));
+    }
+
+    constexpr void PopBack()
+    {
+        mElements.pop_back();
+    }
+
+    constexpr void Resize(size_type count)
+    {
+        mElements.resize(count);
+    }
+
+    constexpr void Resize(size_type count, const value_type& value)
+    {
+        mElements.resize(count, value);
+    }
+
+    constexpr void swap(TArray& other) noexcept(std::allocator_traits<Allocator>::propagate_on_container_swap::value || std::allocator_traits<Allocator>::is_always_equal::value)
+    {
+        mElements.swap(other.mElements)
+    }
+
+    // Non-member
 private:
     std::vector<T, Allocator> mElements;
 };
