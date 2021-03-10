@@ -6,7 +6,7 @@
 #-------------------------------------------------------------------
 
 ############################################################
-# CaveEngine core container library
+# CaveEngine core unit testing library
 ############################################################
 
 # define header and source files for the library

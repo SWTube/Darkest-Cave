@@ -194,10 +194,10 @@ add_subdirectory(ResourceManager)
 
 # set (TARGET_LINK_FLAGS "")
 
-# # setup OgreMain target
+# setup CaveEngine target
 
 # get_native_precompiled_header(OgreMain)
-# add_library(OgreMain ${OGRE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
+# add_library(CaveEngine ${CAVE_ENGINE_LIB_TYPE} ${CaveEngine_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
 # 	set_target_properties(OgreMain PROPERTIES VS_WINRT_COMPONENT "true")
@@ -255,7 +255,7 @@ add_subdirectory(ResourceManager)
 #     set_target_properties(OgreMain PROPERTIES	OUTPUT_NAME Ogre)
 #   endif()
 # endif ()
-# target_link_libraries(OgreMain PUBLIC ${PLATFORM_LIBS} PRIVATE ${LIBRARIES} ${CMAKE_DL_LIBS})
+# target_link_libraries(CaveEngine PRIVATE ${LIBRARIES} ${CMAKE_DL_LIBS})
 
 # # specify a precompiled header to use
 # add_native_precompiled_header(OgreMain "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreStableHeaders.h")
@@ -263,10 +263,10 @@ add_subdirectory(ResourceManager)
 # install Engine
 # cave_engine_config_lib(Engine TRUE)
 # install(FILES ${HEADER_FILES}
-#   DESTINATION include/OGRE
+#   DESTINATION include/CAVE_ENGINE
 # )
 # install(FILES ${PLATFORM_HEADERS}
-#   DESTINATION include/OGRE/${PLATFORM_HEADER_INSTALL}
+#   DESTINATION include/CAVE_ENGINE/${PLATFORM_HEADER_INSTALL}
 # )
 # install(FILES ${THREAD_HEADER_FILES}
 # 	DESTINATION include/OGRE/Threading

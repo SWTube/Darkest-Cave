@@ -6,7 +6,7 @@
 #-------------------------------------------------------------------
 
 ############################################################
-# CaveEngine core container library
+# CaveEngine core math library
 ############################################################
 
 # define header and source files for the library
