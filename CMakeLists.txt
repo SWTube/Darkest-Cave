@@ -413,7 +413,7 @@ endif(WIN32)
 # include(PrecompiledHeader)
 
 # Setup Engine
-add_subdirectory(Engine)
+add_subdirectory(CaveEngine)
 
 # # Setup RenderSystems
 # add_subdirectory(RenderSystems)
