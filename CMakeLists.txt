@@ -35,22 +35,22 @@ set(CAVE_ENGINE_VERSION_DASH_SEPARATED "${CAVE_ENGINE_VERSION_MAJOR}-${CAVE_ENGI
 #   "${PROJECT_SOURCE_DIR}/CMake/Packages"
 # )
 
-include(CMakeDependentOption)
+# include(CMakeDependentOption)
 # include(MacroLogFeature)
 # include(OgreConfigTargets)
 # set(OGRE_TEMPLATES_DIR "${PROJECT_SOURCE_DIR}/CMake/Templates")
-set(CAVE_ENGINE_WORK_DIR ${PROJECT_BINARY_DIR})
+# set(CAVE_ENGINE_WORK_DIR ${PROJECT_BINARY_DIR})
 
 
 #####################################################################
 # Set up the basic build environment
 #####################################################################
 
-if (NOT CMAKE_BUILD_TYPE)
-  # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
-  # differentiation between debug and release builds.
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
-endif ()
+# if (NOT CMAKE_BUILD_TYPE)
+#   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
+#   # differentiation between debug and release builds.
+#   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
+# endif ()
 
 # determine Ogre version numbers
 message(STATUS "Configuring CAVE_ENGINE ${CAVE_ENGINE_VERSION}")
@@ -58,13 +58,13 @@ message(STATUS "Configuring CAVE_ENGINE ${CAVE_ENGINE_VERSION}")
 # configure_file("${CAVE_ENGINE_TEMPLATES_DIR}/version.txt.in" "${PROJECT_BINARY_DIR}/version.txt" @ONLY)
 
 # determine if we are compiling for a 32bit or 64bit system
-include(CheckTypeSize)
-CHECK_TYPE_SIZE("void*" CAVE_ENGINE_PTR_SIZE BUILTIN_TYPES_ONLY)
-if (CAVE_ENGINE_PTR_SIZE EQUAL 8)
-  set(CAVE_ENGINE_PLATFORM_X64 TRUE)
-else ()
-  set(CAVE_ENGINE_PLATFORM_X64 FALSE)
-endif ()
+# include(CheckTypeSize)
+# CHECK_TYPE_SIZE("void*" CAVE_ENGINE_PTR_SIZE BUILTIN_TYPES_ONLY)
+# if (CAVE_ENGINE_PTR_SIZE EQUAL 8)
+#   set(CAVE_ENGINE_PLATFORM_X64 TRUE)
+# else ()
+#   set(CAVE_ENGINE_PLATFORM_X64 FALSE)
+# endif ()
 
 # if (WIN32)
 #   # Create debug libraries with _d postfix
@@ -146,40 +146,40 @@ endif ()
 #   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=cast-qual -Wno-unused-local-typedefs")
 # endif ()
 
-include(GenerateExportHeader)
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-set(CMAKE_VISIBILITY_INLINES_HIDDEN TRUE)
+# include(GenerateExportHeader)
+# set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+# set(CMAKE_VISIBILITY_INLINES_HIDDEN TRUE)
 
 # if((CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU") AND NOT CAVE_ENGINE_STATIC)
 #   set(CAVE_ENGINE_VISIBILITY_FLAGS "-DCAVE_ENGINE_GCC_VISIBILITY") # for legacy headers
 # endif()
 
 # # determine system endianess
-if (MSVC OR ANDROID OR EMSCRIPTEN OR APPLE_IOS)
-  # This doesn't work on VS 2010
-  # MSVC only builds for intel anyway
-  # all IOS devices are little endian
-  set(CAVE_ENGINE_TEST_BIG_ENDIAN FALSE)
-else()
-  include(TestBigEndian)
-  test_big_endian(CAVE_ENGINE_TEST_BIG_ENDIAN)
-endif()
+# if (MSVC OR ANDROID OR EMSCRIPTEN OR APPLE_IOS)
+#   # This doesn't work on VS 2010
+#  # MSVC only builds for intel anyway
+#   # all IOS devices are little endian
+#   set(CAVE_ENGINE_TEST_BIG_ENDIAN FALSE)
+# else()
+#   include(TestBigEndian)
+#   test_big_endian(CAVE_ENGINE_TEST_BIG_ENDIAN)
+# endif()
 
 # definitions for samples
-set(CAVE_ENGINE_LIBRARIES CaveEngineMain)
+# set(CAVE_ENGINE_LIBRARIES CaveEngineMain)
 
 # Specify build paths
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-if (WIN32)
-  if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    # We don't want to install in default system location, install is really for the SDK, so call it that
-    set(CMAKE_INSTALL_PREFIX
-	  "${PROJECT_BINARY_DIR}/sdk" CACHE PATH "CAVE_ENGINE install prefix" FORCE
-    )
-  endif (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-endif(WIN32)
+# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+# if (WIN32)
+#   if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+#     # We don't want to install in default system location, install is really for the SDK, so call it that
+#     set(CMAKE_INSTALL_PREFIX
+# 	  "${PROJECT_BINARY_DIR}/sdk" CACHE PATH "CAVE_ENGINE install prefix" FORCE
+#     )
+#   endif (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+# endif(WIN32)
 
 # # Set up iOS overrides.
 # if (APPLE_IOS)

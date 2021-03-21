@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-// #include "CaveDataTypes.h"
+#include "Core.h"
 
 void InitGame();
 void RunGame();
