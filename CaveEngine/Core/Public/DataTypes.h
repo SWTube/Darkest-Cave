@@ -1,7 +1,9 @@
 #pragma once
-#include "stdint.h"
+#include "cstddef"
+#include "cstdint"
 
 namespace caveengine
 {
-    typedef size_t size_type;
+    typedef std::size_t size_t;
+	typedef std::ptrdiff_t ptrdiff_t;
 }
