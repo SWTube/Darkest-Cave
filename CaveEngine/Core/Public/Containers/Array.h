@@ -8,148 +8,142 @@
 // temporary wrapper
 #include <vector>
 
-#include "DataTypes.h"
+#include "CoreTypes.h"
 // include assertion macros
 // include memory
+#include "Memory/Allocator.h"
 
-template<typename T, typename Allocator = std::allocator<T>>
-class TArray
+namespace caveengine
 {
-public:
-    constexpr explicit TArray(const Allocator& alloc) noexcept
-        : mElements(alloc)
+    template<typename T, typename TAllocator = TAllocator<T>>
+    class TArray
     {
-    }
-
-    constexpr TArray(size_type count, const T& value, const Allocator& alloc = Allocator())
-        : mElements(count, value, alloc)
-    {
-    }
-
-    constexpr explicit TArray(size_type count, const Allocator& alloc = Allocator())
-        : mElements(count, alloc)
-    {
-    }
-
-    template<typename InputIt>
-    constexpr TArray(InputIt first, InputIt last, const Allocator& alloc = Allocator())
-        : mElements(first, last, alloc)
-    {
-    }
-
-    constexpr TArray(const TArray& other)
-        : mElements(other.mElements)
-    {
-    }
-
-    constexpr TArray(const TArray& other, const Allocator& alloc)
-        : mElements(other.mElements, alloc)
-    {
-    }
-
-    constexpr TArray(TArray&& other) noexcept
-        : mElements(std::move(other.mElements))
-    {
-    }
-
-    constexpr TArray(TArray&& other, const Allocator& alloc)
-        : mElemnts(std::move(other.mElements), alloc)
-    {
-    }
-
-    constexpr ~TArray()
-    {
-        mElements.clear();
-    }
-
-    constexpr TArray& operator=(const TArray& other)
-    {
-        if (this != &other)
+    public:
+        constexpr explicit TArray(const TAllocator& alloc) noexcept
+            : mElements(alloc)
         {
-            mElements = other.mElements;
         }
 
-        return *this;
-    }
-
-    constexpr TArray& operator=(TArray&& other) noexcept(std::allocator_traits<Allocator>::propagate_on_container_move_assignment::value || std::allocator_traits<Allocator>::is_always_equal::value)
-    {
-        if (this != &other)
+        constexpr TArray(size_t count, const T& value, const TAllocator& alloc = TAllocator<T>())
+            : mElements(count, value, alloc)
         {
-            mElements = std::move(other.mElements);
         }
 
-        return mElements;
-    }
+        constexpr explicit TArray(size_t count, const TAllocator& alloc = TAllocator<T>())
+            : mElements(count, alloc)
+        {
+        }
 
-    constexpr void Assign(size_type count, const T& value)
-    {
-        mElements.assign(count, value);
-    }
+        template<typename InputIt>
+        constexpr TArray(InputIt first, InputIt last, const TAllocator& alloc = TAllocator<T>())
+            : mElements(first, last, alloc)
+        {
+        }
 
-    template< class InputIt >
-    constexpr void Assign(InputIt first, InputIt last)
-    {
-        mElements.assign(first, last);
-    }
+        constexpr TArray(const TArray& other)
+            : mElements(other.mElements)
+        {
+        }
 
-    constexpr allocator_type GetAllocator() const noexcept
-    {
-        return mElements.get_allocator();
-    }
+        constexpr TArray(const TArray& other, const TAllocator& alloc)
+            : mElements(other.mElements, alloc)
+        {
+        }
 
-    // Element Access
-    constexpr reference At(size_type pos)
-    {
-        return mElements.at(pos);
-    }
+        constexpr TArray(TArray&& other) noexcept
+            : mElements(std::move(other.mElements))
+        {
+        }
 
-    constexpr const_reference At( size_type pos ) const
-    {
-        return mElements.at(pos);
-    }
+        constexpr TArray(TArray&& other, const TAllocator& alloc)
+            : mElements(std::move(other.mElements), alloc)
+        {
+        }
 
-    constexpr reference operator[](size_type pos)
-    {
-        return mElements[pos];
-    }
+        constexpr ~TArray()
+        {
+            mElements.clear();
+        }
 
-    constexpr const_reference operator[](size_type pos) const
-    {
-        return mElements[pos];
-    }
+        constexpr TArray& operator=(const TArray& other)
+        {
+            if (this != &other)
+            {
+                mElements = other.mElements;
+            }
 
-    constexpr reference GetFront()
-    {
-        return mElements.front();
-    }
+            return *this;
+        }
 
-    constexpr const_reference GetFront() const
-    {
-        return mElements.front();
-    }
+        constexpr TArray& operator=(TArray&& other) noexcept(std::allocator_traits<TAllocator>::propagate_on_container_move_assignment::value || std::allocator_traits<TAllocator>::is_always_equal::value)
+        {
+            if (this != &other)
+            {
+                mElements = std::move(other.mElements);
+            }
 
-    constexpr reference GetBack()
-    {
-        return mElements.back();
-    }
+            return mElements;
+        }
 
-    constexpr const_reference GetBack() const
-    {
-        return mElements.back();
-    }
+        constexpr void Assign(size_t count, const T& value)
+        {
+            mElements.assign(count, value);
+        }
 
-    constexpr T* GetData() noexcept
-    {
-        return mElements.data();
-    }
+        template<class InputIt>
+        constexpr void Assign(InputIt first, InputIt last)
+        {
+            mElements.assign(first, last);
+        }
 
-    constexpr const T* GetData() const noexcept
-    {
-        return mElements.data();
-    }
+        constexpr TAllocator GetAllocator() const noexcept
+        {
+            return mElements.get_allocator();
+        }
 
-    // Iterator
-private:
-    std::vector<T, Allocator> mElements;
-};
+        // Element Access
+        constexpr T& operator[](size_t pos)
+        {
+            return mElements[pos];
+        }
+
+        constexpr const T& operator[](size_t pos) const
+        {
+            return mElements[pos];
+        }
+
+        constexpr T& GetFront()
+        {
+            return mElements.front();
+        }
+
+        constexpr const T& GetFront() const
+        {
+            return mElements.front();
+        }
+
+        constexpr T& GetBack()
+        {
+            return mElements.back();
+        }
+
+        constexpr const T& GetBack() const
+        {
+            return mElements.back();
+        }
+
+        constexpr T* GetData() noexcept
+        {
+            return mElements.data();
+        }
+
+        constexpr const T* GetData() const noexcept
+        {
+            return mElements.data();
+        }
+
+        // Iterator
+    private:
+        std::vector<T, TAllocator> mElements;
+    };
+} // namespace caveengine
