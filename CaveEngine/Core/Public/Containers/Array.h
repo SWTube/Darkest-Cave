@@ -2,7 +2,6 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-
 #pragma once
 
 // temporary wrapper
@@ -15,27 +14,119 @@
 
 namespace caveengine
 {
-    template<typename T, typename TAllocator = TAllocator<T>>
+    template<typename ContainerType, typename ElementType, typename SizeType>
+    class TArrayIterator
+    {
+    public:
+        TArrayIterator(ContainerType& container, SizeType startIndex = 0)
+            : mContainer(container), mIndex(startIndex)
+        {
+        }
+
+        TArrayIterator& operator++()
+        {
+            ++Index;
+            return *this;
+        }
+
+        TArrayIterator operator++(int)
+        {
+            TArrayIterator temp(*this);
+            ++Index;
+            return temp;
+        }
+
+        TArrayIterator& operator--()
+        {
+            --Index;
+            return *this;
+        }
+
+        TArrayIterator operator--(int)
+        {
+            TArrayIterator temp(*this);
+            --Index;
+            return temp;
+        }
+
+        TArrayIterator& operator+=(SizeType offset)
+        {
+            Index += offset;
+            return *this;
+        }
+
+        TArrayIterator operator+(SizeType offset)
+        {
+            TArrayIterator temp(*this);
+            return temp += offset;
+        }
+
+        TArrayIterator& operator-=(SizeType offset)
+        {
+            Index -= offset;
+            return *this;
+        }
+
+        TArrayIterator operator-(SizeType offset)
+        {
+            TArrayIterator temp(*this);
+            return temp -= offset;
+        }
+
+        ElementType& operator*() const
+        {
+            return mContainer[mIndex];
+        }
+
+        ElementType* operator->() const
+        {
+            return &mContainer[mIndex];
+        }
+
+        SizeType GetIndex() const
+        {
+            return mIndex;
+        }
+
+        void Reset()
+        {
+            mIndex = 0;
+        }
+
+        friend bool operator==(const TArrayIterator& lhs, const TArrayIterator& rhs)
+        {
+            return &lhs.mContainer == &rhs.mContainer && lhs.mIndex == rhs.mIndex;
+        }
+
+    private:
+        ContainerType& mContainer;
+        SizeType mIndex;
+    };
+
+    template<typename ElementType, typename TAllocator = TAllocator<ElementType>>
     class TArray
     {
     public:
+        using Iterator = TArrayIterator<TArray, ElementType, size_t>;
+        using ConstIterator = TArrayIterator<TArray, const ElementType, size_t>;
+
         constexpr explicit TArray(const TAllocator& alloc) noexcept
             : mElements(alloc)
         {
         }
 
-        constexpr TArray(size_t count, const T& value, const TAllocator& alloc = TAllocator<T>())
+        constexpr TArray(size_t count, const ElementType& value, const TAllocator& alloc = TAllocator<ElementType>())
             : mElements(count, value, alloc)
         {
         }
 
-        constexpr explicit TArray(size_t count, const TAllocator& alloc = TAllocator<T>())
+        constexpr explicit TArray(size_t count, const TAllocator& alloc = TAllocator<ElementType>())
             : mElements(count, alloc)
         {
         }
 
         template<typename InputIt>
-        constexpr TArray(InputIt first, InputIt last, const TAllocator& alloc = TAllocator<T>())
+        constexpr TArray(InputIt first, InputIt last, const TAllocator& alloc = TAllocator<ElementType>())
             : mElements(first, last, alloc)
         {
         }
@@ -85,7 +176,7 @@ namespace caveengine
             return mElements;
         }
 
-        constexpr void Assign(size_t count, const T& value)
+        constexpr void Assign(size_t count, const ElementType& value)
         {
             mElements.assign(count, value);
         }
@@ -102,48 +193,69 @@ namespace caveengine
         }
 
         // Element Access
-        constexpr T& operator[](size_t pos)
+        constexpr ElementType& operator[](size_t pos)
         {
             return mElements[pos];
         }
 
-        constexpr const T& operator[](size_t pos) const
+        constexpr const ElementType& operator[](size_t pos) const
         {
             return mElements[pos];
         }
 
-        constexpr T& GetFront()
+        constexpr ElementType& GetFront()
         {
             return mElements.front();
         }
 
-        constexpr const T& GetFront() const
+        constexpr const ElementType& GetFront() const
         {
             return mElements.front();
         }
 
-        constexpr T& GetBack()
+        constexpr ElementType& GetBack()
         {
             return mElements.back();
         }
 
-        constexpr const T& GetBack() const
+        constexpr const ElementType& GetBack() const
         {
             return mElements.back();
         }
 
-        constexpr T* GetData() noexcept
+        constexpr ElementType* GetData() noexcept
         {
             return mElements.data();
         }
 
-        constexpr const T* GetData() const noexcept
+        constexpr const ElementType* GetData() const noexcept
         {
             return mElements.data();
         }
 
-        // Iterator
+        // Iterators
+
+        constexpr Iterator GetBeginIterator()
+        {
+            return Iterator(*this, 0);
+        }
+
+        constexpr Iterator GetEndIterator()
+        {
+            return Iterator(*this, 0 + mElements.size());
+        }
+
+        constexpr ConstIterator GetBeginConstIterator()
+        {
+            return ConstIterator(*this, 0);
+        }
+
+        constexpr ConstIterator GetEndConstIterator()
+        {
+            return ConstIterator(*this, 0 + mElements.size());
+        }
+
     private:
-        std::vector<T, TAllocator> mElements;
+        std::vector<ElementType, TAllocator> mElements;
     };
 } // namespace caveengine
