@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include <cstddef>
-#include <cstdint>
+#include <stddef.h>
+#include <stdint.h>
 
-namespace caveengine
+#include "CoreDefs.h"
+
+namespace cave
 {
-	typedef std::size_t size_t;
-	typedef std::ptrdiff_t ptrdiff_t;
 }

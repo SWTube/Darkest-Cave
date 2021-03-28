@@ -13,7 +13,7 @@
 // include memory
 #include "Memory/Allocator.h"
 
-namespace caveengine
+namespace cave
 {
     template<typename T, typename TAllocator = TAllocator<T>>
     class TArray
@@ -24,21 +24,21 @@ namespace caveengine
         {
         }
 
-        constexpr TArray(size_t count, const T& value, const TAllocator& alloc = TAllocator<T>())
-            : mElements(count, value, alloc)
-        {
-        }
+        //constexpr TArray(size_t count, const T& value, const TAllocator& alloc = TAllocator<T>())
+        //    : mElements(count, value, alloc)
+        //{
+        //}
 
-        constexpr explicit TArray(size_t count, const TAllocator& alloc = TAllocator<T>())
-            : mElements(count, alloc)
-        {
-        }
+        //constexpr explicit TArray(size_t count, const TAllocator& alloc = TAllocator<T>())
+        //    : mElements(count, alloc)
+        //{
+        //}
 
-        template<typename InputIt>
-        constexpr TArray(InputIt first, InputIt last, const TAllocator& alloc = TAllocator<T>())
-            : mElements(first, last, alloc)
-        {
-        }
+        //template<typename InputIt>
+        //constexpr TArray(InputIt first, InputIt last, const TAllocator& alloc = TAllocator<T>())
+        //    : mElements(first, last, alloc)
+        //{
+        //}
 
         constexpr TArray(const TArray& other)
             : mElements(other.mElements)
@@ -60,7 +60,7 @@ namespace caveengine
         {
         }
 
-        constexpr ~TArray()
+        ~TArray()
         {
             mElements.clear();
         }
@@ -146,4 +146,4 @@ namespace caveengine
     private:
         std::vector<T, TAllocator> mElements;
     };
-} // namespace caveengine
+} // namespace cave
