@@ -3,8 +3,6 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include <sysinfoapi.h>
-
 #include "Memory/Allocator.h"
 
 namespace caveengine
@@ -31,7 +29,7 @@ namespace caveengine
 			msSmallBlockSizesReversed[index] = sSmallBlockSizes[partner];
 		}
 
-		SYSTEM_INFO systemInfo;
+		//SYSTEM_INFO systemInfo;
 //		FGenericPlatformMemoryConstants Constants = FPlatformMemory::GetConstants();
 //		PageSize = Constants.BinnedPageSize;
 //		OsAllocationGranularity = Constants.BinnedAllocationGranularity ? Constants.BinnedAllocationGranularity : PageSize;
