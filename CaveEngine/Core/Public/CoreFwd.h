@@ -13,7 +13,7 @@
 //class FName;
 //class FExec;
 //class FArchive;
-//class FOutputDevice;
+class LogManager;
 //class FFeedbackContext;
 //struct FDateTime;
 //struct FGuid;
@@ -36,13 +36,13 @@
 //struct FIntPoint;
 //struct FIntRect;
 //
-//// Misc
+// Misc
 //struct FResourceSizeEx;
 //class IConsoleVariable;
 //class FRunnableThread;
 //class FEvent;
 //class IPlatformFile;
-//class FMalloc;
+class Allocator;
 //class IFileHandle;
 //class FAutomationTestBase;
 //struct FGenericMemoryStats;

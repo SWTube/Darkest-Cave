@@ -24,6 +24,7 @@
 ----------------------------------------------------------------------------*/
 
 //#include "Misc/VarArgs.h"
+#include "Debug/LogManager.h"
 //#include "Logging/LogVerbosity.h"
 //#include "Misc/OutputDevice.h"
 //#include "HAL/PlatformCrt.h"
@@ -104,7 +105,7 @@
 //#include "Misc/ByteSwap.h"
 //#include "Containers/EnumAsByte.h"
 //#include "HAL/PlatformTLS.h"
-//#include "CoreGlobals.h"
+#include "CoreGlobals.h"
 //#include "Templates/SharedPointer.h"
 //#include "Internationalization/CulturePointer.h"
 //#include "UObject/WeakObjectPtrTemplates.h"
