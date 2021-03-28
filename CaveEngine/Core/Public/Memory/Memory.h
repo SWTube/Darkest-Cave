@@ -10,7 +10,7 @@
 #include "CoreTypes.h"
 #include "Memory/Allocator.h"
 
-namespace caveengine
+namespace cave
 {
 	class MemoryManager final
 	{
@@ -40,4 +40,4 @@ namespace caveengine
 		const uintptr_t alignedAddress = AlignAddress(address, align);
 		return reinterpret_cast<T*>(alignedAddress);
 	}
-} // namespace caveengine
+} // namespace cave

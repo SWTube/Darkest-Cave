@@ -5,7 +5,7 @@
 
 #include "Core.h"
 
-namespace caveengine
+namespace cave
 {
 	void* MemoryManager::Malloc(size_t size)
 	{
@@ -27,4 +27,4 @@ namespace caveengine
 		// return:	On success, returns the pointer to the beginning of newly allocated memory. To avoid a memory leak, the returned pointer must be deallocated with std::free() or std::realloc().
 					//On failure, returns a null pointer.
 	}
-} // namespace caveengine
+} // namespace cave

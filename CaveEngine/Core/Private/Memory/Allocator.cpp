@@ -5,7 +5,7 @@
 
 #include "Memory/Allocator.h"
 
-namespace caveengine
+namespace cave
 {
 	static uint16_t sSmallBlockSizes[] =
 	{
@@ -239,4 +239,4 @@ namespace caveengine
 	{
 
 	}
-} // namespace caveengine
+} // namespace cave

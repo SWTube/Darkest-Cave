@@ -13,7 +13,7 @@
 // include memory
 #include "Memory/Allocator.h"
 
-namespace caveengine
+namespace cave
 {
     template<typename T, typename TAllocator = TAllocator<T>>
     class TArray
@@ -146,4 +146,4 @@ namespace caveengine
     private:
         std::vector<T, TAllocator> mElements;
     };
-} // namespace caveengine
+} // namespace cave
