@@ -100,7 +100,7 @@
 //
 //#include "UObject/UObjectHierarchyFwd.h"
 
-//#include "CoreGlobals.h"
+#include "CoreGlobals.h"
 
 /*----------------------------------------------------------------------------
 	Includes.
@@ -245,6 +245,7 @@
 //#include "Math/RandomStream.h"
 //#include "Logging/LogSuppressionInterface.h"
 //#include "Logging/LogScopedCategoryAndVerbosityOverride.h"
+#include "Debug/LogManager.h"
 //#include "HAL/OutputDevices.h"
 //#include "Misc/OutputDeviceRedirector.h"
 //#include "Misc/OutputDeviceNull.h"

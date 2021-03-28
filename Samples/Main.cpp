@@ -7,6 +7,8 @@
 
 #include "Core.h"
 
+using namespace cave;
+
 void InitGame();
 void RunGame();
 
@@ -19,6 +21,7 @@ int main(int argc, char* argv[])
 
 void InitGame()
 {
+	LOGI(eLogChannel::CORE, "Hi!", std::cout);
 	// Initialize Memory
 	// Initialize File System Manager
 	// Initialize Video Manager
@@ -28,6 +31,7 @@ void InitGame()
 	// Initialize Game Manager
 
 	RunGame();
+	LOGE(eLogChannel::CORE, "hi", std::cout);
 }
 
 void RunGame()
