@@ -12,7 +12,7 @@
 #define MAX_SMALL_POOL_SIZE	(32768-16)	// Maximum block size in GMallocBinned2SmallBlockSizes
 #define SMALL_POOL_COUNT	45
 
-namespace caveengine
+namespace cave
 {
 	struct Allocator
 	{
@@ -52,4 +52,4 @@ namespace caveengine
 			Allocator::Deallocate(ptr, sizeof(T), n);
 		}
 	};
-} // namespace caveengine
+} // namespace cave

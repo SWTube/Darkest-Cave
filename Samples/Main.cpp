@@ -21,7 +21,18 @@ int main(int argc, char* argv[])
 
 void InitGame()
 {
-	LOGI(eLogChannel::CORE, "Hi!", std::cout);
+	// prints verbose log message "Hello, World!" to Core channel stdout
+	LOGV(eLogChannel::CORE, "Hello, World!", std::cout);
+	// prints debug log message "Hello, World!" to Core channel stdout
+	LOGD(eLogChannel::CORE, "Hello, World!", std::cout);
+	// prints informational log message "Hello, World!" to Core channel stdout
+	LOGI(eLogChannel::CORE, "Hello, World!", std::cout);
+	// prints warning log message "Hello, World!" to Core channel stdout
+	LOGW(eLogChannel::CORE, "Hello, World!", std::cout);
+	// prints error log message "Hello, World!" to Core channel stdout
+	LOGE(eLogChannel::CORE, "Hello, World!", std::cout);
+	// prints assert log message "Hello, World!" to Core channel stdout
+	LOGA(eLogChannel::CORE, "Hello, World!", std::cout);
 	// Initialize Memory
 	// Initialize File System Manager
 	// Initialize Video Manager
@@ -31,7 +42,6 @@ void InitGame()
 	// Initialize Game Manager
 
 	RunGame();
-	LOGE(eLogChannel::CORE, "hi", std::cout);
 }
 
 void RunGame()

@@ -139,7 +139,7 @@ namespace cave
 				break;
 			case eLogVerbosity::WARN:
 				buffer += "W/";
-				color = '1';
+				color = '5';
 				break;
 			case eLogVerbosity::ERROR:
 				buffer += "E/";
@@ -147,7 +147,7 @@ namespace cave
 				break;
 			case eLogVerbosity::ASSERT:
 				buffer += "A/";
-				color = '1';
+				color = '6';
 				break;
 			default:
 				assert(false);
