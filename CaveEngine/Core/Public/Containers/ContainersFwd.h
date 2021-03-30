@@ -34,3 +34,6 @@
 //template<typename ElementType, bool bInAllowDuplicateKeys = false> struct DefaultKeyFuncs;
 //template<typename InElementType, typename KeyFuncs = DefaultKeyFuncs<InElementType>, typename Allocator = FDefaultSetAllocator> class TSet;
 /// @endcond
+
+template<typename ContainerType, typename ElementType ,typename SizeType>
+class TArrayIterator;
