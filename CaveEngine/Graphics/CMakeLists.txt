@@ -10,14 +10,14 @@
 ############################################################
 
 # # define header and source files for the library
-# file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h")
 # list(APPEND HEADER_FILES
 #     ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h
 #     ${PROJECT_BINARY_DIR}/include/OgreComponents.h
 #     ${PROJECT_BINARY_DIR}/include/OgreExports.h
 #     ${CMAKE_CURRENT_SOURCE_DIR}/include/Ogre.i)
 
-# file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
 
 # # Remove optional header files
 # list(REMOVE_ITEM HEADER_FILES
@@ -187,6 +187,7 @@
 # # setup OgreMain target
 
 # get_native_precompiled_header(OgreMain)
+add_library(Graphics ${HEADER_FILES} ${SOURCE_FILES})
 # add_library(OgreMain ${OGRE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
@@ -199,6 +200,23 @@
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+find_package(glfw3 3.3 REQUIRED)
+set(OpenGL_GL_PREFERENCE "GLVND")
+find_package(OpenGL REQUIRED)
+target_link_libraries(Graphics PUBLIC OpenGL::GL)
+target_link_libraries(Graphics PUBLIC glfw)
+target_link_libraries(Graphics PUBLIC Gl3w)
+target_link_libraries(Graphics PUBLIC ${CMAKE_DL_LIBS})
+target_link_libraries(Graphics PUBLIC Core)
+
+target_include_directories(Graphics PUBLIC 
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
+  "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+  $<INSTALL_INTERFACE:include/CAVE_ENGINE>)
 # target_include_directories(OgreMain PUBLIC 
 #   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" 
 #   "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
