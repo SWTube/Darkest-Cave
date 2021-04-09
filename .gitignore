@@ -3,3 +3,9 @@ build
 out
 .vscode
 CMakeSettings.json
+Debug
+x64
+Darkest-Cave.vcxproj.user
+CaveEditor/CaveEditor.vcxproj.user
+CaveEngine/CaveEngine.vcxproj.user
+CaveSample/CaveSample.vcxproj.user

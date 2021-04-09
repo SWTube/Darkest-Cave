@@ -3,7 +3,7 @@
 
 #include "framework.h"
 
-#include "shellapi.h"
+//#include "shellapi.h"
 #include "Editor.h"
 
 #define MAX_LOADSTRING 100

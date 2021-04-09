@@ -23,7 +23,7 @@ namespace cave
 	struct PlatformMemory
 	{
 	public:
-		constexpr void* Memmove(void* )
+		constexpr void* Memmove(void*);
 	};
 
 	__forceinline uintptr_t AlignAddress(uintptr_t address, size_t align)
@@ -36,7 +36,7 @@ namespace cave
 	template<typename T>
 	__forceinline T* AlignPointer(T* ptr, size_t align)
 	{
-		const uintptr_t addresss = reinterpret_cast<uintptr_t>(ptr);
+		const uintptr_t address = reinterpret_cast<uintptr_t>(ptr);
 		const uintptr_t alignedAddress = AlignAddress(address, align);
 		return reinterpret_cast<T*>(alignedAddress);
 	}
