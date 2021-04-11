@@ -107,7 +107,7 @@ namespace cave
 		if (msCurrentVerbosity == eLogVerbosity::ALL || verbosity == msCurrentVerbosity)
 		{
 			std::string buffer;
-			
+
 			switch (channel)
 			{
 			case eLogChannel::GRAPHICS:
@@ -209,8 +209,7 @@ namespace cave
 				break;
 			}
 
-			
-			os << "\033[1;3" << color << 'm' << buffer << fileName << "/" << functionName <<"/line:" << lineNumber << " :\t" << message << "\033[0m" << std::endl;
+			os << "\033[1;3" << color << 'm' << buffer << fileName << "/" << functionName << "/line:" << lineNumber << " :\t" << message << "\033[0m" << std::endl;
 		}
 	}
 } // namespace cave

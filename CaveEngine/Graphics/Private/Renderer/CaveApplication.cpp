@@ -51,10 +51,10 @@ HRESULT CaveApplication::Initialize(HINSTANCE hInstance)
 		wcEX.hbrBackground = NULL;
 		wcEX.lpszMenuName = NULL;
 		wcEX.hCursor = LoadCursor(NULL, IDI_APPLICATION);
-		wcEX.lpszClassName = "CaveApp";
+		wcEX.lpszClassName = L"CaveApp";
 
 		RegisterClassEx(&wcEX);
-		mHWnd = CreateWindow("CaveApp", "CaveWindow", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, mWindowWidth, mWindowHeight, NULL, NULL, HINST_THISCOMPONENT, this);
+		mHWnd = CreateWindow(L"CaveApp", L"CaveWindow", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, mWindowWidth, mWindowHeight, NULL, NULL, HINST_THISCOMPONENT, this);
 
 		hr = mHWnd ? S_OK : E_FAIL;
 		if (SUCCEEDED(hr))
@@ -134,10 +134,12 @@ void CaveApplication::OnResize(UINT width, UINT height)
 {
 	mpCaveRenderer->OnResize(width, height);
 }
+
 HWND CaveApplication::GethWnd() const 
 {
 	return mHWnd;
 }
+
 void CaveApplication::SethWnd(HWND hWnd)
 {
 	mHWnd = hWnd;
