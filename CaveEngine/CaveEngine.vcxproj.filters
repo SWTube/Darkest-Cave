@@ -137,6 +137,9 @@
     <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp">
       <Filter>Source Files\Graphics\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.ixx">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">

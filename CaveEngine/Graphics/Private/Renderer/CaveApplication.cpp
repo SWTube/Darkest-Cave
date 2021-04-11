@@ -44,7 +44,7 @@ HRESULT CaveApplication::Initialize(HINSTANCE hInstance)
 	{
 		WNDCLASSEX wcEX = { sizeof(WNDCLASSEX) };
 		wcEX.style = CS_HREDRAW | CS_VREDRAW;
-		wcEX.lpfnWndProc = CaveApplication::WndProc;
+		wcEX.lpfnWndProc = CaveApplication::WindowProcess;
 		wcEX.cbClsExtra = 0;
 		wcEX.cbWndExtra = sizeof(LONG_PTR);
 		wcEX.hInstance = hInstance;
@@ -66,7 +66,7 @@ HRESULT CaveApplication::Initialize(HINSTANCE hInstance)
 	}
 	return hr;
 }
-LRESULT CALLBACK CaveApplication::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CaveApplication::WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT result = 0;
 
