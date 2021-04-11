@@ -16,7 +16,7 @@ class CaveApplication
 public:
 	static CaveApplication* GetInstance();
 	~CaveApplication();
-
+	
 	HRESULT Initialize(HINSTANCE hInstance);
 	HWND GethWnd() const;
 	void SethWnd(HWND hWnd);
@@ -32,7 +32,7 @@ private:
 	static CaveApplication* msInstance;
 
 	CaveRenderer* mpCaveRenderer;
-	static LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	HRESULT OnRender();
 	void OnResize(UINT width, UINT height);
 
@@ -41,3 +41,4 @@ private:
 	int mWindowWidth;
 	int mWindowHeight;
 };
+

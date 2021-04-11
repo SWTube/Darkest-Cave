@@ -16,7 +16,7 @@ CaveApplication* CaveApplication::GetInstance()
 	return msInstance;
 }
 
-CaveApplication::CaveApplication() :
+CaveApplication::CaveApplication():
 	mHWnd(nullptr)
 {
 	mpCaveRenderer = CaveRenderer::GetInstance();
@@ -44,7 +44,7 @@ HRESULT CaveApplication::Initialize(HINSTANCE hInstance)
 	{
 		WNDCLASSEX wcEX = { sizeof(WNDCLASSEX) };
 		wcEX.style = CS_HREDRAW | CS_VREDRAW;
-		wcEX.lpfnWndProc = CaveApplication::WindowProcess;
+		wcEX.lpfnWndProc = CaveApplication::WndProc;
 		wcEX.cbClsExtra = 0;
 		wcEX.cbWndExtra = sizeof(LONG_PTR);
 		wcEX.hInstance = hInstance;
@@ -66,7 +66,7 @@ HRESULT CaveApplication::Initialize(HINSTANCE hInstance)
 	}
 	return hr;
 }
-LRESULT CALLBACK CaveApplication::WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CaveApplication::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT result = 0;
 
@@ -135,7 +135,7 @@ void CaveApplication::OnResize(UINT width, UINT height)
 	mpCaveRenderer->OnResize(width, height);
 }
 
-HWND CaveApplication::GethWnd() const
+HWND CaveApplication::GethWnd() const 
 {
 	return mHWnd;
 }
@@ -148,7 +148,7 @@ int CaveApplication::GetWindowWidth()
 {
 	return mWindowWidth;
 }
-int CaveApplication::GetWindowHeight()
+int CaveApplication::GetWindowHeight() 
 {
 	return mWindowHeight;
 }

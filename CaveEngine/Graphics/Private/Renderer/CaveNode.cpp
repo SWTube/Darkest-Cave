@@ -5,7 +5,7 @@
 #include "Renderer/CaveNode.h"
 #include "Renderer/CaveApplication.h"
 
-CaveNode::CaveNode() :
+CaveNode::CaveNode():
 	mObjectWidth(0.0f)
 	, mObjectHeight(0.0f)
 	, mObjectScaleWidth(0.0f)
@@ -55,7 +55,7 @@ void CaveNode::Update(float eTime)
 			}
 		}
 	}
-
+	
 }
 void CaveNode::UpdateTransform()
 {

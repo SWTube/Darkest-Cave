@@ -12,7 +12,7 @@ CaveRenderer* CaveRenderer::GetInstance()
 	return msInstance;
 }
 
-CaveRenderer::CaveRenderer() :
+CaveRenderer::CaveRenderer():
 	mHWnd(nullptr)
 	, mpD2DFactory(nullptr)
 	, mpRenderTarget(nullptr)

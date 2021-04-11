@@ -11,7 +11,7 @@
 #include <directxcolors.h>
 #include "Test/resource.h"
 
-#include "GraphicsCommon.h"
+#include "GraphicsCommon.h" 
 #include "Test/Resource.h"
 //#include "Renderer/CaveApplication.h" 
 //#include "Renderer/CaveNode.h" 

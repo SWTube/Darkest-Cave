@@ -29,3 +29,4 @@ private:
 	ID2D1Factory* mpD2DFactory;
 	ID2D1HwndRenderTarget* mpRenderTarget;
 };
+

@@ -5,6 +5,9 @@
 add_executable(Template "Main.cpp")
 
 target_link_libraries(Template PUBLIC Core)
+target_link_libraries(Template PUBLIC Graphics)
 
 target_include_directories(Template PUBLIC "${PROJECT_SOURCE_DIR}/CaveEngine/Core/Public")
+target_include_directories(Template PUBLIC "${PROJECT_SOURCE_DIR}/CaveEngine/Graphics/Public")
 target_link_directories(Template PUBLIC "${PROJECT_SOURCE_DIR}/CaveEngine/Core")
+target_link_directories(Template PUBLIC "${PROJECT_SOURCE_DIR}/CaveEngine/Graphics")

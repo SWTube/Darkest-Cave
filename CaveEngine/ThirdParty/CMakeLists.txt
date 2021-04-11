@@ -37,16 +37,7 @@
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSearchOps.cpp"
 # )
 
-add_subdirectory(AI)
-add_subdirectory(Audio)
-add_subdirectory(Core)
-add_subdirectory(Gameplay)
-add_subdirectory(Graphics)
-add_subdirectory(HID)
-add_subdirectory(Physics)
-add_subdirectory(ProfilingDebugging)
-add_subdirectory(ResourceManager)
-add_subdirectory(ThirdParty)
+add_subdirectory(gl3w)
 
 # # Add platform specific files
 # if (EMSCRIPTEN)
