@@ -34,7 +34,7 @@
 ////--------------------------------------------------------------------------------------
 //// Global Variables
 ////--------------------------------------------------------------------------------------
-//HINSTANCE               g_hInst = nullptr;
+//HINSTANCE               mHInstance = nullptr;
 //HWND                    g_hWnd = nullptr;
 //D3D_DRIVER_TYPE         g_driverType = D3D_DRIVER_TYPE_NULL;
 //D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
@@ -57,7 +57,7 @@
 //HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);
 //HRESULT InitDevice();
 //void CleanupDevice();
-//LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+//LRESULT CALLBACK    WindowProcess(HWND, UINT, WPARAM, LPARAM);
 //void Render();
 //
 ////--------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@
 //    WNDCLASSEX wcex;
 //    wcex.cbSize = sizeof(WNDCLASSEX);
 //    wcex.style = CS_HREDRAW | CS_VREDRAW;
-//    wcex.lpfnWndProc = WndProc;
+//    wcex.lpfnWndProc = WindowProcess;
 //    wcex.cbClsExtra = 0;
 //    wcex.cbWndExtra = 0;
 //    wcex.hInstance = hInstance;
@@ -83,7 +83,7 @@
 //        return E_FAIL;
 //
 //    // Create window
-//    g_hInst = hInstance;
+//    mHInstance = hInstance;
 //    RECT rc = { 0, 0, 800, 600 };
 //    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 //    g_hWnd = CreateWindow(L"TutorialWindowClass", L"Direct3D 11 Tutorial 2: Rendering a Triangle",
@@ -396,7 +396,7 @@
 ////--------------------------------------------------------------------------------------
 //// Called every time the application receives a message
 ////--------------------------------------------------------------------------------------
-//LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+//LRESULT CALLBACK WindowProcess(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 //{
 //    PAINTSTRUCT ps;
 //    HDC hdc;

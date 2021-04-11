@@ -8,4 +8,6 @@ x64
 Darkest-Cave.vcxproj.user
 CaveEditor/CaveEditor.vcxproj.user
 CaveEngine/CaveEngine.vcxproj.user
+CaveEngine/Release
 CaveSample/CaveSample.vcxproj.user
+Release

@@ -16,7 +16,7 @@ CaveApplication* CaveApplication::GetInstance()
 	return msInstance;
 }
 
-CaveApplication::CaveApplication() :
+CaveApplication::CaveApplication():
 	mHWnd(nullptr)
 {
 	mpCaveRenderer = CaveRenderer::GetInstance();
@@ -135,7 +135,7 @@ void CaveApplication::OnResize(UINT width, UINT height)
 	mpCaveRenderer->OnResize(width, height);
 }
 
-HWND CaveApplication::GethWnd() const
+HWND CaveApplication::GethWnd() const 
 {
 	return mHWnd;
 }
@@ -148,7 +148,7 @@ int CaveApplication::GetWindowWidth()
 {
 	return mWindowWidth;
 }
-int CaveApplication::GetWindowHeight()
+int CaveApplication::GetWindowHeight() 
 {
 	return mWindowHeight;
 }

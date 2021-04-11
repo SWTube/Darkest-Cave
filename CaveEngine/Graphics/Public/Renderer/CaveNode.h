@@ -13,7 +13,7 @@ public:
 
 	virtual void Renderer();
 	virtual void Update(float eTime);
-
+	
 	void UpdateCameraPos();
 
 	void AddObject(CaveNode* object);
@@ -93,3 +93,4 @@ protected:
 private:
 	float mObjectLivingTime;
 };
+

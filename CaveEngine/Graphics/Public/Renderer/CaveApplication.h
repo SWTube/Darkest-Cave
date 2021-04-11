@@ -16,7 +16,7 @@ class CaveApplication
 public:
 	static CaveApplication* GetInstance();
 	~CaveApplication();
-
+	
 	HRESULT Initialize(HINSTANCE hInstance);
 	HWND GethWnd() const;
 	void SethWnd(HWND hWnd);
@@ -41,3 +41,4 @@ private:
 	int mWindowWidth;
 	int mWindowHeight;
 };
+
