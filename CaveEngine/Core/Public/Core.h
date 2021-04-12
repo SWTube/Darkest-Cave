@@ -15,6 +15,8 @@
 //#include "Misc/Timespan.h"
 //#include "Misc/DateTime.h"
 //#include "HAL/PlatformCrt.h"
+#include "Memory/Memory.h"
+#include "Memory/Allocator.h"
 //#include "GenericPlatform/GenericPlatformMemory.h"
 //#include "HAL/PlatformMemory.h"
 //#include "Misc/Char.h"
