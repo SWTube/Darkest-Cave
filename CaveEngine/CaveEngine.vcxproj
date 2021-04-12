@@ -226,12 +226,15 @@
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx" />
     <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp" />
+    <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />
+    <Image Include="Graphics\Resource\seafloor.dds" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Graphics\Shader\DirectXTestPixelShader.hlsl" />
+    <FxCompile Include="Graphics\Shader\DirectXTestPixelShaderSolid.hlsl" />
     <FxCompile Include="Graphics\Shader\DirectXTestVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
