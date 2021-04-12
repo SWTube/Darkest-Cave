@@ -29,6 +29,7 @@
 //#include "Misc/OutputDevice.h"
 //#include "HAL/PlatformCrt.h"
 //#include "HAL/PlatformMisc.h"
+#include <cassert>
 //#include "Misc/AssertionMacros.h"
 //#include "Templates/IsPointer.h"
 //#include "HAL/PlatformMemory.h"

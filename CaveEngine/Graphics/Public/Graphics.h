@@ -4,7 +4,11 @@
  */
 #pragma once
 
-#include "GraphicsCommon.h" 
-#include "Renderer/CaveApplication.h" 
-#include "Renderer/CaveNode.h" 
-#include "Renderer/CaveRenderer.h" 
+#include "GraphicsCommon.h"
+#ifndef __linux__
+	#include "Renderer/CaveApplication.h" 
+	#include "Renderer/CaveNode.h" 
+	#include "Renderer/CaveRenderer.h"
+#else
+	#include "OpenGlTest.h"
+#endif

@@ -89,7 +89,7 @@ namespace cave
 #define LOGI(channel, os, message) cave::LogManager::Info(channel, __FILE__, __func__, __LINE__, os, message)
 #define LOGWF(channel, os, message, ...) cave::LogManager::WarnF(channel, __FILE__,__func__,  __LINE__, os, message, __VA_ARGS__)
 #define LOGW(channel, os, message) cave::LogManager::Warn(channel, __FILE__,__func__,  __LINE__, os, message)
-#define LOGEF(channel, os, message, ...) cave::LogManager::Error(Fchannel, __FILE__, __func__, __LINE__, os, message, __VA_ARGS__)
+#define LOGEF(channel, os, message, ...) cave::LogManager::ErrorF(channel, __FILE__, __func__, __LINE__, os, message, __VA_ARGS__)
 #define LOGE(channel, os, message) cave::LogManager::Error(channel, __FILE__, __func__, __LINE__, os, message)
 #define LOGAF(channel, os, message, ...) cave::LogManager::AssertF(channel, __FILE__, __func__, __LINE__,  os, message, __VA_ARGS__)
 #define LOGA(channel, os, message) cave::LogManager::Assert(channel, __FILE__, __func__, __LINE__,  os, message)

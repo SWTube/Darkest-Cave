@@ -18,9 +18,11 @@ file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h")
 #     ${CMAKE_CURRENT_SOURCE_DIR}/include/Ogre.i)
 
 file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
-file(GLOB RENDERER_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Renderer/*.h")
 
+if (WIN)
+file(GLOB RENDERER_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Renderer/*.h")
 file(GLOB RENDERER_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Renderer/*.cpp")
+endif (WIN)
 # # Remove optional header files
 # list(REMOVE_ITEM HEADER_FILES
 #     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreDDSCodec.h"
@@ -202,18 +204,22 @@ add_library(Graphics ${HEADER_FILES} ${SOURCE_FILES} ${RENDERER_HEADER_FILES} ${
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
-#set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-#
-#find_package(glfw3 3.3 REQUIRED)
-#set(OpenGL_GL_PREFERENCE "GLVND")
-#find_package(OpenGL REQUIRED)
-#target_link_libraries(Graphics PUBLIC OpenGL::GL)
-#target_link_libraries(Graphics PUBLIC glfw)
-#target_link_libraries(Graphics PUBLIC Gl3w)
-#target_link_libraries(Graphics PUBLIC ${CMAKE_DL_LIBS})
 target_link_libraries(Graphics PUBLIC Core)
+
+if (UNIX)
+	set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+	set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+	set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+	find_package(glfw3 3.3 REQUIRED PATH /usr/lib/x86_64-linux-gnu)
+	
+	set(OpenGL_GL_PREFERENCE "GLVND")
+	find_package(OpenGL REQUIRED)
+	target_link_libraries(Graphics PUBLIC OpenGL::GL)
+	target_link_libraries(Graphics PUBLIC glfw)
+	target_link_libraries(Graphics PUBLIC Gl3w)
+	target_link_libraries(Graphics PUBLIC ${CMAKE_DL_LIBS})
+endif (UNIX)
 
 if(WIN32)
 	#target_link_libraries(Graphics PUBLIC d2d1.lib)
