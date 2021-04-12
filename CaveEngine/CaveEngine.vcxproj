@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{2d717754-a428-482f-bc99-1cf9f487610e}</ProjectGuid>
+    <RootNamespace>CaveEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Public;D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <FxCompile>
+      <DisableOptimizations>false</DisableOptimizations>
+      <ShaderType>
+      </ShaderType>
+      <EntryPointName>VS</EntryPointName>
+      <ShaderModel>4.0_level_9_3</ShaderModel>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <FxCompile>
+      <EntryPointName>VS</EntryPointName>
+    </FxCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Public;D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <OpenMPSupport>false</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Public;D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <FxCompile>
+      <ShaderType>
+      </ShaderType>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <DisableOptimizations>false</DisableOptimizations>
+      <EntryPointName>VS</EntryPointName>
+      <ShaderModel>4.0_level_9_3</ShaderModel>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <FxCompile>
+      <EntryPointName>VS</EntryPointName>
+    </FxCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Public;D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\Public\Containers\Array.h" />
+    <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
+    <ClInclude Include="Core\Public\Core.h" />
+    <ClInclude Include="Core\Public\CoreFwd.h" />
+    <ClInclude Include="Core\Public\CoreGlobals.h" />
+    <ClInclude Include="Core\Public\CoreMinimal.h" />
+    <ClInclude Include="Core\Public\CoreTypes.h" />
+    <ClInclude Include="Core\Public\Debug\LogManager.h" />
+    <ClInclude Include="Core\Public\Memory\Allocator.h" />
+    <ClInclude Include="Core\Public\Memory\Memory.h" />
+    <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
+    <ClInclude Include="Graphics\Public\Graphics.h" />
+    <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
+    <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h" />
+    <ClInclude Include="Graphics\Public\Renderer\CaveNode.h" />
+    <ClInclude Include="Graphics\Public\Renderer\CaveRenderer.h" />
+    <ClInclude Include="Graphics\Public\Test\Resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Core\Private\Debug\LogManager.cpp" />
+    <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
+    <ClCompile Include="Core\Private\Memory\Memory.cpp" />
+    <ClCompile Include="EngineMain.cpp" />
+    <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
+    <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
+    <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
+    <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp" />
+    <ClCompile Include="Renderer.ixx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Graphics\Resource\directx.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Graphics\Shader\DirectXTestPixelShader.hlsl" />
+    <FxCompile Include="Graphics\Shader\DirectXTestVertexShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Shader\DirectXTest.fxh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Graphics\Shader\DirectXTest.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

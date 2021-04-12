@@ -60,7 +60,7 @@ namespace cave
         {
         }
 
-        constexpr ~TArray()
+        ~TArray()
         {
             mElements.clear();
         }

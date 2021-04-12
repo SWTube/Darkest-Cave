@@ -415,6 +415,9 @@ message(STATUS "Configuring CAVE_ENGINE ${CAVE_ENGINE_VERSION}")
 # Setup Engine
 add_subdirectory(CaveEngine)
 
+# Setup Editor
+add_subdirectory(Editor)
+
 # # Setup RenderSystems
 # add_subdirectory(RenderSystems)
 

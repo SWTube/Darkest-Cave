@@ -26,5 +26,6 @@ namespace cave
 
 		// return:	On success, returns the pointer to the beginning of newly allocated memory. To avoid a memory leak, the returned pointer must be deallocated with std::free() or std::realloc().
 					//On failure, returns a null pointer.
+		return nullptr;
 	}
 } // namespace cave
