@@ -100,7 +100,7 @@
       <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Public;D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
     <FxCompile>
       <DisableOptimizations>false</DisableOptimizations>
@@ -132,7 +132,7 @@
       <EntryPointName>VS</EntryPointName>
     </FxCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Public;D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -160,7 +160,7 @@
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Public;D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
     <FxCompile>
       <ShaderType>
@@ -194,7 +194,7 @@
       <EntryPointName>VS</EntryPointName>
     </FxCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Public;D:\SWTube\SpecialProject\Darkest-Cave\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -209,9 +209,6 @@
     <ClInclude Include="Core\Public\Memory\Allocator.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
-    <ClInclude Include="Gameplay\Public\Object\Actor.h" />
-    <ClInclude Include="Gameplay\Public\Object\ActorState.h" />
-    <ClInclude Include="Gameplay\Public\Time\TimeManager.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h" />
@@ -224,9 +221,6 @@
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="EngineMain.cpp" />
-    <ClCompile Include="Gameplay\Private\Object\Actor.cpp" />
-    <ClCompile Include="Gameplay\Private\Object\ActorState.cpp" />
-    <ClCompile Include="Gameplay\Private\Time\TimeManager.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
