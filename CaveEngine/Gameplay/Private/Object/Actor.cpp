@@ -18,7 +18,7 @@ namespace cave
 		mbCanCollision = true;
 
 
-		mPlayState = eActorStateType::Play::None;
+		mPlayState = ActorStateType::Play::None;
 
 		mbIsBeingDestroyed = false;
 

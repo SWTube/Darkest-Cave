@@ -5,13 +5,13 @@
 
 #pragma once
 
-#include "Core/Public/Core.h"
-#include "Gameplay/Public/Object/ActorState.h"
-#include "Gameplay/Public/Tick/TimeManager.h"
+#include "Core.h"
+#include "Object/ActorState.h"
+#include "Time/TimeManager.h"
 
 namespace cave
 {
-    class Actor : public IPhysics
+    class Actor
     {
     public:
         /** Default constructor for Actor. Called Private Initialize(). */
@@ -23,7 +23,7 @@ namespace cave
 
         Actor* GetOwner() const;
 
-        Pawn* GetInstigator() const;
+        class Pawn* GetInstigator() const;
 
         void SetFolderPath(const char* newFolderPath);
         const char* GetFolderPath() const;
@@ -38,9 +38,6 @@ namespace cave
 
         void SetCanCollision(bool newCanCollision);
         bool IsCanCollision() const;
-
-        /** Override IPhysics::OnCollsion(). */
-        void OnCollision() override;
 
         /******************
          *      Time      *
@@ -71,8 +68,6 @@ namespace cave
         void SetCreationTime(uint64_t primary);
 
         void SetLifeSpan(uint64_t lifeSpan);
-
-        void SetLifeState(ActorStateType::Life lifeState = ActorStateType::Life::Forever);
 
     private:
         /** Initialized all Actor's members. */
@@ -106,7 +101,7 @@ namespace cave
          *     Transform    *
          ********************/
 
-        Vector2 mPivotOffset;
+        class Vector2* mPivotOffset;
 
         bool mbLockLocation;
 
@@ -163,20 +158,6 @@ namespace cave
 
         std::vector<const char*> mTags;
 
-        class Guid* mGuid;
+        const char* mUniqueID;
     };
 }
-
-struct Vector2
-{
-    float posX;
-    float posY;
-};
-
-class IPhysics
-{
-public:
-    virtual ~IPhysics() = 0;
-
-    virtual void OnCollision() = 0;
-};

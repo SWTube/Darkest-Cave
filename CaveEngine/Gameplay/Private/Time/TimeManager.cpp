@@ -3,7 +3,7 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Gameplay/Public/Tick/TimeManager.h"
+#include "Time/TimeManager.h"
 
 namespace cave
 {

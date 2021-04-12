@@ -5,7 +5,7 @@
 
 #pragma once	
 
-#include "Core/Public/Core.h"
+#include "Core.h"
 
 namespace cave
 {

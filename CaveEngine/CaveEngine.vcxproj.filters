@@ -58,6 +58,24 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{adca7f36-2313-4244-84d9-1f5647390e80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Gameplay">
+      <UniqueIdentifier>{32db0f36-e1e1-4dc3-855a-45b75bb813bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Object">
+      <UniqueIdentifier>{30337889-05c7-40e8-90f5-ce7f65f27466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay">
+      <UniqueIdentifier>{3196308d-0c78-4abc-9b8b-663936d1aa80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Object">
+      <UniqueIdentifier>{34d7dc31-9247-498e-89b2-d5bbce909d4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Time">
+      <UniqueIdentifier>{501ecee5-acc2-4d6d-b76d-b01eb97287d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Time">
+      <UniqueIdentifier>{788d9742-dc16-4ef6-a0c6-2e995db57926}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -111,6 +129,15 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Actor.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\ActorState.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Time\TimeManager.h">
+      <Filter>Header Files\Gameplay\Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -139,6 +166,15 @@
     </ClCompile>
     <ClCompile Include="Renderer.ixx">
       <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Actor.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\ActorState.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Time\TimeManager.cpp">
+      <Filter>Source Files\Gameplay\Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

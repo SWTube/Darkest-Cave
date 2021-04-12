@@ -8,7 +8,7 @@
 #include <chrono>
 //#include <Windows.h>
 
-#include "Core/Public/Core.h"
+#include "Core.h"
 
 namespace cave
 {
