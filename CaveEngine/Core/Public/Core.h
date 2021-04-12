@@ -61,6 +61,7 @@
 //#include "HAL/PlatformAffinity.h"
 //#include "HAL/PlatformIncludes.h"
 //#include "HAL/PlatformFilemanager.h"
+import Assertion;
 //#include "Misc/AssertionMacros.h"
 //#include "HAL/UnrealMemory.h"
 //#include "Templates/PointerIsConvertibleFromTo.h"
