@@ -97,7 +97,7 @@
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource;$(ProjectDir)\Resource;$(ProjectDir)\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -122,6 +122,9 @@
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource;$(ProjectDir)\Resource;$(ProjectDir)\Public</AdditionalIncludeDirectories>
     </ResourceCompile>
     <FxCompile>
@@ -143,11 +146,8 @@
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource;$(ProjectDir)\Resource;$(ProjectDir)\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
-    <FxCompile>
-      <EntryPointName>VS</EntryPointName>
-    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -168,11 +168,8 @@
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource;$(ProjectDir)\Resource;$(ProjectDir)\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
-    <FxCompile>
-      <EntryPointName>VS</EntryPointName>
-    </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\CaveEngine\Core\Public\Debug\LogManager.h" />
