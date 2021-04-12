@@ -5,274 +5,178 @@
 
 #pragma once
 
-#include "Core.h"
+#include "Core/Public/Core.h"
+#include "Gameplay/Public/Object/ActorState.h"
+#include "Gameplay/Public/Tick/TimeManager.h"
 
 namespace cave
 {
-	class Actor
-	{
-	public:
-		/** Default constructor for Actor. Called Private Initialize(). */
-		Actor();
+    class Actor : public IPhysics
+    {
+    public:
+        /** Default constructor for Actor. Called Private Initialize(). */
+        Actor();
 
-		/********************
-		 *		Actor 		*
-		 ********************/
+        /********************
+         *      Actor       *
+         ********************/
 
-		void SetOwner(Actor* newOwner);
-		Actor* GetOwner() const;
+        Actor* GetOwner() const;
 
-		void SetInstigator(class Pawn* newInstigator);
-		Pawn* GetInstigator() const;
+        Pawn* GetInstigator() const;
 
-		void SetFolderPath(const char* newFolderPath);
-		const char* GetFolderPath() const;
+        void SetFolderPath(const char* newFolderPath);
+        const char* GetFolderPath() const;
 
-	protected:
-		void SetLifeSpan(uint64_t primaryLifeSpan);
+        void AddTag(const char* tag);
+        void RemoveTag(const char* tag);
+        bool SearchTag(const char* tag);
 
-	private:
-		/** Initialized all Actor's member. */
-		void Initialize();
+        /********************
+         *      Physics     *
+         ********************/
 
-	public:
-		/********************
-		 *		Time		*
-		 ********************/
+        void SetCanCollision(bool newCanCollision);
+        bool IsCanCollision() const;
 
-		uint64_t mPrimaryTick;
+        /** Override IPhysics::OnCollsion(). */
+        void OnCollision() override;
 
-		uint64_t mCreationTime;
+        /******************
+         *      Time      *
+         ******************/
 
-		uint64_t mLifeSpan;
+        void SetRenderTime(uint64_t& newRenderTime);
+        uint64_t GetRenderTime() const;
 
-		uint64_t mLastRenderTime;
+        void SetLifeState(ActorStateType::Life newLifeState);
 
-		bool mbTickFunctionsRegisterd;
+        uint64_t GetCreationTime() const;
 
-		/********************
-		 *		Camera		*
-		 ********************/
+        /********************
+         *      Camera      *
+         ********************/
 
-		bool mbViewTarget;
+        void SetVisible(bool visible);
 
-		bool mbHidden;
+        bool IsVisible() const;
 
-		/********************
-		 *	   Transform	*
-		 ********************/
+        bool IsCameraViewTarget() const;
 
-		struct Vector* mPivotOffset;
+    protected:
+        void SetOwner(Actor* newOwner);
 
-		bool mbLockLocation;
+        void SetInstigator(class Pawn* newInstigator);
 
-		/********************
-		 *		Input		*
-		 ********************/
+        void SetCreationTime(uint64_t primary);
 
-		bool mbBlockInput;
+        void SetLifeSpan(uint64_t lifeSpan);
 
-		int32_t mInputPriority;
+        void SetLifeState(ActorStateType::Life lifeState = ActorStateType::Life::Forever);
 
-		class Component* mInputComponent;
+    private:
+        /** Initialized all Actor's members. */
+        void initialize();
 
-		bool mbCollideWhenPlacing;
+    protected:
+        /******************
+         *      Time      *
+         ******************/
 
-		std::vector<const char*> mTags;
+        class TimeManager* mActorTime;
 
-		bool mbCanBeInCluster;
+        uint64_t mCreationTime;
 
-		class Guid* mGuid;
+        uint64_t mLastRenderTime;
+        
+        /** Set once. */
+        uint64_t mLifeSpan;
 
-		std::vector<Actor*> mChildren;
+        ActorStateType::Life mLifeState;
 
-		class SeneComponent* mRootCompoent;
+        /********************
+         *      Camera      *
+         ********************/
 
-		std::vector<class Animation*> mControllingAnimation;
+        bool mbCameraViewTarget;
 
-		bool mbHasFinishedSpawning;
+        bool mbVisible;
 
-		bool mbActorInitailized;
+        /********************
+         *     Transform    *
+         ********************/
 
-		bool mbActorBeginningPlayFromLevelStreaming;
+        Vector2 mPivotOffset;
 
-		bool mbHasDeferredComponentRegistration;
+        bool mbLockLocation;
 
-		/********************
-		 *		Physics		*
-		 ********************/
+        /********************
+         *      Input       *
+         ********************/
 
-		bool mbActorEnableCollision;
+        bool mbBlockInput;
 
-		bool mbActorIsBeingDestroyed;
+        int32_t mInputPriority;
 
-		bool mbActorWantsDestroyDuringBeginPlay;
+        class Component* mInputComponent;
 
-		/********************
-		 *	  Actor State	*
-		 ********************/
+        /********************
+         *      Physics     *
+         ********************/
 
-		enum class eActorPlayState : uint8_t
-		{
-			None,
-			Start,
-			Begin,
-			End,
-		};
+        bool mbCanCollision;
 
-		eActorPlayState mActorPlayState;
 
-		/**
-		 * Called when another actor begins to overlap this actor, for example a player walking into a trigger.
-		 * For events when objects have a blocking collision, for example a player hitting a wall, see 'Hit' events.
-		 * @note Components on both this and the other Actor must have bGenerateOverlapEvents set to true to generate overlap events.
-		 */
-		
-		//	FActorBeginOverlapSignature OnActorBeginOverlap;
+        /********************
+         *    Actor State   *
+         ********************/
 
-		/**
-		 * Called when another actor stops overlapping this actor.
-		 * @note Components on both this and the other Actor must have bGenerateOverlapEvents set to true to generate overlap events.
-		 */
-		
-		//	FActorEndOverlapSignature OnActorEndOverlap;
+        ActorStateType::Play mPlayState;
 
-		/** Called when the mouse cursor is moved over this actor if mouse over events are enabled in the player controller. */
-		
-		//	FActorBeginCursorOverSignature OnBeginCursorOver;
+        bool mbIsBeingDestroyed;
 
-		/** Called when the mouse cursor is moved off this actor if mouse over events are enabled in the player controller. */
-		
-		//	FActorEndCursorOverSignature OnEndCursorOver;
+        bool mbHasFinishedSpawning;
 
-		/** Called when the left mouse button is clicked while the mouse is over this actor and click events are enabled in the player controller. */
-		
-		//	FActorOnClickedSignature OnClicked;
+        bool mbInitailized;
 
-		/** Called when the left mouse button is released while the mouse is over this actor and click events are enabled in the player controller. */
-		
-		//	FActorOnReleasedSignature OnReleased;
+        bool mbCanBeInCluster;
 
-		/** Called when a touch input is received over this actor when touch events are enabled in the player controller. */
-		
-		//	FActorOnInputTouchBeginSignature OnInputTouchBegin;
 
-		/** Called when a touch input is received over this component when touch events are enabled in the player controller. */
-	
-		//	FActorOnInputTouchEndSignature OnInputTouchEnd;
+        std::vector<Actor*> mChildren;
 
-		/** Called when a finger is moved over this actor when touch over events are enabled in the player controller. */
-		
-		//	FActorBeginTouchOverSignature OnInputTouchEnter;
+        class Guid* mGuid;
 
-		/** Called when a finger is moved off this actor when touch over events are enabled in the player controller. */
-		
-		//	FActorEndTouchOverSignature OnInputTouchLeave;
+        class SeneComponent* mRootCompoent;
 
-		/**
-		 *	Called when this Actor hits (or is hit by) something solid. This could happen due to things like Character movement, using Set Location with 'sweep' enabled, or physics simulation.
-		 *	For events when objects overlap (e.g. walking into a trigger) see the 'Overlap' event.
-		 *	@note For collisions during physics simulation to generate hit events, 'Simulation Generates Hit Events' must be enabled.
-		 */
-		
-		//	FActorHitSignature OnActorHit;
+        std::vector<class Animation*> mControllingAnimation;
 
-	protected:
-		/********************
-		 *		Time		*
-		 ********************/
+    private:
+        /********************
+         *       Actor      *
+         ********************/
 
-		uint64_t mPrimaryTick;
+        Actor* mOwner;
 
-		uint64_t mCreationTime;
+        class Pawn* mInstigator;
 
-		uint64_t mLifeSpan;
+        const char* mFolderPath;
 
-		uint64_t mLastRenderTime;
+        std::vector<const char*> mTags;
 
-		bool mbTickFunctionsRegisterd;
-
-		/********************
-		 *		Camera		*
-		 ********************/
-
-		bool mbViewTarget;
-
-		bool mbHidden;
-
-		/********************
-		 *	   Transform	*
-		 ********************/
-
-		struct Vector* mPivotOffset;
-
-		bool mbLockLocation;
-
-		/********************
-		 *		Input		*
-		 ********************/
-
-		bool mbBlockInput;
-
-		int32_t mInputPriority;
-
-		class Component* mInputComponent;
-
-		bool mbCollideWhenPlacing;
-
-		std::vector<const char*> mTags;
-
-		bool mbCanBeInCluster;
-
-		class Guid* mGuid;
-
-		std::vector<Actor*> mChildren;
-
-		class SeneComponent* mRootCompoent;
-
-		std::vector<class Animation*> mControllingAnimation;
-
-		bool mbHasFinishedSpawning;
-
-		bool mbActorInitailized;
-
-		bool mbActorBeginningPlayFromLevelStreaming;
-
-		bool mbHasDeferredComponentRegistration;
-
-		/********************
-		 *		Physics		*
-		 ********************/
-
-		bool mbActorEnableCollision;
-
-		bool mbActorIsBeingDestroyed;
-
-		bool mbActorWantsDestroyDuringBeginPlay;
-
-		/********************
-		 *	  Actor State	*
-		 ********************/
-
-		enum class eActorPlayState : uint8_t
-		{
-			None,
-			Start,
-			Begin,
-			End,
-		};
-
-		eActorPlayState mActorPlayState;
-
-	private:
-		/********************
-		 *		Actor 		*
-		 ********************/
-
-		Actor* mOwner;
-
-		class Pawn* mInstigator;
-
-		const char* mFolderPath;
-	};
+        class Guid* mGuid;
+    };
 }
+
+struct Vector2
+{
+    float posX;
+    float posY;
+};
+
+class IPhysics
+{
+public:
+    virtual ~IPhysics() = 0;
+
+    virtual void OnCollision() = 0;
+};
