@@ -4,7 +4,8 @@
  */
 #pragma once
 
-#include "CaveEngineConfig.h"
+#include "Core.h"
+
 #include "GraphicsCommon.h"
 #if defined(__WIN32__)
 	#include "Test/Resource.h"

@@ -72,9 +72,6 @@
     <ClInclude Include="Core\Public\CoreFwd.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\CoreGlobals.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\CoreMinimal.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -117,6 +114,9 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Public\Debug\Log.h">
+      <Filter>Header Files\Core\Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -148,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx">
       <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Debug\Log.ixx">
+      <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,8 +9,13 @@
 	 Low level includes.
  ----------------------------------------------------------------------------*/
 
+#if defined(__UNIX__)
+	#include "CaveEngineConfig.h"
+#endif
 
 #include "CoreMinimal.h"
+
+
 //#include "Containers/ContainersFwd.h"
 //#include "Misc/Timespan.h"
 //#include "Misc/DateTime.h"
@@ -102,8 +107,6 @@
 //#include "Containers/ContainerAllocationPolicies.h"
 //
 //#include "UObject/UObjectHierarchyFwd.h"
-
-#include "CoreGlobals.h"
 
 /*----------------------------------------------------------------------------
 	Includes.
@@ -248,7 +251,12 @@
 //#include "Math/RandomStream.h"
 //#include "Logging/LogSuppressionInterface.h"
 //#include "Logging/LogScopedCategoryAndVerbosityOverride.h"
-#include "Debug/LogManager.h"
+#if defined(__WIN32__)
+	#include "Debug/Log.h"
+	import Log;
+#elif defined(__UNIX__)
+	#include "Debug/LogManager.h"
+#endif
 //#include "HAL/OutputDevices.h"
 //#include "Misc/OutputDeviceRedirector.h"
 //#include "Misc/OutputDeviceNull.h"
