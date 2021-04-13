@@ -7,6 +7,7 @@
 
 namespace cave
 {
+    
     struct Vector2
     {
     public:
