@@ -5,7 +5,9 @@
 
 module;
 
+#include <iostream>
 #include "Graphics.h"
+import DdsTextureLoader;
 
 export module Renderer;
 
@@ -18,27 +20,56 @@ namespace cave
 		//--------------------------------------------------------------------------------------
 		struct SimpleVertex
 		{
-			DirectX::XMFLOAT3 Pos;
+			DirectX::XMFLOAT3 mPosition;
+			DirectX::XMFLOAT2 mTexCoord;
+		};
+
+		struct ConstantBufferNeverChanges
+		{
+			DirectX::XMMATRIX mView;
+		};
+
+		struct ConstantBufferChangeOnResize
+		{
+			DirectX::XMMATRIX mProjection;
+		};
+
+		struct ConstantBufferChangesEveryFrame
+		{
+			DirectX::XMMATRIX mWorld;
+			DirectX::XMFLOAT4 mvMeshColor;
 		};
 
 		//--------------------------------------------------------------------------------------
 		// Global Variables
 		//--------------------------------------------------------------------------------------
-		HINSTANCE gHInstance = nullptr;
-		HWND gHWindow = nullptr;
-		D3D_DRIVER_TYPE gDriverType = D3D_DRIVER_TYPE_NULL;
-		D3D_FEATURE_LEVEL gFeatureLevel = D3D_FEATURE_LEVEL_11_0;
-		ID3D11Device* gD3dDevice = nullptr;
-		ID3D11Device1* gD3dDevice1 = nullptr;
-		ID3D11DeviceContext* gImmediateContext = nullptr;
-		ID3D11DeviceContext1* gImmediateContext1 = nullptr;
-		IDXGISwapChain* gSwapChain = nullptr;
-		IDXGISwapChain1* gSwapChain1 = nullptr;
-		ID3D11RenderTargetView* gRenderTargetView = nullptr;
-		ID3D11VertexShader* gVertexShader = nullptr;
-		ID3D11PixelShader* gPixelShader = nullptr;
-		ID3D11InputLayout* gVertexLayout = nullptr;
-		ID3D11Buffer* gVertexBuffer = nullptr;
+		HINSTANCE					gHInstance = nullptr;
+		HWND						gHWindow = nullptr;
+		D3D_DRIVER_TYPE				gDriverType = D3D_DRIVER_TYPE_NULL;
+		D3D_FEATURE_LEVEL			gFeatureLevel = D3D_FEATURE_LEVEL_11_0;
+		ID3D11Device*				gD3dDevice = nullptr;
+		ID3D11Device1*				gD3dDevice1 = nullptr;
+		ID3D11DeviceContext*		gImmediateContext = nullptr;
+		ID3D11DeviceContext1*		gImmediateContext1 = nullptr;
+		IDXGISwapChain*				gSwapChain = nullptr;
+		IDXGISwapChain1*			gSwapChain1 = nullptr;
+		ID3D11RenderTargetView*		gRenderTargetView = nullptr;
+		ID3D11Texture2D*			gDepthStencil = nullptr;
+		ID3D11DepthStencilView*		gDepthStencilView = nullptr;
+		ID3D11VertexShader*			gVertexShader = nullptr;
+		ID3D11PixelShader*			gPixelShader = nullptr;
+		ID3D11InputLayout*			gVertexLayout = nullptr;
+		ID3D11Buffer*				gVertexBuffer = nullptr;
+		ID3D11Buffer*				gIndexBuffer = nullptr;
+		ID3D11Buffer*				gConstantBufferNeverChanges = nullptr;
+		ID3D11Buffer*				gConstantBufferChangeOnResize = nullptr;
+		ID3D11Buffer*				gConstantBufferChangesEveryFrame = nullptr;
+		ID3D11ShaderResourceView*	gTextureRv = nullptr;
+		ID3D11SamplerState*			gSamplerLinear = nullptr;
+		DirectX::XMMATRIX			gWorld;
+		DirectX::XMMATRIX			gView;
+		DirectX::XMMATRIX			gProjection;
+		DirectX::XMFLOAT4			gvMeshColor(0.7f, 0.7f, 0.7f, 1.0f);
 		// 텍스처 사용하지 않으므로 shader resource view는 사용하지 않음
 
 		//--------------------------------------------------------------------------------------
@@ -63,9 +94,33 @@ namespace cave
 				gImmediateContext->ClearState();
 			}
 
+			if (gSamplerLinear)
+			{
+				gSamplerLinear->Release();
+			}
+			if (gTextureRv)
+			{
+				gTextureRv->Release();
+			}
+			if (gConstantBufferNeverChanges)
+			{
+				gConstantBufferNeverChanges->Release();
+			}
+			if (gConstantBufferChangeOnResize)
+			{
+				gConstantBufferChangeOnResize->Release();
+			}
+			if (gConstantBufferChangesEveryFrame)
+			{
+				gConstantBufferChangesEveryFrame->Release();
+			}
 			if (gVertexBuffer)
 			{
 				gVertexBuffer->Release();
+			}
+			if (gIndexBuffer)
+			{
+				gIndexBuffer->Release();
 			}
 			if (gVertexLayout)
 			{
@@ -78,6 +133,14 @@ namespace cave
 			if (gPixelShader)
 			{
 				gPixelShader->Release();
+			}
+			if (gDepthStencil)
+			{
+				gDepthStencil->Release();
+			}
+			if (gDepthStencilView)
+			{
+				gDepthStencilView->Release();
 			}
 			if (gRenderTargetView)
 			{
@@ -372,11 +435,41 @@ namespace cave
 				return hResult;
 			}
 
+			// Create depth stencil texture
+			D3D11_TEXTURE2D_DESC descDepth = {};
+			descDepth.Width = width;
+			descDepth.Height = height;
+			descDepth.MipLevels = 1;
+			descDepth.ArraySize = 1;
+			descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			descDepth.SampleDesc.Count = 1;
+			descDepth.SampleDesc.Quality = 0;
+			descDepth.Usage = D3D11_USAGE_DEFAULT;
+			descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+			descDepth.CPUAccessFlags = 0;
+			descDepth.MiscFlags = 0;
+			hResult = gD3dDevice->CreateTexture2D(&descDepth, nullptr, &gDepthStencil);
+			if (FAILED(hResult))
+			{
+				return hResult;
+			}
+
+			// Create the depth stencil view
+			D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+			descDSV.Format = descDepth.Format;
+			descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+			descDSV.Texture2D.MipSlice = 0;
+			hResult = gD3dDevice->CreateDepthStencilView(gDepthStencil, &descDSV, &gDepthStencilView);
+			if (FAILED(hResult))
+			{
+				return hResult;
+			}
+
 			// 여러 target 세팅 가능. 요즘은 8 장까지 가능
-			// 마지막 parameter는 depth buffer. 안쓰니까 nullptr
+			// 마지막 parameter는 depth buffer.
 			// 앞에 OM 붙어있다는 건 Output Manager. 버퍼에 쓰고 뭐하고 하는 짓은 접두어가 OM으로 되어있음
 			// 우리가 그릴 buffer 세팅
-			gImmediateContext->OMSetRenderTargets(1, &gRenderTargetView, nullptr);
+			gImmediateContext->OMSetRenderTargets(1, &gRenderTargetView, gDepthStencilView);
 
 			// gRenderTargetView의 버퍼 중 어디까지를 그릴 건지?
 			// viewport로 3ds max 만든다고 생각하면 화면 4분할해서
@@ -444,6 +537,7 @@ namespace cave
 			D3D11_INPUT_ELEMENT_DESC layout[] =
 			{
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			};
 			UINT numElements = ARRAYSIZE(layout);
 
@@ -485,9 +579,35 @@ namespace cave
 			// Matrix 변환 하나도 없음.
 			// Create vertex buffer
 			SimpleVertex vertices[] = {
-				DirectX::XMFLOAT3(0.0f, 0.5f, 0.5f),
-				DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f),
-				DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f),
+				{ DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
+				{ DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
+				{ DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) },
+
+				{ DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
+				{ DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
+				{ DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
+
+				{ DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
+				{ DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
+
+				{ DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
+				{ DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
+
+				{ DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
+				{ DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
+
+				{ DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
+				{ DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
+				{ DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
 			};
 			D3D11_BUFFER_DESC bd = {};
 			// IMMUTABLE: 생성할 당시 그 버퍼에 값을 포인터로 전달한 다음 절대 건드리지 않기
@@ -497,7 +617,7 @@ namespace cave
 				// GPU 메모리 안에 어떤 값을 알고 싶으면 화면 버퍼의 데이터를 staging으로 copy해서 읽어오기.
 				// GPU 메모리를 바로 못 읽음
 			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(SimpleVertex) * 3;
+			bd.ByteWidth = sizeof(SimpleVertex) * 24;
 			// 버퍼 메모리 유형
 			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			bd.CPUAccessFlags = 0;
@@ -513,12 +633,114 @@ namespace cave
 
 			// 현재 context에 묶어주기
 			// Set vertex buffer
-			UINT stride = sizeof(SimpleVertex); // 12 byte
+			UINT stride = sizeof(SimpleVertex);
 			UINT offset = 0;
 			gImmediateContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &stride, &offset);
 
+			// Create index buffer
+			WORD indices[] = {
+				3,1,0,
+				2,1,3,
+
+				6,4,5,
+				7,4,6,
+
+				11,9,8,
+				10,9,11,
+
+				14,12,13,
+				15,12,14,
+
+				19,17,16,
+				18,17,19,
+
+				22,20,21,
+				23,20,22
+			};
+			bd.Usage = D3D11_USAGE_DEFAULT;
+			bd.ByteWidth = sizeof(WORD) * 36;        // 36 vertices needed for 12 triangles in a triangle list
+			bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+			bd.CPUAccessFlags = 0;
+			InitData.pSysMem = indices;
+			hResult = gD3dDevice->CreateBuffer(&bd, &InitData, &gIndexBuffer);
+			if (FAILED(hResult))
+			{
+				return hResult;
+			}
+
+			// Set index buffer
+			gImmediateContext->IASetIndexBuffer(gIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+
 			// Set primitive topology
 			gImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+			// Create the constant buffer
+			bd.Usage = D3D11_USAGE_DEFAULT;
+			bd.ByteWidth = sizeof(ConstantBufferNeverChanges);
+			bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			bd.CPUAccessFlags = 0;
+			hResult = gD3dDevice->CreateBuffer(&bd, nullptr, &gConstantBufferNeverChanges);
+			if (FAILED(hResult))
+			{
+				return hResult;
+			}
+
+			bd.ByteWidth = sizeof(ConstantBufferChangeOnResize);
+			hResult = gD3dDevice->CreateBuffer(&bd, nullptr, &gConstantBufferChangeOnResize);
+			if (FAILED(hResult))
+			{
+				return hResult;
+			}
+
+			bd.ByteWidth = sizeof(ConstantBufferChangesEveryFrame);
+			hResult = gD3dDevice->CreateBuffer(&bd, nullptr, &gConstantBufferChangesEveryFrame);
+			if (FAILED(hResult))
+			{
+				return hResult;
+			}
+
+			// Load the Texture
+			hResult = cave::DdsTextureLoader::CreateDDSTextureFromFile(gD3dDevice, L"Graphics/Resource/seafloor.dds", nullptr, &gTextureRv);
+			if (FAILED(hResult))
+			{
+				return hResult;
+			}
+
+			// Create the sample state
+			D3D11_SAMPLER_DESC sampDesc = {};
+			sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+			sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+			sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+			sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+			sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+			sampDesc.MinLOD = 0;
+			sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+			hResult = gD3dDevice->CreateSamplerState(&sampDesc, &gSamplerLinear);
+			if (FAILED(hResult))
+			{
+				return hResult;
+			}
+
+			// Initialize the world matrix
+			gWorld = DirectX::XMMatrixIdentity();
+
+			// Initialize the view matrix
+			DirectX::XMVECTOR eye = DirectX::XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
+			DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+			DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+			gView = DirectX::XMMatrixLookAtLH(eye, at, up);
+
+			ConstantBufferNeverChanges constantBufferNeverChanges;
+			constantBufferNeverChanges.mView = DirectX::XMMatrixTranspose(gView);
+			gImmediateContext->UpdateSubresource(gConstantBufferNeverChanges, 0, nullptr, &constantBufferNeverChanges, 0, 0);
+
+			// Initialize the projection matrix
+			gProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, width / static_cast<FLOAT>(height), 0.01f, 100.0f);
+
+			ConstantBufferChangeOnResize constantBufferChangesOnResize;
+			constantBufferChangesOnResize.mProjection = DirectX::XMMatrixTranspose(gProjection);
+			gImmediateContext->UpdateSubresource(gConstantBufferChangeOnResize, 0, nullptr, &constantBufferChangesOnResize, 0, 0);
 
 			return S_OK;
 		}
@@ -570,18 +792,65 @@ namespace cave
 		//--------------------------------------------------------------------------------------
 		export void Render()
 		{
+			// Update our time
+			static float t = 0.0f;
+			if (gDriverType == D3D_DRIVER_TYPE_REFERENCE)
+			{
+				t += static_cast<float>(DirectX::XM_PI) * 0.0125f;
+			}
+			else
+			{
+				static ULONGLONG timeStart = 0;
+				ULONGLONG timeCur = GetTickCount64();
+				if (timeStart == 0)
+				{
+					timeStart = timeCur;
+				}
+				t = (timeCur - timeStart) / 1000.0f;
+			}
+
+			// 1st Cube : Rotate around the origin
+			gWorld = DirectX::XMMatrixRotationY(t);
+
+			// Modify the color
+			gvMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+			gvMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+			gvMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+
 			// 원래 layout 세팅, topology 바꾸는거, vertex buffer 바꾸는거 rendering 함수 안에 들어가는 경우가 보통
 			// vertex buffer랑 pixel shader 두 개는 필수
 			// Clear the back buffer 
 			gImmediateContext->ClearRenderTargetView(gRenderTargetView, DirectX::Colors::MidnightBlue);
 
-			// Render a triangle
+			//
+			// Clear the depth buffer to 1.0 (max depth)
+			//
+			gImmediateContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+			//
+			// Update variables for the first cube
+			//
+			ConstantBufferChangesEveryFrame constantBuffer;
+			constantBuffer.mWorld = DirectX::XMMatrixTranspose(gWorld);
+			constantBuffer.mvMeshColor = gvMeshColor;
+			gImmediateContext->UpdateSubresource(gConstantBufferChangesEveryFrame, 0, nullptr, &constantBuffer, 0, 0);
+
+			//
+			// Render the first cube
+			//
 			gImmediateContext->VSSetShader(gVertexShader, nullptr, 0);
+			gImmediateContext->VSSetConstantBuffers(0, 1, &gConstantBufferNeverChanges);
+			gImmediateContext->VSSetConstantBuffers(1, 1, &gConstantBufferChangeOnResize);
+			gImmediateContext->VSSetConstantBuffers(2, 1, &gConstantBufferChangesEveryFrame);
 			gImmediateContext->PSSetShader(gPixelShader, nullptr, 0);
+			gImmediateContext->PSSetConstantBuffers(2, 1, &gConstantBufferChangesEveryFrame);
+			gImmediateContext->PSSetShaderResources(0, 1, &gTextureRv);
+			gImmediateContext->PSSetSamplers(0, 1, &gSamplerLinear);
 			// 실제 production level에선 Draw보다는 DrawIndexed를 더 많이 사용
 			// 첫번째는 버텍스 개수. 3
 			// back buffer에 그리기
-			gImmediateContext->Draw(3, 0);
+			//gImmediateContext->Draw(3, 0);
+			gImmediateContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
 			// 이제 flip이나 swap 통해서 front buffer에 쏴줌
 			// front buffer에 보내기
