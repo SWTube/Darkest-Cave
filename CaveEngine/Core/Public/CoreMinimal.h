@@ -29,6 +29,7 @@
 //#include "Misc/OutputDevice.h"
 //#include "HAL/PlatformCrt.h"
 //#include "HAL/PlatformMisc.h"
+#include <cassert>
 //#include "Misc/AssertionMacros.h"
 //#include "Templates/IsPointer.h"
 //#include "HAL/PlatformMemory.h"
@@ -69,6 +70,7 @@
 //#include "GenericPlatform/GenericPlatformStricmp.h"
 //#include "GenericPlatform/GenericPlatformString.h"
 //#include "HAL/PlatformString.h"
+#include <cstring>
 //#include "Misc/CString.h"
 //#include "Misc/Crc.h"
 //#include "Math/UnrealMathUtility.h"

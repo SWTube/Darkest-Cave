@@ -26,7 +26,7 @@ namespace cave
 		constexpr void* Memmove(void*);
 	};
 
-	__forceinline uintptr_t AlignAddress(uintptr_t address, size_t align)
+	inline uintptr_t AlignAddress(uintptr_t address, size_t align)
 	{
 		const size_t mask = align - 1;
 		assert((align & mask) == 0);	// pwr of 2
@@ -34,7 +34,7 @@ namespace cave
 	}
 
 	template<typename T>
-	__forceinline T* AlignPointer(T* ptr, size_t align)
+	inline T* AlignPointer(T* ptr, size_t align)
 	{
 		const uintptr_t address = reinterpret_cast<uintptr_t>(ptr);
 		const uintptr_t alignedAddress = AlignAddress(address, align);

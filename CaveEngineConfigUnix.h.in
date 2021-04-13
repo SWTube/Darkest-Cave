@@ -1,0 +1,11 @@
+#pragma once
+
+#ifndef __UNIX__
+	#define __UNIX__
+#endif
+
+#if @CMAKE_COMPILER_IS_GNUCXX@
+	#define FORCEINLINE __attribute__((always_inline))
+#endif
+
+#define PROJECT_DIR "@PROJECT_SOURCE_DIR@"

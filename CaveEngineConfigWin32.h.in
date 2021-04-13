@@ -1,0 +1,13 @@
+#pragma once
+
+#ifndef __WIN32__
+	#define __WIN32__
+#endif
+
+#if @MSVC@
+	#define __FORCEINLINE__ __forceinline
+#elif @MINGW@
+	#define __FORCEINLINE__ __attribute__((always_inline))
+#endif
+
+#define PROJECT_DIR "@PROJECT_SOURCE_DIR@"

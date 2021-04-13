@@ -5,7 +5,6 @@
 
 #include "Graphics.h"
 
-#if defined(__WIN32__)
 import Renderer;
 
 //--------------------------------------------------------------------------------------
@@ -16,20 +15,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
-#elif defined(__UNIX__)
-int main(int argc, char** argv)
-{
-#else
-int main()
-{
-#endif
-    if (FAILED(cave::Renderer::Init("CaveEngineDemo")))
+
+    if (FAILED(cave::Renderer::Init(hInstance, nCmdShow, L"CaveEngine", L"CaveEngineDemo")))
     {
         return 0;
     }
 
     // Main message loop
-#if defined(__WIN32__)
     MSG msg = {0};
     while (WM_QUIT != msg.message)
     {
@@ -43,21 +35,8 @@ int main()
             cave::Renderer::Render();
         }
     }
-#elif defined(__UNIX__)
-	while (!cave::Renderer::GlfwWindowShouldClose())
-	{
-		cave::Renderer::Render();
-		glfwPollEvents();
-	}
-#endif
 
     cave::Renderer::Destroy();
 
-#if defined(__WIN32__)
     return static_cast<int>(msg.wParam);
-#elif defined(__UNIX__)
-	return 0;
-#else
-	return 0;
-#endif
 }

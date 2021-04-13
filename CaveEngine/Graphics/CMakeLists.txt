@@ -18,9 +18,10 @@ file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h")
 #     ${CMAKE_CURRENT_SOURCE_DIR}/include/Ogre.i)
 
 file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
-file(GLOB RENDERER_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Renderer/*.h")
 
+file(GLOB RENDERER_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Renderer/*.h")
 file(GLOB RENDERER_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Renderer/*.cpp")
+
 # # Remove optional header files
 # list(REMOVE_ITEM HEADER_FILES
 #     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreDDSCodec.h"
@@ -202,20 +203,24 @@ add_library(Graphics ${HEADER_FILES} ${SOURCE_FILES} ${RENDERER_HEADER_FILES} ${
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
-#set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-#
-#find_package(glfw3 3.3 REQUIRED)
-#set(OpenGL_GL_PREFERENCE "GLVND")
-#find_package(OpenGL REQUIRED)
-#target_link_libraries(Graphics PUBLIC OpenGL::GL)
-#target_link_libraries(Graphics PUBLIC glfw)
-#target_link_libraries(Graphics PUBLIC Gl3w)
-#target_link_libraries(Graphics PUBLIC ${CMAKE_DL_LIBS})
 target_link_libraries(Graphics PUBLIC Core)
 
-if(WIN32)
+if (UNIX)
+	set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+	set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+	set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+	set(CMAKE_FIND_DEBUG_MODE TRUE)
+	find_package(glfw3 3.3 REQUIRED PATH /usr/lib/x86_64-linux-gnu)
+	
+	set(OpenGL_GL_PREFERENCE "GLVND")
+	find_package(OpenGL REQUIRED)
+	set(CMAKE_FIND_DEBUG_MODE FALSE)
+	target_link_libraries(Graphics PUBLIC OpenGL::GL)
+	target_link_libraries(Graphics PUBLIC glfw)
+	target_link_libraries(Graphics PUBLIC Gl3w)
+	target_link_libraries(Graphics PUBLIC ${CMAKE_DL_LIBS})
+elseif(WIN32)
 	#target_link_libraries(Graphics PUBLIC d2d1.lib)
 	#
 	#
@@ -224,11 +229,15 @@ if(WIN32)
 	#)
 	find_path(DirectX11_INCLUDE_DIR NAMES d2d1.h HINTS "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um")
 	set(DirectX11_LIBRARY d2d1.lib)
-endif(WIN32)
-target_include_directories(Graphics PUBLIC 
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
-  "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
-  $<INSTALL_INTERFACE:include/CAVE_ENGINE>)
+endif()
+
+target_include_directories(Graphics PUBLIC
+	"${PROJECT_BINARY_DIR}"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Shader>" 
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Resource>" 
+	"$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+	$<INSTALL_INTERFACE:include/CAVE_ENGINE>)
 # target_include_directories(OgreMain PUBLIC 
 #   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" 
 #   "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"

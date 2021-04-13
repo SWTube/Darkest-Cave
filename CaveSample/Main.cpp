@@ -15,48 +15,9 @@ using namespace cave;
 void InitGame();
 void RunGame();
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-	if (SUCCEEDED(CoInitialize(nullptr)))
-	{
-		if (SUCCEEDED(CaveApplication::GetInstance()->Initialize(hInstance)))
-		{
-			CaveApplication::GetInstance()->RunMessageLoop();
-		}
-		CoUninitialize();
-	}
-	return 0;
-}
-
 int main(int argc, char* argv[])
 {
-
-	// errorCode = glfwGetError(nullptr);
-	// LOGDF(eLogChannel::GRAPHICS, std::cout, "GLFW Window Creation Result: %x", errorCode);
-	// if (errorCode == GLFW_NOT_INITIALIZED)
-	// {
-	// 	LOGDF(eLogChannel::GRAPHICS, std::cout, "GLFW NOT INITIALIZED", errorCode);
-	// 	return -1;
-	// }
-
-	// if (window == nullptr)
-	// {
-	// 	LOGD(eLogChannel::GRAPHICS, std::cout, "NO");
-	// }
-
-	// glfwMakeContextCurrent(window);
-	// gl3wInit();
-
-	// InitGame();
-
-	// while (!glfwWindowShouldClose(window))
-	// {
-	// 	Draw();
-	// 	glfwSwapBuffers(window);
-	// 	glfwPollEvents();
-	// }
-
-	return 0;
+	return GlfwTestMain(argc, argv);
 }
 
 
