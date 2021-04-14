@@ -221,11 +221,13 @@
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="EngineMain.cpp" />
+    <ClCompile Include="FlatformTimer.ixx" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp" />
     <ClCompile Include="Renderer.ixx" />
+    <ClCompile Include="Timer.ixx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />
