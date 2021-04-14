@@ -17,13 +17,13 @@ namespace cave
 
 	enum class eLogVerbosity
 	{
-		ALL,
-		VERBOSE,
-		DEBUG,
-		INFO,
-		WARN,
+		All,
+		Verbose,
+		Debug,
+		Info,
+		Warn,
 		ERROR,
-		ASSERT
+		Assert
 	};
 
 	enum class eLogChannel

@@ -15,13 +15,17 @@ namespace cave
 {
 	namespace Renderer
 	{
-		//--------------------------------------------------------------------------------------
-		// Structures
-		//--------------------------------------------------------------------------------------
+		/**
+		 * @brief Simple Vertex Structure, acts as the input to the Vertex Shader
+		 * @details Contains position and texture coordinate
+		 * @author Alegruz
+		 * @version 0.0.1
+		 * 
+		 */
 		struct SimpleVertex
 		{
-			DirectX::XMFLOAT3 mPosition;
-			DirectX::XMFLOAT2 mTexCoord;
+			DirectX::XMFLOAT3 mPosition;	/*!< Vertex position data */
+			DirectX::XMFLOAT2 mTexCoord;	/*!< Vertex texture coordinate data */
 		};
 
 		struct ConstantBufferNeverChanges

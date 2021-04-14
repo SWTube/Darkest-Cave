@@ -89,9 +89,6 @@
     <ClInclude Include="Core\Public\CoreFwd.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\CoreGlobals.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\CoreMinimal.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -142,6 +139,8 @@
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Time\TimeManager.h">
       <Filter>Header Files\Gameplay\Time</Filter>
+    <ClInclude Include="Core\Public\Debug\Log.h">
+      <Filter>Header Files\Core\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Time\TimeManager.cpp">
       <Filter>Source Files\Gameplay\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Debug\Log.ixx">
+      <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

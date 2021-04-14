@@ -9,6 +9,10 @@
 	Low level includes.
 ----------------------------------------------------------------------------*/
 
+#if defined(__UNIX__)
+	#include "CaveEngineConfig.h"
+#endif
+
 #include "CoreTypes.h"
 
 /*----------------------------------------------------------------------------
@@ -24,7 +28,12 @@
 ----------------------------------------------------------------------------*/
 
 //#include "Misc/VarArgs.h"
-#include "Debug/LogManager.h"
+#if defined (__WIN32__)
+	#include "Debug/Log.h"
+	import Log;
+#elif defined (__UNIX__)
+	#include "Debug/LogManager.h"
+#endif
 //#include "Logging/LogVerbosity.h"
 //#include "Misc/OutputDevice.h"
 //#include "HAL/PlatformCrt.h"
@@ -107,7 +116,6 @@
 //#include "Misc/ByteSwap.h"
 //#include "Containers/EnumAsByte.h"
 //#include "HAL/PlatformTLS.h"
-#include "CoreGlobals.h"
 //#include "Templates/SharedPointer.h"
 //#include "Internationalization/CulturePointer.h"
 //#include "UObject/WeakObjectPtrTemplates.h"

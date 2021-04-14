@@ -4,8 +4,6 @@
  */
 #pragma once
 
-#include "CaveEngineConfig.h"
-
 #include "CoreMinimal.h"
 #define _DEBUG
 #if defined(__UNIX__)
@@ -18,6 +16,8 @@
 #elif defined(__WIN32__)
 	#define SAFE_DELETE(p) { if(p) { delete (p); (p) = nullptr;} }
 	#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p) = nullptr;} }
+
+	#include <vector>
 
 	#include <windows.h>
 	#include <d3d11_1.h>
