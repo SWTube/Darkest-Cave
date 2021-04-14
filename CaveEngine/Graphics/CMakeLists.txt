@@ -190,7 +190,7 @@ file(GLOB RENDERER_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Renderer/*.
 # # setup OgreMain target
 
 # get_native_precompiled_header(OgreMain)
-add_library(Graphics ${HEADER_FILES} ${SOURCE_FILES} ${RENDERER_HEADER_FILES} ${RENDERER_SOURCE_FILES})
+add_library(Graphics SHARED ${HEADER_FILES} ${SOURCE_FILES} ${RENDERER_HEADER_FILES} ${RENDERER_SOURCE_FILES})
 # add_library(OgreMain ${OGRE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
@@ -203,7 +203,39 @@ add_library(Graphics ${HEADER_FILES} ${SOURCE_FILES} ${RENDERER_HEADER_FILES} ${
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
+file (GLOB_RECURSE resources "${CMAKE_CURRENT_SOURCE_DIR}/Resource/*.*")
+foreach(resource ${resources})
+	get_filename_component(filename ${resource} NAME)
+	get_filename_component(dir ${resource} DIRECTORY)
+	get_filename_component(dirname ${dir} NAME)
+
+	# set (output "")
+ 
+	# while(NOT ${dirname} STREQUAL resources)
+	# 	get_filename_component(path_component ${dir} NAME)
+
+	# 	set (output "${path_component}/${output}")
+	# 	get_filename_component(dir ${dir} DIRECTORY)
+	# 	get_filename_component(dirname ${dir} NAME)
+	# endwhile()
+
+	set(output "${CMAKE_CURRENT_BINARY_DIR}/Resource/${filename}")
+
+	configure_file(${resource} ${output} COPYONLY)
+
+	# add_custom_command(
+	# 	COMMENT "Moving updated resource-file '${filename}'"
+	# 	OUTPUT ${output}
+	# 	DEPENDS ${resource}
+	# 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	# 	${resource}
+	# 	${output}
+	# )
+	# add_custom_target(${filename} ALL DEPENDS ${resource} ${output})
+endforeach()
+
 target_link_libraries(Graphics PUBLIC Core)
+target_link_libraries(Graphics PUBLIC Lodepng)
 
 if (UNIX)
 	set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)

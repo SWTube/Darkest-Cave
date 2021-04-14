@@ -5,7 +5,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#define _DEBUG
+
 #if defined(__UNIX__)
 	#include <cstdio>
 	#define GLFW_INCLUDE_NONE

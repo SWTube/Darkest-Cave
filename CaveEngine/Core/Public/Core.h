@@ -9,9 +9,7 @@
 	 Low level includes.
  ----------------------------------------------------------------------------*/
 
-#if defined(__UNIX__)
-	#include "CaveEngineConfig.h"
-#endif
+#include "CaveEngineConfig.h"
 
 #include "CoreMinimal.h"
 

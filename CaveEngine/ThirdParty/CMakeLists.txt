@@ -38,6 +38,7 @@
 # )
 
 add_subdirectory(gl3w)
+add_subdirectory(lodepng)
 
 # # Add platform specific files
 # if (EMSCRIPTEN)

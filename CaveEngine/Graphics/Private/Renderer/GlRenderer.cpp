@@ -1,4 +1,10 @@
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
 #include "Renderer/GlRenderer.h"
+
+#include "lodepng.h"
 
 namespace cave
 {
@@ -58,9 +64,17 @@ namespace cave
 		// ID3D11PixelShader* gPixelShader = nullptr;
 		// ID3D11InputLayout* gVertexLayout = nullptr;
 		// ID3D11Buffer* gVertexBuffer = nullptr;
+		GLuint gProgram = 0u;
+
+		uint8_t* gBackground = nullptr;
+		uint32_t gBackgroundWidth = 0u;
+		uint32_t gBackgroundHeight = 0u;
+		uint32_t gBackgroundSampler = 0u;
+		// std::vector<uint8_t> gBackground;
 
 		GLuint gVertexArrayObjects[VERTEX_ARRAY_OBJECTS_COUNT];
 		GLuint gBuffers[BUFFER_COUNT];
+		GLuint gTextures[TEXTURE_COUNT];
 
 		const GLuint gNumVertices = 3;
 
@@ -81,6 +95,13 @@ namespace cave
 		//--------------------------------------------------------------------------------------
 		void CleanupDevice()
 		{
+			glDeleteTextures(TEXTURE_COUNT, &gTextures[TEXTURE]);
+
+			if (gBackground)
+			{
+				free(gBackground);
+			}
+
 			glfwDestroyWindow(gWindow);
 
 			glfwTerminate();
@@ -142,8 +163,8 @@ namespace cave
 		//--------------------------------------------------------------------------------------
 		int32_t CompileShaderFromFile(ShaderInfo* shaders)
 		{
-			GLuint program = LoadShaders(shaders);
-			glUseProgram(program);
+			gProgram = LoadShaders(shaders);
+			glUseProgram(gProgram);
 
 			return GLFW_NO_ERROR;
 		}
@@ -215,13 +236,24 @@ namespace cave
 			// 	GLFLOAT3(-0.5f, -0.5f, 0.5f),
 			// };
 
-			static const GLFLOAT3 vertices[3] = {
-				{  0.0f,  0.5f, 0.5f },
-				{  0.5f, -0.5f, 0.5f },
-				{ -0.5f, -0.5f, 0.5f },
+			// static const float vertices[] = {
+			// 	 0.0f,  0.5f, 0.5f,
+			// 	 0.5f, -0.5f, 0.5f,
+			// 	-0.5f, -0.5f, 0.5f,
+
+			// 	0.5f, 1.0f,
+			// 	1.0f, 0.0f,
+			// 	0.0f, 0.0f,
+			// };
+
+			static const float vertices[] = {
+				 0.0f,  0.5f, 0.5f,		0.5f, 1.0f,
+				 0.5f, -0.5f, 0.5f,		1.0f, 0.0f,
+				-0.5f, -0.5f, 0.5f,		0.0f, 0.0f,
 			};
 
 			glCreateBuffers(BUFFER_COUNT, gBuffers);
+			glBindBuffer(GL_ARRAY_BUFFER, BUFFER_COUNT);
 
 			// Preparing to Send Data to OpenGL
 			// All data must be stored in buffer objects (chunks of memory managed by OpenGL)
@@ -230,12 +262,13 @@ namespace cave
 			
 			size_t projectDirLength = strlen(PROJECT_DIR);
 			size_t shaderFileNameLength = strlen("/CaveEngine/Graphics/Shader/triangles.vert");
-			char vertexShaderFile[projectDirLength + shaderFileNameLength] = { '\0', };
-			char fragmentShaderFile[projectDirLength + shaderFileNameLength] = { '\0', };
+			char vertexShaderFile[projectDirLength + shaderFileNameLength + 1] = { '\0', };
+			char fragmentShaderFile[projectDirLength + shaderFileNameLength + 1] = { '\0', };
 			strncpy(vertexShaderFile, PROJECT_DIR, projectDirLength);
 			strncat(vertexShaderFile, "/CaveEngine/Graphics/Shader/triangles.vert", shaderFileNameLength);
 			strncpy(fragmentShaderFile, PROJECT_DIR, projectDirLength);
 			strncat(fragmentShaderFile, "/CaveEngine/Graphics/Shader/triangles.frag", shaderFileNameLength);
+			
 			ShaderInfo shaders[] = {
 				{ GL_VERTEX_SHADER, vertexShaderFile },
 				{ GL_FRAGMENT_SHADER, fragmentShaderFile },
@@ -248,12 +281,70 @@ namespace cave
 				LOGE(eLogChannel::GRAPHICS, std::cout, "The shader files cannot be compiled.");
 				return error;
 			}
+
+			// uint32_t width = 0u;
+			// uint32_t height = 0u;
+			// error = lodepng_decode24_file(&gBackground, &width, &height, "Graphics/Resource/brick_2.png");
+			error = lodepng_decode24_file(&gBackground, &gBackgroundWidth, &gBackgroundHeight, "Graphics/Resource/brick_2.png");
+			if (error != 0)
+			{
+				LOGEF(eLogChannel::GRAPHICS, std::cout, "The png file cannot be loaded. Error Code: %u", error);
+				return error;
+			}
+
+			// LOGDF(eLogChannel::GRAPHICS, std::cout, "vector size: %lu", gBackground.size());
+			LOGDF(eLogChannel::GRAPHICS, std::cout, "image width: %u", gBackgroundWidth);
+			LOGDF(eLogChannel::GRAPHICS, std::cout, "image height: %u", gBackgroundHeight);
+			glCreateTextures(GL_TEXTURE_2D, TEXTURE_COUNT, &gTextures[TEXTURE]);
+			LOGDF(eLogChannel::GRAPHICS, std::cout, "texture index: %u", gTextures[TEXTURE]);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glCreateTextures error code: 0x%x", glGetError());
+
+			glBindTextureUnit(0, gTextures[TEXTURE]);
+
+			if (glGetUniformLocation(gProgram, "tex") < 0)
+			{
+				LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, error code: 0x%x", "tex", glGetError());
+			}
+
+			glTextureParameteri(gTextures[TEXTURE], GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureParameteri error code: 0x%x", glGetError());
+			glTextureParameteri(gTextures[TEXTURE], GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(gTextures[TEXTURE], GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTextureParameteri(gTextures[TEXTURE], GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureParameteri error code: 0x%x", glGetError());
+
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Width: %u Height: %u", gBackgroundWidth, gBackgroundHeight);
+			glTextureStorage2D(gTextures[TEXTURE], 1, GL_RGB8, gBackgroundWidth, gBackgroundHeight);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureStorage2D error code: 0x%x", glGetError());
+			glTextureSubImage2D(gTextures[TEXTURE], 0, 0, 0, gBackgroundWidth, gBackgroundHeight, GL_BGR, GL_UNSIGNED_BYTE, gBackground);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureSubImage2D error code: 0x%x", glGetError());
+			// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, gBackgroundWidth, gBackgroundHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, gBackground);
+			glGenerateTextureMipmap(gTextures[TEXTURE]);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glGenerateTextureMipmap error code: 0x%x", glGetError());
+
+			GLint texLocation = glGetUniformLocation(gProgram, "tex");
+			LOGDF(eLogChannel::GRAPHICS, std::cout, "texture location: %u", texLocation);
+			
+			if (texLocation >= 0)
+			{
+				glUniform1i(texLocation, 0);
+			}
+
+			// glCreateSamplers(1, &gBackgroundSampler);
+			// LOGDF(eLogChannel::GRAPHICS, std::cout, "sampler: %u", gBackgroundSampler);
+			// glBindSampler(gBackgroundIndex, gBackgroundSampler);
+			free(gBackground);
+			gBackground = nullptr;
 			
 			glGenVertexArrays(VERTEX_ARRAY_OBJECTS_COUNT, gVertexArrayObjects);
 			glBindVertexArray(gVertexArrayObjects[TRIANGLES]);
 			glBindBuffer(GL_ARRAY_BUFFER, gBuffers[ARRAY_BUFFER]);
-			glVertexAttribPointer(V_POSITION, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+			// glVertexAttribPointer(V_POSITION, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+			glVertexAttribPointer(V_POSITION, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), BUFFER_OFFSET(0));
 			glEnableVertexAttribArray(V_POSITION);
+
+			glVertexAttribPointer(V_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), BUFFER_OFFSET(3 * sizeof(float)));
+			glEnableVertexAttribArray(V_TEX_COORD);
 
 			return GLFW_NO_ERROR;
 		}
@@ -275,7 +366,8 @@ namespace cave
 			glfwMakeContextCurrent(gWindow);
 			gl3wInit();
 
-			return glfwGetError(nullptr);
+			int32_t error = glfwGetError(nullptr);
+			return error;
 		}
 
 		//--------------------------------------------------------------------------------------
@@ -287,6 +379,8 @@ namespace cave
 
 			glClearBufferfv(GL_COLOR, 0, midnightBlue);
 
+			glBindTextureUnit(GL_TEXTURE_2D, gTextures[TEXTURE]);
+
 			glBindVertexArray(gVertexArrayObjects[TRIANGLES]);
 
 			// Sending Data to OpenGL
@@ -295,6 +389,7 @@ namespace cave
 					// almost always includes positional data
 					// values needed to determine the pixel's final color
 			glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
+			// glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, 0);
 
 			glfwSwapBuffers(gWindow);
 		}
@@ -336,14 +431,14 @@ namespace cave
 				glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 				if (!compiled)
 				{
-#ifdef _DEBUG
+#ifdef __Debug__
 				GLsizei len;
 				glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &len );
 
 				GLchar* log = new GLchar[len+1];
 				glGetShaderInfoLog( shader, len, &len, log );
 				std::cerr << "Shader compilation failed: " << log << std::endl;
-				LOGAF(eLogChannel::GRAPHICS, std::cout, "Shader Compilation Failed: %s", log);
+				LOGAF(eLogChannel::GRAPHICS, std::cout, "%s Compilation Failed: %s", entry->filename, log);
 				delete [] log;
 #endif /* DEBUG */
 
@@ -361,7 +456,7 @@ namespace cave
 			glGetProgramiv(program, GL_LINK_STATUS, &linked);
 			if (!linked)
 			{
-#ifdef _DEBUG
+#ifdef __Debug__
 				GLsizei len;
 				glGetProgramiv( program, GL_INFO_LOG_LENGTH, &len );
 

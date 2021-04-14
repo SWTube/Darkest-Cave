@@ -9,3 +9,5 @@
 #endif
 
 #define PROJECT_DIR "@PROJECT_SOURCE_DIR@"
+
+#define __@CMAKE_BUILD_TYPE@__

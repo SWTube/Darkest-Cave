@@ -28,6 +28,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #elif defined(__UNIX__)
 int main(int argc, char** argv)
 {
+	cave::TimeManager timeManager;
+
+	if (FAILED(cave::Renderer::Init("CaveEngineDemo")))
+	{
+		return 0;
+	}
 #else
 int main()
 {

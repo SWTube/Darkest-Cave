@@ -9,11 +9,14 @@ namespace cave
 	namespace Renderer
 	{
 		
-		constexpr uint8_t TRIANGLES = 0;
-		constexpr uint8_t VERTEX_ARRAY_OBJECTS_COUNT = 1;
-		constexpr uint8_t ARRAY_BUFFER = 0;
-		constexpr uint8_t BUFFER_COUNT = 1;
-		constexpr uint8_t V_POSITION = 0;
+		constexpr uint8_t TRIANGLES = 0u;
+		constexpr uint8_t VERTEX_ARRAY_OBJECTS_COUNT = 1u;
+		constexpr uint8_t ARRAY_BUFFER = 0u;
+		constexpr uint8_t BUFFER_COUNT = 1u;
+		constexpr uint8_t TEXTURE = 0u;
+		constexpr uint8_t TEXTURE_COUNT = 1u;
+		constexpr uint8_t V_POSITION = 0u;
+		constexpr uint8_t V_TEX_COORD = 1u;
 
 		//--------------------------------------------------------------------------------------
 		// Structures
