@@ -64,6 +64,9 @@
     <Filter Include="Source Files\Gameplay\Time">
       <UniqueIdentifier>{384c0ef1-c681-451e-9b8d-85a443461d62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Math">
+      <UniqueIdentifier>{50c5228a-3fc4-4a1f-99d6-7fb27969a140}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -116,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Math\Vector2.h">
+      <Filter>Header Files\Core\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
