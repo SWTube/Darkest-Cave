@@ -4,6 +4,7 @@
  */
 
 #include "Graphics.h"
+#include "AI/Public/BehaviorTree.h"
 
 import Renderer;
 
@@ -13,6 +14,17 @@ import Renderer;
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
+    cave::BTNode* x = new cave::BTNode("x");
+    cave::BTRootNode* a = new cave::BTRootNode("a");
+    cave::BTCompositeNode* b = new cave::BTCompositeNode("b");
+    cave::BTCompositeNode* c = new cave::BTCompositeNode("c");
+
+    a->AddChild(b, -1);
+    b->AddChild(c);
+    
+    
+
+
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 

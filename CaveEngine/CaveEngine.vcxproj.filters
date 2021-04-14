@@ -58,6 +58,18 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{adca7f36-2313-4244-84d9-1f5647390e80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\AI">
+      <UniqueIdentifier>{32dd064d-81c6-4e11-aabd-8e688a77b5b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI\BehaviorTree">
+      <UniqueIdentifier>{097d9913-5b84-488c-a092-2a4583a2d4cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{ab120e30-3e2b-47d2-9927-2e38a631d1fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI\BehaviorTree">
+      <UniqueIdentifier>{d0ade8d8-d83f-4bcb-95e8-c166dd10c48a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -111,6 +123,18 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\BTNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\BTRootNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\BTCompositeNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree.h">
+      <Filter>Source Files\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -139,6 +163,15 @@
     </ClCompile>
     <ClCompile Include="Renderer.ixx">
       <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\BTCompositeNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\BTNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\BTRootNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

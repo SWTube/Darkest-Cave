@@ -198,6 +198,10 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AI\Public\BehaviorTree.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\BTCompositeNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\BTNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\BTRootNode.h" />
     <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Core.h" />
@@ -217,6 +221,9 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AI\Private\BehaviorTree\BTCompositeNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\BTNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\BTRootNode.cpp" />
     <ClCompile Include="Core\Private\Debug\LogManager.cpp" />
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
