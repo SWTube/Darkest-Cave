@@ -149,6 +149,9 @@
     <ClCompile Include="FlatformTimer.ixx">
       <Filter>Source Files\Gameplay\Time</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.ixx">
+      <Filter>Source Files\Gameplay\Time</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">

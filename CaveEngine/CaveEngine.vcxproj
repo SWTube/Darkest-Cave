@@ -227,6 +227,7 @@
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp" />
     <ClCompile Include="Renderer.ixx" />
+    <ClCompile Include="Timer.ixx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />
