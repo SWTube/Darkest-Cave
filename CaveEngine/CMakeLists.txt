@@ -218,7 +218,7 @@ target_include_directories(CaveEngineDemo PUBLIC ${PROJECT_BINARY_DIR})
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
-target_link_libraries(CaveEngineDemo PUBLIC Core Graphics Gl3w)
+target_link_libraries(CaveEngineDemo PUBLIC Core Gameplay Graphics Gl3w)
 
 # # In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
 # if(WIN32 AND MSVC10 AND CMAKE_CL_64)

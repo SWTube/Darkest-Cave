@@ -200,7 +200,7 @@ file(GLOB TIME_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Time/*.cpp")
 
 # get_native_precompiled_header(OgreMain)
 # add_library(Gameplay ${HEADER_FILES})
-add_library(Gameplay ${HEADER_FILES} ${OBJECT_HEADER_FILES} ${OBJECT_SOURCE_FILES} ${EVENT_HEADER_FILES} ${EVENT_SOURCE_FILES}
+add_library(Gameplay SHARED ${HEADER_FILES} ${OBJECT_HEADER_FILES} ${OBJECT_SOURCE_FILES} ${EVENT_HEADER_FILES} ${EVENT_SOURCE_FILES}
                                      ${WORLD_HEADER_FILES} ${WORLD_SOURCE_FILES} ${TIME_HEADER_FILES} ${TIME_SOURCE_FILES} 
                                      ${MESSAGE_HEADER_FILES} ${MESSAGE_SOURCE_FILES} ${HEADER_FILES} ${SOURCE_FILES})
 
@@ -214,8 +214,10 @@ add_library(Gameplay ${HEADER_FILES} ${OBJECT_HEADER_FILES} ${OBJECT_SOURCE_FILE
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
- target_include_directories(Gameplay PUBLIC 
-   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>" 
+target_link_libraries(Gameplay PUBLIC Core)
+
+target_include_directories(Gameplay PUBLIC 
+   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
    "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
    $<INSTALL_INTERFACE:include/CAVE_ENGINE>)
 
