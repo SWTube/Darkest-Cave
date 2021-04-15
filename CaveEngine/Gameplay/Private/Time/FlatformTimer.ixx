@@ -5,8 +5,11 @@
 
 module;
 
-#include <chrono>
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <chrono>
+#endif // _WIN32
 
 export module FlatformTimer;
 
@@ -16,25 +19,37 @@ namespace cave
 	{
 #ifdef _WIN32
 		export using TimePoint = UINT64;
-
 #else
 		export using TimePoint = std::chrono::steady_clock::time_point;
 
 		using SteadyClock = std::chrono::steady_clock;
-		using Milliseconds = std::chrono::milliseconds;
+		using Microseconds = std::chrono::microseconds;
 
 #endif //_WIN32
 
 		export TimePoint GetTimePoint()
 		{
 #ifdef _WIN32
-			return GetTickCount64();
-
+			LARGE_INTEGER timePoint;
+			QueryPerformanceCounter(&timePoint);
+			return timePoint.QuadPart;
 #else
 			return SteadyClock::now();
 #endif // _WIN32
-
 		}
+
+
+#ifdef _WIN32
+		float SetFrequency()
+		{
+			LARGE_INTEGER primaryTimer;
+			QueryPerformanceFrequency(&primaryTimer);
+			return 1.f / primaryTimer.QuadPart;
+		}
+
+		float frequency = SetFrequency();
+
+#endif // _WIN32
 
 		TimePoint creationTimePoint = GetTimePoint();
 		TimePoint beginTimePoint = creationTimePoint;
@@ -81,13 +96,13 @@ namespace cave
 
 			ClearTimePoint();
 #ifdef _WIN32
-			auto differ = (endTimePoint - beginTimePoint);
+			auto differ = (endTimePoint - beginTimePoint) * frequency;
 
 #else
-			auto differ = std::chrono::duration_cast<Milliseconds>(endTimePoint - beginTimePoint).count();
+			auto differ = std::chrono::duration_cast<Microseconds>(endTimePoint - beginTimePoint).count();
 #endif // _WIN32
 
-			return  differ * 0.001f;
+			return  differ;
 		}
 
 		export float GetTime()
