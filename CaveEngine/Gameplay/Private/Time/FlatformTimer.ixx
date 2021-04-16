@@ -64,18 +64,32 @@ namespace cave
 			isSetEndTimePoint = false;
 		}
 
+		void SetTimePointImpl(TimePoint& timePoint, bool& isSetTimePoint)
+		{
+			isSetTimePoint = true;
+			timePoint = GetTimePoint();
+		}
+
+		export bool IsBeginTimePoint()
+		{
+			return isSetBeginTimePoint;
+		}
+
+		export bool IsEndTimePoint()
+		{
+			return isSetEndTimePoint;
+		}
+
 		export void SetTimePoint()
 		{
-			if (!isSetBeginTimePoint)
+			if (!IsBeginTimePoint())
 			{
-				isSetBeginTimePoint = true;
-				beginTimePoint = GetTimePoint();
+				SetTimePointImpl(beginTimePoint, isSetBeginTimePoint);
 				return;
 			}
-			else if (!isSetEndTimePoint)
+			else if (!IsEndTimePoint())
 			{
-				isSetEndTimePoint = true;
-				endTimePoint = GetTimePoint();
+				SetTimePointImpl(endTimePoint, isSetEndTimePoint);
 				return;
 			}
 
