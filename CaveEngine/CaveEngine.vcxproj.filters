@@ -137,7 +137,7 @@
     <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp">
       <Filter>Source Files\Graphics\Test</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.ixx">
+    <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
