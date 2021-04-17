@@ -110,7 +110,7 @@ namespace cave
 
 			ClearTimePoint();
 #ifdef _WIN32
-			auto differ = (endTimePoint - beginTimePoint) * frequency;
+			auto differ = endTimePoint > beginTimePoint ? (endTimePoint - beginTimePoint) * frequency : 0;
 
 #else
 			auto differ = std::chrono::duration_cast<Microseconds>(endTimePoint - beginTimePoint).count();
