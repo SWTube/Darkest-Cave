@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2f705c42-9a1f-44f5-a2ad-1ac04f52b4cd}</ProjectGuid>
+    <ProjectGuid>{F0C58AE9-1CF0-4624-8BB1-C32552FC4E9F}</ProjectGuid>
+    <Keyword>MFCProj</Keyword>
     <RootNamespace>CaveEditor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -31,6 +31,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -38,12 +39,14 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -51,6 +54,7 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -73,102 +77,172 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\SWTube\SpecialProject\Darkest-Cave\CaveEditor\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)Public\DirectX;$(ProjectDir)Private\DirectX;$(ProjectDir)Private;$(ProjectDir)Public;$(ProjectDir)Resource;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
-    </ResourceCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Private;$(ProjectDir)Resource;$(ProjectDir)Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
     </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CaveEngine\Graphics\Public;$(SolutionDir)\CaveEngine\Graphics\Resource</AdditionalIncludeDirectories>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Public\Editor.h" />
+    <ClCompile Include="Private\CaveEditor.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Private\CaveEditorDoc.cpp" />
+    <ClCompile Include="Private\CaveEditorView.cpp" />
+    <ClCompile Include="Private\DirectXView.cpp" />
+    <ClCompile Include="Private\DirectX\BitmapClass.cpp" />
+    <ClCompile Include="Private\DirectX\CameraClass.cpp" />
+    <ClCompile Include="Private\DirectX\ColorShaderClass.cpp" />
+    <ClCompile Include="Private\DirectX\D3DClass.cpp" />
+    <ClCompile Include="Private\DirectX\DDSTextureLoader.cpp" />
+    <ClCompile Include="Private\DirectX\GraphicsClass.cpp" />
+    <ClCompile Include="Private\DirectX\InputClass.cpp" />
+    <ClCompile Include="Private\DirectX\ModelClass.cpp" />
+    <ClCompile Include="Private\DirectX\Squere.cpp" />
+    <ClCompile Include="Private\DirectX\TextureClass.cpp" />
+    <ClCompile Include="Private\DirectX\TextureShaderClass.cpp" />
+    <ClCompile Include="Private\DirectX\WICTextureLoader11.cpp" />
+    <ClCompile Include="Private\ListBoxFormView.cpp" />
+    <ClCompile Include="Private\MainFrm.cpp" />
+    <ClCompile Include="Private\pch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Public\CaveEditor.h" />
+    <ClInclude Include="Public\CaveEditorDoc.h" />
+    <ClInclude Include="Public\CaveEditorView.h" />
+    <ClInclude Include="Public\DirectXView.h" />
+    <ClInclude Include="Public\DirectX\AlignedAllocationPolicy.h" />
+    <ClInclude Include="Public\DirectX\BitmapClass.h" />
+    <ClInclude Include="Public\DirectX\CameraClass.h" />
+    <ClInclude Include="Public\DirectX\ColorShaderClass.h" />
+    <ClInclude Include="Public\DirectX\D3DClass.h" />
+    <ClInclude Include="Public\DirectX\DDSTextureLoader.h" />
+    <ClInclude Include="Public\DirectX\GraphicsClass.h" />
+    <ClInclude Include="Public\DirectX\InputClass.h" />
+    <ClInclude Include="Public\DirectX\ModelClass.h" />
+    <ClInclude Include="Public\DirectX\Squere.h" />
+    <ClInclude Include="Public\DirectX\TextureClass.h" />
+    <ClInclude Include="Public\DirectX\TextureShaderClass.h" />
+    <ClInclude Include="Public\DirectX\WICTextureLoader11.h" />
     <ClInclude Include="Public\framework.h" />
-    <ClInclude Include="Public\resource.h" />
+    <ClInclude Include="Public\ListBoxFormView.h" />
+    <ClInclude Include="Public\MainFrm.h" />
+    <ClInclude Include="Public\pch.h" />
     <ClInclude Include="Public\targetver.h" />
+    <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resource\Editor.aps" />
+    <Image Include="Resource\CaveEditor.ico" />
+    <Image Include="Resource\CaveEditorDoc.ico" />
+    <Image Include="Resource\Toolbar.bmp" />
+    <Image Include="Resource\Toolbar256.bmp" />
+    <Image Include="Resource\userimages.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resource\Editor.ico" />
-    <Image Include="Resource\test.bmp" />
+    <ResourceCompile Include="Resource\CaveEditor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource\Editor.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Private\Editor.cpp" />
+    <None Include="Resource\CaveEditor.rc2" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
