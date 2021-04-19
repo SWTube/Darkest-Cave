@@ -5,12 +5,13 @@
 #pragma once
 
 // temporary wrapper
-#include <vector>
-
 #include "CoreTypes.h"
 // include assertion macros
 // include memory
 #include "Memory/Allocator.h"
+// include template
+#include "Template/EnableIf.h"
+#include "Template/IsIterator.h"
 
 namespace cave
 {
@@ -103,90 +104,182 @@ namespace cave
         SizeType mIndex;
     };
 
-    template<typename ElementType, typename TAllocator = TAllocator<ElementType>>
+    template<typename ElementType, typename AllocatorType = TAllocator<ElementType>>
     class TArray
     {
     public:
         using Iterator = TArrayIterator<TArray, ElementType, size_t>;
         using ConstIterator = TArrayIterator<TArray, const ElementType, size_t>;
 
-        constexpr explicit TArray(const TAllocator& alloc) noexcept
-            : mElements(alloc)
+        constexpr explicit TArray(const AllocatorType& alloc) noexcept
+            : mData(nullptr)
+            , mMaxSize(0)
+            , mCurrentSize(0)
+            , mAllocator(alloc)
         {
         }
 
-        constexpr TArray(size_t count, const ElementType& value, const TAllocator& alloc = TAllocator<ElementType>())
-            : mElements(count, value, alloc)
+        constexpr TArray(size_t count, const ElementType& value, const AllocatorType& alloc = AllocatorType())
+            : mAllocator(alloc)
         {
+            mData = new ElementType[count];
+            mMaxSize = count;
+            mCurrentSize = count;
+            for (size_t i = 0; i < count; ++i)
+            {
+                *(mData + i) = value;
+            }
         }
 
-        constexpr explicit TArray(size_t count, const TAllocator& alloc = TAllocator<ElementType>())
-            : mElements(count, alloc)
+        constexpr explicit TArray(size_t count, const AllocatorType& alloc = AllocatorType())
+            : mAllocator(alloc)
         {
+            mData = new ElementType[count];
+            mMaxSize = count;
+            mCurrentSize = 0;
         }
 
-        template<typename InputIt>
-        constexpr TArray(InputIt first, InputIt last, const TAllocator& alloc = TAllocator<ElementType>())
-            : mElements(first, last, alloc)
+        template<typename InputIt, typename TEnableIf<TIsIterator<Iterator>::Value, bool>::Type = true>
+        constexpr TArray(InputIt first, InputIt last, const AllocatorType& alloc = AllocatorType())
+            : mAllocator(alloc)
         {
-        }
+            size_t count = 0;
+            for (InputIt iterator = first; iterator != last; ++iterator)
+            {
+                ++count;
+            }
+            mData = new ElementType[count];;
+            mMaxSize = count;
+            mCurrentSize = count;
 
-        constexpr TArray(size_t count, const T& value, const TAllocator& alloc = TAllocator<T>())
-            : mElements(count, value, alloc)
-        {
-        }
-
-        constexpr explicit TArray(size_t count, const TAllocator& alloc = TAllocator<T>())
-            : mElements(count, alloc)
-        {
-        }
-
-        template<typename InputIt>
-        constexpr TArray(InputIt first, InputIt last, const TAllocator& alloc = TAllocator<T>())
-            : mElements(first, last, alloc)
-        {
+            for (InputIt iterator = first, size_t i = 0; iterator != last; ++iterator, ++i)
+            {
+                *(mData + i) = *iterator;
+            }
         }
 
         constexpr TArray(const TArray& other)
-            : mElements(other.mElements)
         {
+            if (this != &other)
+            {
+                mAllocator = other.mAllocator;
+                mMaxSize = other.mMaxSize;
+                mCurrentSize = other.mCurrentSize;
+                mData = new ElementType[mMaxSize];
+                for (size_t i = 0; i < mCurrentSize; ++i)
+                {
+                    mData[i] = other.mData[i];
+                }
+            }
+            else
+            {
+                mAllocator = AllocatorType();
+                mMaxSize = 0;
+                mCurrentSize = 0;
+                mData = nullptr;
+            }
         }
 
-        constexpr TArray(const TArray& other, const TAllocator& alloc)
-            : mElements(other.mElements, alloc)
+        constexpr TArray(const TArray& other, const AllocatorType& alloc)
         {
+            if (this != &other)
+            {
+                mAllocator = alloc;
+                mMaxSize = other.mMaxSize;
+                mCurrentSize = other.mCurrentSize;
+                mData = new ElementType[mMaxSize];
+                for (size_t i = 0; i < mCurrentSize; ++i)
+                {
+                    mData[i] = other.mData[i];
+                }
+            }
+            else
+            {
+                mAllocator = alloc;
+                mMaxSize = 0;
+                mCurrentSize = 0;
+                mData = nullptr;
+            }
         }
 
         constexpr TArray(TArray&& other) noexcept
-            : mElements(std::move(other.mElements))
         {
+            if (this != &other)
+            {
+                mAllocator = other.mAllocator;
+                mMaxSize = other.mMaxSize;
+                mCurrentSize = other.mCurrentSize;
+                mData = other.mData;
+                other.mMaxSize = 0;
+                other.mCurrentSize = 0;
+                other.mData = nullptr;
+            }
+            else
+            {
+                mAllocator = AllocatorType();
+                mMaxSize = 0;
+                mCurrentSize = 0;
+                mData = nullptr;
+            }
         }
 
-        constexpr TArray(TArray&& other, const TAllocator& alloc)
-            : mElements(std::move(other.mElements), alloc)
+        constexpr TArray(TArray&& other, const AllocatorType& alloc)
         {
+            if (this != &other)
+            {
+                mAllocator = alloc;
+                mMaxSize = other.mMaxSize;
+                mCurrentSize = other.mCurrentSize;
+                mData = other.mData;
+                other.mMaxSize = 0;
+                other.mCurrentSize = 0;
+                other.mData = nullptr;
+            }
+            else
+            {
+                mAllocator = alloc;
+                mMaxSize = 0;
+                mCurrentSize = 0;
+                mData = nullptr;
+            }
         }
 
-        constexpr ~TArray()
+        ~TArray()
         {
-            mElements.clear();
+            if (mData != nullptr)
+            {
+                delete[] mData;
+            }
         }
 
         constexpr TArray& operator=(const TArray& other)
         {
             if (this != &other)
             {
-                mElements = other.mElements;
+                mAllocator = other.mAllocator;
+                mMaxSize = other.mMaxSize;
+                mCurrentSize = other.mCurrentSize;
+                mData = new ElementType[mMaxSize];
+                for (size_t i = 0; i < mCurrentSize; ++i)
+                {
+                    mData[i] = other.mData[i];
+                }
             }
 
             return *this;
         }
 
-        constexpr TArray& operator=(TArray&& other) noexcept(std::allocator_traits<TAllocator>::propagate_on_container_move_assignment::value || std::allocator_traits<TAllocator>::is_always_equal::value)
+        constexpr TArray& operator=(TArray&& other) noexcept(std::allocator_traits<AllocatorType>::propagate_on_container_move_assignment::value || std::allocator_traits<AllocatorType>::is_always_equal::value)
         {
             if (this != &other)
             {
-                mElements = std::move(other.mElements);
+                mAllocator = other.mAllocator;
+                mMaxSize = other.mMaxSize;
+                mCurrentSize = other.mCurrentSize;
+                mData = other.mData;
+                other.mMaxSize = 0;
+                other.mCurrentSize = 0;
+                other.mData = nullptr;
             }
 
             return mElements;
@@ -194,59 +287,143 @@ namespace cave
 
         constexpr void Assign(size_t count, const ElementType& value)
         {
-            mElements.assign(count, value);
+            if (mCurrentSize + count > mMaxSize)
+            {
+                mMaxSize = mCurrentSize + count;
+                ElementType* tempData = new ElementType[mMaxSize];
+                for (size_t i = 0; i < mCurrentSize; ++i)
+                {
+                    tempData[i] = mData[i];
+                }
+                for (size_t i = 0; i < count; ++i)
+                {
+                    tempData[mCurrentSize + i] = value;
+                }
+                mCurrentSize += count;
+                delete[] mData;
+                mData = tempData;
+            }
+
+            else
+            {
+                for (size_t i = 0; i < count; ++i)
+                {
+                    tempData[mCurrentSize + i] = value;
+                }
+                mCurrentSize += count;
+            }
         }
 
-        template<class InputIt>
+        template<class InputIt, typename TEnableIf<TIsIterator<Iterator>::Value, bool>::Type = true>
         constexpr void Assign(InputIt first, InputIt last)
         {
-            mElements.assign(first, last);
+            size_t count = 0;
+            for (InputIt iterator = first; iterator != last; ++iterator)
+            {
+                ++count;
+            }
+
+            if (mCurrentSize + count > mMaxSize)
+            {
+                mMaxSize = mCurrentSize + count;
+                ElementType* tempData = new ElementType[mMaxSize];
+                for (size_t i = 0; i < mCurrentSize; ++i)
+                {
+                    tempData[i] = mData[i];
+                }
+                for (InputIt iterator = first, size_t i = 0; iterator != last; ++iterator, ++i)
+                {
+                    tempData[mCurrentSize + i] = *iterator;
+                }
+                mCurrentSize += count;
+                delete[] mData;
+                mData = tempData;
+            }
+
+            else
+            {
+                for (InputIt iterator = first, size_t i = 0; iterator != last; ++iterator, ++i)
+                {
+                    tempData[mCurrentSize + i] = *iterator;
+                }
+                mCurrentSize += count;
+            }
         }
 
-        constexpr TAllocator GetAllocator() const noexcept
+        constexpr void ClearElements()
         {
-            return mElements.get_allocator();
+            mCurrentSize = 0;
+        }
+
+        constexpr void InsertBack(const ElementType& element)
+        {
+            Assign(1, element);
+        }
+
+        constexpr void RemoveBack()
+        {
+            --mCurrentSize;
+        }
+
+        constexpr bool IsEmpty()
+        {
+            return (mCurrentSize == 0);
+        }
+
+        constexpr size_t GetSize()
+        {
+            return mCurrentSize;
+        }
+
+        constexpr size_t GetMaxSize()
+        {
+            return mMaxSize;
+        }
+
+        constexpr AllocatorType GetAllocator() const noexcept
+        {
+            return mAllocator;
         }
 
         // Element Access
         constexpr ElementType& operator[](size_t pos)
         {
-            return mElements[pos];
+            return *(mData + pos);
         }
 
         constexpr const ElementType& operator[](size_t pos) const
         {
-            return mElements[pos];
+            return *(mData + pos);
         }
 
         constexpr ElementType& GetFront()
         {
-            return mElements.front();
+            return *mData;
         }
 
         constexpr const ElementType& GetFront() const
         {
-            return mElements.front();
+            return *mData;
         }
 
         constexpr ElementType& GetBack()
         {
-            return mElements.back();
+            return *(mData + mCurrentSize - 1);
         }
 
         constexpr const ElementType& GetBack() const
         {
-            return mElements.back();
+            return *(mData + mCurrentSize - 1);
         }
 
         constexpr ElementType* GetData() noexcept
         {
-            return mElements.data();
+            return mData;
         }
 
         constexpr const ElementType* GetData() const noexcept
         {
-            return mElements.data();
+            return mData;
         }
 
         // Iterators
@@ -272,6 +449,9 @@ namespace cave
         }
 
     private:
-        std::vector<ElementType, TAllocator> mElements;
+        size_t mCurrentSize;
+        size_t mMaxSize;
+        ElementType* mData;
+        AllocatorType mAllocator;
     };
 } // namespace cave
