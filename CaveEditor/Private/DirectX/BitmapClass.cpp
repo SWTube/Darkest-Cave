@@ -205,7 +205,7 @@ bool BitmapClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, float positi
 
 	// 이 비트맵을 렌더링 할 위치가 변경되지 않은 경우 정점 버퍼를 업데이트 하지 마십시오.
 	// 현재 올바른 매개 변수가 있습니다.
-	if((positionX == m_previousPosX) && (positionY == m_previousPosY))
+	if(!isNeedUpdate && (positionX == m_previousPosX) && (positionY == m_previousPosY))
 	{
 		return true;
 	}
@@ -274,6 +274,7 @@ bool BitmapClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, float positi
 	delete [] vertices;
 	vertices = 0;
 
+	isNeedUpdate = false;
 	return true;
 }
 

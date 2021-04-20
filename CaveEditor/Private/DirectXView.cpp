@@ -79,10 +79,9 @@ void DirectXView::AddImageFile(WCHAR* filename)
 
 void DirectXView::Shutdown()
 {
-	if (m_Graphics)
+	if (GraphicsClass::GetInstance())
 	{
 		m_Graphics->Shutdown();
-		delete m_Graphics;
 		m_Graphics = 0;
 	}
 
@@ -115,7 +114,7 @@ void DirectXView::OnInitialUpdate()
 	m_Input->Initialize();
 
 	// m_Graphics 객체 생성.  그래픽 랜더링을 처리하기 위한 객체입니다.
-	m_Graphics = new GraphicsClass;
+	m_Graphics = GraphicsClass::GetInstance();
 
 	// m_Graphics 객체 초기화.
 	m_Graphics->Initialize(width, height, m_hWnd);
@@ -152,8 +151,8 @@ BOOL DirectXView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
-	if (zDelta < 0) m_Graphics->ZoomOutScreen();
-	else if(zDelta > 0) m_Graphics->ZoomInScreen();
+	if (zDelta < 0) GraphicsClass::GetInstance()->ZoomOutScreen();
+	else if(zDelta > 0) GraphicsClass::GetInstance()->ZoomInScreen();
 
 	return CView::OnMouseWheel(nFlags, zDelta, pt);
 }

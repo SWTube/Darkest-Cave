@@ -4,6 +4,7 @@
 // DirectXView 보기
 class InputClass;
 class GraphicsClass;
+
 class DirectXView : public CView
 {
 	DECLARE_DYNCREATE(DirectXView)

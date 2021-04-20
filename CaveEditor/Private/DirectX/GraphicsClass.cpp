@@ -8,7 +8,9 @@
 #include "graphicsclass.h"
 #include "Squere.h"
 #include "BitmapClass.h"
+#include "TextureClass.h"
 
+GraphicsClass* GraphicsClass::instance = nullptr;
 
 GraphicsClass::GraphicsClass()
 {
@@ -117,7 +119,14 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 void GraphicsClass::Shutdown()
 {
-	if (m_Bitmaps.empty()) {
+	if (!m_Textures.empty()) {
+		for (TextureClass* i : m_Textures) {
+			i->Shutdown();
+			delete i;
+		}
+		m_Textures.clear();
+	}
+	if (!m_Bitmaps.empty()) {
 		for (BitmapClass* i : m_Bitmaps) {
 			i->Shutdown();
 			delete i;
@@ -209,8 +218,34 @@ bool GraphicsClass::AddBitmap(WCHAR* filename, int bitmapWidth, int bitmapHeight
 
 	m_Bitmaps.push_back(temp);
 
+	TextureClass* tex = new TextureClass;
+	tex->Initialize(m_Direct3D->GetDevice(), filename);
+
+	m_Textures.push_back(tex);
+	temp->SetTextureIndex(m_Textures.size() - 1);
 	return true;
 	
+}
+
+void GraphicsClass::SetBitmapTexture(int objIndex, int texIndex)
+{
+	m_Bitmaps[objIndex]->SetTextureIndex(texIndex);
+	m_Bitmaps[objIndex]->SetTexture(m_Textures[texIndex]);
+}
+
+int GraphicsClass::GetBitmapTextureIndex(int index)
+{
+	return m_Bitmaps[index]->GetTextureIndex();
+}
+
+void GraphicsClass::SetBitmapSize(int objIndex, int width, int height)
+{
+	m_Bitmaps[objIndex]->SetBitmapSize(width, height);
+}
+
+void GraphicsClass::GetBitmapSize(int objIndex, int& width, int& hegiht)
+{
+	m_Bitmaps[objIndex]->GetBitmapSize(width, hegiht);
 }
 
 void GraphicsClass::ZoomInScreen()
@@ -221,6 +256,14 @@ void GraphicsClass::ZoomInScreen()
 void GraphicsClass::ZoomOutScreen()
 {
 	m_Camera->ZoomOut();
+}
+
+void GraphicsClass::GetObjectPosition(int index, float& x, float& y)
+{
+	if (m_Bitmaps.size() > index) {
+		x = m_Bitmaps[index]->GetPosX();
+		y = m_Bitmaps[index]->GetPosY();
+	}
 }
 
 
@@ -260,10 +303,13 @@ bool GraphicsClass::Render(float rotation)
 
 	for (BitmapClass* bitmap : m_Bitmaps) {
 		bitmap->Render(m_Direct3D->GetDeviceContext());
-		if (!m_TextureShader->Render(m_Direct3D->GetDeviceContext(), bitmap->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, bitmap->GetTexture()))
-		{
-			return false;
+		if (bitmap->HasTexture()) {
+			if (!m_TextureShader->Render(m_Direct3D->GetDeviceContext(), bitmap->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, bitmap->GetTexture()))
+			{
+				return false;
+			}
 		}
+
 	}
 
 	/*

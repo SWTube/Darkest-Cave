@@ -78,6 +78,9 @@
     <ClCompile Include="Private\DirectXView.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectInfoDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\targetver.h">
@@ -147,6 +150,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Public\DirectXView.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectInfoDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

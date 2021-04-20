@@ -4,6 +4,7 @@
 
 // ListBoxFormView 폼 보기
 class DirectXView;
+class ObjectInfoDlg;
 
 class ListBoxFormView : public CFormView
 {
@@ -33,10 +34,18 @@ public:
 	afx_msg void AddTextureFileButton();
 	virtual void OnInitialUpdate();
 	void ChangeSelectedObject();
-
+	void OpenObjectInfoDlg();
+	void ApplyObjectInfo();
 private:
 	CListBox m_listBox1;
 	DirectXView* p_dView = nullptr;
+	CListBox m_textureListbox;
+
+	ObjectInfoDlg* m_infoDlg = nullptr;
+
+
+protected:
+	afx_msg LRESULT OnInfoDlgOkButton(WPARAM wParam, LPARAM lParam);
 };
 
 
