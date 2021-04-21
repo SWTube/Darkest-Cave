@@ -7,6 +7,8 @@
 
 #include "CaveEngineConfig.h"
 
+#define GET_PLATFORM_HEADER(x) STRINGIZE_TOKEN(CONCATENATE_TOKENS(PLATFORM_NAME, x))
+
 // Turns an preprocessor token into a real string
 #define STRINGIZE_TOKEN(x) STRINGIZE_TOKEN_IMPL(x)
 #define STRINGIZE_TOKEN_IMPL(x) #x
@@ -31,3 +33,21 @@
 
 #include <stdint.h>
 #include <stddef.h>
+
+namespace cave
+{
+	enum class eResult : uint32_t
+	{
+		CAVE_OK				= 0x00000000,
+		CAVE_ABORT			= 0x80004004,
+		CAVE_ACCESS_DENIED	= 0x80070005,
+		CAVE_FAIL			= 0x80004005,
+		CAVE_HANDLE_ERROR	= 0x80070006,
+		CAVE_INVALID_ARG	= 0x80070057,
+		CAVE_NO_INTERFACE	= 0x80004002,
+		CAVE_NOT_IMPL		= 0x80004001,
+		CAVE_OUT_OF_MEMORY	= 0x8007000E,
+		CAVE_POINTER_ERROR	= 0x80004003,
+		CAVE_UNEXPECTED		= 0x8000FFFF,
+	};
+}

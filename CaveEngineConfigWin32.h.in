@@ -25,6 +25,7 @@
 
 #ifndef __WIN32__
 	#define __WIN32__
+	#define PLATFORM_NAME Window
 #endif
 
 #if @MSVC@

@@ -20,7 +20,12 @@ file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h")
 file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
 
 file(GLOB RENDERER_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Renderer/*.h")
+file(GLOB OBJECT_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Object/*.h")
+file(GLOB DEVICE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Device/*.h")
+
 file(GLOB RENDERER_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Renderer/*.cpp")
+file(GLOB OBJECT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Object/*.cpp")
+file(GLOB DEVICE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Device/*.cpp")
 
 # # Remove optional header files
 # list(REMOVE_ITEM HEADER_FILES
@@ -190,7 +195,7 @@ file(GLOB RENDERER_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Renderer/*.
 # # setup OgreMain target
 
 # get_native_precompiled_header(OgreMain)
-add_library(Graphics SHARED ${HEADER_FILES} ${SOURCE_FILES} ${RENDERER_HEADER_FILES} ${RENDERER_SOURCE_FILES})
+add_library(Graphics SHARED ${HEADER_FILES} ${SOURCE_FILES} ${RENDERER_HEADER_FILES} ${RENDERER_SOURCE_FILES} ${OBJECT_HEADER_FILES} ${DEVICE_HEADER_FILES} ${DEVICE_SOURCE_FILES})
 # add_library(OgreMain ${OGRE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
@@ -236,20 +241,21 @@ endforeach()
 
 target_link_libraries(Graphics PUBLIC Core)
 target_link_libraries(Graphics PUBLIC Lodepng)
+target_link_libraries(Graphics PUBLIC ResourceManager)
 
 if (UNIX)
-	set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-	set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-	set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+	# set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+	# set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+	# set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
-	set(CMAKE_FIND_DEBUG_MODE TRUE)
-	find_package(glfw3 3.3 REQUIRED PATH /usr/lib/x86_64-linux-gnu)
+	# set(CMAKE_FIND_DEBUG_MODE TRUE)
+	# find_package(glfw3 3.3 REQUIRED PATH /usr/lib/x86_64-linux-gnu)
 	
 	set(OpenGL_GL_PREFERENCE "GLVND")
 	find_package(OpenGL REQUIRED)
 	set(CMAKE_FIND_DEBUG_MODE FALSE)
 	target_link_libraries(Graphics PUBLIC OpenGL::GL)
-	target_link_libraries(Graphics PUBLIC glfw)
+	target_link_libraries(Graphics PUBLIC Glfw)
 	target_link_libraries(Graphics PUBLIC Gl3w)
 	target_link_libraries(Graphics PUBLIC ${CMAKE_DL_LIBS})
 elseif(WIN32)
@@ -263,11 +269,13 @@ elseif(WIN32)
 	set(DirectX11_LIBRARY d2d1.lib)
 endif()
 
+target_precompile_headers(Graphics PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Public/GraphicsApiPch.h")
+
 target_include_directories(Graphics PUBLIC
 	"${PROJECT_BINARY_DIR}"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Shader>" 
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Resource>" 
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Resource>"
 	"$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
 	$<INSTALL_INTERFACE:include/CAVE_ENGINE>)
 # target_include_directories(OgreMain PUBLIC 

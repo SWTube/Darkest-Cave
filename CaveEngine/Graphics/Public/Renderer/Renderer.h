@@ -3,15 +3,8 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#version 450 core
+#pragma once
 
-in vec2 fTexCoord;
+#include "CoreTypes.h"
 
-layout( location = 0 ) out vec4 fColor;
-
-uniform sampler2D tex;
-
-void main()
-{
-	fColor = texture(tex, fTexCoord);
-}
+#include GET_PLATFORM_HEADER(Renderer.h)
