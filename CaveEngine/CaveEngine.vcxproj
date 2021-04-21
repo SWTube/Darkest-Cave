@@ -86,7 +86,7 @@
     <ClCompile>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;__WIN32__;__DEBUG__;_DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;__WIN32__;CAVE_BUILD_DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -116,7 +116,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;__WIN32__;__RELEASE__;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;__WIN32__;CAVE_BUILD_RELEASE;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -139,7 +139,7 @@
     <ClCompile>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;__WIN32__;__DEBUG__;_DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;__WIN32__;CAVE_BUILD_DEBUG;_DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -178,7 +178,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;__RELEASE__;__WIN32__;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;CAVE_BUILD_RELEASE;__WIN32__;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>

@@ -17,6 +17,7 @@
 //#include "Containers/ContainersFwd.h"
 //#include "Misc/Timespan.h"
 //#include "Misc/DateTime.h"
+#include "Utils/Crt.h"
 //#include "HAL/PlatformCrt.h"
 #include "Memory/Memory.h"
 #include "Memory/Allocator.h"
@@ -64,7 +65,7 @@
 //#include "HAL/PlatformAffinity.h"
 //#include "HAL/PlatformIncludes.h"
 //#include "HAL/PlatformFilemanager.h"
-#include <cassert>
+#include "Assertion/Assert.h"
 //#include "Misc/AssertionMacros.h"
 //#include "HAL/UnrealMemory.h"
 //#include "Templates/PointerIsConvertibleFromTo.h"

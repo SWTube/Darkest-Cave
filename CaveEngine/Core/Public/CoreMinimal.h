@@ -34,9 +34,10 @@
 #endif
 //#include "Logging/LogVerbosity.h"
 //#include "Misc/OutputDevice.h"
+#include "Utils/Crt.h"
 //#include "HAL/PlatformCrt.h"
 //#include "HAL/PlatformMisc.h"
-#include <cassert>
+#include "Assertion/Assert.h"
 //#include "Misc/AssertionMacros.h"
 //#include "Templates/IsPointer.h"
 //#include "HAL/PlatformMemory.h"
@@ -77,7 +78,7 @@
 //#include "GenericPlatform/GenericPlatformStricmp.h"
 //#include "GenericPlatform/GenericPlatformString.h"
 //#include "HAL/PlatformString.h"
-#include <cstring>
+#include <string>
 //#include "Misc/CString.h"
 //#include "Misc/Crc.h"
 //#include "Math/UnrealMathUtility.h"

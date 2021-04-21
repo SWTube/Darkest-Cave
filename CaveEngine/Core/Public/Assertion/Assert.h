@@ -5,4 +5,6 @@
 
 #pragma once
 
-#include "Utils/Defines.h"
+#include <cassert>
+
+#include "CoreTypes.h"

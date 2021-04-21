@@ -22,7 +22,7 @@ namespace cave
 		Debug,
 		Info,
 		Warn,
-		ERROR,
+		Error,
 		Assert
 	};
 
