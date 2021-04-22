@@ -6,18 +6,19 @@
 #-------------------------------------------------------------------
 
 ############################################################
-# CaveEngine library
+# CaveEngine core library
 ############################################################
 
-# # define header and source files for the library
-# file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+# define header and source files for the library
+file(GLOB GL_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/GL/*.h")
+file(GLOB KHR_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/KHR/*.h")
 # list(APPEND HEADER_FILES
 #     ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h
 #     ${PROJECT_BINARY_DIR}/include/OgreComponents.h
 #     ${PROJECT_BINARY_DIR}/include/OgreExports.h
 #     ${CMAKE_CURRENT_SOURCE_DIR}/include/Ogre.i)
 
-# file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.c")
 
 # # Remove optional header files
 # list(REMOVE_ITEM HEADER_FILES
@@ -36,17 +37,6 @@
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreZip.cpp"
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSearchOps.cpp"
 # )
-
-add_subdirectory(AI)
-add_subdirectory(Audio)
-add_subdirectory(Core)
-add_subdirectory(Gameplay)
-add_subdirectory(Graphics)
-add_subdirectory(HID)
-add_subdirectory(Physics)
-add_subdirectory(ProfilingDebugging)
-add_subdirectory(ResourceManager)
-add_subdirectory(ThirdParty)
 
 # # Add platform specific files
 # if (EMSCRIPTEN)
@@ -195,10 +185,12 @@ add_subdirectory(ThirdParty)
 
 # set (TARGET_LINK_FLAGS "")
 
-# setup CaveEngine target
+# setup OgreMain target
 
 # get_native_precompiled_header(OgreMain)
-# add_library(CaveEngine ${CAVE_ENGINE_LIB_TYPE} ${CaveEngine_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
+add_library(Gl3w ${GL_HEADER_FILES} ${KHR_HEADER_FILES} ${SOURCE_FILES})
+# add_library(Core ${CAVE_ENGINE_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${ASSERTION_HEADER_FILES} ${ASSERTION_SOURCE_FILES} ${CONTAINERS_HEADER_FILES} ${CONTAINER_SOURCE_FILES} ${CURVE_HEADER_FILES} ${CURVE_SOURCE_FILES} ${DEBUG_HEADER_FILES} ${DEBUG_SOURCE_FILES})
+# add_library(Core ${CAVE_ENGINE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
 # 	set_target_properties(OgreMain PROPERTIES VS_WINRT_COMPONENT "true")
@@ -210,6 +202,15 @@ add_subdirectory(ThirdParty)
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
+# target_include_directories(Core PUBLIC 
+#   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
+#   "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+#   $<INSTALL_INTERFACE:include/CAVE_ENGINE>
+#   PRIVATE "${CAVE_ENGINE_PROFILING_REMOTERY_PATH}")
+target_include_directories(Gl3w PUBLIC 
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
+  "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+  $<INSTALL_INTERFACE:include/CAVE_ENGINE>)
 # target_include_directories(OgreMain PUBLIC 
 #   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" 
 #   "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
@@ -256,7 +257,7 @@ add_subdirectory(ThirdParty)
 #     set_target_properties(OgreMain PROPERTIES	OUTPUT_NAME Ogre)
 #   endif()
 # endif ()
-# target_link_libraries(CaveEngine PRIVATE ${LIBRARIES} ${CMAKE_DL_LIBS})
+# target_link_libraries(OgreMain PUBLIC ${PLATFORM_LIBS} PRIVATE ${LIBRARIES} ${CMAKE_DL_LIBS})
 
 # # specify a precompiled header to use
 # add_native_precompiled_header(OgreMain "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreStableHeaders.h")
@@ -264,10 +265,10 @@ add_subdirectory(ThirdParty)
 # install Engine
 # cave_engine_config_lib(Engine TRUE)
 # install(FILES ${HEADER_FILES}
-#   DESTINATION include/CAVE_ENGINE
+#   DESTINATION include/OGRE
 # )
 # install(FILES ${PLATFORM_HEADERS}
-#   DESTINATION include/CAVE_ENGINE/${PLATFORM_HEADER_INSTALL}
+#   DESTINATION include/OGRE/${PLATFORM_HEADER_INSTALL}
 # )
 # install(FILES ${THREAD_HEADER_FILES}
 # 	DESTINATION include/OGRE/Threading

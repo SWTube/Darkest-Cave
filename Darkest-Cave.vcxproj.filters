@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{61619254-aabf-471f-846d-1274c1639c22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Container">
+      <UniqueIdentifier>{7bbfbd1e-6ff8-4cff-86e7-bfebd39ebc40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Memory">
+      <UniqueIdentifier>{c1a77ee6-8aaf-43ab-bc8d-6fe96224f046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Debug">
+      <UniqueIdentifier>{542b27c9-bcd6-492b-a769-74db4ab0df79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{7d9712ce-29d7-41db-8379-7d1bda49747b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Container">
+      <UniqueIdentifier>{ead73118-73b6-4b0f-8e0a-e66f893cdba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Debug">
+      <UniqueIdentifier>{11604c08-b080-44e7-b0af-4cadb9f09a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Memory">
+      <UniqueIdentifier>{9af7dfd5-79e9-4ebf-917e-72a4c8c4d6c2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="samples\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="caveengine\core\private\memory\Allocator.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="caveengine\core\private\memory\Memory.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="caveengine\core\private\debug\LogManager.cpp">
+      <Filter>Source Files\Core\Debug</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="caveengine\core\public\containers\Array.h">
+      <Filter>Header Files\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\containers\ContainersFwd.h">
+      <Filter>Header Files\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\memory\Allocator.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\Core.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\CoreFwd.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\CoreGlobals.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\CoreMinimal.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\CoreTypes.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\memory\MemoryPool.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\memory\Memory.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="caveengine\core\public\debug\LogManager.h">
+      <Filter>Header Files\Core\Debug</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
