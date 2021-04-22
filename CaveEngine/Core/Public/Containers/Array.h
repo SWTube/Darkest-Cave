@@ -26,33 +26,33 @@ namespace cave
 
         TArrayIterator& operator++()
         {
-            ++Index;
+            ++mIndex;
             return *this;
         }
 
         TArrayIterator operator++(int)
         {
             TArrayIterator temp(*this);
-            ++Index;
+            ++mIndex;
             return temp;
         }
 
         TArrayIterator& operator--()
         {
-            --Index;
+            --mIndex;
             return *this;
         }
 
         TArrayIterator operator--(int)
         {
             TArrayIterator temp(*this);
-            --Index;
+            --mIndex;
             return temp;
         }
 
         TArrayIterator& operator+=(SizeType offset)
         {
-            Index += offset;
+            mIndex += offset;
             return *this;
         }
 
@@ -64,7 +64,7 @@ namespace cave
 
         TArrayIterator& operator-=(SizeType offset)
         {
-            Index -= offset;
+            mIndex -= offset;
             return *this;
         }
 
@@ -151,8 +151,8 @@ namespace cave
             mData = new ElementType[count];;
             mMaxSize = count;
             mCurrentSize = count;
-
-            for (InputIt iterator = first, size_t i = 0; iterator != last; ++iterator, ++i)
+            size_t i = 0;
+            for (InputIt iterator = first; iterator != last; ++iterator, ++i)
             {
                 *(mData + i) = *iterator;
             }
@@ -282,7 +282,7 @@ namespace cave
                 other.mData = nullptr;
             }
 
-            return mElements;
+            return *this;
         }
 
         constexpr void Assign(size_t count, const ElementType& value)
@@ -308,7 +308,7 @@ namespace cave
             {
                 for (size_t i = 0; i < count; ++i)
                 {
-                    tempData[mCurrentSize + i] = value;
+                    mData[mCurrentSize + i] = value;
                 }
                 mCurrentSize += count;
             }
@@ -331,7 +331,9 @@ namespace cave
                 {
                     tempData[i] = mData[i];
                 }
-                for (InputIt iterator = first, size_t i = 0; iterator != last; ++iterator, ++i)
+
+                size_t i = 0;
+                for (InputIt iterator = first; iterator != last; ++iterator, ++i)
                 {
                     tempData[mCurrentSize + i] = *iterator;
                 }
@@ -342,9 +344,10 @@ namespace cave
 
             else
             {
-                for (InputIt iterator = first, size_t i = 0; iterator != last; ++iterator, ++i)
+                size_t i = 0;
+                for (InputIt iterator = first; iterator != last; ++iterator, ++i)
                 {
-                    tempData[mCurrentSize + i] = *iterator;
+                    mData[mCurrentSize + i] = *iterator;
                 }
                 mCurrentSize += count;
             }
@@ -435,7 +438,7 @@ namespace cave
 
         constexpr Iterator GetEndIterator()
         {
-            return Iterator(*this, 0 + mElements.size());
+            return Iterator(*this, 0 + mCurrentSize);
         }
 
         constexpr ConstIterator GetBeginConstIterator()
@@ -445,7 +448,7 @@ namespace cave
 
         constexpr ConstIterator GetEndConstIterator()
         {
-            return ConstIterator(*this, 0 + mElements.size());
+            return ConstIterator(*this, 0 + mCurrentSize);
         }
 
     private:
