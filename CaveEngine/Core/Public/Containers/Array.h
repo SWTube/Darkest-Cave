@@ -13,6 +13,8 @@
 #include "Template/EnableIf.h"
 #include "Template/IsIterator.h"
 
+#define GET_ARRAY_LENGTH(ARR) (sizeof(ARR) / sizeof(ARR[0]))
+
 namespace cave
 {
     template<size_t N>
