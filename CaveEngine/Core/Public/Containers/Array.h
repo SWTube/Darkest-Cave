@@ -15,6 +15,67 @@
 
 namespace cave
 {
+    template<size_t N>
+    class TFloatArray
+    {
+    public:
+        constexpr TFloatArray() = default;
+        constexpr TFloatArray(const TFloatArray& other) = default;
+        constexpr TFloatArray(TFloatArray&& other) = default;
+
+        TFloatArray& operator=(const TFloatArray& other) = delete;
+        TFloatArray& operator=(TFloatArray&& other) = delete;
+
+        virtual ~TFloatArray() = default;
+
+        constexpr size_t GetArrayLength() const
+        {
+            return N;
+        }
+
+        constexpr float& operator[](size_t index)
+        {
+            return mData[index];
+        }
+
+        constexpr float& operator*()
+        {
+            return *mData;
+        }
+
+        constexpr float* operator+(size_t index)
+        {
+            return mData + index;
+        }
+    private:
+        float mData[N];
+    };
+
+    class FFloatArray
+    {
+        constexpr FFloatArray() = delete;
+        constexpr explicit FFloatArray(size_t size);
+        constexpr FFloatArray(const FFloatArray& other);
+        constexpr FFloatArray(FFloatArray&& other) noexcept;
+
+        FFloatArray& operator=(const FFloatArray& other) = delete;
+        FFloatArray& operator=(FFloatArray&& other) = delete;
+
+        virtual ~FFloatArray();
+
+        constexpr size_t GetArrayLength() const;
+
+        constexpr float& operator[](size_t index);
+
+        constexpr float& operator*();
+
+        constexpr float* operator+(size_t index);
+
+    private:
+        float* mData;
+        size_t mSize;
+    };
+
     template<typename ContainerType, typename ElementType, typename SizeType>
     class TArrayIterator
     {
