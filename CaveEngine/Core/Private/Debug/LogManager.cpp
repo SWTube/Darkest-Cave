@@ -76,7 +76,7 @@ namespace cave
 
 	void LogManager::Error(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, std::ostream& os, const char* message)
 	{
-		log(channel, eLogVerbosity::ERROR, fileName, functionName, lineNumber, os, message);
+		log(channel, eLogVerbosity::Error, fileName, functionName, lineNumber, os, message);
 	}
 
 	void LogManager::ErrorF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, std::ostream& os, const char* message, ...)
@@ -84,7 +84,7 @@ namespace cave
 		va_list vl;
 		va_start(vl, message);
 		vsnprintf(mBuffer, MAX_BUFFER, message, vl);
-		log(channel, eLogVerbosity::ERROR, fileName, functionName, lineNumber, os, mBuffer);
+		log(channel, eLogVerbosity::Error, fileName, functionName, lineNumber, os, mBuffer);
 		va_end(vl);
 	}
 
@@ -196,7 +196,7 @@ namespace cave
 				buffer += "W/";
 				color = '5';
 				break;
-			case eLogVerbosity::ERROR:
+			case eLogVerbosity::Error:
 				buffer += "E/";
 				color = '1';
 				break;

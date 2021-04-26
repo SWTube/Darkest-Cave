@@ -2,8 +2,12 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
+#include <time.h>
+
 #include "CoreMinimal.h"
-#include "Graphics.h"
+#include "Time/TimeManager.h"
+
+#include "Engine.h"
 
 #if defined(__WIN32__)
 import Log;
@@ -18,76 +22,137 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
-	if (FAILED(cave::Renderer::Init(hInstance, nCmdShow, 256l, 240l, L"CaveEngine", L"CaveEngineDemo")))
-	{
-		return 0;
-	}
-#elif defined(__UNIX__)
-int main(int argc, char** argv)
-{
+	// Enable run-time memory check for debug builds.
+	#if defined(CAVE_BUILD_DEBUG)
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	#endif
+
 #else
-int main()
+int main(int32_t argc, char** argv)
 {
-	if (FAILED(cave::Renderer::Init("CaveEngineDemo")))
+	cave::TimeManager timeManager;
+
+	uint32_t commandFlag = 0u;
+	constexpr uint32_t LOG_FLAG = 0x01;
+	for (int32_t currentArgIndex = 0; currentArgIndex < argc; ++currentArgIndex)
 	{
-		return 0;
+		if (strcmp("-l", argv[currentArgIndex]) == 0)
+		{
+			commandFlag |= LOG_FLAG;
+		}
+
+		if (commandFlag & LOG_FLAG)
+		{
+			cave::eLogVerbosity verbosity = cave::eLogVerbosity::All;
+			switch (argv[currentArgIndex][0])
+			{
+			case 'V':
+				verbosity = cave::eLogVerbosity::Info;
+				break;
+			case 'D':
+				verbosity = cave::eLogVerbosity::Debug;
+				break;
+			case 'I':
+				verbosity = cave::eLogVerbosity::Info;
+				break;
+			case 'W':
+				verbosity = cave::eLogVerbosity::Warn;
+				break;
+			case 'E':
+				verbosity = cave::eLogVerbosity::Error;
+				break;
+			case 'A':
+				verbosity = cave::eLogVerbosity::Assert;
+				break;
+			default:
+				break;
+			}
+
+			commandFlag &= (~LOG_FLAG);
+		}
 	}
 #endif
-
+	
 	// Main message loop
-#if defined(__WIN32__)
-	MSG msg = {0};
-	LARGE_INTEGER startingTime;
-	LARGE_INTEGER endingTime;
-	LARGE_INTEGER secondTracker;
-	long double tictoc = 0.0l;
-	long double elapsedTime = 0.0l;
-	LARGE_INTEGER frequency;
-	bool bHasSecondPassed = true;
+	// Begin initialization.
 
-	QueryPerformanceFrequency(&frequency);
-	while (WM_QUIT != msg.message)
-	{
-		QueryPerformanceCounter(&startingTime);
-		if (bHasSecondPassed)
-		{
-			secondTracker.QuadPart = startingTime.QuadPart;
-			bHasSecondPassed = false;
-		}
+	// Instantiate the window manager class.
+	cave::Engine* main = new cave::Engine();
+	// Create a window.
+	int32_t result = main->CreateDesktopWindow();
 
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			cave::Renderer::Render();
-		}
-		QueryPerformanceCounter(&endingTime);
-		elapsedTime = static_cast<long double>((endingTime.QuadPart - secondTracker.QuadPart) * 1000ull) / static_cast<long double>(frequency.QuadPart);
-		if (elapsedTime >= 1000ull)
-		{
-			bHasSecondPassed = true;
-			tictoc = static_cast<long double>((endingTime.QuadPart - startingTime.QuadPart) * 1000ull) / static_cast<long double>(frequency.QuadPart);
-			LOGDF(cave::Log::eLogChannel::GRAPHICS, "%Lf", (1.0l / (tictoc * 0.001l)));
-		}
-	}
-#elif defined(__UNIX__)
-	while (!cave::Renderer::GlfwWindowShouldClose())
-	{
-		cave::Renderer::Render();
-		glfwPollEvents();
-	}
-#endif
-
-	cave::Renderer::Destroy();
-
-#if defined(__WIN32__)
-	return static_cast<int>(msg.wParam);
-#elif defined(__UNIX__)
-	return 0;
+#ifdef __WIN32__
+	if (SUCCEEDED(result))
 #else
-	return 0;
+	if (result == GLFW_NO_ERROR)
 #endif
+	{
+		// Instantiate the device manager class.
+		cave::DeviceResources* deviceResources = new cave::DeviceResources();
+		// Create device resources.
+		deviceResources->CreateDeviceResources();
+
+		// Instantiate the renderer.
+		cave::Renderer* renderer = new cave::Renderer(std::move(deviceResources));
+		renderer->CreateDeviceDependentResources();
+
+		// We have a window, so initialize window size-dependent resources.
+#ifdef __WIN32__
+		deviceResources->CreateWindowResources(main->GetWindowHandle());
+#else
+		deviceResources->CreateWindowResources();
+#endif
+		renderer->CreateWindowSizeDependentResources();
+
+		// Go full-screen.
+		deviceResources->GoFullScreen();
+
+		// Whoops! We resized the "window" when we went full-screen. Better
+		// tell the renderer.
+		renderer->CreateWindowSizeDependentResources();
+
+		// Run the program.
+		result = main->Run(deviceResources, renderer);
+
+		delete deviceResources;
+		delete renderer;
+	}
+
+	// long double tic = 0.0l;
+	// long double toc = 0.0l;
+	// long double tick = 0.0l;
+	// struct timespec tp;
+	// long double startTic = 0.0l;
+	// bool bHasSecondPassed = false;
+	// uint32_t tickCount = 0u;
+
+	// while (!cave::Renderer::GlfwWindowShouldClose())
+	// {
+	// 	clock_gettime(CLOCK_MONOTONIC, &tp);
+	// 	tic = (static_cast<long double>(tp.tv_sec) * 1000.0l) + (static_cast<long double>(tp.tv_nsec) * 0.000001l);
+	// 	if (bHasSecondPassed)
+	// 	{
+	// 		startTic = tic;
+	// 		bHasSecondPassed = false;
+	// 		LOGIF(cave::eLogChannel::GRAPHICS, std::cout, "FPS: %u", static_cast<uint32_t>(1.0l / ((tick / static_cast<long double>(tickCount)) * 0.001l)));
+	// 		tick = 0.0l;
+	// 		tickCount = 0u;
+	// 	}
+	// 	// LOGIF(cave::eLogChannel::GRAPHICS, std::cout, "Delta Time: %f", timeManager.GetDeltaTime());
+	// 	cave::Renderer::Render();
+	// 	glfwPollEvents();
+	// 	clock_gettime(CLOCK_MONOTONIC, &tp);
+	// 	toc = (static_cast<long double>(tp.tv_sec) * 1000.0l) + (static_cast<long double>(tp.tv_nsec) * 0.000001l);
+	// 	tick += toc - tic;
+	// 	++tickCount;
+	// 	if (toc - startTic >= 1000.0l)
+	// 	{
+	// 		bHasSecondPassed = true;
+	// 	}
+	// }
+
+	delete main;
+
+	// Cleanup is handled in destructors.
+    return result;
 }

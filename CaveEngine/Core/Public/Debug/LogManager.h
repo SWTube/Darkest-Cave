@@ -13,7 +13,7 @@
 
 namespace cave
 {
-	constexpr size_t MAX_BUFFER = 81;
+	constexpr size_t MAX_BUFFER = 255;
 
 	enum class eLogVerbosity
 	{
@@ -22,7 +22,7 @@ namespace cave
 		Debug,
 		Info,
 		Warn,
-		ERROR,
+		Error,
 		Assert
 	};
 

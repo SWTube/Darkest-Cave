@@ -3,9 +3,8 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 #pragma once
-#include "GraphicsCommon.h"
 
-#ifdef __WIN32__
+#if defined(__WIN32__)
 	#include "Renderer/CaveRenderer.h"
 
 	#ifndef HINST_THISCOMPONENT
@@ -43,4 +42,5 @@
 		int mWindowWidth;
 		int mWindowHeight;
 	};
+#elif defined(__UNIX__)
 #endif

@@ -4,14 +4,14 @@
  */
 #pragma once
 
-#include "Core.h"
+#include "CoreMinimal.h"
 
-#include "GraphicsCommon.h"
+#include "Renderer/Renderer.h"
 #if defined(__WIN32__)
 	#include "Test/Resource.h"
 	#include "Renderer/CaveApplication.h" 
 	#include "Renderer/CaveNode.h" 
 	#include "Renderer/CaveRenderer.h"
 #elif defined(__UNIX__)
-	#include "Renderer/GlRenderer.h"
+	#include "Object/DrawableObject.h"
 #endif

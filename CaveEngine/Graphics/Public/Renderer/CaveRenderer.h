@@ -1,7 +1,5 @@
 #pragma once
 
-#include "GraphicsCommon.h"
-
 #ifdef __WIN32__
 	class CaveRenderer
 	{
