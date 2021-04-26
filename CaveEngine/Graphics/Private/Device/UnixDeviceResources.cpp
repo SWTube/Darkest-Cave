@@ -5,27 +5,9 @@
 
 #include "Device/UnixDeviceResources.h"
 
+#ifdef __UNIX__
 namespace cave
 {
-	int32_t UnixDeviceResources::Init()
-	{
-		int32_t result = CreateDeviceResources();
-		if (result != GLFW_NO_ERROR)
-		{
-			Destroy();
-			return result;
-		}
-
-		result = CreateWindowResources(mWindow);
-		if (result != GLFW_NO_ERROR)
-		{
-			Destroy();
-			return result;
-		}
-
-		return result;
-	}
-
 	int32_t UnixDeviceResources::CreateDeviceResources()
 	{
 		glfwSetErrorCallback(errorCallback);
@@ -206,3 +188,4 @@ namespace cave
 		return mWindow;
 	}
 } // namespace cave
+#endif

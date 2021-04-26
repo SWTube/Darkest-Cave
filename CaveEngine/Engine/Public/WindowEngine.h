@@ -24,10 +24,10 @@ namespace cave
 		static LRESULT CALLBACK StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam);
 		
 	private:
-		HINSTANCE	mInstance = nullptr;
-		HWND		mWindow = nullptr;
-		HMENU		mMenu = nullptr;
-		RECT		mRect;
+		static HINSTANCE	msInstance;
+		HWND				mWindow = nullptr;
+		HMENU				mMenu = nullptr;
+		RECT				mRect;
 	};
 
 	typedef WindowEngine Engine;

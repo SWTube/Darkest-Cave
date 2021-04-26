@@ -23,7 +23,6 @@ namespace cave
 #else
 		virtual int32_t CreateWindowResources(GLFWwindow* window) = 0;
 #endif
-		virtual int32_t Init() = 0;
 		virtual int32_t CreateDeviceResources() = 0;
 		virtual void Destroy() = 0;
 

@@ -5,7 +5,7 @@
 
 #include "UnixEngine.h"
 
-#if 1
+#ifdef __UNIX__
 namespace cave
 {
 	UnixEngine::UnixEngine()

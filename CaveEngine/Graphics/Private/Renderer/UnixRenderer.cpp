@@ -10,6 +10,7 @@
 #include "CoreMinimal.h"
 #include "Renderer/UnixRenderer.h"
 
+#ifdef __UNIX__
 namespace cave
 {
 	GLFLOAT3::GLFLOAT3(const GLFLOAT3&& other)
@@ -76,8 +77,8 @@ namespace cave
 		GLFLOAT2 textCoord;
 	};
 
-	UnixRenderer::UnixRenderer(DeviceResources*&& deviceResources)
-		: GenericRenderer(std::move(deviceResources))
+	UnixRenderer::UnixRenderer(DeviceResources* deviceResources)
+		: GenericRenderer(deviceResources)
 	{
 	}
 	
@@ -87,7 +88,6 @@ namespace cave
 	UnixRenderer::~UnixRenderer()
 	{
 		Destroy();
-		mDeviceResources->Destroy();
 	}
 
 	int32_t UnixRenderer::createShaders()
@@ -551,6 +551,7 @@ namespace cave
 	void UnixRenderer::Destroy()
 	{
 		cleanupDevice();
+		mDeviceResources = nullptr;
 	}
 
 	// void UnixRenderer::Resize(uint32_t width, uint32_t height)
@@ -560,3 +561,4 @@ namespace cave
 	// 	glViewport(0, 0, static_cast<int32_t>(msWidth), static_cast<int32_t>(msHeight));
 	// }
 }
+#endif

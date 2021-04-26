@@ -2,6 +2,8 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
+
+#include <exception>
 #include <time.h>
 
 #include "CoreMinimal.h"
@@ -11,7 +13,6 @@
 
 #if defined(__WIN32__)
 import Log;
-import Renderer;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -23,9 +24,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	// Enable run-time memory check for debug builds.
-	#if defined(CAVE_BUILD_DEBUG)
+#if defined(CAVE_BUILD_DEBUG)
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	#endif
+#endif
 
 #else
 int main(int32_t argc, char** argv)
@@ -87,35 +88,42 @@ int main(int32_t argc, char** argv)
 	if (result == GLFW_NO_ERROR)
 #endif
 	{
-		// Instantiate the device manager class.
-		cave::DeviceResources* deviceResources = new cave::DeviceResources();
-		// Create device resources.
-		deviceResources->CreateDeviceResources();
+		try
+		{
+			// Instantiate the device manager class.
+			cave::DeviceResources* deviceResources = new cave::DeviceResources();
+			// Create device resources.
+			deviceResources->CreateDeviceResources();
 
-		// Instantiate the renderer.
-		cave::Renderer* renderer = new cave::Renderer(std::move(deviceResources));
-		renderer->CreateDeviceDependentResources();
+			// Instantiate the renderer.
+			cave::Renderer* renderer = new cave::Renderer(deviceResources);
+			renderer->CreateDeviceDependentResources();
 
-		// We have a window, so initialize window size-dependent resources.
+			// We have a window, so initialize window size-dependent resources.
 #ifdef __WIN32__
-		deviceResources->CreateWindowResources(main->GetWindowHandle());
+			deviceResources->CreateWindowResources(main->GetWindowHandle());
 #else
-		deviceResources->CreateWindowResources();
+			deviceResources->CreateWindowResources();
 #endif
-		renderer->CreateWindowSizeDependentResources();
+			renderer->CreateWindowSizeDependentResources();
 
-		// Go full-screen.
-		deviceResources->GoFullScreen();
+			//// Go full-screen.
+			//deviceResources->GoFullScreen();
 
-		// Whoops! We resized the "window" when we went full-screen. Better
-		// tell the renderer.
-		renderer->CreateWindowSizeDependentResources();
+			//// Whoops! We resized the "window" when we went full-screen. Better
+			//// tell the renderer.
+			//renderer->CreateWindowSizeDependentResources();
 
-		// Run the program.
-		result = main->Run(deviceResources, renderer);
+			// Run the program.
+			result = main->Run(deviceResources, renderer);
 
-		delete deviceResources;
-		delete renderer;
+			delete deviceResources;
+			delete renderer;
+		}
+		catch (const std::exception& e)
+		{
+			LOGEF(cave::eLogChannel::GRAPHICS, "%s", e.what());
+		}
 	}
 
 	// long double tic = 0.0l;

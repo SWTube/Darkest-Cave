@@ -8,9 +8,10 @@
 #ifdef __WIN32__
 namespace cave
 {
+	HINSTANCE	WindowEngine::msInstance = nullptr;
+
 	WindowEngine::WindowEngine()
 		: GenericEngine()
-		, mInstance(nullptr)
 	{
 	}
 
@@ -22,9 +23,9 @@ namespace cave
 	{
 		// Window resources are dealt with here.
     
-		if (mInstance == nullptr)
+		if (msInstance == nullptr)
 		{
-			mInstance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
+			msInstance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
 		}
 
 		// HICON hIcon = nullptr;
@@ -34,26 +35,26 @@ namespace cave
 		// // If the icon is NULL, then use the first one found in the exe
 		// if(hIcon == NULL)
 		// {
-		// 	hIcon = ExtractIcon(mInstance, szExePath, 0);
+		// 	hIcon = ExtractIcon(msInstance, szExePath, 0);
 		// }
 
 		// Register the windows class
-		WNDCLASS wndClass;
+		WNDCLASSEX wndClass;
 		wndClass.cbSize = sizeof(WNDCLASSEX);
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
-		wndClass.lpfnWndProc = MainClass::StaticWindowProc;
+		wndClass.lpfnWndProc = Engine::StaticWindowProc;
 		wndClass.cbClsExtra = 0;
 		wndClass.cbWndExtra = 0;
-		wndClass.hInstance = mInstance;
+		wndClass.hInstance = msInstance;
 		// wndClass.hIcon = hIcon;
-		wndClass.hIcon = LoadIcon(mInstance, reinterpret_cast<LPCTSTR>(107));
+		wndClass.hIcon = LoadIcon(msInstance, reinterpret_cast<LPCTSTR>(107));
 		wndClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
-		wndClass.hbrBackground = static_cast<HBRUSH>(COLOR_WINDOW + 1);
+		wndClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
 		wndClass.lpszMenuName = nullptr;
-		wndClass.lpszClassName = mWindowClassName;
+		wndClass.lpszClassName = msWindowClassName;
 		wndClass.hIconSm = LoadIcon(wndClass.hInstance, reinterpret_cast<LPCTSTR>(107));
 
-		if(!RegisterClass(&wndClass))
+		if(!RegisterClassEx(&wndClass))
 		{
 			DWORD dwError = GetLastError();
 			if(dwError != ERROR_CLASS_ALREADY_EXISTS)
@@ -82,14 +83,14 @@ namespace cave
 
 		// Create the window for our viewport.
 		mWindow = CreateWindow(
-			mWindowClassName,
+			msWindowClassName,
 			L"CaveEngine",
 			WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 			x, y,
 			(mRect.right - mRect.left), (mRect.bottom - mRect.top),
 			nullptr,
 			mMenu,
-			mInstance,
+			msInstance,
 			nullptr
 		);
 
@@ -146,7 +147,7 @@ namespace cave
 		return hr;
 	}
 
-	static LRESULT CALLBACK WindowEngine::StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK WindowEngine::StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam)
 	{
 		PAINTSTRUCT ps;
 		HDC hdc;
@@ -167,8 +168,8 @@ namespace cave
 			}
 			DestroyWindow(hWindow);
 			UnregisterClass(
-				mWindowClassName,
-				mInstance
+				msWindowClassName,
+				msInstance
 			);
 			break;
 

@@ -6,8 +6,9 @@
 #include <cassert>
 #include <string>
 
-#include "Debug/LogManager.h"
+#include "Debug/Log.h"
 
+#ifdef __UNIX__
 namespace cave
 {
 	eLogVerbosity LogManager::msCurrentVerbosity = eLogVerbosity::All;
@@ -213,3 +214,4 @@ namespace cave
 		}
 	}
 } // namespace cave
+#endif

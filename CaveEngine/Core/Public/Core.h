@@ -9,8 +9,6 @@
 	 Low level includes.
  ----------------------------------------------------------------------------*/
 
-#include "CaveEngineConfig.h"
-
 #include "CoreMinimal.h"
 
 

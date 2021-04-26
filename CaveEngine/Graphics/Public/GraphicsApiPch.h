@@ -5,7 +5,26 @@
 
 #pragma once
 
-#include "CaveEngineConfig.h"
+#if !defined(WIN32)
+	#include "CaveEngineConfig.h"
+#else
+	 /*--------------------------------------------------------------------------------
+		 Build configuration coming from CAVE, do not modify
+	 --------------------------------------------------------------------------------*/
+
+	 // Ensure that we have one, and only one build config coming from UBT
+	#if CAVE_BUILD_DEBUG + CAVE_BUILD_DEVELOPMENT + CAVE_BUILD_TEST + CAVE_BUILD_RELEASE != 1
+	#error Exactly one of [CAVE_BUILD_DEBUG CAVE_BUILD_DEVELOPMENT CAVE_BUILD_TEST CAVE_BUILD_RELEASE] should be defined to be 1
+	#endif
+
+	#ifndef __WIN32__
+	#define __WIN32__
+	#endif
+
+	#define PLATFORM_NAME Window
+
+	#define __FORCEINLINE__ __forceinline
+#endif
 
 #if defined(__UNIX__)
 	#include <cstdio>

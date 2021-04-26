@@ -4,43 +4,44 @@
  */
 #pragma once
 
-#if defined(__WIN32__)
-	#include "Renderer/CaveRenderer.h"
+#include "GraphicsApiPch.h"
+#include "Renderer/CaveRenderer.h"
 
-	#ifndef HINST_THISCOMPONENT
+#ifdef __WIN32__
+
+#ifndef HINST_THISCOMPONENT
 	EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 	#define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)
-	#endif
+#endif
 
-	class CaveApplication
-	{
-	public:
-		static CaveApplication* GetInstance();
-		~CaveApplication();
+class CaveApplication
+{
+public:
+	static CaveApplication* GetInstance();
+	~CaveApplication();
 		
-		HRESULT Initialize(HINSTANCE hInstance);
-		HWND GethWnd() const;
-		void SethWnd(HWND hWnd);
+	HRESULT Initialize(HINSTANCE hInstance);
+	HWND GethWnd() const;
+	void SethWnd(HWND hWnd);
 
-		void RunMessageLoop();
+	void RunMessageLoop();
 
-		int GetWindowWidth();
-		int GetWindowHeight();
-		void SetWindowSize(int windowWidth, int windowHeight);
+	int GetWindowWidth();
+	int GetWindowHeight();
+	void SetWindowSize(int windowWidth, int windowHeight);
 
-	private:
-		CaveApplication();
-		static CaveApplication* msInstance;
+private:
+	CaveApplication();
+	static CaveApplication* msInstance;
 
-		CaveRenderer* mpCaveRenderer;
-		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-		HRESULT OnRender();
-		void OnResize(UINT width, UINT height);
+	CaveRenderer* mpCaveRenderer;
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	HRESULT OnRender();
+	void OnResize(UINT width, UINT height);
 
-		HWND mHWnd;
+	HWND mHWnd;
 
-		int mWindowWidth;
-		int mWindowHeight;
-	};
-#elif defined(__UNIX__)
+	int mWindowWidth;
+	int mWindowHeight;
+};
 #endif

@@ -7,16 +7,10 @@
 
 namespace cave
 {
-	GenericRenderer::GenericRenderer(DeviceResources*&& deviceResources)
+	GenericRenderer::GenericRenderer(DeviceResources* deviceResources)
 		: mDeviceResources(deviceResources)
 		, mFrameCount(0u)
 	{
-		deviceResources = nullptr;
-	}
-
-	GenericRenderer::~GenericRenderer()
-	{
-		mDeviceResources->Destroy();
 	}
 
 	DeviceResources* const GenericRenderer::GetDeviceResources() const

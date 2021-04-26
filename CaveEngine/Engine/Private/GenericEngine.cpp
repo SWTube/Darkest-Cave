@@ -7,8 +7,5 @@
 
 namespace cave
 {
-	GenericEngine::GenericEngine()
-		: mWindowClassName(L"GenericWindowClass")
-	{
-	}
+	const wchar_t* GenericEngine::msWindowClassName = L"GenericWindowClass";
 }

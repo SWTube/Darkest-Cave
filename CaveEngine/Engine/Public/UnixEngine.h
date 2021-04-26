@@ -8,7 +8,7 @@
 #include "CoreTypes.h"
 #include "GenericEngine.h"
 
-#if 1
+#ifdef __UNIX__
 namespace cave
 {
 	class UnixEngine final : public GenericEngine

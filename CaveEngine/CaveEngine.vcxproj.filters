@@ -1,88 +1,99 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{1574bd97-bb90-457c-a02d-0c323e5174ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Containers">
-      <UniqueIdentifier>{eaaab97b-69d2-4253-af58-87c2ed5857ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Debug">
-      <UniqueIdentifier>{b39b8a72-de13-49b5-af01-05e92a0f960a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Memory">
-      <UniqueIdentifier>{e74c87e9-e7a8-4ea5-bf34-0bb67079e8c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics">
-      <UniqueIdentifier>{598e2617-0f3d-494b-8df8-c1f29cc95968}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{253d7982-db18-46a0-ba47-bbc06a025463}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Containers">
-      <UniqueIdentifier>{7cf09ef5-2cfc-4c96-b9b5-9ae2d6fa0256}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Memory">
-      <UniqueIdentifier>{c56f1321-69bd-4e88-b487-f116792a5f4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Debug">
-      <UniqueIdentifier>{d738b192-16d7-4120-bfa4-017f8a40dba7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics">
-      <UniqueIdentifier>{357a963d-3c2f-4bfc-9064-c74c1d123ecd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics\Renderer">
-      <UniqueIdentifier>{dd057c74-8c4c-4573-9d0e-ea9c8daae624}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics\Renderer">
-      <UniqueIdentifier>{799c705f-1638-4d91-9e46-7f4494c96585}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics\Test">
-      <UniqueIdentifier>{f3eb281e-3b3b-478a-b5ec-802180f63120}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics\Test">
-      <UniqueIdentifier>{cc742b2b-c8a5-4d54-a9c8-1671ae2b0b27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{adca7f36-2313-4244-84d9-1f5647390e80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ResourceManager">
-      <UniqueIdentifier>{2d306fa1-6a92-4e83-9130-0ff3acd40b4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ResourceManager\Texture">
-      <UniqueIdentifier>{0b3115a7-a5df-4b6b-9665-68ebee35ddff}</UniqueIdentifier>
-    <Filter Include="Source Files\Gameplay">
-      <UniqueIdentifier>{32db0f36-e1e1-4dc3-855a-45b75bb813bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Gameplay\Object">
-      <UniqueIdentifier>{30337889-05c7-40e8-90f5-ce7f65f27466}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Gameplay">
-      <UniqueIdentifier>{3196308d-0c78-4abc-9b8b-663936d1aa80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Gameplay\Object">
-      <UniqueIdentifier>{34d7dc31-9247-498e-89b2-d5bbce909d4a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Gameplay\Time">
-      <UniqueIdentifier>{501ecee5-acc2-4d6d-b76d-b01eb97287d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Gameplay\Time">
-      <UniqueIdentifier>{788d9742-dc16-4ef6-a0c6-2e995db57926}</UniqueIdentifier>
-    </Filter>
+    <FxCompile Include="Graphics\Shader\DirectXTestPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Graphics\Shader\DirectXTestPixelShaderSolid.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Graphics\Shader\DirectXTestVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EngineMain.cpp" />
+    <ClCompile Include="Core\Private\Memory\Allocator.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Debug\Log.cpp">
+      <Filter>Source Files\Core\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Debug\Log.ixx">
+      <Filter>Source Files\Core\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Memory\Memory.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\UnixDeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\WindowDeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\UnixRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\WindowRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Private\GenericEngine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Private\UnixEngine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Private\WindowEngine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graphics\Public\Test\Resource.h" />
+    <ClInclude Include="Core\Public\Memory\Allocator.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Memory\Memory.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Memory\MemoryPool.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Array.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\CaveNode.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\CaveRenderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Public\Core.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -95,96 +106,54 @@
     <ClInclude Include="Core\Public\CoreTypes.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Array.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Debug\LogManager.h">
-      <Filter>Header Files\Core\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Memory\Allocator.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Memory\Memory.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Memory\MemoryPool.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Graphics.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\GraphicsCommon.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h">
+    <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\CaveNode.h">
+    <ClInclude Include="Graphics\Public\Renderer\Renderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\CaveRenderer.h">
+    <ClInclude Include="Graphics\Public\Renderer\UnixRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Test\Resource.h">
-      <Filter>Header Files\Graphics\Test</Filter>
+    <ClInclude Include="Graphics\Public\Renderer\WindowRenderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Object\Actor.h">
-      <Filter>Header Files\Gameplay\Object</Filter>
+    <ClInclude Include="Graphics\Public\Device\DeviceResources.h">
+      <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Object\ActorState.h">
-      <Filter>Header Files\Gameplay\Object</Filter>
+    <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h">
+      <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Time\TimeManager.h">
-      <Filter>Header Files\Gameplay\Time</Filter>
+    <ClInclude Include="Graphics\Public\Device\UnixDeviceResources.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\WindowDeviceResources.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\GraphicsApiPch.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Public\Engine.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Public\GenericEngine.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Public\UnixEngine.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Public\WindowEngine.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Public\Debug\Log.h">
       <Filter>Header Files\Core\Debug</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Core\Private\Debug\LogManager.cpp">
-      <Filter>Source Files\Core\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Memory\Allocator.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Memory\Memory.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineMain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp">
-      <Filter>Source Files\Graphics\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
-    <ClCompile Include="Gameplay\Private\Object\Actor.cpp">
-      <Filter>Source Files\Gameplay\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Private\Object\ActorState.cpp">
-      <Filter>Source Files\Gameplay\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Private\Time\TimeManager.cpp">
-      <Filter>Source Files\Gameplay\Time</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Debug\Log.ixx">
-      <Filter>Source Files\Core\Debug</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -195,24 +164,84 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Graphics\Shader\DirectXTestPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Graphics\Shader\DirectXTestVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Graphics\Shader\DirectXTestPixelShaderSolid.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Graphics\Shader\DirectXTest.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{46a95d2c-89f3-46f3-9ab9-70a016aa649a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{24b754ef-fb73-4f0a-8493-4b058379434e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{60a16105-ab69-42bf-88ad-90eb7b2b8249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{a9a4e727-ee9c-4633-b2e3-fe44ccf82320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{03f6801d-5458-4537-b185-99a8e33fd856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Memory">
+      <UniqueIdentifier>{82b23163-1e4a-4033-9c83-a6f6a32ea237}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{4dd6cf74-370c-4523-bffb-665283ea7f36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Memory">
+      <UniqueIdentifier>{4b279c87-9271-4950-b637-cb086df10dec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Containers">
+      <UniqueIdentifier>{df235bc8-2608-4ff5-827d-bc4149d78f3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{044d56bb-db60-420b-9811-d55e8c3244ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Renderer">
+      <UniqueIdentifier>{bc5231d5-224d-430d-b2ad-493854c3c516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{45edc3fc-1af9-4451-9554-438fc2fee190}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Renderer">
+      <UniqueIdentifier>{e09474f8-8b49-4bc5-b4f8-6ff8c9d87f61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ResourceManager">
+      <UniqueIdentifier>{c92855d6-8a4e-448a-8d7a-c089beb9145c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Debug">
+      <UniqueIdentifier>{9fe7be19-b60f-40ea-8bb8-01cdf36dd330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Debug">
+      <UniqueIdentifier>{858daae3-f0ec-49e4-b76c-05b79677c916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Device">
+      <UniqueIdentifier>{d743986d-0856-4020-a1a3-46b9cc622ecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Device">
+      <UniqueIdentifier>{660be1b0-2868-4187-ba34-40312544a359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{40174f76-535a-4f55-98e7-cfaa24cdf15b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{f3417384-84dd-4461-8688-029dc0ff5d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ResourceManager">
+      <UniqueIdentifier>{0710795e-03ee-4ef0-94be-5f246debb47a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ResourceManager\Texture">
+      <UniqueIdentifier>{7bebf7fb-1862-45b2-b069-7c5b1479d8b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ResourceManager\Texture">
+      <UniqueIdentifier>{c5ca6e59-115e-4980-bf79-e267882ab430}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\Shader\DirectXTest.fxh">
       <Filter>Shader</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Graphics\Shader\DirectXTest.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

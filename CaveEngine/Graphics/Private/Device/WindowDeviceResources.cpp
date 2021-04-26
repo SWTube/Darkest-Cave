@@ -8,10 +8,9 @@
 #ifdef __WIN32__
 namespace cave
 {
-	constexpr WindowDeviceResources(HWND window)
+	WindowDeviceResources::~WindowDeviceResources()
 	{
-		assert(window != nullptr);
-		mWindow = window;
+		Destroy();
 	}
 
 	int32_t WindowDeviceResources::CreateDeviceResources()
@@ -40,27 +39,16 @@ namespace cave
 		};
 		uint32_t numFeatureLevels = ARRAYSIZE( featureLevels );
 
-		DXGI_SWAP_CHAIN_DESC desc;
-		ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
-		desc.Windowed = TRUE;
-		desc.BufferCount = 2;
-		desc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		desc.SampleDesc.Count = 1;      //multisampling setting
-		desc.SampleDesc.Quality = 0;    //vendor-specific flag
-		desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-		desc.OutputWindow = hWnd;
-
 		for(uint32_t driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
 		{
 			mDriverType = driverTypes[driverTypeIndex];
 
-			result = D3D11CreateDevice(nullptr, mDriverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mImmediateContext);
+			result = D3D11CreateDevice(nullptr, mDriverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &mD3dDevice, &mFeatureLevel, &mImmediateContext);
 
 			if (result == E_INVALIDARG)
 			{
 				// DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
-				result = D3D11CreateDevice(nullptr, mDriverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mImmediateContext);
+				result = D3D11CreateDevice(nullptr, mDriverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1, D3D11_SDK_VERSION, &mD3dDevice, &mFeatureLevel, &mImmediateContext);
 			}
 
 			if (SUCCEEDED(result))
@@ -73,18 +61,26 @@ namespace cave
 			return result;
 		}
 
+		return result;
+	}
+
+	int32_t WindowDeviceResources::CreateWindowResources(HWND window)
+	{
+		assert(window != nullptr);
+		int32_t result = S_OK;
+
 		// Obtain DXGI factory from device (since we used nullptr for pAdapter above)
 		IDXGIFactory1* dxgiFactory = nullptr;
 		{
 			IDXGIDevice* dxgiDevice = nullptr;
-			result = reinterpret_cast<int32_t>(mDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice)));
-			if (SUCCEEDED(reinterpret_cast<uint32_t>(result)))
+			result = static_cast<int32_t>(mD3dDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice)));
+			if (SUCCEEDED(static_cast<uint32_t>(result)))
 			{
 				IDXGIAdapter* adapter = nullptr;
-				result = reinterpret_cast<int32_t>(dxgiDevice->GetAdapter(&adapter));
-				if (SUCCEEDED(reinterpret_cast<uint32_t>(result)))
+				result = static_cast<int32_t>(dxgiDevice->GetAdapter(&adapter));
+				if (SUCCEEDED(static_cast<uint32_t>(result)))
 				{
-					result = reinterpret_cast<int32_t>(adapter->GetParent( __uuidof(IDXGIFactory1), reinterpret_cast<void**>(&dxgiFactory)));
+					result = static_cast<int32_t>(adapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&dxgiFactory)));
 					adapter->Release();
 				}
 				dxgiDevice->Release();
@@ -95,25 +91,19 @@ namespace cave
 			return result;
 		}
 
-		return result;
-	}
-
-	int32_t WindowDeviceResources::Init()
-	{
-		int32_t result = CreateDeviceResources();
-		result = CreateWindowResources(mWindow);
-
-		return result;
-	}
-
-	int32_t WindowDeviceResources::CreateWindowResources(HWND window)
-	{
-		assert(window != nullptr);
-		mWindow = window;
-		int32_t result = S_OK;
+		DXGI_SWAP_CHAIN_DESC desc;
+		ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
+		desc.Windowed = TRUE;
+		desc.BufferCount = 2;
+		desc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		desc.SampleDesc.Count = 1;      //multisampling setting
+		desc.SampleDesc.Quality = 0;    //vendor-specific flag
+		desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+		desc.OutputWindow = window;
 
 		RECT rc;
-		GetClientRect(mWindow, &rc);
+		GetClientRect(window, &rc);
 		uint32_t width = rc.right - rc.left;
 		uint32_t height = rc.bottom - rc.top;
 
@@ -123,7 +113,7 @@ namespace cave
 		if ( dxgiFactory2 )
 		{
 			// DirectX 11.1 or later
-			result = mDevice->QueryInterface( __uuidof(ID3D11Device1), reinterpret_cast<void**>(&mD3dDevice1));
+			result = mD3dDevice->QueryInterface( __uuidof(ID3D11Device1), reinterpret_cast<void**>(&mD3dDevice1));
 			if (SUCCEEDED(result))
 			{
 				static_cast<void>(mImmediateContext->QueryInterface( __uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&mImmediateContext1) ));
@@ -138,7 +128,7 @@ namespace cave
 			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			sd.BufferCount = 1;
 
-			result = dxgiFactory2->CreateSwapChainForHwnd( mD3dDevice, mWindow, &sd, nullptr, nullptr, &mSwapChain1 );
+			result = dxgiFactory2->CreateSwapChainForHwnd( mD3dDevice, window, &sd, nullptr, nullptr, &mSwapChain1 );
 			if (SUCCEEDED(result))
 			{
 				result = mSwapChain1->QueryInterface( __uuidof(IDXGISwapChain), reinterpret_cast<void**>(&mSwapChain) );
@@ -157,7 +147,7 @@ namespace cave
 			sd.BufferDesc.RefreshRate.Numerator = 60;
 			sd.BufferDesc.RefreshRate.Denominator = 1;
 			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-			sd.OutputWindow = mWindow;
+			sd.OutputWindow = window;
 			sd.SampleDesc.Count = 1;	// multisampling setting
 			sd.SampleDesc.Quality = 0;	// vendor-specific flag
 			sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
@@ -190,8 +180,7 @@ namespace cave
 		}
 		mBackBuffer->GetDesc(&mBackBufferDesc);
 
-		result = mD3dDevice->CreateRenderTargetView(mBackBuffer, nullptr, &mRenderTargetViewView);
-		mBackBuffer->Release();
+		result = mD3dDevice->CreateRenderTargetView(mBackBuffer, nullptr, &mRenderTargetView);
 		if(FAILED(result))
 		{
 			return result;
@@ -310,7 +299,7 @@ namespace cave
 	{
 		int32_t result = S_OK;
 
-		result = m_pDXGISwapChain->SetFullscreenState(FALSE, NULL);
+		result = mSwapChain->SetFullscreenState(FALSE, NULL);
 
 		// Swap chains created with the DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL flag need to
 		// call ResizeBuffers in order to realize a change to windowed mode. Otherwise, 
@@ -321,7 +310,7 @@ namespace cave
 		ReleaseBackBuffer();
 
 		// Now we can call ResizeBuffers.
-		result = m_pDXGISwapChain->ResizeBuffers(
+		result = mSwapChain->ResizeBuffers(
 			0,                   // Number of buffers. Set this to 0 to preserve the existing setting.
 			0, 0,                // Width and height of the swap chain. MUST be set to a non-zero value. For example, match the window size.
 			DXGI_FORMAT_UNKNOWN, // This tells DXGI to retain the current back buffer format.
@@ -359,7 +348,7 @@ namespace cave
 		return mDepthStencilView;
 	}
 
-	D3D_DRIVER_TYPE GetDriverType()
+	D3D_DRIVER_TYPE WindowDeviceResources::GetDriverType() const
 	{
 		return mDriverType;
 	}

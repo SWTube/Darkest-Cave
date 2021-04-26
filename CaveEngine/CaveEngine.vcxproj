@@ -89,8 +89,8 @@
       <PreprocessorDefinitions>WIN32;__WIN32__;CAVE_BUILD_DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -118,8 +118,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;__WIN32__;CAVE_BUILD_RELEASE;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,13 +141,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;__WIN32__;CAVE_BUILD_DEBUG;_DEBUG;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <OmitFramePointers>false</OmitFramePointers>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -180,8 +180,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;CAVE_BUILD_RELEASE;__WIN32__;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Debug\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -204,29 +204,51 @@
     <ClInclude Include="Core\Public\CoreFwd.h" />
     <ClInclude Include="Core\Public\CoreMinimal.h" />
     <ClInclude Include="Core\Public\CoreTypes.h" />
-    <ClInclude Include="Core\Public\Debug\Log.h" />
-    <ClInclude Include="Core\Public\Debug\LogManager.h" />
+    <ClInclude Include="Core\Public\Debug\Log.h">
+      <DeploymentContent>false</DeploymentContent>
+    </ClInclude>
     <ClInclude Include="Core\Public\Memory\Allocator.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
+    <ClInclude Include="Engine\Public\Engine.h" />
+    <ClInclude Include="Engine\Public\GenericEngine.h" />
+    <ClInclude Include="Engine\Public\UnixEngine.h" />
+    <ClInclude Include="Engine\Public\WindowEngine.h" />
+    <ClInclude Include="Graphics\Public\Device\DeviceResources.h" />
+    <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h" />
+    <ClInclude Include="Graphics\Public\Device\UnixDeviceResources.h" />
+    <ClInclude Include="Graphics\Public\Device\WindowDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
+    <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveNode.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveRenderer.h" />
+    <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h" />
+    <ClInclude Include="Graphics\Public\Renderer\Renderer.h" />
+    <ClInclude Include="Graphics\Public\Renderer\UnixRenderer.h" />
+    <ClInclude Include="Graphics\Public\Renderer\WindowRenderer.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\Log.ixx" />
-    <ClCompile Include="Core\Private\Debug\LogManager.cpp" />
+    <ClCompile Include="Core\Private\Debug\Log.cpp" />
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="EngineMain.cpp" />
+    <ClCompile Include="Engine\Private\GenericEngine.cpp" />
+    <ClCompile Include="Engine\Private\UnixEngine.cpp" />
+    <ClCompile Include="Engine\Private\WindowEngine.cpp" />
+    <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp" />
+    <ClCompile Include="Graphics\Private\Device\UnixDeviceResources.cpp" />
+    <ClCompile Include="Graphics\Private\Device\WindowDeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
+    <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx" />
-    <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp" />
+    <ClCompile Include="Graphics\Private\Renderer\UnixRenderer.cpp" />
+    <ClCompile Include="Graphics\Private\Renderer\WindowRenderer.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
   </ItemGroup>
   <ItemGroup>

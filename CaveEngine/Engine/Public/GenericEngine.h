@@ -14,7 +14,7 @@ namespace cave
 	class GenericEngine
 	{
 	public:
-		GenericEngine();
+		GenericEngine() = default;
 		virtual ~GenericEngine() = default;
 
 #ifdef __WIN32__
@@ -27,6 +27,6 @@ namespace cave
 		virtual int32_t Run(DeviceResources* deviceResources, Renderer* renderer) = 0;
 
 	protected:
-		const wchar_t* mWindowClassName = nullptr;
+		static const wchar_t* msWindowClassName;
 	};
 }

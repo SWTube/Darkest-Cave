@@ -15,13 +15,11 @@ namespace cave
 	class WindowDeviceResources final : public GenericDeviceResources
 	{
 	public:
-		constexpr WindowDeviceResources() = delete;
-		constexpr WindowDeviceResources(HWND window);
+		WindowDeviceResources() = default;
 		constexpr WindowDeviceResources(const WindowDeviceResources&) = delete;
 		WindowDeviceResources& operator=(const WindowDeviceResources&) = delete;
 		virtual ~WindowDeviceResources();
 
-		int32_t Init() override;
 		int32_t CreateWindowResources(HWND window) override;
 		int32_t CreateDeviceResources() override;
 		void Destroy() override;
@@ -42,7 +40,6 @@ namespace cave
 		void Present() override;
 	private:
 		HINSTANCE	mInstance = nullptr;
-		HWND		mWindow = nullptr;
 
 		//-----------------------------------------------------------------------------
 		// Direct3D device

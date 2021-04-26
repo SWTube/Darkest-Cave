@@ -9,6 +9,7 @@
 #include "GraphicsApiPch.h"
 #include "Device/GenericDeviceResources.h"
 
+#ifdef __UNIX__
 namespace cave
 {
 	class UnixDeviceResources final : public GenericDeviceResources
@@ -19,7 +20,6 @@ namespace cave
 		UnixDeviceResources& operator=(const UnixDeviceResources&) = default;
 		virtual ~UnixDeviceResources() = default;
 
-		int32_t Init() override;
 		int32_t CreateDeviceResources() override;
 		int32_t CreateWindowResources(GLFWwindow* window) override;
 		int32_t CreateWindowResources();
@@ -57,3 +57,4 @@ namespace cave
 
 	typedef UnixDeviceResources DeviceResources;
 }
+#endif

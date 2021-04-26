@@ -15,8 +15,8 @@ namespace cave
 	class GenericRenderer
 	{
 	public:
-		GenericRenderer(DeviceResources*&& deviceResources);
-		virtual ~GenericRenderer();
+		GenericRenderer(DeviceResources* deviceResources);
+		virtual ~GenericRenderer() = default;
 
 		GenericRenderer(const GenericRenderer&) = delete;
 		GenericRenderer& operator=(const GenericRenderer&) = delete;

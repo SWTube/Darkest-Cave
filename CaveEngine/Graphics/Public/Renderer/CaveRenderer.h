@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GraphicsApiPch.h"
+
 #ifdef __WIN32__
 	class CaveRenderer
 	{

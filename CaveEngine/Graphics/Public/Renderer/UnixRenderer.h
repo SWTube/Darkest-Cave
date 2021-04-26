@@ -14,6 +14,7 @@
 #define BUFFER_OFFSET(a) (reinterpret_cast<void*>(a))
 #define FAILED(error) ((static_cast<int32_t>(error)) != GLFW_NO_ERROR)
 
+#ifdef __UNIX__
 namespace cave
 {
 	//--------------------------------------------------------------------------------------
@@ -56,7 +57,8 @@ namespace cave
 	class UnixRenderer final : public GenericRenderer
 	{
 	public:
-		UnixRenderer(DeviceResources*&& deviceResources);
+		UnixRenderer() = delete;
+		UnixRenderer(DeviceResources* deviceResources);
 		virtual ~UnixRenderer();
 
 		UnixRenderer(const UnixRenderer&) = delete;
@@ -64,8 +66,6 @@ namespace cave
 		UnixRenderer& operator=(const UnixRenderer&&) = delete;
 
 		bool WindowShouldClose() override;
-
-		int32_t Init(uint32_t width, uint32_t height, const char* title);
 
 		void CreateDeviceDependentResources() override;
 		void CreateWindowSizeDependentResources() override;
@@ -120,3 +120,4 @@ namespace cave
 
 	typedef UnixRenderer Renderer;
 }
+#endif
