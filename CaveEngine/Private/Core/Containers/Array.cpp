@@ -6,7 +6,7 @@
 
 namespace cave
 {
-	constexpr explicit FFloatArray::FFloatArray(size_t size)
+	constexpr FFloatArray::FFloatArray(size_t size)
 		: mSize(size)
 		, mData(new float[size])
 	{ }
