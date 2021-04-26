@@ -18,7 +18,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
-	if (FAILED(cave::Renderer::Init(hInstance, nCmdShow, L"CaveEngine", L"CaveEngineDemo")))
+	if (FAILED(cave::Renderer::Init(hInstance, nCmdShow, 256l, 240l, L"CaveEngine", L"CaveEngineDemo")))
 	{
 		return 0;
 	}

@@ -82,8 +82,8 @@ namespace cave
 		void CleanupDevice();
 		HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 		void Destroy();
-		HRESULT Init(HINSTANCE hInstance, int nCmdShow, LPCWSTR className, LPCWSTR windowName);
-		HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow, LPCWSTR className, LPCWSTR windowName);
+		HRESULT Init(HINSTANCE hInstance, int nCmdShow, LONG width, LONG height, LPCWSTR className, LPCWSTR windowName);
+		HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow, LONG width, LONG height, LPCWSTR className, LPCWSTR windowName);
 		HRESULT InitDevice();
 		void Render();
 		LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -248,9 +248,9 @@ namespace cave
 		//--------------------------------------------------------------------------------------
 		// Initialize Renderer
 		//--------------------------------------------------------------------------------------
-		export HRESULT Init(HINSTANCE hInstance, int nCmdShow, LPCWSTR className, LPCWSTR windowName)
+		export HRESULT Init(HINSTANCE hInstance, int nCmdShow, LONG width, LONG height, LPCWSTR className, LPCWSTR windowName)
 		{
-			HRESULT hResult = FAILED(InitWindow(hInstance, nCmdShow, className, windowName));
+			HRESULT hResult = FAILED(InitWindow(hInstance, nCmdShow, width, height, className, windowName));
 			if (FAILED(hResult))
 			{
 				return hResult;
@@ -730,8 +730,8 @@ namespace cave
 			gWorld = DirectX::XMMatrixIdentity();
 
 			// Initialize the view matrix
-			DirectX::XMVECTOR eye = DirectX::XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
-			DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+			DirectX::XMVECTOR eye = DirectX::XMVectorSet(0.0f, 0.0f, -6.0f, 0.0f);
+			DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 			DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 			gView = DirectX::XMMatrixLookAtLH(eye, at, up);
 
@@ -752,7 +752,7 @@ namespace cave
 		//--------------------------------------------------------------------------------------
 		// Register class and create window
 		//--------------------------------------------------------------------------------------
-		HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow, LPCWSTR className, LPCWSTR windowName)
+		HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow, LONG width, LONG height, LPCWSTR className, LPCWSTR windowName)
 		{
 			// Register class
 			WNDCLASSEX windowClassEx;
@@ -775,7 +775,7 @@ namespace cave
 
 			// Create window
 			gHInstance = hInstance;
-			RECT rect = {0, 0, 800, 600};
+			RECT rect = {0, 0, width, height};
 			AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 			gHWindow = CreateWindow(className, windowName,
 				WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
