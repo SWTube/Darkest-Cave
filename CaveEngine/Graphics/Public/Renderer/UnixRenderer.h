@@ -8,6 +8,8 @@
 #include "GraphicsApiPch.h"
 
 #include "CoreMinimal.h"
+#include "Device/DeviceResources.h"
+#include "Renderer/GenericRenderer.h"
 
 #define BUFFER_OFFSET(a) (reinterpret_cast<void*>(a))
 #define FAILED(error) ((static_cast<int32_t>(error)) != GLFW_NO_ERROR)
@@ -51,37 +53,45 @@ namespace cave
 		GLuint       shader;
 	} ShaderInfo;
 
-	class UnixRenderer final
+	class UnixRenderer final : public GenericRenderer
 	{
 	public:
-		static void Destroy();
-		static bool GlfwWindowShouldClose();
+		UnixRenderer(DeviceResources*&& deviceResources);
+		virtual ~UnixRenderer();
 
-		static int32_t Init(uint32_t width, uint32_t height, const char* title);
+		UnixRenderer(const UnixRenderer&) = delete;
+		UnixRenderer& operator=(const UnixRenderer&) = delete;
+		UnixRenderer& operator=(const UnixRenderer&&) = delete;
 
+		bool WindowShouldClose() override;
+
+		int32_t Init(uint32_t width, uint32_t height, const char* title);
+
+		void CreateDeviceDependentResources() override;
+		void CreateWindowSizeDependentResources() override;
+		void Update() override;
 		// Render steps:
 			// 1. Clear the window by calling glClearBufferfv()
 			// 2. Issue the OpenGL calls required to render your object
 			// 3. Request that the image is presented to the screen
-		static void Render();
+		void Render() override;
 
-		static void OnChar(uint32_t codepoint);
-		static void OnKey(int32_t key, int32_t scancode, int32_t action, int32_t mods);
-		static void Resize(uint32_t width, uint32_t height);
+		void Destroy() override;
+
+
+		void OnChar(uint32_t codepoint);
+		void OnKey(int32_t key, int32_t scancode, int32_t action, int32_t mods);
+		// void Resize(uint32_t width, uint32_t height);
 	private:
-		static void cleanupDevice();
-		static int32_t compileShaderFromFile(ShaderInfo* shaders);
-		static void errorCallback(int errorCode, const char* description);
-		static int32_t initWindow(uint32_t width, uint32_t height, const char* title);
-		static int32_t initDevice();
-		static GLuint loadShaders(ShaderInfo* shaders);
-		static const GLchar* readShader(const char* filename);
+		int32_t createShaders() override;
+		int32_t createCube() override;
+		void createView() override;
+		void createPerspective() override;
 
-		static void windowSizeCallback(GLFWwindow* window, int32_t width, int32_t height);
-		static void keyCallback(GLFWwindow* window, int32_t key, int32_t scancode, int32_t action, int32_t mods);
-		static void charCallback(GLFWwindow* window, uint32_t codepoint);
-
-		static char glfwKeyToChar(int32_t key);
+		void cleanupDevice();
+		int32_t compileShaderFromFile(ShaderInfo* shaders);
+		GLuint loadShaders(ShaderInfo* shaders);
+		const GLchar* readShader(const char* filename);
 
 		static constexpr uint8_t TRIANGLES = 0u;
 		static constexpr uint8_t VERTEX_ARRAY_OBJECTS_COUNT = 1u;
@@ -94,21 +104,16 @@ namespace cave
 		static constexpr uint8_t V_TEX_COORD = 1u;
 
 		//--------------------------------------------------------------------------------------
-		// Global Variables
+		// Member Variables
 		//--------------------------------------------------------------------------------------
-		static GLFWwindow* msWindow;
-		static uint32_t msWidth;
-		static uint32_t msHeight;
-		static GLuint msProgram;
+		uint8_t* msBackground = nullptr;
+		uint32_t msBackgroundWidth = 0u;
+		uint32_t msBackgroundHeight = 0u;
+		uint32_t msBackgroundSampler = 0u;
 
-		static uint8_t* msBackground;
-		static uint32_t msBackgroundWidth;
-		static uint32_t msBackgroundHeight;
-		static uint32_t msBackgroundSampler;
-
-		static GLuint msVertexArrayObjects[VERTEX_ARRAY_OBJECTS_COUNT];
-		static GLuint msBuffers[BUFFER_COUNT];
-		static GLuint msTextures[TEXTURE_COUNT];
+		GLuint msVertexArrayObjects[VERTEX_ARRAY_OBJECTS_COUNT];
+		GLuint msBuffers[BUFFER_COUNT] = { 0u, };
+		GLuint msTextures[TEXTURE_COUNT];
 
 		static constexpr GLuint msNumVertices = 4u;
 	};

@@ -8,19 +8,6 @@
 #ifdef __WIN32__
 namespace cave
 {
-	HINSTANCE					WindowRenderer::msHInstance = nullptr;
-	HWND						WindowRenderer::msHWindow = nullptr;
-	D3D_DRIVER_TYPE				WindowRenderer::msDriverType = D3D_DRIVER_TYPE_NULL;
-	D3D_FEATURE_LEVEL			WindowRenderer::msFeatureLevel = D3D_FEATURE_LEVEL_11_0;
-	ID3D11Device*				WindowRenderer::msD3dDevice = nullptr;
-	ID3D11Device1*				WindowRenderer::msD3dDevice1 = nullptr;
-	ID3D11DeviceContext*		WindowRenderer::msImmediateContext = nullptr;
-	ID3D11DeviceContext1*		WindowRenderer::msImmediateContext1 = nullptr;
-	IDXGISwapChain*				WindowRenderer::msSwapChain = nullptr;
-	IDXGISwapChain1*			WindowRenderer::msSwapChain1 = nullptr;
-	ID3D11RenderTarmsetView*	WindowRenderer::msRenderTargetView = nullptr;
-	ID3D11Texture2D*			WindowRenderer::msDepthStencil = nullptr;
-	ID3D11DepthStencilView*		WindowRenderer::msDepthStencilView = nullptr;
 	ID3D11VertexShader*			WindowRenderer::msVertexShader = nullptr;
 	ID3D11PixelShader*			WindowRenderer::msPixelShader = nullptr;
 	ID3D11InputLayout*			WindowRenderer::msVertexLayout = nullptr;
@@ -35,17 +22,17 @@ namespace cave
 	DirectX::XMMATRIX			WindowRenderer::msView;
 	DirectX::XMMATRIX			WindowRenderer::msProjection;
 	DirectX::XMFLOAT4			WindowRenderer::msMeshColor = DirectX::XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
+
+	DeviceResources*			WindowRenderer::msDeviceResources = nullptr;
+	uint32_t					WindowRenderer::msIndexCount = 0u;
+	uint32_t					WindowRenderer::msFrameCount = 0u;
+	ID3D11InputLayout*			WindowRenderer::msInputLayoutExtended;
 	
 	//--------------------------------------------------------------------------------------
 	// Clean up the objects we've created
 	//--------------------------------------------------------------------------------------
 	void WindowRenderer::cleanupDevice()
 	{
-		if (msImmediateContext)
-		{
-			msImmediateContext->ClearState();
-		}
-
 		if (msSamplerLinear)
 		{
 			msSamplerLinear->Release();
@@ -97,30 +84,6 @@ namespace cave
 		if (msRenderTargetView)
 		{
 			msRenderTargetView->Release();
-		}
-		if (msSwapChain1)
-		{
-			msSwapChain1->Release();
-		}
-		if (msSwapChain)
-		{
-			msSwapChain->Release();
-		}
-		if (msImmediateContext1)
-		{
-			msImmediateContext1->Release();
-		}
-		if (msImmediateContext)
-		{
-			msImmediateContext->Release();
-		}
-		if (msD3dDevice1)
-		{
-			msD3dDevice1->Release();
-		}
-		if (msD3dDevice)
-		{
-			msD3dDevice->Release();
 		}
 	}
 
@@ -191,6 +154,7 @@ namespace cave
 	void WindowRenderer::Destroy()
 	{
 		cleanupDevice();
+		msDeviceResources->Destroy();
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -198,7 +162,7 @@ namespace cave
 	//--------------------------------------------------------------------------------------
 	int32_t WindowRenderer::Init(HINSTANCE hInstance, int nCmdShow, LPCWSTR className, LPCWSTR windowName)
 	{
-		HRESULT hResult = FAILED(initWindow(hInstance, nCmdShow, className, windowName));
+		int32_t hResult = FAILED(initWindow(hInstance, nCmdShow, className, windowName));
 		if (FAILED(hResult))
 		{
 			return hResult;
@@ -417,12 +381,6 @@ namespace cave
 			return hResult;
 		}
 
-		// ���� target ���� ����. ������ 8 ����� ����
-		// ������ parameter�� depth buffer.
-		// �տ� OM �پ��ִٴ� �� Output Manager. ���ۿ� ���� ���ϰ� �ϴ� ���� ���ξ OM���� �Ǿ�����
-		// �츮�� �׸� buffer ����
-		msImmediateContext->OMSetRenderTargets(1, &msRenderTargetView, msDepthStencilView);
-
 		// gRenderTargetView�� ���� �� �������� �׸� ����?
 		// viewport�� 3ds max ����ٰ� �����ϸ� ȭ�� 4�����ؼ�
 		// ���� �������ϸ� ���� �ϳ��� viewport�� ���� 4������ ����ŭ �־ 
@@ -503,10 +461,6 @@ namespace cave
 			return hResult;
 		}
 
-		// IA. Input Assembly
-		// Set the input layout
-		msImmediateContext->IASetInputLayout(gVertexLayout);
-
 		// Compile the pixel shader
 		ID3DBlob* pPSBlob = nullptr;
 		hResult = compileShaderFromFile(L"Graphics/Shader/DirectXTest.fxh", "PS", "ps_4_0", &pPSBlob);
@@ -583,12 +537,6 @@ namespace cave
 			return hResult;
 		}
 
-		// ���� context�� �����ֱ�
-		// Set vertex buffer
-		UINT stride = sizeof(SimpleVertex);
-		UINT offset = 0;
-		msImmediateContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &stride, &offset);
-
 		// Create index buffer
 		WORD indices[] = {
 			3,1,0,
@@ -619,13 +567,6 @@ namespace cave
 		{
 			return hResult;
 		}
-
-		// Set index buffer
-		msImmediateContext->IASetIndexBuffer(gIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-
-
-		// Set primitive topology
-		msImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		// Create the constant buffer
 		bd.Usage = D3D11_USAGE_DEFAULT;
@@ -744,71 +685,70 @@ namespace cave
 	//--------------------------------------------------------------------------------------
 	void WindowRenderer::Render()
 	{
-		// Update our time
-		static float t = 0.0f;
-		if (msDriverType == D3D_DRIVER_TYPE_REFERENCE)
-		{
-			t += static_cast<float>(DirectX::XM_PI) * 0.0125f;
-		}
-		else
-		{
-			static uint64_t timeStart = 0;
-			uint64_t timeCur = GetTickCount64();
-			if (timeStart == 0)
-			{
-				timeStart = timeCur;
-			}
-			t = (timeCur - timeStart) / 1000.0f;
-		}
+		 ID3D11DeviceContext* context = msDeviceResources->GetDeviceContext();
 
-		// 1st Cube : Rotate around the origin
-		msWorld = DirectX::XMMatrixRotationY(t);
-
-		// Modify the color
-		msMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-		msMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-		msMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
-
-		// ���� layout ����, topology �ٲٴ°�, vertex buffer �ٲٴ°� rendering �Լ� �ȿ� ���� ��찡 ����
-		// vertex buffer�� pixel shader �� ���� �ʼ�
-		// Clear the back buffer 
-		msImmediateContext->ClearRenderTargetView(msRenderTargetView, DirectX::Colors::MidnightBlue);
-
-		//
-		// Clear the depth buffer to 1.0 (max depth)
-		//
-		msImmediateContext->ClearDepthStencilView(msDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		ID3D11RenderTargetView* renderTarget = msDeviceResources->GetRenderTarget();
+		ID3D11DepthStencilView* depthStencil = msDeviceResources->GetDepthStencil();
 
 		//
 		// Update variables for the first cube
 		//
-		ConstantBufferChangesEveryFrame constantBuffer;
-		constantBuffer.mWorld = DirectX::XMMatrixTranspose(msWorld);
-		constantBuffer.mvMeshColor = msMeshColor;
-		msImmediateContext->UpdateSubresource(msConstantBufferChangesEveryFrame, 0, nullptr, &constantBuffer, 0, 0);
+		context->UpdateSubresource(msConstantBuffer, 0, nullptr, &msConstantBufferData, 0, 0);
+
+
+		// ���� layout ����, topology �ٲٴ°�, vertex buffer �ٲٴ°� rendering �Լ� �ȿ� ���� ��찡 ����
+		// vertex buffer�� pixel shader �� ���� �ʼ�
+		// Clear the back buffer 
+		context->ClearRenderTargetView(renderTarget, DirectX::Colors::MidnightBlue);
+
+		//
+		// Clear the depth buffer to 1.0 (max depth)
+		//
+		context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+		// ���� target ���� ����. ������ 8 ����� ����
+		// ������ parameter�� depth buffer.
+		// �տ� OM �پ��ִٴ� �� Output Manager. ���ۿ� ���� ���ϰ� �ϴ� ���� ���ξ OM���� �Ǿ�����
+		// �츮�� �׸� buffer ����
+		context->OMSetRenderTargets(1, &renderTarget, depthStencil);
+
+		// ���� context�� �����ֱ�
+		// Set vertex buffer
+		uint32_t stride = sizeof(SimpleVertex);
+		uint32_t offset = 0;
+		context->IASetVertexBuffers(0, 1, &msVertexBuffer, &stride, &offset);
+
+		// Set index buffer
+		context->IASetIndexBuffer(msIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+
+		// Set primitive topology
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// IA. Input Assembly
+		// Set the input layout
+		context->IASetInputLayout(msVertexLayout);
 
 		//
 		// Render the first cube
 		//
-		msImmediateContext->VSSetShader(msVertexShader, nullptr, 0);
-		msImmediateContext->VSSetConstantBuffers(0, 1, &msConstantBufferNeverChanges);
-		msImmediateContext->VSSetConstantBuffers(1, 1, &msConstantBufferChangeOnResize);
-		msImmediateContext->VSSetConstantBuffers(2, 1, &msConstantBufferChangesEveryFrame);
-		msImmediateContext->PSSetShader(msPixelShader, nullptr, 0);
-		msImmediateContext->PSSetConstantBuffers(2, 1, &msConstantBufferChangesEveryFrame);
-		msImmediateContext->PSSetShaderResources(0, 1, &msTextureRv);
-		msImmediateContext->PSSetSamplers(0, 1, &gSamplerLinear);
+		context->VSSetShader(msVertexShader, nullptr, 0);
+		context->VSSetConstantBuffers(0, 1, &msConstantBufferNeverChanges);
+		context->PSSetShader(msPixelShader, nullptr, 0);
+		context->PSSetConstantBuffers(2, 1, &msConstantBufferChangesEveryFrame);
+		context->PSSetShaderResources(0, 1, &msTextureRv);
+		context->PSSetSamplers(0, 1, &msSamplerLinear);
 		// ���� production level���� Draw���ٴ� DrawIndexed�� �� ���� ���
 		// ù��°�� ���ؽ� ����. 3
 		// back buffer�� �׸���
-		//msImmediateContext->Draw(3, 0);
-		msImmediateContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
+		//context->Draw(3, 0);
+		context->DrawIndexed(msIndexCount, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
 		// ���� flip�̳� swap ���ؼ� front buffer�� ����
 		// front buffer�� ������
 		// ���� �׷����� ������ GPU Driver���� �ٸ�. ������ ���������� �񵿱�� �Ͼ
 		// Present the information rendered to the back buffer to the front buffer (the screen)
-		gSwapChain->Present(0, 0);
+		// gSwapChain->Present(0, 0);
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -839,5 +779,298 @@ namespace cave
 
 		return 0;
 	}
+
+	int32_t WindowRenderer::Init(DeviceResources* deviceResources)
+	{
+		msFrameCount = 0u;
+		msDeviceResources = deviceResources;
+	}
+
+	void WindowRenderer::CreateDeviceDependentResources()
+	{
+		auto createShadersTask = Concurrency::create_task(
+			[this]()
+			{
+				createShaders();
+			}
+		);
+
+		auto createCubeTask = CreateShadersTask.then(
+			[this]()
+			{
+				createCube();
+			}
+		);
+	}
+
+	void WindowRenderer::CreateWindowSizeDependentResources()
+	{
+		createView();
+		createPerspective();
+	}
+
+	void WindowRenderer::Update()
+	{
+		// Update our time
+		static float t = 0.0f;
+		D3D_DRIVER_TYPE driverType = mDeviceResources->GetDriverType();
+		if(driverType == D3D_DRIVER_TYPE_REFERENCE)
+		{
+			t += static_cast<float>(XM_PI) * 0.0125f;
+		}
+		else
+		{
+			static uint64_t timeStart = 0ul;
+			uint64_t timeCur = GetTickCount64();
+			if (timeStart == 0)
+			{
+				timeStart = timeCur;
+			}
+			t = (timeCur - timeStart) / 1000.0f;
+		}
+
+		// Rotate cube around the origin
+		msConstantBufferData.mWorld = XMMatrixRotationY(t);
+
+		// Modify the color
+		msConstantBufferData.mMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+		msConstantBufferData.mMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+		msConstantBufferData.mMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+
+		if (msFrameCount == UINT32_MAX)
+		{
+			msFrameCount = 0;
+		}
+	}
+
+	int32_t WindowRenderer::createShaders()
+	{
+		int32_t result = S_OK;
+
+		// Use the Direct3D device to load resources into graphics memory.
+		ID3D11Device* device = mDeviceResources->GetDevice();
+		
+		// Compile the vertex shader
+		ID3DBlob* pVSBlob = nullptr;
+		result = CompileShaderFromFile(L"DirectXTest.fxh", "VS", "vs_4_0", &pVSBlob);
+		if(FAILED(result))
+		{
+			MessageBox(nullptr,
+						L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
+			return result;
+		}
+
+		// Create the vertex shader
+		result = device->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &msVertexShader);
+		if( FAILED( result ) )
+		{    
+			pVSBlob->Release();
+			return result;
+		}
+
+		// Define the input layout
+		D3D11_INPUT_ELEMENT_DESC layout[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		};
+		uint32_t numElements = ARRAYSIZE(layout);
+
+		// Create the input layout
+		result = device->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
+											pVSBlob->GetBufferSize(), &msVertexLayout );
+		pVSBlob->Release();
+		if(FAILED(result))
+		{
+			return result;
+		}
+
+		// Compile the pixel shader
+		ID3DBlob* pPSBlob = nullptr;
+		result = CompileShaderFromFile(L"DirectXTest.fxh", "PS", "ps_4_0", &pPSBlob);
+		if(FAILED(result))
+		{
+			MessageBox(nullptr,
+						L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
+			return result;
+		}
+
+		// Create the pixel shader
+		result = device->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), nullptr, &msPixelShader);
+		pPSBlob->Release();
+		if(FAILED(result))
+		{
+			return result;
+		}
+
+		// Create the constant buffers
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(ConstantBufferNeverChanges);
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.CPUAccessFlags = 0;
+		result = device->CreateBuffer(&bd, nullptr, &msConstantBufferNeverChanges);
+		if(FAILED(result))
+		{
+			return result;
+		}
+		
+		bd.ByteWidth = sizeof(ConstantBufferChangeOnResize);
+		result = device->CreateBuffer(&bd, nullptr, &msConstantBufferChangeOnResize);
+		if(FAILED(result))
+		{
+			return result;
+		}
+		
+		bd.ByteWidth = sizeof(ConstantBufferChangesEveryFrame);
+		result = device->CreateBuffer( &bd, nullptr, &msConstantBufferChangesEveryFrame );
+		if(FAILED(result))
+		{
+			return result;
+		}
+
+		// Load the Texture
+		result = cave::DdsTextureLoader::CreateDDSTextureFromFile(device, L"seafloor.dds", nullptr, &msTextureRv);
+		if(FAILED(result))
+		{
+			return result;
+		}
+
+		// Create the sample state
+		D3D11_SAMPLER_DESC sampDesc = {};
+		sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		sampDesc.MinLOD = 0;
+		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+		result = device->CreateSamplerState(&sampDesc,&msSamplerLinear);
+		if(FAILED(result))
+		{
+			return result;
+		}
+		
+		return result;
+	}
+
+	int32_t WindowRenderer::createCube()
+	{
+		int32_t result = S_OK;
+
+		// Use the Direct3D device to load resources into graphics memory.
+		ID3D11Device* device = mDeviceResources->GetDevice();
+
+		// Create vertex buffer
+		SimpleVertex vertices[] =
+		{
+			{ XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
+			{ XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
+			{ XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+			{ XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
+
+			{ XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
+			{ XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
+			{ XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
+			{ XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+
+			{ XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+			{ XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
+			{ XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
+			{ XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
+
+			{ XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
+			{ XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+			{ XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
+			{ XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
+
+			{ XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+			{ XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
+			{ XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
+			{ XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
+
+			{ XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
+			{ XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+			{ XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
+			{ XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
+		};
+
+		D3D11_BUFFER_DESC bd = {};
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(SimpleVertex) * 24;
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA InitData = {};
+		InitData.pSysMem = vertices;
+		result = device->CreateBuffer(&bd, &InitData, &msVertexBuffer);
+		if(FAILED(result))
+		{
+			return result;
+		}
+
+		// Create index buffer
+		uint16_t indices[] =
+		{
+			3,1,0,
+			2,1,3,
+
+			6,4,5,
+			7,4,6,
+
+			11,9,8,
+			10,9,11,
+
+			14,12,13,
+			15,12,14,
+
+			19,17,16,
+			18,17,19,
+
+			22,20,21,
+			23,20,22
+		};
+
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(uint16_t) * 36;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+		InitData.pSysMem = indices;
+		result = device->CreateBuffer(&bd, &InitData, &mIndexBuffer);
+		if(FAILED(result))
+		{
+			return result;
+		}
+
+		return result;
+	}
+
+	void WindowRenderer::createView()
+	{
+		// Initialize the view matrix
+		XMVECTOR eye = DirectX::XMVectorSet( 0.0f, 3.0f, -6.0f, 0.0f );
+		XMVECTOR at = DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+		XMVECTOR up = DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+		msView = DirectX::XMMatrixLookAtLH(eye, at, up);
+	}
+
+	void WindowRenderer::createPerspective()
+	{
+		msView = DirectX::XMMatrixIdentity();
+
+		float aspectRatioX = msDeviceResources->GetAspectRatio();
+		float aspectRatioY = aspectRatioX < (16.0f / 9.0f) ? aspectRatioX / (16.0f / 9.0f) : 1.0f;
+
+		ID3D11DeviceContext* context = msDeviceResources->GetDeviceContext();
+
+		ConstantBufferNeverChanges constantBufferNeverChanges;
+		constantBufferNeverChanges.mView = DirectX::XMMatrixTranspose(msView);
+		context->UpdateSubresource(msConstantBufferNeverChanges, 0, nullptr, &constantBufferNeverChanges, 0, 0);
+
+		// 2.0f * std::atan(std::tan(DirectX::XMConvertToRadians(70) * 0.5f)
+		msProjection= XMMatrixPerspectiveFovLH(XM_PIDIV4, aspectRatioX, 0.01f, 100.0f);
+
+		ConstantBufferChangeOnResize constantBufferChangesOnResize;
+		constantBufferChangesOnResize.mProjection = DirectX::XMMatrixTranspose(msProjection);
+		context->UpdateSubresource(msConstantBufferChangeOnResize, 0, nullptr, &constantBufferChangesOnResize, 0, 0);
 }
 #endif

@@ -8,9 +8,20 @@
 #ifdef __WIN32__
 namespace cave
 {
-	int32_t WindowDeviceResources::CreateDeviceResources(HWND window)
+	constexpr WindowDeviceResources(HWND window)
+	{
+		assert(window != nullptr);
+		mWindow = window;
+	}
+
+	int32_t WindowDeviceResources::CreateDeviceResources()
 	{
 		int32_t result = S_OK;
+
+		uint32_t createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+#if defined(CAVE_BUILD_DEBUG)
+		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
 
 		D3D_DRIVER_TYPE driverTypes[] =
 		{
@@ -29,11 +40,6 @@ namespace cave
 		};
 		uint32_t numFeatureLevels = ARRAYSIZE( featureLevels );
 
-		uint32_t createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-#if defined(CAVE_BUILD_DEBUG)
-		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
 		DXGI_SWAP_CHAIN_DESC desc;
 		ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
 		desc.Windowed = TRUE;
@@ -45,20 +51,16 @@ namespace cave
 		desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 		desc.OutputWindow = hWnd;
 
-		Microsoft::WRL::ComPtr<ID3D11Device> device;
-		Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
-		Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
-
 		for(uint32_t driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
 		{
 			mDriverType = driverTypes[driverTypeIndex];
 
-			result = D3D11CreateDevice(nullptr, mDriverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mDeviceContext);
+			result = D3D11CreateDevice(nullptr, mDriverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mImmediateContext);
 
 			if (result == E_INVALIDARG)
 			{
 				// DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
-				result = D3D11CreateDevice(nullptr, mDriverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mDeviceContext);
+				result = D3D11CreateDevice(nullptr, mDriverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mImmediateContext);
 			}
 
 			if (SUCCEEDED(result))
@@ -66,7 +68,7 @@ namespace cave
 				break;
 			}
 		}
-		if (FAILED(result)))
+		if (FAILED(result))
 		{
 			return result;
 		}
@@ -88,10 +90,32 @@ namespace cave
 				dxgiDevice->Release();
 			}
 		}
-		if (FAILED(result)))
+		if (FAILED(result))
 		{
 			return result;
 		}
+
+		return result;
+	}
+
+	int32_t WindowDeviceResources::Init()
+	{
+		int32_t result = CreateDeviceResources();
+		result = CreateWindowResources(mWindow);
+
+		return result;
+	}
+
+	int32_t WindowDeviceResources::CreateWindowResources(HWND window)
+	{
+		assert(window != nullptr);
+		mWindow = window;
+		int32_t result = S_OK;
+
+		RECT rc;
+		GetClientRect(mWindow, &rc);
+		uint32_t width = rc.right - rc.left;
+		uint32_t height = rc.bottom - rc.top;
 
 		// Create swap chain
 		IDXGIFactory2* dxgiFactory2 = nullptr;
@@ -99,10 +123,10 @@ namespace cave
 		if ( dxgiFactory2 )
 		{
 			// DirectX 11.1 or later
-			result = mDevice->QueryInterface( __uuidof(ID3D11Device1), reinterpret_cast<void**>(&g_pd3dDevice1));
+			result = mDevice->QueryInterface( __uuidof(ID3D11Device1), reinterpret_cast<void**>(&mD3dDevice1));
 			if (SUCCEEDED(result))
 			{
-				static_cast<void>(g_pImmediateContext->QueryInterface( __uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&g_pImmediateContext1) ));
+				static_cast<void>(mImmediateContext->QueryInterface( __uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&mImmediateContext1) ));
 			}
 
 			DXGI_SWAP_CHAIN_DESC1 sd = {};
@@ -114,10 +138,10 @@ namespace cave
 			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			sd.BufferCount = 1;
 
-			result = dxgiFactory2->CreateSwapChainForHwnd( g_pd3dDevice, g_hWnd, &sd, nullptr, nullptr, &g_pSwapChain1 );
+			result = dxgiFactory2->CreateSwapChainForHwnd( mD3dDevice, mWindow, &sd, nullptr, nullptr, &mSwapChain1 );
 			if (SUCCEEDED(result))
 			{
-				result = g_pSwapChain1->QueryInterface( __uuidof(IDXGISwapChain), reinterpret_cast<void**>(&g_pSwapChain) );
+				result = mSwapChain1->QueryInterface( __uuidof(IDXGISwapChain), reinterpret_cast<void**>(&mSwapChain) );
 			}
 
 			dxgiFactory2->Release();
@@ -126,23 +150,21 @@ namespace cave
 		{
 			// DirectX 11.0 systems
 			DXGI_SWAP_CHAIN_DESC sd = {};
-			sd.BufferCount = 1;
+			sd.BufferCount = 2;
 			sd.BufferDesc.Width = width;
 			sd.BufferDesc.Height = height;
 			sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			sd.BufferDesc.RefreshRate.Numerator = 60;
 			sd.BufferDesc.RefreshRate.Denominator = 1;
 			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-			sd.OutputWindow = g_hWnd;
-			sd.SampleDesc.Count = 1;
-			sd.SampleDesc.Quality = 0;
+			sd.OutputWindow = mWindow;
+			sd.SampleDesc.Count = 1;	// multisampling setting
+			sd.SampleDesc.Quality = 0;	// vendor-specific flag
+			sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 			sd.Windowed = TRUE;
 
-			result = dxgiFactory->CreateSwapChain( g_pd3dDevice, &sd, &g_pSwapChain );
+			result = dxgiFactory->CreateSwapChain( mD3dDevice, &sd, &mSwapChain );
 		}
-
-		// Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
-		dxgiFactory->MakeWindowAssociation( g_hWnd, DXGI_MWA_NO_ALT_ENTER );
 
 		dxgiFactory->Release();
 
@@ -151,20 +173,7 @@ namespace cave
 			return result;
 		}
 
-
-		return result;
-	}
-
-	int32_t WindowDeviceResources::CreateDeviceResources()
-	{
-		int32_t result = S_OK;
-
-		return result;
-	}
-
-	int32_t WindowDeviceResources::CreateWindowResources(HWND window)
-	{
-		int32_t result = S_OK;
+		result = ConfigureBackBuffer();
 
 		return result;
 	}
@@ -173,12 +182,98 @@ namespace cave
 	{
 		int32_t result = S_OK;
 
+		// Create a render target view
+		result = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&mBackBuffer));
+		if (FAILED(result))
+		{
+			return result;
+		}
+		mBackBuffer->GetDesc(&mBackBufferDesc);
+
+		result = mD3dDevice->CreateRenderTargetView(mBackBuffer, nullptr, &mRenderTargetViewView);
+		mBackBuffer->Release();
+		if(FAILED(result))
+		{
+			return result;
+		}
+
+		// Create depth stencil texture
+		D3D11_TEXTURE2D_DESC descDepth = {};
+		descDepth.Width = mBackBufferDesc.Width;
+		descDepth.Height = mBackBufferDesc.Height;
+		descDepth.MipLevels = 1;	// Use a single mimap level
+		descDepth.ArraySize = 1;	// this depth stencil view has only one texture
+		descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		descDepth.SampleDesc.Count = 1;
+		descDepth.SampleDesc.Quality = 0;
+		descDepth.Usage = D3D11_USAGE_DEFAULT;
+		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		descDepth.CPUAccessFlags = 0;
+		descDepth.MiscFlags = 0;
+		result = mD3dDevice->CreateTexture2D(&descDepth, nullptr, &mDepthStencil);
+		if (FAILED(result))
+		{
+			return result;
+		}
+
+		// Create the depth stencil view
+		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+		descDSV.Format = descDepth.Format;
+		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		descDSV.Texture2D.MipSlice = 0;
+		result = mD3dDevice->CreateDepthStencilView(mDepthStencil, &descDSV, &mDepthStencilView);
+		if (FAILED(result))
+		{
+			return result;
+		}
+
+		// Setup the viewport
+		D3D11_VIEWPORT vp;
+		vp.Width = static_cast<float>(mBackBufferDesc.Width);
+		vp.Height = static_cast<float>(mBackBufferDesc.Height);
+		vp.MinDepth = 0.0f;
+		vp.MaxDepth = 1.0f;
+		vp.TopLeftX = 0;
+		vp.TopLeftY = 0;
+		mImmediateContext->RSSetViewports(1, &vp);
+
 		return result;
 	}
 
 	int32_t WindowDeviceResources::ReleaseBackBuffer()
 	{
 		int32_t result = S_OK;
+
+		// Release the render target view based on the back buffer:
+		if (mRenderTargetView != nullptr)
+		{
+			mRenderTargetView->Release();
+		}
+
+		// Release the back buffer itself:
+		if (mBackBuffer != nullptr)
+		{
+			mBackBuffer->Release();
+		}
+
+		// The depth stencil will need to be resized, so release it (and view):
+		if (mDepthStencilView != nullptr)
+		{
+			mDepthStencilView->Release();
+		}
+
+		if (mDepthStencil != nullptr)
+		{
+			mDepthStencil->Release();
+		}
+
+		// After releasing references to these resources, we need to call Flush() to 
+		// ensure that Direct3D also releases any references it might still have to
+		// the same resources - such as pipeline bindings.
+		if (mImmediateContext != nullptr)
+		{
+			mImmediateContext->ClearState();
+		}
 
 		return result;
 	}
@@ -187,6 +282,27 @@ namespace cave
 	{
 		int32_t result = S_OK;
 
+		result = mSwapChain->SetFullscreenState(TRUE, NULL);
+
+		// Swap chains created with the DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL flag need to
+		// call ResizeBuffers in order to realize a full-screen mode switch. Otherwise, 
+		// your next call to Present will fail.
+
+		// Before calling ResizeBuffers, you have to release all references to the back 
+		// buffer device resource.
+		ReleaseBackBuffer();
+
+		// Now we can call ResizeBuffers.
+		result = mSwapChain->ResizeBuffers(
+			0,                   // Number of buffers. Set this to 0 to preserve the existing setting.
+			0, 0,                // Width and height of the swap chain. Set to 0 to match the screen resolution.
+			DXGI_FORMAT_UNKNOWN, // This tells DXGI to retain the current back buffer format.
+			0
+		);
+
+		// Then we can recreate the back buffer, depth buffer, and so on.
+		result = ConfigureBackBuffer();
+
 		return result;
 	}
 	
@@ -194,36 +310,121 @@ namespace cave
 	{
 		int32_t result = S_OK;
 
+		result = m_pDXGISwapChain->SetFullscreenState(FALSE, NULL);
+
+		// Swap chains created with the DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL flag need to
+		// call ResizeBuffers in order to realize a change to windowed mode. Otherwise, 
+		// your next call to Present will fail.
+
+		// Before calling ResizeBuffers, you have to release all references to the back 
+		// buffer device resource.
+		ReleaseBackBuffer();
+
+		// Now we can call ResizeBuffers.
+		result = m_pDXGISwapChain->ResizeBuffers(
+			0,                   // Number of buffers. Set this to 0 to preserve the existing setting.
+			0, 0,                // Width and height of the swap chain. MUST be set to a non-zero value. For example, match the window size.
+			DXGI_FORMAT_UNKNOWN, // This tells DXGI to retain the current back buffer format.
+			0
+		);
+
+		// Then we can recreate the back buffer, depth buffer, and so on.
+		result = ConfigureBackBuffer();
+
 		return result;
 	}
 
 	float WindowDeviceResources::GetAspectRatio()
 	{
-		return 0.0f;
+		return static_cast<float>(mBackBufferDesc.Width) / static_cast<float>(mBackBufferDesc.Height);
 	}
 
 	ID3D11Device* WindowDeviceResources::GetDevice()
 	{
-		return nullptr;
+		return mD3dDevice;
 	}
 	
 	ID3D11DeviceContext* WindowDeviceResources::GetDeviceContext()
 	{
-		return nullptr;
+		return mImmediateContext;
 	}
 
 	ID3D11RenderTargetView* WindowDeviceResources::GetRenderTarget()
 	{
-		return nullptr;
+		return mRenderTargetView;
 	}
 
 	ID3D11DepthStencilView* WindowDeviceResources::GetDepthStencil()
 	{
-		return nullptr;
+		return mDepthStencilView;
+	}
+
+	D3D_DRIVER_TYPE GetDriverType()
+	{
+		return mDriverType;
 	}
 
 	void WindowDeviceResources::Present()
 	{
+		mSwapChain->Present(1, 0);
+	}
+
+	void WindowDeviceResources::Destroy()
+	{
+		if (mImmediateContext != nullptr)
+		{
+			mImmediateContext->ClearState();
+		}
+
+		if (mDepthStencil != nullptr)
+		{
+			mDepthStencil->Release();
+		}
+
+		if (mDepthStencilView)
+		{
+			mDepthStencilView->Release();
+		}
+
+		if (mBackBuffer != nullptr)
+		{
+			mBackBuffer->Release();
+		}
+
+		if (mRenderTargetView != nullptr)
+		{
+			mRenderTargetView->Release();
+		}
+		
+		if (mSwapChain1 != nullptr)
+		{
+			mSwapChain1->Release();
+		}
+
+		if (mSwapChain != nullptr)
+		{
+			mSwapChain->Release();
+		}
+
+		if (mImmediateContext1 != nullptr)
+		{
+			mImmediateContext1->Release();
+		}
+
+		if (mImmediateContext)
+		{
+			mImmediateContext->Release();
+		}
+
+		if (mD3dDevice1 != nullptr)
+		{
+			mD3dDevice1->Release();
+		}
+
+		if (mD3dDevice != nullptr)
+		{
+			mD3dDevice->Release();
+		}
 	}
 } // namespace cave
 #endif

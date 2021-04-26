@@ -19,13 +19,13 @@ namespace cave
 		virtual ~GenericDeviceResources() = default;
 
 #ifdef __WIN32__
-		virtual int32_t CreateDeviceResources(HWND window) = 0;
 		virtual int32_t CreateWindowResources(HWND window) = 0;
 #else
-		virtual int32_t CreateDeviceResources(GLFWwindow* window) = 0;
 		virtual int32_t CreateWindowResources(GLFWwindow* window) = 0;
 #endif
+		virtual int32_t Init() = 0;
 		virtual int32_t CreateDeviceResources() = 0;
+		virtual void Destroy() = 0;
 
 		virtual int32_t ConfigureBackBuffer() = 0;
 		virtual int32_t ReleaseBackBuffer() = 0;

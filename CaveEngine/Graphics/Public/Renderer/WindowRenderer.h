@@ -4,6 +4,7 @@
  */
 
 #include "CoreTypes.h"
+#include "Device/DeviceResources.h"
 #include "Texture/DdsTextureLoader.h"
 
 #ifdef __WIN32__
@@ -23,6 +24,10 @@ namespace cave
 		static int32_t Init(HINSTANCE hInstance, int32_t nCmdShow, const wchar_t* className, const wchar_t* windowName);
 		static void Render();
 		
+		static int32_t Init(DeviceResources* deviceResources);
+		static void CreateDeviceDependentResources();
+		static void CreateWindowSizeDependentResources();
+		static void Update();
 	private:
 		static void cleanupDevice();
 		static int32_t compileShaderFromFile(const wchar_t* fileName, const wchar_t* entryPoint, const wchar_t* shaderModel, ID3DBlob** blobOut);
@@ -48,10 +53,16 @@ namespace cave
 			DirectX::XMMATRIX mView;
 		};
 
+		// Assert that the constant buffer remains 16-byte aligned.
+		static_assert((sizeof(ConstantBufferNeverChanges) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
+
 		struct ConstantBufferChangeOnResize
 		{
 			DirectX::XMMATRIX mProjection;
 		};
+
+		// Assert that the constant buffer remains 16-byte aligned.
+		static_assert((sizeof(ConstantBufferChangeOnResize) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
 
 		struct ConstantBufferChangesEveryFrame
 		{
@@ -59,22 +70,12 @@ namespace cave
 			DirectX::XMFLOAT4 mvMeshColor;
 		};
 
+		// Assert that the constant buffer remains 16-byte aligned.
+		static_assert((sizeof(ConstantBufferChangesEveryFrame) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
+
 		//--------------------------------------------------------------------------------------
 		// Global Variables
 		//--------------------------------------------------------------------------------------
-		static HINSTANCE					msHInstance;
-		static HWND							msHWindow;
-		static D3D_DRIVER_TYPE				msDriverType;
-		static D3D_FEATURE_LEVEL			msFeatureLevel;
-		static ID3D11Device*				msD3dDevice;
-		static ID3D11Device1*				msD3dDevice1;
-		static ID3D11DeviceContext*			msImmediateContext;
-		static ID3D11DeviceContext1*		msImmediateContext1;
-		static IDXGISwapChain*				msSwapChain;
-		static IDXGISwapChain1*				msSwapChain1;
-		static ID3D11RenderTarmsetView*		msRenderTargetView;
-		static ID3D11Texture2D*				msDepthStencil;
-		static ID3D11DepthStencilView*		msDepthStencilView;
 		static ID3D11VertexShader*			msVertexShader;
 		static ID3D11PixelShader*			msPixelShader;
 		static ID3D11InputLayout*			msVertexLayout;
@@ -90,6 +91,25 @@ namespace cave
 		static DirectX::XMMATRIX			msProjection;
 		static DirectX::XMFLOAT4			msMeshColor;
 		// �ؽ�ó ������� �����Ƿ� shader resource view�� ������� ����
+
+		static int32_t createShaders();
+		static int32_t createCube();
+		static void createView();
+		static void createPerspective();
+
+		//-----------------------------------------------------------------------------
+		// Pointer to device resource manager
+		//-----------------------------------------------------------------------------
+		static DeviceResources* msDeviceResources;
+
+		static uint32_t msIndexCount;
+		static uint32_t msFrameCount;
+
+		//-----------------------------------------------------------------------------
+		// Direct3D device resources
+		//-----------------------------------------------------------------------------
+		//ID3DXEffect* mEffect;
+		static ID3D11InputLayout*       msInputLayoutExtended;
 	}
 
 	typedef WindowRenderer Renderer;

@@ -6,18 +6,26 @@
 #-------------------------------------------------------------------
 
 ############################################################
-# CaveEngine library
+# CaveEngine engine library
 ############################################################
 
 # # define header and source files for the library
-# file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h")
 # list(APPEND HEADER_FILES
 #     ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h
 #     ${PROJECT_BINARY_DIR}/include/OgreComponents.h
 #     ${PROJECT_BINARY_DIR}/include/OgreExports.h
 #     ${CMAKE_CURRENT_SOURCE_DIR}/include/Ogre.i)
 
-# file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
+
+# file(GLOB RENDERER_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Renderer/*.h")
+# file(GLOB OBJECT_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Object/*.h")
+# file(GLOB DEVICE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Device/*.h")
+
+# file(GLOB RENDERER_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Renderer/*.cpp")
+# file(GLOB OBJECT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Object/*.cpp")
+# file(GLOB DEVICE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Device/*.cpp")
 
 # # Remove optional header files
 # list(REMOVE_ITEM HEADER_FILES
@@ -36,19 +44,6 @@
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreZip.cpp"
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSearchOps.cpp"
 # )
-
-add_subdirectory(AI)
-add_subdirectory(Audio)
-add_subdirectory(Core)
-add_subdirectory(Gameplay)
-add_subdirectory(Graphics)
-add_subdirectory(HID)
-add_subdirectory(Physics)
-add_subdirectory(ProfilingDebugging)
-add_subdirectory(ResourceManager)
-add_subdirectory(ThirdParty)
-
-add_subdirectory(Engine)
 
 # # Add platform specific files
 # if (EMSCRIPTEN)
@@ -197,18 +192,11 @@ add_subdirectory(Engine)
 
 # set (TARGET_LINK_FLAGS "")
 
-# setup CaveEngine target
+# # setup OgreMain target
 
 # get_native_precompiled_header(OgreMain)
-# if (WIN32)
-# 	add_executable(CaveEngineDemo EngineMain.cpp)
-# elseif (UNIX)
-# 	add_executable(CaveEngineDemo EngineMainUnix.cpp)
-# endif()
-add_executable(CaveEngineDemo EngineMain.cpp)
-# add_library(CaveEngine ${CAVE_ENGINE_LIB_TYPE} ${CaveEngine_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
-
-target_include_directories(CaveEngineDemo PUBLIC ${PROJECT_BINARY_DIR})
+add_library(Engine SHARED ${HEADER_FILES} ${SOURCE_FILES})
+# add_library(OgreMain ${OGRE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
 # 	set_target_properties(OgreMain PROPERTIES VS_WINRT_COMPONENT "true")
@@ -220,7 +208,22 @@ target_include_directories(CaveEngineDemo PUBLIC ${PROJECT_BINARY_DIR})
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
-target_link_libraries(CaveEngineDemo PUBLIC Core Gameplay Graphics Gl3w Engine)
+target_link_libraries(Engine PUBLIC Core)
+target_link_libraries(Engine PUBLIC Gameplay)
+target_link_libraries(Engine PUBLIC Graphics)
+target_link_libraries(Engine PUBLIC Lodepng)
+target_link_libraries(Engine PUBLIC ResourceManager)
+
+target_include_directories(Engine PUBLIC
+	"${PROJECT_BINARY_DIR}"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>"
+	"$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+	$<INSTALL_INTERFACE:include/CAVE_ENGINE>)
+# target_include_directories(OgreMain PUBLIC 
+#   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" 
+#   "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+#   $<INSTALL_INTERFACE:include/OGRE>
+#   PRIVATE "${OGRE_PROFILING_REMOTERY_PATH}")
 
 # # In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
 # if(WIN32 AND MSVC10 AND CMAKE_CL_64)
@@ -262,7 +265,7 @@ target_link_libraries(CaveEngineDemo PUBLIC Core Gameplay Graphics Gl3w Engine)
 #     set_target_properties(OgreMain PROPERTIES	OUTPUT_NAME Ogre)
 #   endif()
 # endif ()
-# target_link_libraries(CaveEngine PRIVATE ${LIBRARIES} ${CMAKE_DL_LIBS})
+# target_link_libraries(OgreMain PUBLIC ${PLATFORM_LIBS} PRIVATE ${LIBRARIES} ${CMAKE_DL_LIBS})
 
 # # specify a precompiled header to use
 # add_native_precompiled_header(OgreMain "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreStableHeaders.h")
@@ -270,10 +273,10 @@ target_link_libraries(CaveEngineDemo PUBLIC Core Gameplay Graphics Gl3w Engine)
 # install Engine
 # cave_engine_config_lib(Engine TRUE)
 # install(FILES ${HEADER_FILES}
-#   DESTINATION include/CAVE_ENGINE
+#   DESTINATION include/OGRE
 # )
 # install(FILES ${PLATFORM_HEADERS}
-#   DESTINATION include/CAVE_ENGINE/${PLATFORM_HEADER_INSTALL}
+#   DESTINATION include/OGRE/${PLATFORM_HEADER_INSTALL}
 # )
 # install(FILES ${THREAD_HEADER_FILES}
 # 	DESTINATION include/OGRE/Threading

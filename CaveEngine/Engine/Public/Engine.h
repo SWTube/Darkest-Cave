@@ -6,6 +6,6 @@
 #pragma once
 
 #include "CoreTypes.h"
-#include "Renderer/GenericRenderer.h"
+#include "GenericEngine.h"
 
-#include GET_PLATFORM_HEADER(Renderer.h)
+#include GET_PLATFORM_HEADER(Engine.h)

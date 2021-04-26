@@ -3,6 +3,8 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <future>
+
 #include "lodepng.h"
 
 #include "CoreMinimal.h"
@@ -74,149 +76,22 @@ namespace cave
 		GLFLOAT2 textCoord;
 	};
 
-	GLFWwindow* UnixRenderer::msWindow = nullptr;
-	uint32_t UnixRenderer::msWidth = 0u;
-	uint32_t UnixRenderer::msHeight = 0u;
-	GLuint UnixRenderer::msProgram = 0u;
-
-	uint8_t* UnixRenderer::msBackground = nullptr;
-	uint32_t UnixRenderer::msBackgroundWidth = 0u;
-	uint32_t UnixRenderer::msBackgroundHeight = 0u;
-	uint32_t UnixRenderer::msBackgroundSampler = 0u;
-
-	GLuint UnixRenderer::msVertexArrayObjects[UnixRenderer::VERTEX_ARRAY_OBJECTS_COUNT];
-	GLuint UnixRenderer::msBuffers[UnixRenderer::BUFFER_COUNT] = { 0u, };
-	GLuint UnixRenderer::msTextures[UnixRenderer::TEXTURE_COUNT];
-	//--------------------------------------------------------------------------------------
-	// Clean up the objects we've created
-	//--------------------------------------------------------------------------------------
-	void UnixRenderer::cleanupDevice()
+	UnixRenderer::UnixRenderer(DeviceResources*&& deviceResources)
+		: GenericRenderer(std::move(deviceResources))
 	{
-		uint32_t deleteCount = 0u;
-		for (; deleteCount < TEXTURE_COUNT && msTextures[deleteCount] != 0u; ++deleteCount)
-		{
-		}
-
-		if (deleteCount > 0u)
-		{
-			glDeleteTextures(deleteCount, &msTextures[TEXTURE]);
-		}
-
-		deleteCount = 0u;
-		for (; deleteCount < BUFFER_COUNT && msBuffers[deleteCount] != 0u; ++deleteCount)
-		{
-		}
-
-		if (deleteCount > 0u)
-		{
-			glDeleteBuffers(deleteCount, msBuffers);
-		}
-
-		if (msBackground != nullptr)
-		{
-			free(msBackground);
-		}
-
-		if (msWindow != nullptr)
-		{
-			glfwDestroyWindow(msWindow);
-		}
-
-		glfwTerminate();
 	}
-
-	//--------------------------------------------------------------------------------------
-	// Helper for compiling shaders with D3DCompile
-	//
-	// With VS 11, we could load up prebuilt .cso files instead...
-	//--------------------------------------------------------------------------------------
-	int32_t UnixRenderer::compileShaderFromFile(ShaderInfo* shaders)
-	{
-		msProgram = loadShaders(shaders);
-		glUseProgram(msProgram);
-
-		return GLFW_NO_ERROR;
-	}
-
+	
 	//--------------------------------------------------------------------------------------
 	// Destroy Renderer
 	//--------------------------------------------------------------------------------------
-	void UnixRenderer::Destroy()
+	UnixRenderer::~UnixRenderer()
 	{
-		cleanupDevice();
+		Destroy();
+		mDeviceResources->Destroy();
 	}
 
-	void UnixRenderer::errorCallback(int errorCode, const char* description)
+	int32_t UnixRenderer::createShaders()
 	{
-		LOGE(eLogChannel::GRAPHICS, std::cerr, description);
-	}
-
-	bool UnixRenderer::GlfwWindowShouldClose()
-	{
-		return static_cast<bool>(glfwWindowShouldClose(msWindow));
-	}
-
-	//--------------------------------------------------------------------------------------
-	// Initialize Renderer
-	//--------------------------------------------------------------------------------------
-	int32_t UnixRenderer::Init(uint32_t width, uint32_t height, const char* title)
-	{
-		glfwSetErrorCallback(errorCallback);
-
-		uint32_t error = glfwInit();
-		if (error == GLFW_FALSE)
-		{
-			Destroy();
-			return error;
-		}
-
-		error = initWindow(width, height, title);
-		if (FAILED(error))
-		{
-			Destroy();
-			return error;
-		}
-
-		error = initDevice();
-		if (FAILED(error))
-		{
-			Destroy();
-			return error;
-		}
-
-		return error;
-	}
-
-	//--------------------------------------------------------------------------------------
-	// Create OpenGL device and swap chain
-	//--------------------------------------------------------------------------------------
-	// Used to set up data for use later in the program
-		// vertext information
-		// image data
-	// Specify shaders
-	// Shader Plumbing
-	int32_t UnixRenderer::initDevice()
-	{
-		int32_t error = GLFW_NO_ERROR;
-		GLenum glError = GL_NO_ERROR;
-
-		// 2. Make Context Current ---------------------------------------------------------------------------------------------
-		glfwMakeContextCurrent(msWindow);
-		if (error = glfwGetError(nullptr); error != GLFW_NO_ERROR)
-		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glfwMakeContextCurrent error code: 0x%x", error);
-		}
-		gl3wInit();
-
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "Renderer: %s", glGetString(GL_RENDERER));
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %s", glGetString(GL_VERSION));
-		int32_t major = 0;
-		int32_t minor = 0;
-		glGetIntegerv(GL_MAJOR_VERSION, &major);
-		glGetIntegerv(GL_MINOR_VERSION, &minor);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", major);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", minor);
-
 		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
 		size_t projectDirLength = strlen(PROJECT_DIR);
 		size_t shaderFileNameLength = strlen("/CaveEngine/Graphics/Shader/triangles.vert");
@@ -233,12 +108,19 @@ namespace cave
 			{ GL_NONE, nullptr }
 		};
 
-		error = compileShaderFromFile(shaders);
+		int32_t error = compileShaderFromFile(shaders);
 		if (FAILED(error))
 		{
 			LOGE(eLogChannel::GRAPHICS, std::cout, "The shader files cannot be compiled.");
 			return error;
 		}
+
+		return GLFW_NO_ERROR;
+	}
+
+	int32_t UnixRenderer::createCube()
+	{
+		GLenum glError = GL_NO_ERROR;
 
 		// 13. Set up Vertices and Indices ---------------------------------------------------------------------------------------------
 		static const SimpleVertex vertices[] = {
@@ -324,8 +206,7 @@ namespace cave
 
 
 		// 16. Load Textures ---------------------------------------------------------------------------------------------
-		error = lodepng_decode24_file(&msBackground, &msBackgroundWidth, &msBackgroundHeight, "Graphics/Resource/8471.png");
-
+		uint32_t error = lodepng_decode24_file(&msBackground, &msBackgroundWidth, &msBackgroundHeight, "Graphics/Resource/8471.png");
 		if (error != 0)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cout, "The png file cannot be loaded. Error Code: %u", error);
@@ -348,7 +229,8 @@ namespace cave
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindTextureUnit error code: 0x%x", glError);
 		}
 
-		if (glGetUniformLocation(msProgram, "tex") < 0)
+		uint32_t program = mDeviceResources->GetProgram();
+		if (glGetUniformLocation(program, "tex") < 0)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, error code: 0x%x", "tex", glGetError());
 		}
@@ -376,7 +258,7 @@ namespace cave
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glGenerateTextureMipmap error code: 0x%x", glError);
 		}
 
-		GLint texLocation = glGetUniformLocation(msProgram, "tex");
+		GLint texLocation = glGetUniformLocation(program, "tex");
 		LOGDF(eLogChannel::GRAPHICS, std::cout, "texture location: %u", texLocation);
 		
 		if (texLocation >= 0)
@@ -393,29 +275,105 @@ namespace cave
 		return GLFW_NO_ERROR;
 	}
 
-	//--------------------------------------------------------------------------------------
-	// Register class and create window
-	//--------------------------------------------------------------------------------------
-	int32_t UnixRenderer::initWindow(uint32_t width, uint32_t height, const char* title)
+	void UnixRenderer::createView()
 	{
-		msWidth = width;
-		msHeight = height;
-		// Register class
 
-		// Create window
-		msWindow = glfwCreateWindow(static_cast<int32_t>(msWidth), static_cast<int32_t>(msHeight), title, nullptr, nullptr);
-		if (msWindow == nullptr)
+	}
+
+	void UnixRenderer::createPerspective()
+	{
+
+	}
+
+	//-----------------------------------------------------------------------------
+	// Create device-dependent resources for rendering.
+	//---------------------------------------------------------------------------
+	void UnixRenderer::CreateDeviceDependentResources()
+	{
+		// Compile shaders using the Effects library.
+		std::future<int32_t> createShadersTask = std::async(std::launch::async, &UnixRenderer::createShaders, this);
+
+
+		// Load the geometry for the spinning cube.
+		std::future<int32_t> createCubeTask = std::async(std::launch::async, &UnixRenderer::createCube, this);
+	}
+
+	void UnixRenderer::CreateWindowSizeDependentResources()
+	{
+		createView();
+		createPerspective();
+	}
+
+	void UnixRenderer::Update()
+	{
+		if (mFrameCount == UINT32_MAX)
 		{
-			return glfwGetError(nullptr);
+			mFrameCount == 0u;
+		}
+	}
+
+	//--------------------------------------------------------------------------------------
+	// Clean up the objects we've created
+	//--------------------------------------------------------------------------------------
+	void UnixRenderer::cleanupDevice()
+	{
+		uint32_t deleteCount = 0u;
+		for (; deleteCount < TEXTURE_COUNT && msTextures[deleteCount] != 0u; ++deleteCount)
+		{
 		}
 
-		glfwSetWindowSizeCallback(msWindow, windowSizeCallback);
-		glfwSetKeyCallback(msWindow, keyCallback);
-		glfwSetCharCallback(msWindow, charCallback);
+		if (deleteCount > 0u)
+		{
+			glDeleteTextures(deleteCount, &msTextures[TEXTURE]);
+		}
 
-		int32_t error = glfwGetError(nullptr);
-		return error;
+		deleteCount = 0u;
+		for (; deleteCount < BUFFER_COUNT && msBuffers[deleteCount] != 0u; ++deleteCount)
+		{
+		}
+
+		if (deleteCount > 0u)
+		{
+			glDeleteBuffers(deleteCount, msBuffers);
+		}
+
+		if (msBackground != nullptr)
+		{
+			free(msBackground);
+		}
 	}
+
+	//--------------------------------------------------------------------------------------
+	// Helper for compiling shaders with D3DCompile
+	//
+	// With VS 11, we could load up prebuilt .cso files instead...
+	//--------------------------------------------------------------------------------------
+	int32_t UnixRenderer::compileShaderFromFile(ShaderInfo* shaders)
+	{
+		mDeviceResources->SetProgram(loadShaders(shaders));
+		glUseProgram(mDeviceResources->GetProgram());
+
+		return GLFW_NO_ERROR;
+	}
+
+	bool UnixRenderer::WindowShouldClose()
+	{
+		return static_cast<bool>(glfwWindowShouldClose(mDeviceResources->GetWindow()));
+	}
+
+	//--------------------------------------------------------------------------------------
+	// Initialize Renderer
+	//--------------------------------------------------------------------------------------
+
+
+	//--------------------------------------------------------------------------------------
+	// Create OpenGL device and swap chain
+	//--------------------------------------------------------------------------------------
+	// Used to set up data for use later in the program
+		// vertext information
+		// image data
+	// Specify shaders
+	// Shader Plumbing
 
 	//--------------------------------------------------------------------------------------
 	// Render a frame
@@ -459,9 +417,6 @@ namespace cave
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glDrawElements error code: 0x%x", glError);
 		}
-
-		// 6. Swap buffers ---------------------------------------------------------------------------------------------
-		glfwSwapBuffers(msWindow);
 	}
 
 	GLuint UnixRenderer::loadShaders(ShaderInfo* shaders)
@@ -593,30 +548,15 @@ namespace cave
 		}
 	}
 
-	void UnixRenderer::Resize(uint32_t width, uint32_t height)
+	void UnixRenderer::Destroy()
 	{
-		msWidth = width;
-		msHeight = height;
-		glViewport(0, 0, static_cast<int32_t>(msWidth), static_cast<int32_t>(msHeight));
+		cleanupDevice();
 	}
 
-	void UnixRenderer::windowSizeCallback(GLFWwindow* window, int32_t width, int32_t height)
-	{	
-		Resize(static_cast<uint32_t>(width), static_cast<uint32_t>(height));
-	}
-
-	void UnixRenderer::keyCallback(GLFWwindow* window, int32_t key, int32_t scancode, int32_t action, int32_t mods)
-	{
-		OnKey(key, scancode, action, mods);
-	}
-
-	void UnixRenderer::charCallback(GLFWwindow* window, uint32_t codepoint)
-	{
-		OnChar(codepoint);
-	}
-
-	char UnixRenderer::glfwKeyToChar(int32_t key)
-	{
-		return static_cast<char>(key);
-	}
+	// void UnixRenderer::Resize(uint32_t width, uint32_t height)
+	// {
+	// 	msWidth = width;
+	// 	msHeight = height;
+	// 	glViewport(0, 0, static_cast<int32_t>(msWidth), static_cast<int32_t>(msHeight));
+	// }
 }

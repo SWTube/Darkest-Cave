@@ -3,9 +3,12 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#pragma once
+#include "GenericEngine.h"
 
-#include "CoreTypes.h"
-#include "Renderer/GenericRenderer.h"
-
-#include GET_PLATFORM_HEADER(Renderer.h)
+namespace cave
+{
+	GenericEngine::GenericEngine()
+		: mWindowClassName(L"GenericWindowClass")
+	{
+	}
+}
