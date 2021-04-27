@@ -25,10 +25,13 @@ namespace cave
 		virtual eResult Run(DeviceResources* deviceResources, Renderer* renderer);
 		virtual eResult Run() = 0;
 
+		virtual void AddDrawableObject(DrawableObject*&& object);
+
 	protected:
 		DeviceResources* mDeviceResources = nullptr;
 		Renderer* mRenderer = nullptr;
 		Window* mWindow = nullptr;
+
 		static const wchar_t* msWindowClassName;
 	};
 }

@@ -9,6 +9,7 @@
 
 #include "CoreTypes.h"
 #include "Device/DeviceResources.h"
+#include "Object/DrawableObject.h"
 
 namespace cave
 {
@@ -28,16 +29,20 @@ namespace cave
     	virtual void Render() = 0;
 		virtual void Destroy() = 0;
 
+		virtual void AddDrawableObject(DrawableObject*&& object);
+
 		virtual bool WindowShouldClose() = 0;
 		DeviceResources* const GetDeviceResources() const;
 	protected:
 		virtual int32_t createShaders() = 0;
-		virtual int32_t createCube() = 0;
+		virtual int32_t createObjects() = 0;
 		virtual void createView() = 0;
 		virtual void createPerspective() = 0;
 
 		DeviceResources* mDeviceResources = nullptr;
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
+
+		std::vector<DrawableObject*> mDrawableObjects;
 	};
 }

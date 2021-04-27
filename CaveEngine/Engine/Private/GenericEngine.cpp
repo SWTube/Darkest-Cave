@@ -21,4 +21,10 @@ namespace cave
 
 		return Run();
 	}
+
+	void GenericEngine::AddDrawableObject(DrawableObject*&& object)
+	{
+		mRenderer->AddDrawableObject(std::move(object));
+		object = nullptr;
+	}
 }

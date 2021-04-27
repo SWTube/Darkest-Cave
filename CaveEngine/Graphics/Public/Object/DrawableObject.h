@@ -5,9 +5,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "CoreTypes.h"
+#include "Object/GenericDrawableObject.h"
 
-namespace cave
-{
-	
-}
+#include GET_PLATFORM_HEADER(DrawableObject.h)

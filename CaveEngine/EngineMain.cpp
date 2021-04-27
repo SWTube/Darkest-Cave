@@ -7,9 +7,9 @@
 #include <time.h>
 
 #include "CoreMinimal.h"
-#include "Time/TimeManager.h"
-
 #include "Engine.h"
+#include "Object/DrawableObject.h"
+#include "Time/TimeManager.h"
 
 #if defined(__WIN32__)
 import Log;
@@ -84,6 +84,27 @@ int main(int32_t argc, char** argv)
 
 	if (result == cave::eResult::CAVE_OK)
 	{
+		// 13. Set up Vertices and Indices ---------------------------------------------------------------------------------------------
+		const float tempVertices[] = {
+			-1.0f,  1.0f, 0.5f, 0.0f, 0.0f,	// top left
+			 1.0f,  1.0f, 0.5f, 1.0f, 0.0f,	// top right
+			 1.0f, -1.0f, 0.5f, 1.0f, 1.0f,	// bottom right
+			-1.0f, -1.0f, 0.5f, 0.0f, 1.0f,	// bottom left
+		};
+
+		float* vertices = new float[20];
+		for (uint32_t i = 0; i < 20u; ++i)
+		{
+			vertices[i] = tempVertices[i];
+		}
+
+		uint8_t indices[] = {
+			0u, 1u, 2u,
+			2u, 3u, 0u,
+		};
+		cave::DrawableObject* object = new cave::DrawableObject(4u, 5u, std::move(vertices), 6u, std::move(indices));
+
+		main->AddDrawableObject(std::move(object));
 		//// Go full-screen.
 		//deviceResources->GoFullScreen();
 

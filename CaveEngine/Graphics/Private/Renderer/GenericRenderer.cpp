@@ -11,10 +11,17 @@ namespace cave
 		: mDeviceResources(deviceResources)
 		, mFrameCount(0u)
 	{
+		mDrawableObjects.reserve(1);
 	}
 
 	DeviceResources* const GenericRenderer::GetDeviceResources() const
 	{
 		return mDeviceResources;
+	}
+
+	void GenericRenderer::AddDrawableObject(DrawableObject*&& object)
+	{
+		mDrawableObjects.push_back(std::move(object));
+		object = nullptr;
 	}
 }

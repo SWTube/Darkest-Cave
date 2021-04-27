@@ -33,7 +33,7 @@ namespace cave
 
 	private:
 		int32_t createShaders() override;
-		int32_t createCube() override;
+		int32_t createObjects() override;
 		void createView() override;
 		void createPerspective() override;
 
