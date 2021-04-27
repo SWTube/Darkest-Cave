@@ -10,97 +10,41 @@ namespace cave
 {
 	HINSTANCE	WindowEngine::msInstance = nullptr;
 
-	WindowEngine::WindowEngine()
-		: GenericEngine()
+	eResult UnixEngine::Init()
 	{
-	}
+		eResult result = eResult::CAVE_OK;
 
-	WindowEngine::~WindowEngine()
-	{
+		mWindow = new Window(640u, 480u, "Test", nullptr);
+
+
+		// Instantiate the device manager class.
+		mDeviceResources = new DeviceResources();
+		// Create device resources.
+		result = mDeviceResources->CreateDeviceResources();
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
+
+		// Instantiate the renderer.
+		mRenderer = new Renderer(mDeviceResources);
+		mRenderer->CreateDeviceDependentResources();
+	
+		// We have a window, so initialize window size-dependent resources.
+		mDeviceResources->CreateWindowResources(mWindow);
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
+
+		mRenderer->CreateWindowSizeDependentResources();
+		
+		return result;
 	}
 
 	int32_t WindowEngine::CreateDesktopWindow()
 	{
-		// Window resources are dealt with here.
-    
-		if (msInstance == nullptr)
-		{
-			msInstance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
-		}
-
-		// HICON hIcon = nullptr;
-		// wchar_t szExePath[MAX_PATH];
-		// GetModuleFileName(nullptr, szExePath, MAX_PATH);
 		
-		// // If the icon is NULL, then use the first one found in the exe
-		// if(hIcon == NULL)
-		// {
-		// 	hIcon = ExtractIcon(msInstance, szExePath, 0);
-		// }
-
-		// Register the windows class
-		WNDCLASSEX wndClass;
-		wndClass.cbSize = sizeof(WNDCLASSEX);
-		wndClass.style = CS_HREDRAW | CS_VREDRAW;
-		wndClass.lpfnWndProc = Engine::StaticWindowProc;
-		wndClass.cbClsExtra = 0;
-		wndClass.cbWndExtra = 0;
-		wndClass.hInstance = msInstance;
-		// wndClass.hIcon = hIcon;
-		wndClass.hIcon = LoadIcon(msInstance, reinterpret_cast<LPCTSTR>(107));
-		wndClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
-		wndClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-		wndClass.lpszMenuName = nullptr;
-		wndClass.lpszClassName = msWindowClassName;
-		wndClass.hIconSm = LoadIcon(wndClass.hInstance, reinterpret_cast<LPCTSTR>(107));
-
-		if(!RegisterClassEx(&wndClass))
-		{
-			DWORD dwError = GetLastError();
-			if(dwError != ERROR_CLASS_ALREADY_EXISTS)
-			{
-				return HRESULT_FROM_WIN32(dwError);
-			}
-		}
-
-		// Create window
-		mRect;
-		int32_t x = CW_USEDEFAULT;
-		int32_t y = CW_USEDEFAULT;
-
-		// No menu in this example.
-		mMenu = nullptr;
-
-		// This example uses a non-resizable 640 by 480 viewport for simplicity.
-		int32_t defaultWidth = 640;
-		int32_t defaultHeight = 480;
-		SetRect(&mRect, 0, 0, defaultWidth, defaultHeight);        
-		AdjustWindowRect(
-			&mRect,
-			WS_OVERLAPPEDWINDOW,
-			(mMenu != nullptr) ? true : false
-		);
-
-		// Create the window for our viewport.
-		mWindow = CreateWindow(
-			msWindowClassName,
-			L"CaveEngine",
-			WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-			x, y,
-			(mRect.right - mRect.left), (mRect.bottom - mRect.top),
-			nullptr,
-			mMenu,
-			msInstance,
-			nullptr
-		);
-
-		if(mWindow == nullptr)
-		{
-			DWORD dwError = GetLastError();
-			return HRESULT_FROM_WIN32(dwError);
-		}
-
-		return S_OK;
 	}
 
 

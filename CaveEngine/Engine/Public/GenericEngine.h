@@ -17,16 +17,18 @@ namespace cave
 		GenericEngine() = default;
 		virtual ~GenericEngine() = default;
 
-#ifdef __WIN32__
-		virtual HWND GetWindowHandle() = 0;
-#else
-		virtual const GLFWwindow* GetWindowHandle() = 0;
-#endif
+		virtual eResult Init() = 0;
+		virtual void Destroy() = 0;
 
-		virtual int32_t CreateDesktopWindow() = 0;
-		virtual int32_t Run(DeviceResources* deviceResources, Renderer* renderer) = 0;
+		virtual Window* GetWindowHandle();
+
+		virtual eResult Run(DeviceResources* deviceResources, Renderer* renderer);
+		virtual eResult Run() = 0;
 
 	protected:
+		DeviceResources* mDeviceResources = nullptr;
+		Renderer* mRenderer = nullptr;
+		Window* mWindow = nullptr;
 		static const wchar_t* msWindowClassName;
 	};
 }

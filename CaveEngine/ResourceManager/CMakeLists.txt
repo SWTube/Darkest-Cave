@@ -10,14 +10,14 @@
 ############################################################
 
 # # define header and source files for the library
-# file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h")
 # list(APPEND HEADER_FILES
 #     ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h
 #     ${PROJECT_BINARY_DIR}/include/OgreComponents.h
 #     ${PROJECT_BINARY_DIR}/include/OgreExports.h
 #     ${CMAKE_CURRENT_SOURCE_DIR}/include/Ogre.i)
 
-# file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
 
 file(GLOB TEXTURE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/Texture/*.h")
 
@@ -191,7 +191,7 @@ file(GLOB TEXTURE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Texture/*.cp
 # # setup OgreMain target
 
 # get_native_precompiled_header(OgreMain)
-add_library(ResourceManager SHARED ${TEXTURE_HEADER_FILES} ${TEXTURE_SOURCE_FILES})
+add_library(ResourceManager SHARED ${HEADER_FILES} ${SOURCE_FILES} ${TEXTURE_HEADER_FILES} ${TEXTURE_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
 # 	set_target_properties(OgreMain PROPERTIES VS_WINRT_COMPONENT "true")

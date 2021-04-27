@@ -64,9 +64,10 @@ namespace cave
 		return result;
 	}
 
-	int32_t WindowDeviceResources::CreateWindowResources(HWND window)
+	int32_t WindowDeviceResources::CreateWindowResources(Window* window)
 	{
 		assert(window != nullptr);
+		HWND hWindow = window->GetWindow();
 		int32_t result = S_OK;
 
 		// Obtain DXGI factory from device (since we used nullptr for pAdapter above)
@@ -100,10 +101,10 @@ namespace cave
 		desc.SampleDesc.Count = 1;      //multisampling setting
 		desc.SampleDesc.Quality = 0;    //vendor-specific flag
 		desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-		desc.OutputWindow = window;
+		desc.OutputWindow = hWindow;
 
 		RECT rc;
-		GetClientRect(window, &rc);
+		GetClientRect(hWindow, &rc);
 		uint32_t width = rc.right - rc.left;
 		uint32_t height = rc.bottom - rc.top;
 
@@ -128,7 +129,7 @@ namespace cave
 			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			sd.BufferCount = 1;
 
-			result = dxgiFactory2->CreateSwapChainForHwnd( mD3dDevice, window, &sd, nullptr, nullptr, &mSwapChain1 );
+			result = dxgiFactory2->CreateSwapChainForHwnd(mD3dDevice, hWindow, &sd, nullptr, nullptr, &mSwapChain1);
 			if (SUCCEEDED(result))
 			{
 				result = mSwapChain1->QueryInterface( __uuidof(IDXGISwapChain), reinterpret_cast<void**>(&mSwapChain) );
@@ -147,7 +148,7 @@ namespace cave
 			sd.BufferDesc.RefreshRate.Numerator = 60;
 			sd.BufferDesc.RefreshRate.Denominator = 1;
 			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-			sd.OutputWindow = window;
+			sd.OutputWindow = hWindow;
 			sd.SampleDesc.Count = 1;	// multisampling setting
 			sd.SampleDesc.Quality = 0;	// vendor-specific flag
 			sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
@@ -167,6 +168,111 @@ namespace cave
 
 		return result;
 	}
+
+	int32_t WindowDeviceResources::CreateWindowResources(HWND hWindow)
+	{
+		assert(hWindow != nullptr);
+		int32_t result = S_OK;
+
+		// Obtain DXGI factory from device (since we used nullptr for pAdapter above)
+		IDXGIFactory1* dxgiFactory = nullptr;
+		{
+			IDXGIDevice* dxgiDevice = nullptr;
+			result = static_cast<int32_t>(mD3dDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice)));
+			if (SUCCEEDED(static_cast<uint32_t>(result)))
+			{
+				IDXGIAdapter* adapter = nullptr;
+				result = static_cast<int32_t>(dxgiDevice->GetAdapter(&adapter));
+				if (SUCCEEDED(static_cast<uint32_t>(result)))
+				{
+					result = static_cast<int32_t>(adapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&dxgiFactory)));
+					adapter->Release();
+				}
+				dxgiDevice->Release();
+			}
+		}
+		if (FAILED(result))
+		{
+			return result;
+		}
+
+		DXGI_SWAP_CHAIN_DESC desc;
+		ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
+		desc.Windowed = TRUE;
+		desc.BufferCount = 2;
+		desc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		desc.SampleDesc.Count = 1;      //multisampling setting
+		desc.SampleDesc.Quality = 0;    //vendor-specific flag
+		desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+		desc.OutputWindow = hWindow;
+
+		RECT rc;
+		GetClientRect(hWindow, &rc);
+		uint32_t width = rc.right - rc.left;
+		uint32_t height = rc.bottom - rc.top;
+
+		// Create swap chain
+		IDXGIFactory2* dxgiFactory2 = nullptr;
+		result = dxgiFactory->QueryInterface( __uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
+		if ( dxgiFactory2 )
+		{
+			// DirectX 11.1 or later
+			result = mD3dDevice->QueryInterface( __uuidof(ID3D11Device1), reinterpret_cast<void**>(&mD3dDevice1));
+			if (SUCCEEDED(result))
+			{
+				static_cast<void>(mImmediateContext->QueryInterface( __uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&mImmediateContext1) ));
+			}
+
+			DXGI_SWAP_CHAIN_DESC1 sd = {};
+			sd.Width = width;
+			sd.Height = height;
+			sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			sd.SampleDesc.Count = 1;
+			sd.SampleDesc.Quality = 0;
+			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+			sd.BufferCount = 1;
+
+			result = dxgiFactory2->CreateSwapChainForHwnd(mD3dDevice, hWindow, &sd, nullptr, nullptr, &mSwapChain1);
+			if (SUCCEEDED(result))
+			{
+				result = mSwapChain1->QueryInterface( __uuidof(IDXGISwapChain), reinterpret_cast<void**>(&mSwapChain) );
+			}
+
+			dxgiFactory2->Release();
+		}
+		else
+		{
+			// DirectX 11.0 systems
+			DXGI_SWAP_CHAIN_DESC sd = {};
+			sd.BufferCount = 2;
+			sd.BufferDesc.Width = width;
+			sd.BufferDesc.Height = height;
+			sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			sd.BufferDesc.RefreshRate.Numerator = 60;
+			sd.BufferDesc.RefreshRate.Denominator = 1;
+			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+			sd.OutputWindow = hWindow;
+			sd.SampleDesc.Count = 1;	// multisampling setting
+			sd.SampleDesc.Quality = 0;	// vendor-specific flag
+			sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+			sd.Windowed = TRUE;
+
+			result = dxgiFactory->CreateSwapChain( mD3dDevice, &sd, &mSwapChain );
+		}
+
+		dxgiFactory->Release();
+
+		if (FAILED(result))
+		{
+			return result;
+		}
+
+		result = ConfigureBackBuffer();
+
+		return result;
+	}
+
 
 	int32_t WindowDeviceResources::ConfigureBackBuffer()
 	{

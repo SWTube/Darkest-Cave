@@ -14,14 +14,12 @@ namespace cave
 	class UnixEngine final : public GenericEngine
 	{
 	public:
-		UnixEngine();
+		UnixEngine() = default;
 		virtual ~UnixEngine() = default;
 
-		const GLFWwindow* GetWindowHandle() override;
-		int32_t CreateDesktopWindow() override;
-		int32_t Run(DeviceResources* deviceResources, Renderer* renderer) override;
-	private:
-		GLFWwindow* mWindow = nullptr;
+		eResult Init() override;
+		void Destroy() override;
+		eResult Run() override;
 	};
 
 	typedef UnixEngine Engine;

@@ -8,40 +8,43 @@
 #ifdef __UNIX__
 namespace cave
 {
-	int32_t UnixDeviceResources::CreateDeviceResources()
+	eResult UnixDeviceResources::Init(Window* window)
 	{
-		glfwSetErrorCallback(errorCallback);
-		int32_t result = GLFW_NO_ERROR;
-		GLenum glError = GL_NO_ERROR;
-
-		int32_t glfwInitResult = glfwInit();
-		if (glfwInitResult == GLFW_FALSE)
+		eResult result = CreateDeviceResources();
+		if (result != eResult::CAVE_OK)
 		{
-			glfwTerminate();
-			return glfwInitResult;
+			return result;
+		}
+
+		result = CreateWindowResources(window);
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
 		}
 
 		return result;
 	}
 
-	int32_t UnixDeviceResources::CreateWindowResources()
+	eResult UnixDeviceResources::CreateDeviceResources()
+	{
+		glfwSetErrorCallback(errorCallback);
+
+		int32_t glfwInitResult = glfwInit();
+		if (glfwInitResult == GLFW_FALSE)
+		{
+			glfwTerminate();
+			return eResult::CAVE_FAIL;
+		}
+
+		return eResult::CAVE_OK;
+	}
+
+	eResult UnixDeviceResources::CreateWindowResources(Window* window)
 	{
 		int32_t result = GLFW_NO_ERROR;
 
-		mWidth = 1024;
-		mHeight = 960;
-		// Register class
-
-		// Create window
-		mWindow = glfwCreateWindow(static_cast<int32_t>(mWidth), static_cast<int32_t>(mHeight), "CaveEngine", nullptr, nullptr);
-		if (mWindow == nullptr)
-		{
-			return glfwGetError(nullptr);
-		}
-
-		glfwSetWindowSizeCallback(mWindow, windowSizeCallback);
-		glfwSetKeyCallback(mWindow, keyCallback);
-		glfwSetCharCallback(mWindow, charCallback);
+		assert(window != nullptr);
+		mWindow = window->GetWindow();
 
 		// 2. Make Context Current ---------------------------------------------------------------------------------------------
 		glfwMakeContextCurrent(mWindow);
@@ -60,10 +63,10 @@ namespace cave
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", major);
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", minor);
 
-		return result;
+		return eResult::CAVE_OK;
 	}
 
-	int32_t UnixDeviceResources::CreateWindowResources(GLFWwindow* window)
+	eResult UnixDeviceResources::CreateWindowResources(GLFWwindow* window)
 	{
 		int32_t result = GLFW_NO_ERROR;
 
@@ -74,17 +77,6 @@ namespace cave
 		mHeight = 960;
 		// Register class
 
-		// Create window
-		mWindow = glfwCreateWindow(static_cast<int32_t>(mWidth), static_cast<int32_t>(mHeight), "CaveEngine", nullptr, nullptr);
-		if (mWindow == nullptr)
-		{
-			return glfwGetError(nullptr);
-		}
-
-		glfwSetWindowSizeCallback(mWindow, windowSizeCallback);
-		glfwSetKeyCallback(mWindow, keyCallback);
-		glfwSetCharCallback(mWindow, charCallback);
-
 		// 2. Make Context Current ---------------------------------------------------------------------------------------------
 		glfwMakeContextCurrent(mWindow);
 		if (result = glfwGetError(nullptr); result != GLFW_NO_ERROR)
@@ -102,7 +94,7 @@ namespace cave
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", major);
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", minor);
 
-		return result;
+		return eResult::CAVE_OK;
 	}
 
 	int32_t UnixDeviceResources::ConfigureBackBuffer()
@@ -163,7 +155,7 @@ namespace cave
 		LOGE(eLogChannel::GRAPHICS, std::cerr, description);
 	}
 
-	void UnixDeviceResources::Destroy()
+	eResult UnixDeviceResources::Destroy()
 	{
 		if (mWindow != nullptr)
 		{
@@ -171,6 +163,8 @@ namespace cave
 		}
 
 		glfwTerminate();
+
+		return eResult::CAVE_OK;
 	}
 
 	uint32_t UnixDeviceResources::GetProgram() const

@@ -3,9 +3,6 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include <cassert>
-#include <string>
-
 #include "Debug/Log.h"
 
 #ifdef __UNIX__

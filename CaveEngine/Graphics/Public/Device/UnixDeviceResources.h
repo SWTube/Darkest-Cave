@@ -20,10 +20,11 @@ namespace cave
 		UnixDeviceResources& operator=(const UnixDeviceResources&) = default;
 		virtual ~UnixDeviceResources() = default;
 
-		int32_t CreateDeviceResources() override;
-		int32_t CreateWindowResources(GLFWwindow* window) override;
-		int32_t CreateWindowResources();
-		void Destroy() override;
+		eResult Init(Window* window) override;
+		eResult CreateDeviceResources() override;
+		eResult CreateWindowResources(Window* window) override;
+		eResult CreateWindowResources(GLFWwindow* window);
+		eResult Destroy() override;
 
 		int32_t ConfigureBackBuffer() override;
 		int32_t ReleaseBackBuffer() override;
@@ -39,12 +40,6 @@ namespace cave
 		void Present() override;
 	private:
 		static void errorCallback(int32_t errorCode, const char* description);
-
-		static void windowSizeCallback(GLFWwindow* window, int32_t width, int32_t height);
-		static void keyCallback(GLFWwindow* window, int32_t key, int32_t scancode, int32_t action, int32_t mods);
-		static void charCallback(GLFWwindow* window, uint32_t codepoint);
-
-		static char glfwKeyToChar(int32_t key);
 
 		//-----------------------------------------------------------------------------
 		// OpenGL device

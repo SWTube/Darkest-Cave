@@ -3,12 +3,12 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include <ppltasks.h>
-
-#include "Debug/Log.h"
 #include "Renderer/WindowRenderer.h"
 
 #ifdef __WIN32__
+#include <ppltasks.h>
+
+#include "Debug/Log.h"
 import DdsTextureLoader;
 
 namespace cave

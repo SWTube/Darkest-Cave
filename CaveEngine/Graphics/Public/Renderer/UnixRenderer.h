@@ -78,10 +78,6 @@ namespace cave
 
 		void Destroy() override;
 
-
-		void OnChar(uint32_t codepoint);
-		void OnKey(int32_t key, int32_t scancode, int32_t action, int32_t mods);
-		// void Resize(uint32_t width, uint32_t height);
 	private:
 		int32_t createShaders() override;
 		int32_t createCube() override;

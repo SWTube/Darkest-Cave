@@ -21,7 +21,7 @@
 // #include "HAL/PlatformMemory.h"
 // #include "GenericPlatform/GenericPlatformMemory.h"
 // #include "HAL/MemoryBase.h"
-#include "Debug/LogManager.h"
+#include "Debug/Log.h"
 // #include "Misc/OutputDevice.h"
 // #include "Logging/LogVerbosity.h"
 // #include "Misc/VarArgs.h"

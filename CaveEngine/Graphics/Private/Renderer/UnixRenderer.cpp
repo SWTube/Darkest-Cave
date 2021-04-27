@@ -3,8 +3,6 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include <future>
-
 #include "lodepng.h"
 
 #include "CoreMinimal.h"
@@ -291,11 +289,10 @@ namespace cave
 	void UnixRenderer::CreateDeviceDependentResources()
 	{
 		// Compile shaders using the Effects library.
-		std::future<int32_t> createShadersTask = std::async(std::launch::async, &UnixRenderer::createShaders, this);
-
+		createShaders();
 
 		// Load the geometry for the spinning cube.
-		std::future<int32_t> createCubeTask = std::async(std::launch::async, &UnixRenderer::createCube, this);
+		createCube();
 	}
 
 	void UnixRenderer::CreateWindowSizeDependentResources()
@@ -306,6 +303,7 @@ namespace cave
 
 	void UnixRenderer::Update()
 	{
+		++mFrameCount;
 		if (mFrameCount == UINT32_MAX)
 		{
 			mFrameCount == 0u;
@@ -534,31 +532,10 @@ namespace cave
 		return const_cast<const GLchar*>(source);
 	}
 
-	void UnixRenderer::OnChar(uint32_t codepoint)
-	{
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "Codepoint: %u", codepoint);
-	}
-
-	void UnixRenderer::OnKey(int32_t key, int32_t scancode, int32_t action, int32_t mods)
-	{
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "Key: %d, Scancode: %d, Action: %d, Mods: %d", key, scancode, action, mods);
-		if (key == 256)
-		{
-			Destroy();
-		}
-	}
-
 	void UnixRenderer::Destroy()
 	{
 		cleanupDevice();
 		mDeviceResources = nullptr;
 	}
-
-	// void UnixRenderer::Resize(uint32_t width, uint32_t height)
-	// {
-	// 	msWidth = width;
-	// 	msHeight = height;
-	// 	glViewport(0, 0, static_cast<int32_t>(msWidth), static_cast<int32_t>(msHeight));
-	// }
 }
 #endif

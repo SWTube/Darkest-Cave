@@ -6,6 +6,7 @@
 #pragma once
 
 #include "CoreTypes.h"
+#include "Device/Window.h"
 #include "GraphicsApiPch.h"
 
 namespace cave
@@ -18,13 +19,10 @@ namespace cave
 		GenericDeviceResources& operator=(const GenericDeviceResources&) = default;
 		virtual ~GenericDeviceResources() = default;
 
-#ifdef __WIN32__
-		virtual int32_t CreateWindowResources(HWND window) = 0;
-#else
-		virtual int32_t CreateWindowResources(GLFWwindow* window) = 0;
-#endif
-		virtual int32_t CreateDeviceResources() = 0;
-		virtual void Destroy() = 0;
+		virtual eResult Init(Window* window) = 0;
+		virtual eResult CreateWindowResources(Window* window) = 0;
+		virtual eResult CreateDeviceResources() = 0;
+		virtual eResult Destroy() = 0;
 
 		virtual int32_t ConfigureBackBuffer() = 0;
 		virtual int32_t ReleaseBackBuffer() = 0;

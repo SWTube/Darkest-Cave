@@ -24,12 +24,7 @@
 ----------------------------------------------------------------------------*/
 
 //#include "Misc/VarArgs.h"
-#if defined (__WIN32__)
-	#include "Debug/Log.h"
-	import Log;
-#elif defined (__UNIX__)
-	#include "Debug/LogManager.h"
-#endif
+#include "Debug/Log.h"
 //#include "Logging/LogVerbosity.h"
 //#include "Misc/OutputDevice.h"
 #include "Utils/Crt.h"

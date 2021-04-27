@@ -14,18 +14,17 @@ namespace cave
 	class WindowEngine final : public GenericEngine
 	{
 	public:
-		WindowEngine();
-		virtual ~WindowEngine();
+		WindowEngine() = default;
+		virtual ~WindowEngine() = default;
 
-		HWND GetWindowHandle() override;
-		int32_t CreateDesktopWindow() override;
-		int32_t Run(DeviceResources* deviceResources, Renderer* renderer) override;
+		eResult Init() override;
+		void Destroy() override;
+		eResult Run() override;
 
 		static LRESULT CALLBACK StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam);
 		
 	private:
 		static HINSTANCE	msInstance;
-		HWND				mWindow = nullptr;
 		HMENU				mMenu = nullptr;
 		RECT				mRect;
 	};

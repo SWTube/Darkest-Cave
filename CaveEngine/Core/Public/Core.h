@@ -248,12 +248,7 @@
 //#include "Math/RandomStream.h"
 //#include "Logging/LogSuppressionInterface.h"
 //#include "Logging/LogScopedCategoryAndVerbosityOverride.h"
-#if defined(__WIN32__)
-	#include "Debug/Log.h"
-	import Log;
-#elif defined(__UNIX__)
-	#include "Debug/LogManager.h"
-#endif
+#include "Debug/Log.h"
 //#include "HAL/OutputDevices.h"
 //#include "Misc/OutputDeviceRedirector.h"
 //#include "Misc/OutputDeviceNull.h"

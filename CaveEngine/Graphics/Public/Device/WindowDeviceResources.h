@@ -20,7 +20,8 @@ namespace cave
 		WindowDeviceResources& operator=(const WindowDeviceResources&) = delete;
 		virtual ~WindowDeviceResources();
 
-		int32_t CreateWindowResources(HWND window) override;
+		int32_t CreateWindowResources(Window* window) override;
+		int32_t CreateWindowResources(HWND hWindow);
 		int32_t CreateDeviceResources() override;
 		void Destroy() override;
 

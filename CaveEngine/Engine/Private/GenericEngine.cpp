@@ -8,4 +8,17 @@
 namespace cave
 {
 	const wchar_t* GenericEngine::msWindowClassName = L"GenericWindowClass";
+
+	Window* GenericEngine::GetWindowHandle()
+	{
+		return mWindow;
+	}
+
+	eResult GenericEngine::Run(DeviceResources* deviceResources, Renderer* renderer)
+	{
+		mDeviceResources = deviceResources;
+		mRenderer = renderer;
+
+		return Run();
+	}
 }
