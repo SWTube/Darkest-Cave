@@ -43,7 +43,7 @@
     <ClCompile Include="Graphics\Private\Device\UnixDeviceResources.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\WindowDeviceResources.cpp">
+    <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
@@ -52,7 +52,7 @@
     <ClCompile Include="Graphics\Private\Renderer\UnixRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\WindowRenderer.cpp">
+    <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Private\GenericEngine.cpp">
@@ -61,11 +61,41 @@
     <ClCompile Include="Engine\Private\UnixEngine.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Private\WindowEngine.cpp">
+    <ClCompile Include="Engine\Private\WindowsEngine.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx">
       <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\UnixWindow.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Object\GenericDrawableObject.cpp">
+      <Filter>Source Files\Graphics\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Object\UnixDrawableObject.cpp">
+      <Filter>Source Files\Graphics\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Object\Vertex.cpp">
+      <Filter>Source Files\Graphics\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Object\WindowsDrawableObject.cpp">
+      <Filter>Source Files\Graphics\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
+      <Filter>Source Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Shader\UnixShader.cpp">
+      <Filter>Source Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
+      <Filter>Source Files\Graphics\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,7 +151,7 @@
     <ClInclude Include="Graphics\Public\Renderer\UnixRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\WindowRenderer.h">
+    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Device\DeviceResources.h">
@@ -133,7 +163,7 @@
     <ClInclude Include="Graphics\Public\Device\UnixDeviceResources.h">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\WindowDeviceResources.h">
+    <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h">
@@ -148,11 +178,50 @@
     <ClInclude Include="Engine\Public\UnixEngine.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Public\WindowEngine.h">
+    <ClInclude Include="Engine\Public\WindowsEngine.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Debug\Log.h">
       <Filter>Header Files\Core\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\GenericWindow.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\UnixWindow.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\Window.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\WindowsWindow.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Shader\GenericShader.h">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Shader\Shader.h">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Shader\UnixShader.h">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Object\DrawableObject.h">
+      <Filter>Header Files\Graphics\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Object\GenericDrawableObject.h">
+      <Filter>Header Files\Graphics\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Object\UnixDrawableObject.h">
+      <Filter>Header Files\Graphics\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Object\Vertex.h">
+      <Filter>Header Files\Graphics\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Object\WindowsDrawableObject.h">
+      <Filter>Header Files\Graphics\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">
+      <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -233,9 +302,27 @@
     <Filter Include="Source Files\ResourceManager\Texture">
       <UniqueIdentifier>{c5ca6e59-115e-4980-bf79-e267882ab430}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics\Object">
+      <UniqueIdentifier>{1e5df92c-e828-4393-a60b-e98d2f61d888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Shader">
+      <UniqueIdentifier>{030d19f1-44a2-41ce-86e0-0619d311dc89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Object">
+      <UniqueIdentifier>{b16c34d6-b973-42a7-90e8-142191610b55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Shader">
+      <UniqueIdentifier>{ce661392-408e-4ca9-811d-9ec6fda3af15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\Shader\DirectXTest.fxh">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Graphics\Shader\sprite.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Graphics\Shader\sprite.vert">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

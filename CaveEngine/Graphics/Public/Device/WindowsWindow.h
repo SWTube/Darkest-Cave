@@ -16,15 +16,18 @@ namespace cave
 	{
 	public:
 		WindowsWindow() = delete;
-		WindowsWindow(uint32_t width, uint32_t height, const char* title, HINSTANCE hInstance);
+		WindowsWindow(uint32_t width, uint32_t height, const wchar_t* title, HINSTANCE hInstance, LRESULT (CALLBACK* windowProc)(HWND, uint32_t, WPARAM, LPARAM));
 		WindowsWindow(const WindowsWindow&) = delete;
 		WindowsWindow(const WindowsWindow&&) = delete;
 		WindowsWindow& operator=(const WindowsWindow&) = delete;
 		virtual ~WindowsWindow() = default;
 
+		void Resize(uint32_t width, uint32_t height) override;
 		HWND GetWindow() override;
 	private:
 		HWND mWindow = nullptr;
+		HMENU mMenu = nullptr;
+		RECT mRect;
 	};
 
 	typedef WindowsWindow Window;

@@ -6,7 +6,7 @@
 #pragma once
 
 #include "CoreTypes.h"
-
+#include "GraphicsApiPch.h"
 #include "Object/Vertex.h"
 
 namespace cave
@@ -15,16 +15,16 @@ namespace cave
 	{
 	public:
 		GenericDrawableObject() = delete;
-		constexpr GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
-		constexpr GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
-		constexpr GenericDrawableObject(const GenericDrawableObject& other);
-		constexpr GenericDrawableObject(const GenericDrawableObject&& other);
+		GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
+		GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
+		GenericDrawableObject(const GenericDrawableObject& other);
+		GenericDrawableObject(const GenericDrawableObject&& other);
 		constexpr GenericDrawableObject& operator=(const GenericDrawableObject& other);
 		constexpr GenericDrawableObject& operator=(const GenericDrawableObject&& other);
 		virtual ~GenericDrawableObject();
 
 #ifdef __WIN32__
-		virtual eResult Init() = 0;
+		virtual eResult Init(ID3D11Device* device, ID3D11DeviceContext* context) = 0;
 #else
 		virtual eResult Init(uint32_t program) = 0;
 #endif
@@ -41,7 +41,15 @@ namespace cave
 		uint8_t* mIndices = nullptr;
 
 #ifdef __WIN32__
-		DirectX::XMMATRIX mWorld;
+		typedef struct ConstantBuffer
+		{
+			DirectX::XMMATRIX mWorld;
+		} ConstantBuffer;
+
+		// Assert that the constant buffer remains 16-byte aligned.
+		static_assert((sizeof(ConstantBuffer) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
+
+		DirectX::XMMATRIX mWorld = DirectX::XMMatrixIdentity();
 #else
 		glm::mat4 mWorld = glm::mat4(1.0f);
 #endif
@@ -53,43 +61,4 @@ namespace cave
 		uint32_t mTextureSampler = 0u;
 		const char* mTextureFilePath = nullptr;
 	};
-
-	constexpr GenericDrawableObject::GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
-		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices), nullptr)
-	{
-	}
-
-	constexpr GenericDrawableObject::GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
-		: mVerticesCount(verticesCount)
-		, mVertices(vertices)
-		, mIndicesCount(indicesCount)
-		, mIndices(indices)
-		, mTextureFilePath(textureFilePath)
-	{
-		vertices = nullptr;
-		indices = nullptr;
-	}
-
-	constexpr GenericDrawableObject::GenericDrawableObject(const GenericDrawableObject& other)
-	{
-		if (this != &other)
-		{
-			mVerticesCount = other.mVerticesCount;
-			if (sizeof(other.mVertices))
-			{
-
-			}
-			mVertices = new Vertex[mVerticesCount];
-			for (uint32_t i = 0; i < mVerticesCount; ++i)
-			{
-				mVertices[i] = other.mVertices[i];
-			}
-			mIndicesCount = other.mIndicesCount;
-			mIndices = new uint8_t[mIndicesCount];
-			for (uint32_t i = 0; i < mIndicesCount; ++i)
-			{
-				mIndices[i] = other.mIndices[i];
-			}
-		}
-	}
 } // namespace cave

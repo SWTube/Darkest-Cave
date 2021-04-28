@@ -7,7 +7,11 @@
 
 namespace cave
 {
+#ifdef __WIN32__
+	GenericWindow::GenericWindow(uint32_t width, uint32_t height, const wchar_t* title)
+#else
 	GenericWindow::GenericWindow(uint32_t width, uint32_t height, const char* title)
+#endif
 		: mWidth(width)
 		, mHeight(height)
 		, mTitle(title)

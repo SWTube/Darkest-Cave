@@ -21,7 +21,7 @@
 		#define __WIN32__
 	#endif
 
-	#define PLATFORM_NAME Window
+	#define PLATFORM_NAME Windows
 
 	#define __FORCEINLINE__ __forceinline
 #endif
@@ -52,6 +52,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <utility>
 
 namespace cave
 {

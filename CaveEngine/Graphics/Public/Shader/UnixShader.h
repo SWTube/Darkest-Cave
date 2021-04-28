@@ -7,39 +7,41 @@
 
 #include "Shader/GenericShader.h"
 
-namespace cave
-{
-	class UnixShader final : public GenericShader
+#ifdef __UNIX__
+	namespace cave
 	{
-	public:
-		UnixShader() = delete;
-		constexpr UnixShader(const char* vertexShaderFilePath, const char* fragmentShaderFilePath);
-		UnixShader(const UnixShader&) = delete;
-		UnixShader(const UnixShader&&) = delete;
-		UnixShader& operator=(const UnixShader&) = delete;
-		virtual ~UnixShader();
-
-		virtual eResult Compile() override;
-		virtual uint32_t GetProgram();
-	private:
-		typedef struct
+		class UnixShader final : public GenericShader
 		{
-			GLenum       type;
-			const char*  filename;
-			GLuint       shader;
-		} ShaderInfo;
+		public:
+			UnixShader() = delete;
+			constexpr UnixShader(const char* vertexShaderFilePath, const char* fragmentShaderFilePath);
+			UnixShader(const UnixShader&) = delete;
+			UnixShader(const UnixShader&&) = delete;
+			UnixShader& operator=(const UnixShader&) = delete;
+			virtual ~UnixShader();
 
-		eResult compileShaderFromFile(ShaderInfo* shaders);
-		uint32_t loadShaders(ShaderInfo* shaders);
-		const char* readShader(const char* filename);
+			virtual eResult Compile() override;
+			virtual uint32_t GetProgram();
+		private:
+			typedef struct
+			{
+				GLenum       type;
+				const char*  filename;
+				GLuint       shader;
+			} ShaderInfo;
 
-		uint32_t mProgram = 0u;
-	};
+			eResult compileShaderFromFile(ShaderInfo* shaders);
+			uint32_t loadShaders(ShaderInfo* shaders);
+			const char* readShader(const char* filename);
 
-	constexpr UnixShader::UnixShader(const char* vertexShaderFilePath, const char* fragmentShaderFilePath)
-		: GenericShader(vertexShaderFilePath, fragmentShaderFilePath)
-	{
-	}
+			uint32_t mProgram = 0u;
+		};
 
-	typedef UnixShader Shader;
-} // namespace cave
+		constexpr UnixShader::UnixShader(const char* vertexShaderFilePath, const char* fragmentShaderFilePath)
+			: GenericShader(vertexShaderFilePath, fragmentShaderFilePath)
+		{
+		}
+
+		typedef UnixShader Shader;
+	} // namespace cave
+#endif

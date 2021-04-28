@@ -3,17 +3,34 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Device/WindowDeviceResources.h"
+#include "Device/WindowsDeviceResources.h"
 
 #ifdef __WIN32__
 namespace cave
 {
-	WindowDeviceResources::~WindowDeviceResources()
+	WindowsDeviceResources::~WindowsDeviceResources()
 	{
 		Destroy();
 	}
 
-	int32_t WindowDeviceResources::CreateDeviceResources()
+	eResult WindowsDeviceResources::Init(Window* window)
+	{
+		eResult result = CreateDeviceResources();
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
+
+		result = CreateWindowResources(window);
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
+
+		return result;
+	}
+
+	eResult WindowsDeviceResources::CreateDeviceResources()
 	{
 		int32_t result = S_OK;
 
@@ -58,13 +75,13 @@ namespace cave
 		}
 		if (FAILED(result))
 		{
-			return result;
+			return eResult::CAVE_FAIL;
 		}
 
-		return result;
+		return eResult::CAVE_OK;
 	}
 
-	int32_t WindowDeviceResources::CreateWindowResources(Window* window)
+	eResult WindowsDeviceResources::CreateWindowResources(Window* window)
 	{
 		assert(window != nullptr);
 		HWND hWindow = window->GetWindow();
@@ -89,7 +106,7 @@ namespace cave
 		}
 		if (FAILED(result))
 		{
-			return result;
+			return eResult::CAVE_FAIL;
 		}
 
 		DXGI_SWAP_CHAIN_DESC desc;
@@ -161,15 +178,15 @@ namespace cave
 
 		if (FAILED(result))
 		{
-			return result;
+			return eResult::CAVE_FAIL;
 		}
 
 		result = ConfigureBackBuffer();
 
-		return result;
+		return eResult::CAVE_OK;
 	}
 
-	int32_t WindowDeviceResources::CreateWindowResources(HWND hWindow)
+	eResult WindowsDeviceResources::CreateWindowResources(HWND hWindow)
 	{
 		assert(hWindow != nullptr);
 		int32_t result = S_OK;
@@ -193,7 +210,7 @@ namespace cave
 		}
 		if (FAILED(result))
 		{
-			return result;
+			return eResult::CAVE_FAIL;
 		}
 
 		DXGI_SWAP_CHAIN_DESC desc;
@@ -265,16 +282,16 @@ namespace cave
 
 		if (FAILED(result))
 		{
-			return result;
+			return eResult::CAVE_FAIL;
 		}
 
 		result = ConfigureBackBuffer();
 
-		return result;
+		return eResult::CAVE_OK;
 	}
 
 
-	int32_t WindowDeviceResources::ConfigureBackBuffer()
+	int32_t WindowsDeviceResources::ConfigureBackBuffer()
 	{
 		int32_t result = S_OK;
 
@@ -335,7 +352,7 @@ namespace cave
 		return result;
 	}
 
-	int32_t WindowDeviceResources::ReleaseBackBuffer()
+	int32_t WindowsDeviceResources::ReleaseBackBuffer()
 	{
 		int32_t result = S_OK;
 
@@ -373,7 +390,7 @@ namespace cave
 		return result;
 	}
 
-	int32_t WindowDeviceResources::GoFullScreen()
+	int32_t WindowsDeviceResources::GoFullScreen()
 	{
 		int32_t result = S_OK;
 
@@ -401,7 +418,7 @@ namespace cave
 		return result;
 	}
 	
-	int32_t WindowDeviceResources::GoWindowed()
+	int32_t WindowsDeviceResources::GoWindowed()
 	{
 		int32_t result = S_OK;
 
@@ -429,42 +446,42 @@ namespace cave
 		return result;
 	}
 
-	float WindowDeviceResources::GetAspectRatio()
+	float WindowsDeviceResources::GetAspectRatio()
 	{
 		return static_cast<float>(mBackBufferDesc.Width) / static_cast<float>(mBackBufferDesc.Height);
 	}
 
-	ID3D11Device* WindowDeviceResources::GetDevice()
+	ID3D11Device* WindowsDeviceResources::GetDevice()
 	{
 		return mD3dDevice;
 	}
 	
-	ID3D11DeviceContext* WindowDeviceResources::GetDeviceContext()
+	ID3D11DeviceContext* WindowsDeviceResources::GetDeviceContext()
 	{
 		return mImmediateContext;
 	}
 
-	ID3D11RenderTargetView* WindowDeviceResources::GetRenderTarget()
+	ID3D11RenderTargetView* WindowsDeviceResources::GetRenderTarget()
 	{
 		return mRenderTargetView;
 	}
 
-	ID3D11DepthStencilView* WindowDeviceResources::GetDepthStencil()
+	ID3D11DepthStencilView* WindowsDeviceResources::GetDepthStencil()
 	{
 		return mDepthStencilView;
 	}
 
-	D3D_DRIVER_TYPE WindowDeviceResources::GetDriverType() const
+	D3D_DRIVER_TYPE WindowsDeviceResources::GetDriverType() const
 	{
 		return mDriverType;
 	}
 
-	void WindowDeviceResources::Present()
+	void WindowsDeviceResources::Present()
 	{
 		mSwapChain->Present(1, 0);
 	}
 
-	void WindowDeviceResources::Destroy()
+	void WindowsDeviceResources::Destroy()
 	{
 		if (mImmediateContext != nullptr)
 		{

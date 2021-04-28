@@ -11,11 +11,11 @@
 #ifdef __WIN32__
 namespace cave
 {
-	class WindowEngine final : public GenericEngine
+	class WindowsEngine final : public GenericEngine
 	{
 	public:
-		WindowEngine() = default;
-		virtual ~WindowEngine() = default;
+		WindowsEngine() = default;
+		virtual ~WindowsEngine() = default;
 
 		eResult Init() override;
 		void Destroy() override;
@@ -25,10 +25,8 @@ namespace cave
 		
 	private:
 		static HINSTANCE	msInstance;
-		HMENU				mMenu = nullptr;
-		RECT				mRect;
 	};
 
-	typedef WindowEngine Engine;
+	typedef WindowsEngine Engine;
 }
 #endif

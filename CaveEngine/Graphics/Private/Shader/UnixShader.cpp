@@ -9,6 +9,7 @@
 
 #include "Shader/UnixShader.h"
 
+#ifdef __UNIX__
 namespace cave
 {
 	UnixShader::~UnixShader()
@@ -177,3 +178,4 @@ namespace cave
 		return const_cast<const GLchar*>(source);
 	}
 } // namespace cave
+#endif

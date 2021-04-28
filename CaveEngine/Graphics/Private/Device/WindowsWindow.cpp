@@ -11,7 +11,7 @@
 #ifdef __WIN32__
 namespace cave
 {
-	WindowsWindow::WindowsWindow(uint32_t width, uint32_t height, const char* title, HINSTANCE hInstance)
+	WindowsWindow::WindowsWindow(uint32_t width, uint32_t height, const wchar_t* title, HINSTANCE hInstance, LRESULT(CALLBACK* windowProc)(HWND, uint32_t, WPARAM, LPARAM))
 		: GenericWindow(width, height, title)
 	{
 		// Window resources are dealt with here.
@@ -35,7 +35,7 @@ namespace cave
 		WNDCLASSEX wndClass;
 		wndClass.cbSize = sizeof(WNDCLASSEX);
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
-		wndClass.lpfnWndProc = Engine::StaticWindowProc;
+		wndClass.lpfnWndProc = windowProc;
 		wndClass.cbClsExtra = 0;
 		wndClass.cbWndExtra = 0;
 		wndClass.hInstance = hInstance;
@@ -97,6 +97,10 @@ namespace cave
 	HWND WindowsWindow::GetWindow()
 	{
 		return mWindow;
+	}
+
+	void WindowsWindow::Resize(uint32_t width, uint32_t height)
+	{
 	}
 } // namespace cave
 #endif

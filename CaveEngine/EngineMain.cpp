@@ -107,14 +107,25 @@ int main(int32_t argc, char** argv)
 		2u, 3u, 0u,
 	};
 
+#ifdef __WIN32__
+	LOGDF(cave::eLogChannel::GRAPHICS, "size of Float3: %u, size of Float2: %u", sizeof(cave::Float3), sizeof(cave::Float2));
+	LOGDF(cave::eLogChannel::GRAPHICS, "size of Vertex: %u, size of VertexT: %u", sizeof(cave::Vertex), sizeof(cave::VertexT));
+	LOGDF(cave::eLogChannel::GRAPHICS, "size of vertices: %u, size of indices: %u", sizeof(vertices), sizeof(indices));
+	LOGDF(cave::eLogChannel::GRAPHICS, "size of float: %u, size of uint32_t: %u", sizeof(float), sizeof(uint32_t));
+#else
 	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of Float3: %u, size of Float2: %u", sizeof(cave::Float3), sizeof(cave::Float2));
 	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of Vertex: %u, size of VertexT: %u", sizeof(cave::Vertex), sizeof(cave::VertexT));
 	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of vertices: %u, size of indices: %u", sizeof(vertices), sizeof(indices));
 	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of float: %u, size of uint32_t: %u", sizeof(float), sizeof(uint32_t));
+#endif
 
 	cave::DrawableObject* object = new cave::DrawableObject(4u, std::move(vertices), 6u, std::move(indices), "Graphics/Resource/8471.png");
 	cave::DrawableObject* object2 = new cave::DrawableObject(4u, std::move(vertices2), 6u, std::move(indices2), "Graphics/Resource/orange_mushroom.png");
+#ifdef __WIN32__
+	cave::Shader* shader = new cave::Shader("DirectXTest.fxh");
+#else
 	cave::Shader* shader = new cave::Shader("sprite.vert", "sprite.frag");
+#endif
 
 	cave::Renderer* renderer = main->GetRenderer();
 	renderer->AddShader(std::move(shader));

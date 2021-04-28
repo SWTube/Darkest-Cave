@@ -24,7 +24,7 @@ namespace cave
 		eResult CreateDeviceResources() override;
 		eResult CreateWindowResources(Window* window) override;
 		eResult CreateWindowResources(GLFWwindow* window);
-		eResult Destroy() override;
+		void Destroy() override;
 
 		int32_t ConfigureBackBuffer() override;
 		int32_t ReleaseBackBuffer() override;

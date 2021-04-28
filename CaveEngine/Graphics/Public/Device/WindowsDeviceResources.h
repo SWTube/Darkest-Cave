@@ -12,17 +12,18 @@
 #ifdef __WIN32__
 namespace cave
 {
-	class WindowDeviceResources final : public GenericDeviceResources
+	class WindowsDeviceResources final : public GenericDeviceResources
 	{
 	public:
-		WindowDeviceResources() = default;
-		constexpr WindowDeviceResources(const WindowDeviceResources&) = delete;
-		WindowDeviceResources& operator=(const WindowDeviceResources&) = delete;
-		virtual ~WindowDeviceResources();
+		WindowsDeviceResources() = default;
+		constexpr WindowsDeviceResources(const WindowsDeviceResources&) = delete;
+		WindowsDeviceResources& operator=(const WindowsDeviceResources&) = delete;
+		virtual ~WindowsDeviceResources();
 
-		int32_t CreateWindowResources(Window* window) override;
-		int32_t CreateWindowResources(HWND hWindow);
-		int32_t CreateDeviceResources() override;
+		eResult Init(Window* window) override;
+		eResult CreateWindowResources(Window* window) override;
+		eResult CreateWindowResources(HWND hWindow);
+		eResult CreateDeviceResources() override;
 		void Destroy() override;
 
 		int32_t ConfigureBackBuffer() override;
@@ -76,6 +77,6 @@ namespace cave
 		D3D_DRIVER_TYPE			mDriverType = D3D_DRIVER_TYPE_NULL;
 	};
 
-	typedef WindowDeviceResources DeviceResources;
+	typedef WindowsDeviceResources DeviceResources;
 }
 #endif

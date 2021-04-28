@@ -3,19 +3,22 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "WindowEngine.h"
+#include "WindowsEngine.h"
 
 #ifdef __WIN32__
 namespace cave
 {
-	HINSTANCE	WindowEngine::msInstance = nullptr;
+	HINSTANCE	WindowsEngine::msInstance = nullptr;
 
-	eResult UnixEngine::Init()
+	eResult WindowsEngine::Init()
 	{
 		eResult result = eResult::CAVE_OK;
 
+#ifdef __WIN32__
+		mWindow = new Window(640u, 480u, L"Test", msInstance, StaticWindowProc);
+#else
 		mWindow = new Window(640u, 480u, "Test", nullptr);
-
+#endif
 
 		// Instantiate the device manager class.
 		mDeviceResources = new DeviceResources();
@@ -42,19 +45,33 @@ namespace cave
 		return result;
 	}
 
-	int32_t WindowEngine::CreateDesktopWindow()
+	void WindowsEngine::Destroy()
 	{
-		
+		if (mRenderer != nullptr)
+		{
+			mRenderer->Destroy();
+			delete mRenderer;
+		}
+
+		if (mDeviceResources != nullptr)
+		{
+			mDeviceResources->Destroy();
+			delete mDeviceResources;
+		}
+
+		if (mWindow != nullptr)
+		{
+			delete mWindow;
+		}
 	}
 
-
-	int32_t WindowEngine::Run(DeviceResources* deviceResources, Renderer* renderer)
+	eResult WindowsEngine::Run()
 	{
 		int32_t hr = S_OK;
-
-		if (!IsWindowVisible(mWindow))
+		HWND window = mWindow->GetWindow();
+		if (!IsWindowVisible(window))
 		{
-			ShowWindow(mWindow, SW_SHOW);
+			ShowWindow(window, SW_SHOW);
 		}
 
 		// The render loop is controlled here.
@@ -62,7 +79,6 @@ namespace cave
 		MSG  msg;
 		msg.message = WM_NULL;
 		PeekMessage(&msg, nullptr, 0u, 0u, PM_NOREMOVE);
-
 		while (WM_QUIT != msg.message)
 		{
 			// Process window events.
@@ -78,20 +94,20 @@ namespace cave
 			else
 			{
 				// Update the scene.
-				renderer->Update();
+				mRenderer->Update();
 
 				// Render frames during idle time (when no messages are waiting).
-				renderer->Render();
+				mRenderer->Render();
 
 				// Present the frame to the screen.
-				deviceResources->Present();
+				mDeviceResources->Present();
 			}
 		}
 
-		return hr;
+		return eResult::CAVE_OK;
 	}
 
-	LRESULT CALLBACK WindowEngine::StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK WindowsEngine::StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam)
 	{
 		PAINTSTRUCT ps;
 		HDC hdc;
@@ -129,11 +145,6 @@ namespace cave
 		}
 
 		return 0;
-	}
-
-	HWND WindowEngine::GetWindowHandle()
-	{
-		return mWindow;
 	}
 }
 #endif

@@ -24,7 +24,6 @@ cbuffer cbChangeOnResize : register(b1)
 cbuffer cbChangesEveryFrame : register(b2)
 {
     matrix World;
-    float4 vMeshColor;
 };
 
 
@@ -62,5 +61,5 @@ PS_INPUT VS(VS_INPUT input)
 //--------------------------------------------------------------------------------------
 float4 PS(PS_INPUT input) : SV_Target
 {
-    return txDiffuse.Sample(samLinear, input.Tex) * vMeshColor;
+    return txDiffuse.Sample(samLinear, input.Tex);
 }

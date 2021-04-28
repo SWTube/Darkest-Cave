@@ -9,6 +9,7 @@
 
 #include "Device/GenericWindow.h"
 
+#ifdef __UNIX__
 namespace cave
 {
 	class UnixWindow final : public GenericWindow
@@ -38,3 +39,4 @@ namespace cave
 
 	typedef UnixWindow Window;
 } // namespace cave
+#endif

@@ -157,7 +157,7 @@ namespace cave
 		LOGE(eLogChannel::GRAPHICS, std::cerr, description);
 	}
 
-	eResult UnixDeviceResources::Destroy()
+	void UnixDeviceResources::Destroy()
 	{
 		if (mWindow != nullptr)
 		{
@@ -165,8 +165,6 @@ namespace cave
 		}
 
 		glfwTerminate();
-
-		return eResult::CAVE_OK;
 	}
 
 	uint32_t UnixDeviceResources::GetProgram() const

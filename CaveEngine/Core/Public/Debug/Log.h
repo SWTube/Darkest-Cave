@@ -6,7 +6,6 @@
 #pragma once
 
 #include <cstdarg>
-#include <iostream>
 
 #include "CoreTypes.h"
 
@@ -26,6 +25,8 @@
 	#define LOGAF(channel, message, ...) cave::Log::AssertF(channel, __FILE__, __func__, __LINE__, message, __VA_ARGS__)
 	#define LOGA(channel, message) cave::Log::Assert(channel, __FILE__, __func__, __LINE__, message)
 #else
+	#include <iostream>
+	
 	namespace cave
 	{
 		constexpr size_t MAX_BUFFER = 255;

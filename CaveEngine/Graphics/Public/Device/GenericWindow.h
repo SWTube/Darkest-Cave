@@ -15,7 +15,11 @@ namespace cave
 	{
 	public:
 		GenericWindow() = delete;
+#ifdef __WIN32__
+		GenericWindow(uint32_t width, uint32_t height, const wchar_t* title);
+#else
 		GenericWindow(uint32_t width, uint32_t height, const char* title);
+#endif
 		GenericWindow(const GenericWindow&) = delete;
 		GenericWindow(const GenericWindow&&) = delete;
 		GenericWindow& operator=(const GenericWindow&) = delete;
@@ -33,6 +37,10 @@ namespace cave
 	protected:
 		uint32_t mWidth = 0u;
 		uint32_t mHeight = 0u;
+#ifdef __WIN32__
+		const wchar_t* mTitle = nullptr;
+#else
 		const char* mTitle = nullptr;
+#endif
 	};
 }

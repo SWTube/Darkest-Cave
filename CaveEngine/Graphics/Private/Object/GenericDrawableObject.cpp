@@ -7,7 +7,42 @@
 
 namespace cave
 {
-	constexpr GenericDrawableObject::GenericDrawableObject(const GenericDrawableObject&& other)
+	GenericDrawableObject::GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
+		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices), nullptr)
+	{
+	}
+
+	GenericDrawableObject::GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
+		: mVerticesCount(verticesCount)
+		, mVertices(vertices)
+		, mIndicesCount(indicesCount)
+		, mIndices(indices)
+		, mTextureFilePath(textureFilePath)
+	{
+		vertices = nullptr;
+		indices = nullptr;
+	}
+
+	GenericDrawableObject::GenericDrawableObject(const GenericDrawableObject& other)
+	{
+		if (this != &other)
+		{
+			mVerticesCount = other.mVerticesCount;
+			mVertices = new Vertex[mVerticesCount];
+			for (uint32_t i = 0; i < mVerticesCount; ++i)
+			{
+				mVertices[i] = other.mVertices[i];
+			}
+			mIndicesCount = other.mIndicesCount;
+			mIndices = new uint8_t[mIndicesCount];
+			for (uint32_t i = 0; i < mIndicesCount; ++i)
+			{
+				mIndices[i] = other.mIndices[i];
+			}
+		}
+	}
+
+	GenericDrawableObject::GenericDrawableObject(const GenericDrawableObject&& other)
 	{
 		if (this != &other)
 		{

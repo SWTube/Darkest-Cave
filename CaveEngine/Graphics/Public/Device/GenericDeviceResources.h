@@ -22,7 +22,7 @@ namespace cave
 		virtual eResult Init(Window* window) = 0;
 		virtual eResult CreateWindowResources(Window* window) = 0;
 		virtual eResult CreateDeviceResources() = 0;
-		virtual eResult Destroy() = 0;
+		virtual void Destroy() = 0;
 
 		virtual int32_t ConfigureBackBuffer() = 0;
 		virtual int32_t ReleaseBackBuffer() = 0;
