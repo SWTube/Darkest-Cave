@@ -17,25 +17,38 @@ namespace cave
 	{
 	public:
 		UnixDrawableObject() = delete;
-		constexpr UnixDrawableObject(uint32_t verticesCount, uint32_t verticesFrameSize, float*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
+		constexpr UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
+		constexpr UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
 		constexpr UnixDrawableObject(const UnixDrawableObject& object);
 		constexpr UnixDrawableObject(const UnixDrawableObject&& object);
 		constexpr UnixDrawableObject& operator=(const UnixDrawableObject& object);
 		constexpr UnixDrawableObject& operator=(const UnixDrawableObject&& object);
-		virtual ~UnixDrawableObject();
+		~UnixDrawableObject();
 
-		virtual void Destroy();
+		eResult Init(uint32_t program) override;
+		void Destroy() override;
+		void Update() override;
+		void Render() override;
 
 		uint32_t* const GetBuffers();
-		uint32_t VertexArrayObject = 0u;
-		static constexpr uint32_t ARRAY_BUFFER = 2u;
-		static constexpr uint32_t ELEMENT_ARRAY_BUFFER = 2u;
+	private:
+		uint32_t mVertexArrayObject = 0u;
+		static constexpr uint32_t ARRAY_BUFFER = 0u;
+		static constexpr uint32_t ELEMENT_ARRAY_BUFFER = 1u;
 		static constexpr uint32_t BUFFER_COUNT = 2u;
-		uint32_t Buffers[BUFFER_COUNT] = { 0u, };
+		static constexpr uint32_t V_POSITION = 0u;
+		static constexpr uint32_t V_TEX_COORD = 1u;
+		uint32_t mBuffers[BUFFER_COUNT] = { 0u, };
+		uint32_t mProgram = 0u;
 	};
 
-	constexpr UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, uint32_t verticesFrameSize, float*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
-		: GenericDrawableObject(verticesCount, verticesFrameSize, std::move(vertices), indicesCount, std::move(indices))
+	constexpr UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
+		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices))
+	{
+	}
+
+	constexpr UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
+		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices), textureFilePath)
 	{
 	}
 

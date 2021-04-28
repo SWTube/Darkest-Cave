@@ -10,6 +10,7 @@
 #include "CoreTypes.h"
 #include "Device/DeviceResources.h"
 #include "Object/DrawableObject.h"
+#include "Shader/Shader.h"
 
 namespace cave
 {
@@ -17,7 +18,7 @@ namespace cave
 	{
 	public:
 		GenericRenderer(DeviceResources* deviceResources);
-		virtual ~GenericRenderer() = default;
+		virtual ~GenericRenderer();
 
 		GenericRenderer(const GenericRenderer&) = delete;
 		GenericRenderer& operator=(const GenericRenderer&) = delete;
@@ -30,19 +31,30 @@ namespace cave
 		virtual void Destroy() = 0;
 
 		virtual void AddDrawableObject(DrawableObject*&& object);
+		virtual void AddShader(Shader*&& shader);
 
 		virtual bool WindowShouldClose() = 0;
 		DeviceResources* const GetDeviceResources() const;
 	protected:
-		virtual int32_t createShaders() = 0;
-		virtual int32_t createObjects() = 0;
+		virtual eResult createShader(Shader& shader) = 0;
+		virtual eResult createShaders() = 0;
+		virtual eResult createObject(DrawableObject& object) = 0;
+		virtual eResult createObjects() = 0;
 		virtual void createView() = 0;
 		virtual void createPerspective() = 0;
 
+#ifdef __WIN32__
+		DirectX::XMMATRIX mView;
+		DirectX::XMMATRIX mProjection;
+#else
+		glm::mat4 mView  = glm::mat4(1.0f);
+		glm::mat4 mProjection = glm::mat4(1.0f);
+#endif
 		DeviceResources* mDeviceResources = nullptr;
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 
 		std::vector<DrawableObject*> mDrawableObjects;
+		std::vector<Shader*> mShaders;
 	};
 }

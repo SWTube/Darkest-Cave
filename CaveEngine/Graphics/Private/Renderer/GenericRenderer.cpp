@@ -14,6 +14,19 @@ namespace cave
 		mDrawableObjects.reserve(1);
 	}
 
+	GenericRenderer::~GenericRenderer()
+	{
+		for (Shader* const shader : mShaders)
+		{
+			delete shader;
+		}
+
+		for (DrawableObject* const drawableObject : mDrawableObjects)
+		{
+			delete drawableObject;
+		}
+	}
+
 	DeviceResources* const GenericRenderer::GetDeviceResources() const
 	{
 		return mDeviceResources;
@@ -22,6 +35,13 @@ namespace cave
 	void GenericRenderer::AddDrawableObject(DrawableObject*&& object)
 	{
 		mDrawableObjects.push_back(std::move(object));
-		object = nullptr;
+		createObject(*mDrawableObjects.back());
+	}
+
+	void GenericRenderer::AddShader(Shader*&& shader)
+	{
+		mShaders.push_back(std::move(shader));
+		createShader(*mShaders.back());
+		CreateWindowSizeDependentResources();
 	}
 }

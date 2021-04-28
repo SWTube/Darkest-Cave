@@ -45,6 +45,8 @@ namespace cave
 
 		assert(window != nullptr);
 		mWindow = window->GetWindow();
+		mWidth = window->GetWidth();
+		mHeight = window->GetHeight();
 
 		// 2. Make Context Current ---------------------------------------------------------------------------------------------
 		glfwMakeContextCurrent(mWindow);
@@ -180,6 +182,16 @@ namespace cave
 	GLFWwindow* const UnixDeviceResources::GetWindow() const
 	{
 		return mWindow;
+	}
+
+	uint32_t UnixDeviceResources::GetWidth() const
+	{
+		return mWidth;
+	}
+
+	uint32_t UnixDeviceResources::GetHeight() const
+	{
+		return mHeight;
 	}
 } // namespace cave
 #endif

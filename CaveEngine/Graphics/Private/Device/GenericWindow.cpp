@@ -13,4 +13,14 @@ namespace cave
 		, mTitle(title)
 	{
 	}
+
+	uint32_t GenericWindow::GetWidth() const
+	{
+		return mWidth;
+	}
+
+	uint32_t GenericWindow::GetHeight() const
+	{
+		return mHeight;
+	}
 }

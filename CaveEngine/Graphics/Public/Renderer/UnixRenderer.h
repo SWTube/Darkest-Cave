@@ -50,8 +50,10 @@ namespace cave
 		void Destroy() override;
 
 	private:
-		int32_t createShaders() override;
-		int32_t createObjects() override;
+		eResult createShader(Shader& shader) override;
+		eResult createShaders() override;
+		eResult createObject(DrawableObject& object) override;
+		eResult createObjects() override;
 		void createView() override;
 		void createPerspective() override;
 

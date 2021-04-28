@@ -28,6 +28,8 @@ namespace cave
 #else
 		virtual GLFWwindow* GetWindow() = 0;
 #endif
+		uint32_t GetWidth() const;
+		uint32_t GetHeight() const;
 	protected:
 		uint32_t mWidth = 0u;
 		uint32_t mHeight = 0u;

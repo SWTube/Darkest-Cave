@@ -76,11 +76,6 @@ namespace cave
 		return *this;
 	}
 
-	constexpr Vertex::Vertex(float x, float y, float z)
-		: Position(Float3(x, y, z))
-	{
-	}
-
 	constexpr Vertex::Vertex(float* array)
 		: Position(Float3(array))
 	{
@@ -116,13 +111,6 @@ namespace cave
 		}
 
 		return *this;
-	}
-
-	constexpr VertexT::VertexT(float posX, float posY, float posZ, float texX, float texY)
-		: Vertex(posX, posY, posZ)
-		, TexCoord(Float2(texX, texY))
-	{
-		VertexFlag |= VERTEX_TEXCOORD;
 	}
 
 	constexpr VertexT::VertexT(float* array)

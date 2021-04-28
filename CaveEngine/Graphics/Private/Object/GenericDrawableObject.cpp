@@ -11,11 +11,10 @@ namespace cave
 	{
 		if (this != &other)
 		{
-			VerticesCount = other.VerticesCount;
-			VerticesFrameSize = other.VerticesFrameSize;
-			Vertices = other.Vertices;
-			IndicesCount = other.IndicesCount;
-			Indices = other.Indices;
+			mVerticesCount = other.mVerticesCount;
+			mVertices = other.mVertices;
+			mIndicesCount = other.mIndicesCount;
+			mIndices = other.mIndices;
 		}
 	}
 
@@ -23,28 +22,27 @@ namespace cave
 	{
 		if (this != &other)
 		{
-			if (VerticesCount * VerticesFrameSize != other.VerticesCount * other.VerticesFrameSize)
+			if (mVerticesCount != other.mVerticesCount)
 			{
-				delete Vertices;
-				Vertices = new float[other.VerticesCount * other.VerticesFrameSize];
+				delete[] mVertices;
+				mVertices = new Vertex[other.mVerticesCount];
 			}
-			VerticesCount = other.VerticesCount;
-			VerticesFrameSize = other.VerticesFrameSize;
+			mVerticesCount = other.mVerticesCount;
 			
-			for (uint32_t i = 0; i < VerticesCount * VerticesFrameSize; ++i)
+			for (uint32_t i = 0; i < mVerticesCount; ++i)
 			{
-				Vertices[i] = other.Vertices[i];
+				mVertices[i] = other.mVertices[i];
 			}
 
-			if (IndicesCount != other.IndicesCount)
+			if (mIndicesCount != other.mIndicesCount)
 			{
-				delete Indices;
-				Indices = new uint8_t[other.IndicesCount];
+				delete[] mIndices;
+				mIndices = new uint8_t[other.mIndicesCount];
 			}
-			IndicesCount = other.IndicesCount;
-			for (uint32_t i = 0; i < IndicesCount; ++i)
+			mIndicesCount = other.mIndicesCount;
+			for (uint32_t i = 0; i < mIndicesCount; ++i)
 			{
-				Indices[i] = other.Indices[i];
+				mIndices[i] = other.mIndices[i];
 			}
 		}
 
@@ -55,28 +53,27 @@ namespace cave
 	{
 		if (this != &other)
 		{
-			if (VerticesCount * VerticesFrameSize != other.VerticesCount * other.VerticesFrameSize)
+			if (mVerticesCount != other.mVerticesCount)
 			{
-				delete Vertices;
-				Vertices = new float[other.VerticesCount * other.VerticesFrameSize];
+				delete[] mVertices;
+				mVertices = new Vertex[other.mVerticesCount];
 			}
-			VerticesCount = other.VerticesCount;
-			VerticesFrameSize = other.VerticesFrameSize;
+			mVerticesCount = other.mVerticesCount;
 			
-			for (uint32_t i = 0; i < VerticesCount * VerticesFrameSize; ++i)
+			for (uint32_t i = 0; i < mVerticesCount; ++i)
 			{
-				Vertices[i] = other.Vertices[i];
+				mVertices[i] = other.mVertices[i];
 			}
 
-			if (IndicesCount != other.IndicesCount)
+			if (mIndicesCount != other.mIndicesCount)
 			{
-				delete Indices;
-				Indices = new uint8_t[other.IndicesCount];
+				delete[] mIndices;
+				mIndices = new uint8_t[other.mIndicesCount];
 			}
-			IndicesCount = other.IndicesCount;
-			for (uint32_t i = 0; i < IndicesCount; ++i)
+			mIndicesCount = other.mIndicesCount;
+			for (uint32_t i = 0; i < mIndicesCount; ++i)
 			{
-				Indices[i] = other.Indices[i];
+				mIndices[i] = other.mIndices[i];
 			}
 		}
 
@@ -85,12 +82,13 @@ namespace cave
 
 	GenericDrawableObject::~GenericDrawableObject()
 	{
-		delete Indices;
-		delete Vertices;
+		delete[] mIndices;
+		delete[] mVertices;
+		delete[] mTextureFilePath;
 	}
 
-	uint32_t GenericDrawableObject::GetVerticesDataSize() const
+	void GenericDrawableObject::SetTextureFilePath(const char* filePath)
 	{
-		return VerticesCount * VerticesFrameSize;
+		mTextureFilePath = filePath;
 	}
 } // namespace cave

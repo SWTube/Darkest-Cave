@@ -53,8 +53,8 @@ namespace cave
 	{
 	}
 
-	constexpr uint8_t VERTEX_POSITION = 0x0001;
-	constexpr uint8_t VERTEX_TEXCOORD = 0x0010;
+	constexpr uint8_t VERTEX_POSITION = 0b01;
+	constexpr uint8_t VERTEX_TEXCOORD = 0b10;
 
 
 	typedef struct Vertex
@@ -72,7 +72,37 @@ namespace cave
 		constexpr Vertex(float* array);
 		constexpr Vertex(const Float3& array);
 		constexpr Vertex(const Float3&& array);
+		constexpr uint32_t GetSize();
 	} Vertex;
+
+	constexpr Vertex::Vertex(float x, float y, float z)
+		: Position(Float3(x, y, z))
+	{
+	}
+
+	constexpr uint32_t Vertex::GetSize()
+	{
+		uint32_t size = 0u;
+		if (VertexFlag | VERTEX_POSITION)
+		{
+			size += 3u;
+		}
+
+		if (VertexFlag | VERTEX_TEXCOORD)
+		{
+			size += 2u;
+		}
+
+		size = size * sizeof(float) + sizeof(VertexFlag);
+
+		if (size | 0b10 || size | 0b01)
+		{
+			size &= ~(0b11);
+			size += 0b100;
+		}
+
+		return size;
+	}
 
 	typedef struct VertexT : public Vertex
 	{
@@ -89,4 +119,11 @@ namespace cave
 		constexpr VertexT(const Float3& position, const Float2& texCoord);
 		constexpr VertexT(const Float3&& position, const Float2&& texCoord);
 	} VertexT;
+
+	constexpr VertexT::VertexT(float posX, float posY, float posZ, float texX, float texY)
+		: Vertex(posX, posY, posZ)
+		, TexCoord(Float2(texX, texY))
+	{
+		VertexFlag |= VERTEX_TEXCOORD;
+	}
 } // namespace cave

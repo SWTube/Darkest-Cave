@@ -37,6 +37,9 @@ namespace cave
 		void SetProgram(uint32_t program);
 		GLFWwindow* const GetWindow() const;
 
+		uint32_t GetWidth() const;
+		uint32_t GetHeight() const;
+
 		void Present() override;
 	private:
 		static void errorCallback(int32_t errorCode, const char* description);

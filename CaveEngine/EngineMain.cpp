@@ -82,29 +82,47 @@ int main(int32_t argc, char** argv)
 	// Create a window.
 	cave::eResult result = main->Init();
 
+	// 13. Set up Vertices and Indices ---------------------------------------------------------------------------------------------
+	cave::VertexT vertices[] = {
+		cave::VertexT(-1.0f,  1.0f, 0.5f,	0.0f, 0.0f),	// top left
+		cave::VertexT( 1.0f,  1.0f, 0.5f,	1.0f, 0.0f),	// top right
+		cave::VertexT( 1.0f, -1.0f, 0.5f,	1.0f, 1.0f),	// bottom right
+		cave::VertexT(-1.0f, -1.0f, 0.5f,	0.0f, 1.0f),	// bottom left
+	};
+
+	uint8_t indices[] = {
+		0u, 1u, 2u,
+		2u, 3u, 0u,
+	};
+
+	cave::VertexT vertices2[] = {
+		cave::VertexT(-0.25f,  0.25f, 0.5f,	0.0f, 0.0f),	// top left
+		cave::VertexT( 0.25f,  0.25f, 0.5f,	1.0f, 0.0f),	// top right
+		cave::VertexT( 0.25f, -0.25f, 0.5f,	1.0f, 1.0f),	// bottom right
+		cave::VertexT(-0.25f, -0.25f, 0.5f,	0.0f, 1.0f),	// bottom left
+	};
+
+	uint8_t indices2[] = {
+		0u, 1u, 2u,
+		2u, 3u, 0u,
+	};
+
+	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of Float3: %u, size of Float2: %u", sizeof(cave::Float3), sizeof(cave::Float2));
+	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of Vertex: %u, size of VertexT: %u", sizeof(cave::Vertex), sizeof(cave::VertexT));
+	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of vertices: %u, size of indices: %u", sizeof(vertices), sizeof(indices));
+	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of float: %u, size of uint32_t: %u", sizeof(float), sizeof(uint32_t));
+
+	cave::DrawableObject* object = new cave::DrawableObject(4u, std::move(vertices), 6u, std::move(indices), "Graphics/Resource/8471.png");
+	cave::DrawableObject* object2 = new cave::DrawableObject(4u, std::move(vertices2), 6u, std::move(indices2), "Graphics/Resource/orange_mushroom.png");
+	cave::Shader* shader = new cave::Shader("sprite.vert", "sprite.frag");
+
+	cave::Renderer* renderer = main->GetRenderer();
+	renderer->AddShader(std::move(shader));
+	renderer->AddDrawableObject(std::move(object));
+	renderer->AddDrawableObject(std::move(object2));
+
 	if (result == cave::eResult::CAVE_OK)
 	{
-		// 13. Set up Vertices and Indices ---------------------------------------------------------------------------------------------
-		const float tempVertices[] = {
-			-1.0f,  1.0f, 0.5f, 0.0f, 0.0f,	// top left
-			 1.0f,  1.0f, 0.5f, 1.0f, 0.0f,	// top right
-			 1.0f, -1.0f, 0.5f, 1.0f, 1.0f,	// bottom right
-			-1.0f, -1.0f, 0.5f, 0.0f, 1.0f,	// bottom left
-		};
-
-		float* vertices = new float[20];
-		for (uint32_t i = 0; i < 20u; ++i)
-		{
-			vertices[i] = tempVertices[i];
-		}
-
-		uint8_t indices[] = {
-			0u, 1u, 2u,
-			2u, 3u, 0u,
-		};
-		cave::DrawableObject* object = new cave::DrawableObject(4u, 5u, std::move(vertices), 6u, std::move(indices));
-
-		main->AddDrawableObject(std::move(object));
 		//// Go full-screen.
 		//deviceResources->GoFullScreen();
 

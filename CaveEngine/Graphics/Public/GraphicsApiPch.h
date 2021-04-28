@@ -31,6 +31,9 @@
 	#define GLFW_INCLUDE_NONE
 	#include "GL/gl3w.h"
 	#include "Glfw.h"
+	#include "glm/glm.hpp"
+	#include "glm/gtc/matrix_transform.hpp"
+	#include "glm/gtc/type_ptr.hpp"
 
 	#define BUFFER_OFFSET(a) (reinterpret_cast<void*>(a))
 #elif defined(__WIN32__)
