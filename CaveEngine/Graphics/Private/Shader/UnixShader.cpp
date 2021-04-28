@@ -3,6 +3,8 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <filesystem>
+
 #include "GraphicsApiPch.h"
 
 #include "Shader/UnixShader.h"
@@ -18,22 +20,16 @@ namespace cave
 	eResult UnixShader::Compile()
 	{
 		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
-		size_t projectDirLength = strlen(PROJECT_DIR);
-		size_t shaderFilePathLength = strlen("/CaveEngine/Graphics/Shader/");
-		size_t vertexShaderFileNameLength = strlen(mVertexShaderFilePath);
-		size_t fragmentShaderFileNameLength = strlen(mFragmentShaderFilePath);
-		char vertexShaderFile[projectDirLength + shaderFilePathLength + vertexShaderFileNameLength + 1] = { '\0', };
-		char fragmentShaderFile[projectDirLength + shaderFilePathLength + fragmentShaderFileNameLength + 1] = { '\0', };
-		strncpy(vertexShaderFile, PROJECT_DIR, projectDirLength);
-		strncat(vertexShaderFile, "/CaveEngine/Graphics/Shader/", shaderFilePathLength);
-		strncat(vertexShaderFile, mVertexShaderFilePath, vertexShaderFileNameLength);
-		strncpy(fragmentShaderFile, PROJECT_DIR, projectDirLength);
-		strncat(fragmentShaderFile, "/CaveEngine/Graphics/Shader/", shaderFilePathLength);
-		strncat(fragmentShaderFile, mFragmentShaderFilePath, fragmentShaderFileNameLength);
+		std::filesystem::path vertexShaderPath = PROJECT_DIR;
+		vertexShaderPath += "/CaveEngine/Graphics/Shader/";
+		vertexShaderPath += mVertexShaderFilePath;
+		std::filesystem::path fragmentShaderPath = PROJECT_DIR;
+		fragmentShaderPath += "/CaveEngine/Graphics/Shader/";
+		fragmentShaderPath += mFragmentShaderFilePath;
 		
 		ShaderInfo shaders[] = {
-			{ GL_VERTEX_SHADER, vertexShaderFile },
-			{ GL_FRAGMENT_SHADER, fragmentShaderFile },
+			{ GL_VERTEX_SHADER, vertexShaderPath.c_str()},
+			{ GL_FRAGMENT_SHADER, fragmentShaderPath.c_str() },
 			{ GL_NONE, nullptr }
 		};
 
