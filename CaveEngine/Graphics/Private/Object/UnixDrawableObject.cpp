@@ -10,36 +10,33 @@
 #ifdef __UNIX__
 namespace cave
 {
-	constexpr UnixDrawableObject::UnixDrawableObject(const UnixDrawableObject& other)
-		: GenericDrawableObject(other)
+	UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
+		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices))
 	{
-		if (this != &other)
-		{
-
-		}
 	}
 
-	constexpr UnixDrawableObject::UnixDrawableObject(const UnixDrawableObject&& other)
-		: GenericDrawableObject(other)
+	UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
+		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices), textureFilePath)
 	{
-		if (this != &other)
-		{
-
-		}
 	}
 
-	constexpr UnixDrawableObject& UnixDrawableObject::operator=(const UnixDrawableObject& other)
+	UnixDrawableObject::UnixDrawableObject(const UnixDrawableObject&& other)
+		: GenericDrawableObject(std::move(other))
 	{
-		return *this;
 	}
+
 
 	constexpr UnixDrawableObject& UnixDrawableObject::operator=(const UnixDrawableObject&& other)
 	{
-		return *this;
-	}
+		if (this != &other)
+		{
+			GenericDrawableObject::operator=(other);
+			mVertexArrayObject = other.mVertexArrayObject;
+			memcpy(mBuffers, other.mBuffers, BUFFER_COUNT);
+			mProgram = other.mProgram;
+		}
 
-	UnixDrawableObject::~UnixDrawableObject()
-	{
+		return *this;
 	}
 
 	eResult UnixDrawableObject::Init(uint32_t program)

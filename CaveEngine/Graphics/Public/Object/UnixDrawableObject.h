@@ -17,13 +17,13 @@ namespace cave
 	{
 	public:
 		UnixDrawableObject() = delete;
-		constexpr UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
-		constexpr UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
-		constexpr UnixDrawableObject(const UnixDrawableObject& object);
-		constexpr UnixDrawableObject(const UnixDrawableObject&& object);
-		constexpr UnixDrawableObject& operator=(const UnixDrawableObject& object);
+		UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
+		UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
+		UnixDrawableObject(const UnixDrawableObject& object) = default;
+		UnixDrawableObject(const UnixDrawableObject&& object);
+		constexpr UnixDrawableObject& operator=(const UnixDrawableObject& object) = default;
 		constexpr UnixDrawableObject& operator=(const UnixDrawableObject&& object);
-		~UnixDrawableObject();
+		~UnixDrawableObject() = default;
 
 		eResult Init(uint32_t program) override;
 		void Destroy() override;
@@ -41,16 +41,6 @@ namespace cave
 		uint32_t mBuffers[BUFFER_COUNT] = { 0u, };
 		uint32_t mProgram = 0u;
 	};
-
-	constexpr UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
-		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices))
-	{
-	}
-
-	constexpr UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
-		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices), textureFilePath)
-	{
-	}
 
 	typedef UnixDrawableObject DrawableObject;
 } // namespace cave
