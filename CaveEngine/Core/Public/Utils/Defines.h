@@ -43,7 +43,7 @@
 
 #ifdef CAVE_BUILD_DEBUG
 	#ifdef __UNIX__
-		#define FORCEINLINE __attribute__((always_inline))
+		#define FORCEINLINE __attribute__((always_inline)) inline
 	#else
 		#define FORCEINLINE __forceinline
 	#endif

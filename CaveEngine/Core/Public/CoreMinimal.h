@@ -38,6 +38,7 @@
 //#include "Misc/Exec.h"
 //#include "HAL/MemoryBase.h"
 //#include "HAL/UnrealMemory.h"
+#include "Memory/MemoryPool.h"
 //#include "Templates/IsArithmetic.h"
 //#include "Templates/AndOrNot.h"
 //#include "Templates/AreTypesEqual.h"

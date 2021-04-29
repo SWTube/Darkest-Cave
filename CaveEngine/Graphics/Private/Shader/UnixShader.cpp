@@ -79,7 +79,7 @@ namespace cave
 
 			entry->shader = shader;
 
-			const GLchar* source = readShader(entry->filename);
+			const char* source = readShader(entry->filename);
 			if (source == nullptr)
 			{
 				for (entry = shaders; entry->type != GL_NONE; ++entry)
@@ -96,15 +96,15 @@ namespace cave
 
 			glCompileShader(shader);
 
-			GLint compiled;
+			int32_t compiled;
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 			if (!compiled)
 			{
 #ifdef __Debug__
-			GLsizei len;
+			uint32_t len;
 			glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &len );
 
-			GLchar* log = new GLchar[len+1];
+			char* log = new char[len+1];
 			glGetShaderInfoLog( shader, len, &len, log );
 			std::cerr << "Shader compilation failed: " << log << std::endl;
 			LOGAF(eLogChannel::GRAPHICS, std::cout, "%s Compilation Failed: %s", entry->filename, log);
@@ -121,15 +121,15 @@ namespace cave
 
 		glLinkProgram(program);
 
-		GLint linked;
+		int32_t linked;
 		glGetProgramiv(program, GL_LINK_STATUS, &linked);
 		if (!linked)
 		{
 #ifdef __Debug__
-			GLsizei len;
+			uint32_t len;
 			glGetProgramiv( program, GL_INFO_LOG_LENGTH, &len );
 
-			GLchar* log = new GLchar[len+1];
+			char* log = new char[len + 1];
 			glGetProgramInfoLog( program, len, &len, log );
 			LOGAF(eLogChannel::GRAPHICS, std::cout, "Shader Linking Failed: %s", log);
 			delete [] log;
@@ -161,21 +161,24 @@ namespace cave
 #ifdef _DEBUG
 			LOGAF(eLogChannel::GRAPHICS, std::cout, "Unable to open file '%s' ", filename);
 #endif /* DEBUG */
-			return NULL;
+			return nullptr;
 		}
 
 		fseek(infile, 0, SEEK_END);
 		int len = ftell(infile);
 		fseek(infile, 0, SEEK_SET);
 
-		GLchar* source = new GLchar[len + 1];
+		char* source = new char[len + 1];
 
-		fread(source, 1, len, infile);
+		if (fread(source, 1, len, infile) < 1)
+		{
+			return nullptr;
+		}
 		fclose(infile);
 
 		source[len] = 0;
 
-		return const_cast<const GLchar*>(source);
+		return const_cast<const char*>(source);
 	}
 } // namespace cave
 #endif

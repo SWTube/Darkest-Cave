@@ -21,8 +21,8 @@ namespace cave
 		UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
 		UnixDrawableObject(const UnixDrawableObject& object) = default;
 		UnixDrawableObject(const UnixDrawableObject&& object);
-		constexpr UnixDrawableObject& operator=(const UnixDrawableObject& object) = default;
-		constexpr UnixDrawableObject& operator=(const UnixDrawableObject&& object);
+		UnixDrawableObject& operator=(const UnixDrawableObject& object) = default;
+		UnixDrawableObject& operator=(const UnixDrawableObject&& object);
 		~UnixDrawableObject() = default;
 
 		eResult Init(uint32_t program) override;

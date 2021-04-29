@@ -19,8 +19,8 @@ namespace cave
 		GenericDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
 		GenericDrawableObject(const GenericDrawableObject& other);
 		GenericDrawableObject(const GenericDrawableObject&& other);
-		constexpr GenericDrawableObject& operator=(const GenericDrawableObject& other);
-		constexpr GenericDrawableObject& operator=(const GenericDrawableObject&& other);
+		GenericDrawableObject& operator=(const GenericDrawableObject& other);
+		GenericDrawableObject& operator=(const GenericDrawableObject&& other);
 		virtual ~GenericDrawableObject();
 
 #ifdef __WIN32__

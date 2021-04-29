@@ -58,9 +58,6 @@ namespace cave
 		void createPerspective() override;
 
 		void cleanupDevice();
-		int32_t compileShaderFromFile(ShaderInfo* shaders);
-		GLuint loadShaders(ShaderInfo* shaders);
-		const GLchar* readShader(const char* filename);
 
 		static constexpr uint8_t V_POSITION = 0u;
 		static constexpr uint8_t V_TEX_COORD = 1u;

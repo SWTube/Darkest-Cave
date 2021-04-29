@@ -18,6 +18,7 @@
 #include "Utils/Crt.h"
 //#include "HAL/PlatformCrt.h"
 #include "Memory/Memory.h"
+#include "Memory/MemoryPool.h"
 #include "Memory/Allocator.h"
 //#include "GenericPlatform/GenericPlatformMemory.h"
 //#include "HAL/PlatformMemory.h"

@@ -53,7 +53,7 @@ namespace cave
 		}
 	}
 
-	constexpr GenericDrawableObject& GenericDrawableObject::operator=(const GenericDrawableObject& other)
+	GenericDrawableObject& GenericDrawableObject::operator=(const GenericDrawableObject& other)
 	{
 		if (this != &other)
 		{
@@ -84,7 +84,7 @@ namespace cave
 		return *this;
 	}
 
-	constexpr GenericDrawableObject& GenericDrawableObject::operator=(const GenericDrawableObject&& other)
+	GenericDrawableObject& GenericDrawableObject::operator=(const GenericDrawableObject&& other)
 	{
 		if (this != &other)
 		{

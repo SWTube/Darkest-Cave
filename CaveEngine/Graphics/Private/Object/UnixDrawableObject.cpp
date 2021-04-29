@@ -26,7 +26,7 @@ namespace cave
 	}
 
 
-	constexpr UnixDrawableObject& UnixDrawableObject::operator=(const UnixDrawableObject&& other)
+	UnixDrawableObject& UnixDrawableObject::operator=(const UnixDrawableObject&& other)
 	{
 		if (this != &other)
 		{
