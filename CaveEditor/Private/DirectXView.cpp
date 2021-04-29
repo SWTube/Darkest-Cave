@@ -74,7 +74,7 @@ BOOL DirectXView::Frame()
 
 void DirectXView::AddImageFile(WCHAR* filename)
 {
-	m_Graphics->AddBitmap(filename);
+	m_Graphics->AddTexture(filename);
 }
 
 void DirectXView::Shutdown()
@@ -119,7 +119,21 @@ void DirectXView::OnInitialUpdate()
 	// m_Graphics 객체 초기화.
 	m_Graphics->Initialize(width, height, m_hWnd);
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	TCHAR pszPathName[_MAX_PATH];
+	::GetModuleFileName(::AfxGetInstanceHandle(), pszPathName, _MAX_PATH);
+	CString strPathName = pszPathName;
+	int i = strPathName.Find(L"Darkist-Cave");
+	strPathName = strPathName.Left(i) + _T("Darkist-Cave\\CaveEditor\\Resource\\default.bmp");
+	//L"D:\\Desktop\\SW-Project\\Darkist-Cave\\CaveEditor\\Resource\\default.bmp"
+	AddImageFile(T2W(strPathName.GetBuffer(0)));
 }
+
+BOOL DirectXView::DestroyWindow()
+{
+	Shutdown();
+	return CView::DestroyWindow();
+}
+
 
 void DirectXView::OnLButtonDown(UINT nFlags, CPoint point)
 {

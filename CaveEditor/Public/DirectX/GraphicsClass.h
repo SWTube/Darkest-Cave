@@ -29,7 +29,10 @@ public:
 	bool Frame();
 
 	void MoveObject(int index, float posX, float posY);
-	bool AddBitmap(WCHAR* filename, int bitmapWidth = 200 , int bitmapHeight = 200);
+	bool AddBitmap(int bitmapWidth = 200 , int bitmapHeight = 200);
+	bool AddTexture(WCHAR* filename);
+	void DeleteBitmap(int objIndex);
+	void DeleteTexture(int texIndex);
 	void SetBitmapTexture(int objIndex,int texIndex);
 	int GetBitmapTextureIndex(int index);
 	void SetBitmapSize(int objIndex,int width, int height);
@@ -37,6 +40,7 @@ public:
 	void ZoomInScreen();
 	void ZoomOutScreen();
 	void GetObjectPosition(int index, float& x, float& y);
+
 private:
 	GraphicsClass();
 	GraphicsClass(const GraphicsClass&);

@@ -32,10 +32,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void AddTextureFileButton();
+	afx_msg void AddObjectButton();
+	afx_msg void DeleteObjectButton();
+
 	virtual void OnInitialUpdate();
 	void ChangeSelectedObject();
 	void OpenObjectInfoDlg();
 	void ApplyObjectInfo();
+	void AddObject();
 private:
 	CListBox m_listBox1;
 	DirectXView* p_dView = nullptr;

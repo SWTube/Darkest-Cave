@@ -192,6 +192,11 @@ void CCaveEditorApp::SaveCustomState()
 {
 }
 
+void CCaveEditorApp::OnClosingMainFrame(CFrameImpl* pFrameImpl)
+{
+	mView->Shutdown();
+}
+
 // CCaveEditorApp 메시지 처리기
 
 

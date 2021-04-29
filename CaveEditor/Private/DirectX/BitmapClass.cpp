@@ -41,9 +41,10 @@ bool BitmapClass::Initialize(ID3D11Device* device, int screenWidth, int screenHe
 	{
 		return false;
 	}
-
+	
+	return true;
 	// 이 모델의 텍스처를 로드합니다.
-	return LoadTexture(device, textureFilename);	
+	//return LoadTexture(device, textureFilename);	
 }
 
 

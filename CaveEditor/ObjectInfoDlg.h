@@ -30,7 +30,11 @@ private:
 	CComboBox m_textureComboBox;
 
 	HWND p_hwnd;
+
 public:
+	bool isCreateDlg = false;
+
+
 	virtual BOOL OnInitDialog();
 	afx_msg void OnOkButton();
 	CString GetName();

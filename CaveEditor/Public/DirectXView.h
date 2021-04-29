@@ -37,7 +37,7 @@ public:
 	BOOL Frame();
 	void AddImageFile(WCHAR* filename);
 	void Shutdown();
-	void SetSlectedObject(int i) { curSeletedObjectIndex = i; }
+	void SetSelectedObject(int i) { curSeletedObjectIndex = i; }
 
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -47,6 +47,7 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	virtual BOOL DestroyWindow();
 };
 
 

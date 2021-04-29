@@ -208,29 +208,52 @@ void GraphicsClass::MoveObject(int index, float posX, float posY)
 	}
 }
 
-bool GraphicsClass::AddBitmap(WCHAR* filename, int bitmapWidth, int bitmapHeight)
+bool GraphicsClass::AddBitmap(int bitmapWidth, int bitmapHeight)
 {
 	BitmapClass* temp = new BitmapClass;
 
-	if (!temp->Initialize(m_Direct3D->GetDevice(), m_screenWidth, m_screenHeight, filename, bitmapWidth, bitmapHeight)) {
+	if (!temp->Initialize(m_Direct3D->GetDevice(), m_screenWidth, m_screenHeight, 0, bitmapWidth, bitmapHeight)) {
 		return false;
 	}
-
+	temp->SetTextureIndex(0);
 	m_Bitmaps.push_back(temp);
 
+	//TextureClass* tex = new TextureClass;
+	//tex->Initialize(m_Direct3D->GetDevice(), filename);
+
+	//m_Textures.push_back(tex);
+	//temp->SetTextureIndex(m_Textures.size() - 1);
+
+	return true;
+	
+}
+
+bool GraphicsClass::AddTexture(WCHAR* filename)
+{
 	TextureClass* tex = new TextureClass;
 	tex->Initialize(m_Direct3D->GetDevice(), filename);
 
 	m_Textures.push_back(tex);
-	temp->SetTextureIndex(m_Textures.size() - 1);
 	return true;
-	
+}
+
+void GraphicsClass::DeleteBitmap(int objIndex)
+{
+	m_Bitmaps[objIndex]->Shutdown();
+	delete(m_Bitmaps[objIndex]);
+	m_Bitmaps.erase(m_Bitmaps.begin() + objIndex);
+}
+
+void GraphicsClass::DeleteTexture(int texIndex)
+{
+	m_Textures[texIndex]->Shutdown();
+	delete(m_Textures[texIndex]);
+	m_Textures.erase(m_Textures.begin() + texIndex);
 }
 
 void GraphicsClass::SetBitmapTexture(int objIndex, int texIndex)
 {
 	m_Bitmaps[objIndex]->SetTextureIndex(texIndex);
-	m_Bitmaps[objIndex]->SetTexture(m_Textures[texIndex]);
 }
 
 int GraphicsClass::GetBitmapTextureIndex(int index)
@@ -270,7 +293,7 @@ void GraphicsClass::GetObjectPosition(int index, float& x, float& y)
 bool GraphicsClass::Render(float rotation)
 {
 	// 씬을 그리기 위해 버퍼를 지웁니다
-	m_Direct3D->BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
+	m_Direct3D->BeginScene(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// 카메라의 위치에 따라 뷰 행렬을 생성합니다
 	m_Camera->Render();
@@ -282,33 +305,33 @@ bool GraphicsClass::Render(float rotation)
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
 	m_Direct3D->GetOrthoMatrix(orthoMatrix);
 
-	// 모델 버텍스와 인덱스 버퍼를 그래픽 파이프 라인에 배치하여 드로잉을 준비합니다.
-	m_Model->Render(m_Direct3D->GetDeviceContext());
+	//// 모델 버텍스와 인덱스 버퍼를 그래픽 파이프 라인에 배치하여 드로잉을 준비합니다.
+	//m_Model->Render(m_Direct3D->GetDeviceContext());
 
-	// 색상 쉐이더를 사용하여 모델을 렌더링합니다.
-	if (!m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix))
-	{
-		return false;
-	}
+	//// 색상 쉐이더를 사용하여 모델을 렌더링합니다.
+	//if (!m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix))
+	//{
+	//	return false;
+	//}
 
-	//m_Direct3D->TurnZBufferOff();
+	////m_Direct3D->TurnZBufferOff();
 
-	m_Squere->Render(m_Direct3D->GetDeviceContext(), 50, 50);
+	//m_Squere->Render(m_Direct3D->GetDeviceContext(), 50, 50);
 
-	// 텍스처 쉐이더로 비트 맵을 렌더링합니다.	
-	if (!m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Squere->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix))
-	{
-		return false;
-	}
+	//// 텍스처 쉐이더로 비트 맵을 렌더링합니다.	
+	//if (!m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Squere->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix))
+	//{
+	//	return false;
+	//}
 
 	for (BitmapClass* bitmap : m_Bitmaps) {
 		bitmap->Render(m_Direct3D->GetDeviceContext());
-		if (bitmap->HasTexture()) {
-			if (!m_TextureShader->Render(m_Direct3D->GetDeviceContext(), bitmap->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, bitmap->GetTexture()))
+	
+			if (!m_TextureShader->Render(m_Direct3D->GetDeviceContext(), bitmap->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, m_Textures[bitmap->GetTextureIndex()]->GetTexture() ))
 			{
 				return false;
 			}
-		}
+		
 
 	}
 

@@ -31,8 +31,8 @@ public:
 	virtual void PreLoadState();
 	virtual void LoadCustomState();
 	virtual void SaveCustomState();
+	virtual void OnClosingMainFrame(CFrameImpl* pFrameImpl);
 
-	DirectXView* GetDirectXView() { return mView; }
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
 	virtual BOOL OnIdle(LONG lCount);

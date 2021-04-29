@@ -26,8 +26,6 @@ public:
 	void Move(float x, float y);
 	float GetPosX() const { return m_posX; }
 	float GetPosY() const { return m_posY; }
-	void SetTexture(TextureClass* texture) { m_Texture = texture;}
-	bool HasTexture() { return (m_Texture != nullptr); }
 	void SetTextureIndex(int i) { m_textureIndex = i; }
 	int GetTextureIndex() { return m_textureIndex; }
 	int GetWidth() { return m_bitmapWidth; }
