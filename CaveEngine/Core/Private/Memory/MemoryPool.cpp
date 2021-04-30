@@ -61,7 +61,6 @@ namespace cave
 
 	void* MemoryPool::Allocate(size_t size)
 	{
-		static size_t counter = 0ul;
 		size_t memorySize = GetUpperPowerOfTwo(size);
 		size_t memoryIndex = GetExponent(memorySize);
 
@@ -79,7 +78,7 @@ namespace cave
 			mDataBlocks[memoryIndex] = new DataBlock(memorySize, 1ul);
 		}
 
-		// LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "%u memorySize: %u, Datablock[%u]: %u / %u", counter, memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
+		// LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "memorySize: %u, Datablock[%u]: %u / %u", memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
 
 		// If Data Block is empty, allocate new memory and push back
 		// If user requires larger memory than current free memory, return corresponding pointer but don't store
@@ -92,13 +91,11 @@ namespace cave
 				mFreeSize -= memorySize;
 				mMaxBlockSize += memorySize;
 			}
-			++counter;
 			return newPointer;
 		}
 
 		// Memory Pool can give pointer stored in corresponding Data Block
 		mFreeSize -= memorySize;
-		++counter;
 		return mDataBlocks[memoryIndex]->Get();
 	}
 

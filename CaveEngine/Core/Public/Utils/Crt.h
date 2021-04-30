@@ -14,6 +14,5 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <string>
 #include <time.h>
 #include <wchar.h>

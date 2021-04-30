@@ -38,7 +38,7 @@ namespace cave
 		std::vector<DataBlock*> mDataBlocks;
 	};
 
-	FORCEINLINE size_t GetUpperPowerOfTwo(size_t number)
+	FORCEINLINE constexpr size_t GetUpperPowerOfTwo(size_t number)
 	{
 		if (number && !(number & (number - 1ul)))
 		{
@@ -53,7 +53,7 @@ namespace cave
 		return 1 << count;
 	}
 
-	FORCEINLINE size_t GetExponent(size_t number)
+	FORCEINLINE constexpr size_t GetExponent(size_t number)
 	{
 		if (!number || (number & (number - 1)))
 		{
@@ -68,7 +68,7 @@ namespace cave
 		return exponent;
 	}
 
-	FORCEINLINE size_t GetPowerOfTwo(size_t exponent)
+	FORCEINLINE constexpr size_t GetPowerOfTwo(size_t exponent)
 	{
 		size_t result = 1ul;
 

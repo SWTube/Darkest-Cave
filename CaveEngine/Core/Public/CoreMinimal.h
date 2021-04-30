@@ -72,7 +72,7 @@
 //#include "GenericPlatform/GenericPlatformStricmp.h"
 //#include "GenericPlatform/GenericPlatformString.h"
 //#include "HAL/PlatformString.h"
-#include <string>
+#include "String/String.h"
 //#include "Misc/CString.h"
 //#include "Misc/Crc.h"
 //#include "Math/UnrealMathUtility.h"

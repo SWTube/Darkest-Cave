@@ -8,6 +8,7 @@
 #include <cstdarg>
 
 #include "CoreTypes.h"
+#include "String/String.h"
 
 #if defined(__WIN32__)
 	import Log;
