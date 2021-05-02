@@ -38,6 +38,11 @@ namespace cave
 			return mCreationTimePoint;
 		}
 
+		Second GetCreationTime() const noexcept
+		{
+			return FlatformTimer::GetTimeDiffer(FlatformTimer::GetCreationTimePoint(), mCreationTimePoint);
+		}
+
 		Second GetTimeSinceCreation() const noexcept
 		{
 			return FlatformTimer::GetTimeDiffer(mCreationTimePoint, FlatformTimer::GetTimePoint());
