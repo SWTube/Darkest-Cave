@@ -3,13 +3,11 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-module;
-
-#include <basetsd.h>
-
-import FlatformTimer;
+#include <cassert>
 
 export module Timer;
+
+import FlatformTimer;
 
 namespace cave
 {
@@ -17,40 +15,66 @@ namespace cave
 	{
 	public:
 		using TimePoint = FlatformTimer::TimePoint;
+		using Second = float;
 
-		Timer()
+		explicit Timer() noexcept
 		{
 			mCreationTimePoint = FlatformTimer::GetTimePoint();
 			mTimePoint = mCreationTimePoint;
+			mLifeSpan = 0;
 		}
 
-		float GetDeltaTime()
+		Second GetDeltaTime() noexcept
 		{
 			auto newTimePoint = FlatformTimer::GetTimePoint();
 			auto deltaTime = FlatformTimer::GetTimeDiffer(mTimePoint, newTimePoint);
-			mTimePoint = newTimePoint;
+			SetTimePoint(newTimePoint);
 
 			return deltaTime;
 		}
 
-		float GetCreationTime() const
+		TimePoint GetCreationTimePoint() const noexcept
 		{
-			return FlatformTimer::GetTimeDiffer(FlatformTimer::GetCreationTimePoint(), mCreationTimePoint);
+			return mCreationTimePoint;
 		}
 
-		FlatformTimer::TimePoint GetTimePoint() const
+		Second GetTimeSinceCreation() const noexcept
+		{
+			return FlatformTimer::GetTimeDiffer(mCreationTimePoint, FlatformTimer::GetTimePoint());
+		}
+
+		void SetTimePoint(TimePoint newTimePoint) noexcept
+		{
+			assert(newTimePoint > mTimePoint);
+			mTimePoint = newTimePoint;
+		}
+
+		TimePoint GetTimePoint() const noexcept
 		{
 			return mTimePoint;
 		}
 
-		float GetLifeSpan()
+		void SetLifeSpan(Second newLifeSpan) noexcept
 		{
-			return FlatformTimer::GetTimeDiffer(mCreationTimePoint);
+			assert(newLifeSpan > 0.f && mLifeSpan == 0);
+			mLifeSpan = newLifeSpan;
+		}
+
+		Second GetLifeSpan() const noexcept
+		{
+			return mLifeSpan;
+		}
+
+		bool IsLifeExpired() const noexcept
+		{
+			return mLifeSpan < GetTimeSinceCreation() && mLifeSpan != 0.f ? true : false;
 		}
 
 	private:
-		FlatformTimer::TimePoint mCreationTimePoint;
+		TimePoint mCreationTimePoint;
 
-		FlatformTimer::TimePoint mTimePoint;
+		TimePoint mTimePoint;
+
+		Second mLifeSpan;
 	};
 }

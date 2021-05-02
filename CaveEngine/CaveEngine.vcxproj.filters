@@ -70,6 +70,9 @@
     <Filter Include="Source Files\Gameplay\Component">
       <UniqueIdentifier>{ccbefcd7-82e0-405d-9e8e-d056e85dbf9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Gameplay\Object">
+      <UniqueIdentifier>{e16925c7-671b-411b-913b-36ff2013f1de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -163,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Component\Component.ixx">
       <Filter>Source Files\Gameplay\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Actor.ixx">
+      <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -223,6 +223,7 @@
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Gameplay\Private\Component\Component.ixx" />
+    <ClCompile Include="Gameplay\Private\Object\Actor.ixx" />
     <ClCompile Include="Gameplay\Private\Time\FlatformTimer.ixx" />
     <ClCompile Include="Gameplay\Private\Time\Timer.ixx" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
