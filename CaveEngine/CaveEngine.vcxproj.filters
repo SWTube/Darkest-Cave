@@ -67,6 +67,9 @@
     <Filter Include="Header Files\Core\Math">
       <UniqueIdentifier>{50c5228a-3fc4-4a1f-99d6-7fb27969a140}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Gameplay\Component">
+      <UniqueIdentifier>{ccbefcd7-82e0-405d-9e8e-d056e85dbf9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Time\Timer.ixx">
       <Filter>Source Files\Gameplay\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Component\Component.ixx">
+      <Filter>Source Files\Gameplay\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

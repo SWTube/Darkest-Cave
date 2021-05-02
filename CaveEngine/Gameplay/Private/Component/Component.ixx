@@ -5,30 +5,35 @@ namespace cave
 	export class Component
 	{
 	public:
-		enum class eType
+		enum class eType : unsigned char
 		{
 			NONE,
-			POSSESSOR,
 			INPUT,
 			PHTSICS,
 			AUDIO,
 			VECTOR,
-			EVENT,
 		};
 
-		explicit Component() :
+		explicit Component() noexcept :
 			mType(eType::NONE)
 		{
 
 		}
 
-		explicit Component(eType newType) :
+		explicit Component(eType newType) noexcept :
 			mType(newType)
 		{
 
 		}
 
-		__forceinline eType GetType()
+		Component(const Component& other) = delete;
+		Component(Component&& other) = delete;
+
+		Component& operator=(const Component& other) = delete;
+		Component& operator=(Component&& other) = delete;
+
+
+		__forceinline eType GetType() const noexcept
 		{
 			return mType;
 		}
