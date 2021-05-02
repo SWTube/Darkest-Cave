@@ -206,6 +206,7 @@
     <ClInclude Include="Core\Public\CoreMinimal.h" />
     <ClInclude Include="Core\Public\CoreTypes.h" />
     <ClInclude Include="Core\Public\Debug\LogManager.h" />
+    <ClInclude Include="Core\Public\Math\Vector2.h" />
     <ClInclude Include="Core\Public\Memory\Allocator.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
@@ -221,6 +222,8 @@
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="EngineMain.cpp" />
+    <ClCompile Include="Gameplay\Private\Time\FlatformTimer.ixx" />
+    <ClCompile Include="Gameplay\Private\Time\Timer.ixx" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
