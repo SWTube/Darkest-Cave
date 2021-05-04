@@ -88,7 +88,7 @@
 // #include "Containers/StringConv.h"
 // #include "UObject/UnrealNames.h"
 // #include "Templates/SharedPointer.h"
-// #include "CoreGlobals.h"
+#include "CoreGlobals.h"
 // #include "HAL/PlatformTLS.h"
 // #include "GenericPlatform/GenericPlatformTLS.h"
 // #include "Delegates/Delegate.h"

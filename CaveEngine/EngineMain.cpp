@@ -85,38 +85,7 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	cave::String str = "string";
-    const char* cptr = "C-string";
-    const char carr[] = "Two and one";
- 
-    cave::String output;
- 
-    // 1) Append a char 3 times. 
-    // Notice, this is the only overload accepting chars.
-    output.Append(3ul, '*');
-    std::cout << "1) " << output << "\n";
- 
-    //  2) Append a whole string
-    output.Append(str);
-    std::cout << "2) " << output << "\n";
- 
-    // 3) Append part of a string (last 3 letters, in this case)
-    output.Append(str, 3, 3);
-    std::cout << "3) " << output << "\n";
- 
-    // 4) Append part of a C-string
-    // Notice, because `append` returns *this, we can chain calls together
-    output.Append(1, ' ');
-	output.Append(carr, 4);
-    std::cout << "4) " << output << "\n";
- 
-    // 5) Append a whole C-string
-    output.Append(cptr);
-    std::cout << "5) " << output << "\n";
- 
-	// cave::MemoryPool pool(MEMORY_POOL_SIZE);
-	// MemoryTest1<100ul>(pool);
-	// MemoryTest2<100ul>(pool);
+	cave::StringTest::Test();
 	
 	// Cleanup is handled in destructors.
     return 0;

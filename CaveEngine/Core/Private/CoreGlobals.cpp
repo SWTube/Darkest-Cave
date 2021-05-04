@@ -3,15 +3,9 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#pragma once
-
-#include "CoreTypes.h"
-
-#include "Memory/MemoryPool.h"
+#include "CoreGlobals.h"
 
 namespace cave
 {
-	constexpr size_t CORE_MEMORY_POOL_SIZE = 1048576;
-
-	extern MemoryPool gCoreMemoryPool;
-} // namespace cave
+	MemoryPool gCoreMemoryPool(CORE_MEMORY_POOL_SIZE);
+}

@@ -30,9 +30,9 @@ namespace cave
 	 * @date 2021-04-30
 	 * @version 0.0.1
 	 * @todo check if cave::String satisfies the requirements of 
-	 * 			<a href="https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer">AllocatorAwareContainer</a>, 
-	 * 			<a href="https://en.cppreference.com/w/cpp/named_req/SequenceContainer">SequenceContainer</a> and 
-	 * 			<a href="https://en.cppreference.com/w/cpp/named_req/ContiguousContainer">ContiguousContainer</a>
+	 * 			[AllocatorAwareContainer](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer),
+	 * 			[SequenceContainer](https://en.cppreference.com/w/cpp/named_req/SequenceContainer)</a> and 
+	 * 			[ContiguousContainer](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer)</a>
 	 *
 	 */
 	class String final
@@ -51,11 +51,13 @@ namespace cave
 		constexpr String(const char* first, const char* last, MemoryPool& pool = gCoreMemoryPool);
 		constexpr String(const String& other);
 		constexpr String(const String& other, MemoryPool& pool);
-		constexpr String(const String&& other) noexcept;
-		constexpr String(const String&& other, MemoryPool& pool);
+		constexpr String(String&& other) noexcept;
+		constexpr String(String&& other, MemoryPool& pool);
 		virtual ~String();
-		String& operator=(const char* s);
 		String& operator=(const String& str);
+		String& operator=(String&& str);
+		String& operator=(const char* s);
+		String& operator=(char ch);
 		constexpr const MemoryPool& GetMemoryPool() const;
 
 		// Element access
@@ -70,6 +72,7 @@ namespace cave
 		// Capacity
 		[[nodiscard]] constexpr bool IsEmpty() const noexcept;
 		constexpr size_t GetLength() const noexcept;
+		constexpr void SetCapacity(size_t newCapacity);
 		constexpr size_t GetCapacity() const noexcept;
 		constexpr void Shrink();
 
@@ -89,23 +92,83 @@ namespace cave
 		constexpr void Append(const char* s, size_t count);
 		constexpr void Append(const char* s);
 		String& operator+=(const String& str);
+		String& operator+=(char ch);
 		String& operator+=(const char* s);
-		String operator+(const String& rhs) const;
-		bool operator==(const String& rhs) const;		
+		constexpr bool StartsWith(const String& str) const noexcept;
+		constexpr bool StartsWith(const String&& str) const noexcept;
+		constexpr bool StartsWith(char c) const noexcept;
+		constexpr bool StartsWith(const char* s) const;
+		constexpr bool EndsWith(const String& str) const noexcept;
+		constexpr bool EndsWith(const String&& str) const noexcept;
+		constexpr bool EndsWith(char c) const noexcept;
+		constexpr bool EndsWith(const char* s) const;
+		constexpr bool Contains(const String& str) const noexcept;
+		constexpr bool Contains(const String&& str) const noexcept;
+		constexpr bool Contains(char c) const noexcept;
+		constexpr bool Contains(const char* s) const;
+		constexpr String& Replace(size_t pos, size_t count, const String& str);
+		constexpr String& Replace(size_t pos, size_t count, const String& str, size_t pos2, size_t count2 = NPOS);
+		constexpr String& Replace(size_t pos, size_t count, const char* cStr, size_t count2);
+		constexpr String& Replace(size_t pos, size_t count, const char* cStr);
+		constexpr String& Replace(size_t pos, size_t count, size_t count2, char ch);
+		String GetSubstring(size_t pos = 0ul, size_t count = NPOS) const;
+		constexpr void Resize(size_t count);
+		constexpr void Resize(size_t count, char ch);	
 
 		// Search
-		int32_t IndexOf(const char* s);
-		int32_t LastIndexOf(const char* s);
+		constexpr size_t GetIndexOf(const String& str, size_t pos = 0ul) const noexcept;
+		constexpr size_t GetIndexOf(const char* s, size_t pos, size_t count) const;
+		constexpr size_t GetIndexOf(const char* s, size_t pos = 0ul) const;
+		constexpr size_t GetIndexOf(char ch, size_t pos = 0ul) const;
+		constexpr size_t GetLastIndexOf(const String& str, size_t pos = NPOS) const noexcept;
+		constexpr size_t GetLastIndexOf(const char* s, size_t pos, size_t count) const;
+		constexpr size_t GetLastIndexOf(const char* s, size_t pos = NPOS) const;
+		constexpr size_t GetLastIndexOf(char ch, size_t pos = NPOS) const;
 		void Interleave(const char* s);
+
+		// Operators
+		String operator+(const String& rhs) const;
+		bool operator==(const String& rhs) const;
 
 		// Constants
 		static constexpr size_t NPOS = -1;
+		static constexpr size_t ALIGNED_BYTE = 16ul;
 
 	private:
-		static constexpr size_t ALIGNED_BYTE = 8ul;
 		MemoryPool* mPool = &gCoreMemoryPool;
 		size_t mLength = 0ul;
 		size_t mCapacity = 0ul;
 		char* mString = nullptr;
 	};
+
+#ifdef CAVE_BUILD_DEBUG
+	namespace StringTest
+	{
+		void Test();
+		void Constructor();
+		void AssignmentOperator();
+		void SubscriptOperator();
+		void GetFront();
+		void GetBack();
+		void GetCString();
+		void IsEmpty();
+		void GetSize();
+		void SetCapacity();
+		void GetCapacity();
+		void Shrink();
+		void Clear();
+		void InsertAt();
+		void RemoveAt();
+		void Append();
+		void AdditionCompoundAssignmentOperator();
+		void StartsWith();
+		void EndsWith();
+		void Contains();
+		void Replace();
+		void GetSubstring();
+		void Resize();
+		void GetIndexOf();
+		void GetLastIndexOf();
+	}
+#endif
 } // namespace cave

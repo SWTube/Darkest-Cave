@@ -176,4 +176,13 @@ namespace cave
 			}
 		}
 	}
+
+	void MemoryPool::PrintDataBlockByByte(size_t byte) const
+	{
+		size_t memorySize = GetUpperPowerOfTwo(byte);
+		size_t memoryIndex = GetExponent(memorySize);
+
+		// mDataBlocks[memoryIndex]->PrintFreedNodes();
+		mDataBlocks[memoryIndex]->PrintAllocatedNodes();
+	}
 } // namespace neople

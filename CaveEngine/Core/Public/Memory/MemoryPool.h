@@ -29,6 +29,7 @@ namespace cave
 		size_t GetMaxNumDataBlocks() const;
 		size_t GetPoolSize() const;
 		void PrintPoolStatus(std::ostream& os) const;
+		void PrintDataBlockByByte(size_t byte) const;
 	private:
 		size_t mPoolSize;
 		size_t mFreeSize;
