@@ -217,6 +217,7 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Private\Containers\List.ixx" />
     <ClCompile Include="Core\Private\Debug\LogManager.cpp" />
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
