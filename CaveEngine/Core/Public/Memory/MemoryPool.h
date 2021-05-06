@@ -24,7 +24,7 @@ namespace cave
 
 		void* Allocate(size_t size);
 		void Deallocate(void* item, size_t size);
-		size_t GetFreeMemorySize() const;
+		constexpr size_t GetFreeMemorySize() const;
 		size_t GetCurrentStorage() const;
 		size_t GetMaxNumDataBlocks() const;
 		size_t GetPoolSize() const;
@@ -38,6 +38,11 @@ namespace cave
 		size_t mMaxNumDataBlocks;
 		std::vector<DataBlock*> mDataBlocks;
 	};
+
+	constexpr size_t MemoryPool::GetFreeMemorySize() const
+	{
+		return mFreeSize;
+	}
 
 	FORCEINLINE constexpr size_t GetUpperPowerOfTwo(size_t number)
 	{

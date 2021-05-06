@@ -38,8 +38,48 @@ namespace cave
 	class String final
 	{
 		// Non-member functions
+		friend String operator+(const String& lhs, const String& rhs);
+		friend String operator+(const String& lhs, const char* rhs);
+		friend String operator+(const String& lhs, char rhs);
+		friend String operator+(const char* lhs, const String& rhs);
+		friend String operator+(char lhs, const String& rhs);
+		friend String operator+(String&& lhs, String&& rhs);
+		friend String operator+(String&& lhs, const String& rhs);
+		friend String operator+(String&& lhs, const char* rhs);
+		friend String operator+(String&& lhs, char rhs);
+		friend String operator+(const String& lhs, String&& rhs);
+		friend String operator+(const char* lhs, String&& rhs);
+		friend String operator+(char lhs, String&& rhs);
+		friend constexpr bool operator==(const String& lhs, const String& rhs) noexcept;
+		friend constexpr bool operator!=(const String& lhs, const String& rhs) noexcept;
+		friend constexpr bool operator==(const String& lhs, const char* rhs) noexcept;
+		friend constexpr bool operator!=(const String& lhs, const char* rhs) noexcept;
 			// input / output
 		friend std::ostream& operator<<(std::ostream& os, const String& str);
+		friend std::istream& operator>>(std::istream& is, String& str);
+		friend std::istream& GetLine(std::istream& input, String& str, char delim);
+		friend std::istream& GetLine(std::istream&& input, String& str, char delim);
+		friend std::istream& GetLine(std::istream& input, String& str);
+		friend std::istream& GetLine(std::istream&& input, String& str);
+			// numeric conversions
+		friend int32_t StringToInt32(const String& str, size_t* pos, int32_t base);
+		friend int32_t StringToInt32(const String& str, size_t* pos);
+		friend int32_t StringToInt32(const String& str);
+		friend int64_t StringToInt64(const String& str, size_t* pos, int32_t base);
+		friend int64_t StringToInt64(const String& str, size_t* pos);
+		friend int64_t StringToInt64(const String& str);
+		friend uint32_t StringToUint32(const String& str, size_t* pos, int32_t base);
+		friend uint32_t StringToUint32(const String& str, size_t* pos);
+		friend uint32_t StringToUint32(const String& str);
+		friend uint64_t StringToUint64(const String& str, size_t* pos, int32_t base);
+		friend uint64_t StringToUint64(const String& str, size_t* pos);
+		friend uint64_t StringToUint64(const String& str);
+		friend float StringToFloat(const String& str, size_t* pos);
+		friend float StringToFloat(const String& str);
+		friend double StringToDouble(const String& str, size_t* pos);
+		friend double StringToDouble(const String& str);
+		friend long double StringToLongDouble(const String& str, size_t* pos);
+		friend long double StringToLongDouble(const String& str);
 	public:
 		String() noexcept(noexcept(gCoreMemoryPool));
 		explicit String(MemoryPool& pool) noexcept;
@@ -72,6 +112,7 @@ namespace cave
 		// Capacity
 		[[nodiscard]] constexpr bool IsEmpty() const noexcept;
 		constexpr size_t GetLength() const noexcept;
+		constexpr size_t GetMaxSize() const noexcept;
 		constexpr void SetCapacity(size_t newCapacity);
 		constexpr size_t GetCapacity() const noexcept;
 		constexpr void Shrink();
@@ -126,10 +167,6 @@ namespace cave
 		constexpr size_t GetLastIndexOf(char ch, size_t pos = NPOS) const;
 		void Interleave(const char* s);
 
-		// Operators
-		String operator+(const String& rhs) const;
-		bool operator==(const String& rhs) const;
-
 		// Constants
 		static constexpr size_t NPOS = -1;
 		static constexpr size_t ALIGNED_BYTE = 16ul;
@@ -140,6 +177,16 @@ namespace cave
 		size_t mCapacity = 0ul;
 		char* mString = nullptr;
 	};
+
+	String ToString(int32_t value);
+	String ToString(int64_t value);
+	String ToString(uint32_t value);
+	String ToString(uint64_t value);
+	String ToString(float value);
+	String ToString(double value);
+	String ToString(long double value);
+
+	String operator""s(const char* str, size_t len);
 
 #ifdef CAVE_BUILD_DEBUG
 	namespace StringTest
@@ -169,6 +216,13 @@ namespace cave
 		void Resize();
 		void GetIndexOf();
 		void GetLastIndexOf();
+		void AdditionOperator();
+		void ComparisonOperator();
+		void StreamOperator();
+		void GetLine();
+		void StringToInt();
+		void StringToFloat();
+		void ToString();
 	}
 #endif
 } // namespace cave

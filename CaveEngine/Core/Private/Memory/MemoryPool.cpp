@@ -131,11 +131,6 @@ namespace cave
 		++counter;
 	}
 
-	size_t MemoryPool::GetFreeMemorySize() const
-	{
-		return mFreeSize;
-	}
-
 	size_t MemoryPool::GetCurrentStorage() const
 	{
 		size_t currentStorage = 0;

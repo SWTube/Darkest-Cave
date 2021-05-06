@@ -3,6 +3,8 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <sstream>
+
 #include "String/String.h"
 
 namespace cave
@@ -210,9 +212,14 @@ namespace cave
 	 *
 	 */
 	constexpr String::String(const String& other)
+		: mPool(other.mPool)
+		, mLength(other.mLength)
+		, mCapacity(other.mCapacity)
 	{
 		assert(other.mPool != nullptr && other.mString != nullptr);
-		String(other, *other.mPool);
+		mString = static_cast<char*>(mPool->Allocate((mCapacity) * sizeof(char)));
+		strncpy(mString, other.mString, mLength);
+		memset(&mString[mLength], '\0', mCapacity - mLength);
 	}
 
 	/**
@@ -247,9 +254,19 @@ namespace cave
 	 *
 	 */
 	constexpr String::String(String&& other) noexcept
+		: mPool(other.mPool)
+		, mLength(other.mLength)
+		, mCapacity(other.mCapacity)
+		, mString(other.mString)
 	{
 		assert(other.mPool != nullptr && other.mString != nullptr);
-		String(std::move(other), *other.mPool);
+
+		other.mPool = nullptr;
+		other.mLength = 0ul;
+		other.mCapacity = 0ul;
+		other.mString = nullptr;
+
+		other.~String();
 	}
 
 	/**
@@ -289,6 +306,12 @@ namespace cave
 		if (mString != nullptr)
 		{
 			mPool->Deallocate(mString, mCapacity * sizeof(char));
+			mString = nullptr;
+		}
+
+		if (mPool != nullptr)
+		{
+			mPool = nullptr;
 		}
 	}
 
@@ -592,6 +615,20 @@ namespace cave
 	constexpr size_t String::GetLength() const noexcept
 	{
 		return mLength;
+	}
+
+	/**
+	 *
+  	 * @brief Returns the maximum number of characters
+	 * @details Returns the maximum number of elements the string is able to hold due to system or library implementation limitations.
+	 * 			@n@n
+	 * 			Complexity: constant
+	 * @return Maximum number of characters.
+	 *
+	 */
+	constexpr size_t String::GetMaxSize() const noexcept
+	{
+		return mPool->GetFreeMemorySize();
 	}
 
 	/**
@@ -1636,7 +1673,7 @@ namespace cave
 			count = mLength - pos;
 		}
 
-		return String(*this, pos, count, *mPool);
+		return String{*this, pos, count, *mPool};
 	}
 
 	/**
@@ -2005,45 +2042,1779 @@ namespace cave
 		mPool->Deallocate(newString, (mLength + 1) * sizeof(char));
 	}
 
-	String String::operator+(const String& rhs) const
+	/**
+	 *
+  	 * @brief (1) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is lhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(const String& lhs, const String& rhs)
 	{
-		String s(mString);
+		String s(lhs);
 
 		// Append other to s
 		s.Append(rhs.mString);
 
-		return String(s.mString);
+		return s;
 	}
 
-
-	bool String::operator==(const String& str) const
+	/**
+	 *
+  	 * @brief (2) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is lhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(const String& lhs, const char* rhs)
 	{
-		if (mLength != str.mLength)
+		String s(lhs);
+		s.Append(rhs);
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (3) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is lhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(const String& lhs, char rhs)
+	{
+		String s(lhs);
+		s.Append(1, rhs);
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (4) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is rhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(const char* lhs, const String& rhs)
+	{
+		String s(lhs, *rhs.mPool);
+		s.Append(rhs.mString);
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (5) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is rhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(char lhs, const String& rhs)
+	{
+		String s(1, lhs, *rhs.mPool);
+		s.Append(rhs.mString);
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (6) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is lhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(String&& lhs, String&& rhs)
+	{
+		String s(std::move(lhs));
+		s.Append(rhs.mString);
+		rhs.~String();
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (7) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is lhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(String&& lhs, const String& rhs)
+	{
+		String s(std::move(lhs));
+		s.Append(rhs.mString);
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (8) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is lhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(String&& lhs, const char* rhs)
+	{
+		String s(std::move(lhs));
+		s.Append(rhs);
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (9) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is lhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(String&& lhs, char rhs)
+	{
+		String s(std::move(lhs));
+		s.Append(1, rhs);
+		return s;
+	}
+	
+	/**
+	 *
+  	 * @brief (10) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is rhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(const String& lhs, String&& rhs)
+	{
+		String s(lhs, *rhs.mPool);
+		s.Append(rhs.mString);
+		rhs.~String();
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (11) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is rhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(const char* lhs, String&& rhs)
+	{
+		String s(lhs, *rhs.mPool);
+		s.Append(rhs.mString);
+		rhs.~String();
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (12) Concatenates two strings or a string and a char
+	 * @details Returns a string containing characters from lhs followed by the characters from rhs.@n
+	 * 			The allocator used for the result is rhs.GetMemoryPool()
+	 * @param lhs string, character, or pointer to the first character in a null-terminated array
+	 * @param rhs string, character, or pointer to the first character in a null-terminated array 
+	 * @return A string containing characters from lhs followed by the characters from rhs, using the memory pool determined as above.
+	 *
+	 */
+	String operator+(char lhs, String&& rhs)
+	{
+		String s(1, lhs, *rhs.mPool);
+		s.Append(rhs.mString);
+		rhs.~String();
+		return s;
+	}
+
+	/**
+	 *
+  	 * @brief (1) Lexicographically compares two strings
+	 * @details Compares the contents of a string with another string or a null-terminated array of CharT.@n 
+	 * 			Two strings are equal if both the size of lhs and rhs are equal and 
+	 * 			each character in lhs has equivalent character in rhs at the same position.@n
+	 * 			Compares two String objects.
+	 * 			@n@n 
+	 * 			Complexity: linear in the size of the strings.
+	 * @param lhs string whose contents to compare
+	 * @param rhs string whose contents to compare
+	 * @return true if the corresponding comparison holds, false otherwise.
+	 *
+	 */
+	constexpr bool operator==(const String& lhs, const String& rhs) noexcept
+	{
+
+		if (lhs.mLength != rhs.mLength)
 		{
 			return false;
 		}
 
-		char* temp = mString;
-		const char* comp = str.mString;
-		if (comp != nullptr)
+		const char* lhsString = lhs.mString;
+		const char* rhsString = rhs.mString;
+		if (rhsString != nullptr)
 		{
-			for (; *temp == *comp && *temp != '\0' && *comp != '\0'; ++temp, ++comp)
+			for (; *lhsString == *rhsString && *lhsString != '\0' && *rhsString != '\0'; ++lhsString, ++rhsString)
 			{
 			}
 
-			if (*temp == '\0' && *comp == '\0')
+			if (*lhsString == '\0' && *rhsString == '\0')
 			{
 				return true;
 			}
 		}
+
 		return false;
 	}
 
+	/**
+	 *
+  	 * @brief (2) Lexicographically compares two strings
+	 * @details Compares the contents of a string with another string or a null-terminated array of CharT.@n 
+	 * 			Two strings are equal if both the size of lhs and rhs are equal and 
+	 * 			each character in lhs has equivalent character in rhs at the same position.@n
+	 * 			Compares two String objects.
+	 * 			@n@n 
+	 * 			Complexity: linear in the size of the strings.
+	 * @param lhs string whose contents to compare
+	 * @param rhs string whose contents to compare
+	 * @return true if the corresponding comparison holds, false otherwise.
+	 *
+	 */
+	constexpr bool operator!=(const String& lhs, const String& rhs) noexcept
+	{
+		return !(lhs == rhs);
+	}
+
+	/**
+	 *
+  	 * @brief (3) Lexicographically compares two strings
+	 * @details Compares the contents of a string with another string or a null-terminated array of CharT.@n 
+	 * 			Two strings are equal if both the size of lhs and rhs are equal and 
+	 * 			each character in lhs has equivalent character in rhs at the same position.@n
+	 * 			Compares a String object and a null-terminated array of char.
+	 * 			@n@n 
+	 * 			Complexity: linear in the size of the strings.
+	 * @param lhs string whose contents to compare
+	 * @param rhs string whose contents to compare
+	 * @return true if the corresponding comparison holds, false otherwise.
+	 *
+	 */
+	constexpr bool operator==(const String& lhs, const char* rhs) noexcept
+	{
+		size_t rhsLength = strlen(rhs);
+
+		if (lhs.mLength != rhsLength)
+		{
+			return false;
+		}
+
+		const char* lhsString = lhs.mString;
+		const char* rhsString = rhs;
+		if (rhsString != nullptr)
+		{
+			for (; *lhsString == *rhsString && *lhsString != '\0' && *rhsString != '\0'; ++lhsString, ++rhsString)
+			{
+			}
+
+			if (*lhsString == '\0' && *rhsString == '\0')
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 *
+  	 * @brief (4) Lexicographically compares two strings
+	 * @details Compares the contents of a string with another string or a null-terminated array of CharT.@n 
+	 * 			Two strings are equal if both the size of lhs and rhs are equal and 
+	 * 			each character in lhs has equivalent character in rhs at the same position.@n
+	 * 			Compares a String object and a null-terminated array of char.
+	 * 			@n@n 
+	 * 			Complexity: linear in the size of the strings.
+	 * @param lhs string whose contents to compare
+	 * @param rhs string whose contents to compare
+	 * @return true if the corresponding comparison holds, false otherwise.
+	 *
+	 */
+	constexpr bool operator!=(const String& lhs, const char* rhs) noexcept
+	{
+		return !(lhs == rhs);
+	}
+
+	/**
+	 *
+  	 * @brief Performs stream output on strings
+	 * @details Behaves as a FormattedOutputFunction. After constructing and checking the sentry object, determines the output format padding as follows:@n
+	 * 			a) If str.GetLength() is not less than os.width(), uses the range [&str[0], &str[str.GetLength()]) as-is @n
+	 * 			b) Otherwise, if (os.flags() & ios_base::adjustfield) == ios_base::left, @n
+	 * 			os.width()-str.GetLength() copies of the os.fill() character after the character sequence@n
+	 * 			c) Otherwise, places os.width()-str.GetLength() copies of the os.fill() character before the character sequence@n
+	 * 			Then stores each character from the resulting sequence (the contents of str plus padding) to the output stream os 
+	 * 			as if by calling os.rdbuf()->sputn(seq, n), where n=std::max(os.width(), str.GetLength())@n
+	 * 			Finally, calls os.width(0) to cancel the effects of std::setw, if any.
+	 * @param os a character output stream
+	 * @param str the string to be inserted or extracted 
+	 * @return os
+	 *
+	 */
 	std::ostream& operator<<(std::ostream& os, const String& str)
 	{
-		os << str.mString;
+		if (str.GetLength() >= os.width())
+		{
+			os.rdbuf()->sputn(str.mString, str.GetLength());
+		}
+		else if (os.flags() & std::ios_base::adjustfield == std::ios_base::left)
+		{
+			os.rdbuf()->sputn(str.mString, str.GetLength());
+			for (size_t i = 0ul; i < os.width() - str.GetLength(); ++i)
+			{
+				os.rdbuf()->sputc(os.fill());
+			}
+		}
+		else
+		{
+			for (size_t i = 0ul; i < os.width() - str.GetLength(); ++i)
+			{
+				os.rdbuf()->sputc(os.fill());
+			}
+			os.rdbuf()->sputn(str.mString, str.GetLength());
+		}
+
+		os.width(0);
 
 		return os;
+	}
+
+	/**
+	 *
+  	 * @brief Performs stream input on strings
+	 * @details Behaves as a FormattedInputFunction. After constructing and checking the sentry object, which may skip leading whitespace, 
+	 * 			first clears str with str.Clear(), then reads characters from is and appends them to str as if by str.Append(1, c), 
+	 * 			until one of the following conditions becomes true:@n
+	 * 			* N characters are read, where N is is.width() if is.width() > 0, otherwise N is str.GetCapacity()@n
+	 * 			* the end-of-file condition occurs in the stream is@n
+	 * 			* std::isspace(c,is.getloc()) is true for the next character c in is (this whitespace character remains in the input stream).@n
+	 * 			If no characters are extracted then std::ios::failbit is set on is, which may throw std::ios_base::failure.@n
+	 * 			Finally, calls is.width(0) to cancel the effects of std::setw, if any. 
+	 * @param is a character input stream
+	 * @param str the string to be inserted or extracted 
+	 * @return is
+	 *
+	 */
+	std::istream& operator>>(std::istream& is, String& str)
+	{
+		str.Clear();
+
+		size_t readCharacterCount = 0ul;
+		bool isEof = false;
+		size_t width = (is.width() > 0) ? is.width() : str.GetMaxSize();
+		for (
+			char c = static_cast<char>(is.get()), isEof = is.eof(); 
+			readCharacterCount < width && !isEof && !std::isspace(c, is.getloc()); 
+			++readCharacterCount, c = static_cast<char>(is.get()), isEof = is.eof()
+		)
+		{
+			str.Append(1, c);
+		}
+
+		if (str.GetLength() <= 0)
+		{
+			try
+			{
+				is.setstate(std::ios::failbit);
+			} catch (const std::ios_base::failure& e)
+			{
+				LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+			}
+		}
+
+		is.width(0);
+
+		return is;
+	}
+
+	/**
+	 *
+  	 * @brief (1) Read data from an I/O stream into a string
+	 * @details GetLine reads characters from an input stream and places them into a string:@n
+	 * 			Behaves as UnformattedInputFunction, except that input.gcount() is not affected. 
+	 * 			After constructing and checking the sentry object, performs the following:@n
+	 * 			1) Calls str.Clear()@n
+	 * 			2) Extracts characters from input and appends them to str until one of the following occurs (checked in the order listed)@n
+	 * 				a) end-of-file condition on input, in which case, GetLine sets eofbit.@n
+	 * 				b) the next available input character is delim, as tested by c == delim, 
+	 * 				in which case the delimiter character is extracted from input, but is not appended to str.@n
+	 * 				c) str.GetMaxSize() characters have been stored, in which case getline sets failbit and returns.@n
+	 * 			3) If no characters were extracted for whatever reason (not even the discarded delimiter), GetLine sets failbit and returns.
+	 * @param input the stream to get data from
+	 * @param str the string to put the data into
+	 * @param delim the delimiter character
+	 * @return input
+	 *
+	 */
+	std::istream& GetLine(std::istream& input, String& str, char delim)
+	{
+		str.Clear();
+
+		size_t readCharacterCount = 0ul;
+		size_t maxSize = str.GetMaxSize();
+		bool isEof = false;
+		size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
+		for (
+			char c = static_cast<char>(input.get()), isEof = input.eof(); 
+			!isEof && c != delim && readCharacterCount < maxSize; 
+			++readCharacterCount, c = static_cast<char>(input.get()), isEof = input.eof()
+		)
+		{
+			str.Append(1, c);
+		}
+
+		if (isEof)
+		{
+			try
+			{
+				input.setstate(std::ios::eofbit);
+			}
+			catch (const std::ios_base::failure& e)
+			{
+				LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+			}
+		}
+
+		if (str.GetLength() <= 0 || readCharacterCount >= maxSize)
+		{
+			try
+			{
+				input.setstate(std::ios::failbit);
+			}
+			catch (const std::ios_base::failure& e)
+			{
+				LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+			}
+		}
+
+		return input;
+	}
+
+	/**
+	 *
+  	 * @brief (1) Read data from an I/O stream into a string
+	 * @details GetLine reads characters from an input stream and places them into a string:@n
+	 * 			Behaves as UnformattedInputFunction, except that input.gcount() is not affected. 
+	 * 			After constructing and checking the sentry object, performs the following:@n
+	 * 			1) Calls str.Clear()@n
+	 * 			2) Extracts characters from input and appends them to str until one of the following occurs (checked in the order listed)@n
+	 * 				a) end-of-file condition on input, in which case, GetLine sets eofbit.@n
+	 * 				b) the next available input character is delim, as tested by c == delim, 
+	 * 				in which case the delimiter character is extracted from input, but is not appended to str.@n
+	 * 				c) str.GetMaxSize() characters have been stored, in which case getline sets failbit and returns.@n
+	 * 			3) If no characters were extracted for whatever reason (not even the discarded delimiter), GetLine sets failbit and returns.
+	 * @param input the stream to get data from
+	 * @param str the string to put the data into
+	 * @param delim the delimiter character
+	 * @return input
+	 *
+	 */
+	std::istream& GetLine(std::istream&& input, String& str, char delim)
+	{
+		str.Clear();
+
+		size_t readCharacterCount = 0ul;
+		size_t maxSize = str.GetMaxSize();
+		bool isEof = false;
+		size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
+		for (
+			char c = static_cast<char>(input.get()), isEof = input.eof(); 
+			!isEof && c != delim && readCharacterCount < maxSize; 
+			++readCharacterCount, c = static_cast<char>(input.get()), isEof = input.eof()
+		)
+		{
+			str.Append(1, c);
+		}
+
+		if (isEof)
+		{
+			try
+			{
+				input.setstate(std::ios::eofbit);
+			}
+			catch (const std::ios_base::failure& e)
+			{
+				LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+			}
+		}
+
+		if (str.GetLength() <= 0 || readCharacterCount >= maxSize)
+		{
+			try
+			{
+				input.setstate(std::ios::failbit);
+			}
+			catch (const std::ios_base::failure& e)
+			{
+				LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+			}
+		}
+
+		return input;
+	}
+
+	/**
+	 *
+  	 * @brief (2) Read data from an I/O stream into a string
+	 * @details GetLine reads characters from an input stream and places them into a string:@n
+	 * 			Same as GetLine(input, str, input.widen('\n')), that is, the default delimiter is the endline character.
+	 * @param input the stream to get data from
+	 * @param str the string to put the data into
+	 * @return input
+	 *
+	 */
+	std::istream& GetLine(std::istream& input, String& str)
+	{
+		return GetLine(input, str, input.widen('\n'));
+	}
+
+	/**
+	 *
+  	 * @brief (2) Read data from an I/O stream into a string
+	 * @details GetLine reads characters from an input stream and places them into a string:@n
+	 * 			Same as GetLine(input, str, input.widen('\n')), that is, the default delimiter is the endline character.
+	 * @param input the stream to get data from
+	 * @param str the string to put the data into
+	 * @return input
+	 *
+	 */
+	std::istream& GetLine(std::istream&& input, String& str)
+	{
+		return GetLine(std::move(input), str, input.widen('\n'));
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts a string to a signed integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * 			If pos is not a null pointer, 
+	 * 			then a pointer ptr - internal to the conversion functions - will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, giving the number of characters that were processed by the conversion.
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @param base the number base
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	int32_t StringToInt32(const String& str, size_t* pos, int32_t base)
+	{
+		assert(base >= 0 && base != 1 && base <= 36);
+		if (pos != nullptr)
+		{
+			*pos = 0;
+		}
+		size_t index = 0;
+		int32_t result = 0;
+		for (; std::isspace(str.mString[index]); ++index)
+		{
+		}
+		
+		bool isNegative = false;
+		if (str.mString[index] == '-' || str.mString[index] == '+')
+		{
+			isNegative = str.mString[index] == '-';
+			++index;
+			if (pos != nullptr)
+			{
+				++(*pos);
+			}
+		}
+
+		if (base <= 10)
+		{
+			assert(('0' <= str.mString[index] && str.mString[index] <= '0' + base - 1));
+		}
+		else
+		{
+			assert(
+				('0' <= str.mString[index] && str.mString[index] <= '9')
+				|| ('a' <= str.mString[index] && str.mString[index] <= 'a' + base - 11)
+				|| ('A' <= str.mString[index] && str.mString[index] <= 'A' + base - 11)
+			);
+		}
+
+		if (str.mString[index] == '0')
+		{
+			if (base == 8)
+			{
+				++index;
+				if (pos != nullptr)
+				{
+					++(*pos);
+				}
+			}
+
+			if (base == 16 && str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X')
+			{
+				index += 2;
+				if (pos != nullptr)
+				{
+					(*pos) += 2;
+				}
+			}
+		}
+		
+		while (true)
+		{
+			int32_t digit = 0;
+			if (base <= 10)
+			{
+				if ('0' <= str.mString[index] && str.mString[index] <= '0' + base - 1)
+				{
+					digit = static_cast<int32_t>(str.mString[index] - '0');
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				if ('0' <= str.mString[index] && str.mString[index] <= '9')
+				{
+					digit = static_cast<int32_t>(str.mString[index] - '0');
+				}
+				else if ('a' <= str.mString[index] && str.mString[index] <= 'a' + base - 11)
+				{
+					digit = static_cast<int32_t>(str.mString[index] - 'a');
+				}
+				else if ('A' <= str.mString[index] && str.mString[index] <= 'A' + base - 11)
+				{
+					digit = static_cast<int32_t>(str.mString[index] - 'A');
+				}
+				else
+				{
+					break;
+				}
+			}
+			if (result == 0 && digit == 0)
+			{
+				continue;
+			}
+			assert(result < base * result + digit);
+
+			result = base * result + digit;
+			if (pos != nullptr)
+			{
+				++(*pos);
+			}
+			++index;
+		}
+
+		return isNegative ? -result : result;
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts a string to a signed integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	int32_t StringToInt32(const String& str, size_t* pos)
+	{
+		return StringToInt32(str, pos, 10);
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts a string to a signed integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * @param str the string to convert
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	int32_t StringToInt32(const String& str)
+	{
+		return StringToInt32(str, nullptr, 10);
+	}
+
+	/**
+	 *
+  	 * @brief (2) Converts a string to a signed integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * 			If pos is not a null pointer, 
+	 * 			then a pointer ptr - internal to the conversion functions - will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, giving the number of characters that were processed by the conversion.
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @param base the number base
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	int64_t StringToInt64(const String& str, size_t* pos, int32_t base)
+	{
+		assert(base >= 0 && base != 1 && base <= 36);
+		if (pos != nullptr)
+		{
+			*pos = 0;
+		}
+		size_t index = 0;
+		int64_t result = 0l;
+		for (; std::isspace(str.mString[index]); ++index)
+		{
+		}
+		
+		bool isNegative = false;
+		if (str.mString[index] == '-' || str.mString[index] == '+')
+		{
+			isNegative = str.mString[index] == '-';
+			++index;
+			if (pos != nullptr)
+			{
+				++(*pos);
+			}
+		}
+
+		if (base <= 10)
+		{
+			assert(('0' <= str.mString[index] && str.mString[index] <= '0' + base - 1));
+		}
+		else
+		{
+			assert(
+				('0' <= str.mString[index] && str.mString[index] <= '9')
+				|| ('a' <= str.mString[index] && str.mString[index] <= 'a' + base - 11)
+				|| ('A' <= str.mString[index] && str.mString[index] <= 'A' + base - 11)
+			);
+		}
+
+		if (str.mString[index] == '0')
+		{
+			if (base == 8)
+			{
+				++index;
+				if (pos != nullptr)
+				{
+					++(*pos);
+				}
+			}
+
+			if (base == 16 && str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X')
+			{
+				index += 2;
+				if (pos != nullptr)
+				{
+					(*pos) += 2;
+				}
+			}
+		}
+		
+		while (true)
+		{
+			int64_t digit = 0;
+			if (base <= 10)
+			{
+				if ('0' <= str.mString[index] && str.mString[index] <= '0' + base - 1)
+				{
+					digit = static_cast<int64_t>(str.mString[index] - '0');
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				if ('0' <= str.mString[index] && str.mString[index] <= '9')
+				{
+					digit = static_cast<int64_t>(str.mString[index] - '0');
+				}
+				else if ('a' <= str.mString[index] && str.mString[index] <= 'a' + base - 11)
+				{
+					digit = static_cast<int64_t>(str.mString[index] - 'a');
+				}
+				else if ('A' <= str.mString[index] && str.mString[index] <= 'A' + base - 11)
+				{
+					digit = static_cast<int64_t>(str.mString[index] - 'A');
+				}
+				else
+				{
+					break;
+				}
+			}
+			assert(result < static_cast<int64_t>(base) * result + digit);
+
+			if (result == 0l && digit == 0l)
+			{
+				continue;
+			}
+
+			result = static_cast<int64_t>(base) * result + digit;
+			if (pos != nullptr)
+			{
+				++(*pos);
+			}
+			++index;
+		}
+
+		return isNegative ? -result : result;
+	}
+
+	/**
+	 *
+  	 * @brief (2) Converts a string to a signed integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * 			If pos is not a null pointer, 
+	 * 			then a pointer ptr - internal to the conversion functions - will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, giving the number of characters that were processed by the conversion.
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	int64_t StringToInt64(const String& str, size_t* pos)
+	{
+		return StringToInt64(str, pos, 10);
+	}
+
+	/**
+	 *
+  	 * @brief (2) Converts a string to a signed integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * @param str the string to convert
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	int64_t StringToInt64(const String& str)
+	{
+		return StringToInt64(str, nullptr, 10);
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts a string to a unsigned integer
+	 * @details Interprets a unsigned integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) unsigned integer number representation 
+	 * 			and converts them to an integer value. The valid unsigned integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type, 
+	 * 			which applies unsigned integer wraparound rules. @n
+	 * 			If pos is not a null pointer, 
+	 * 			then a pointer ptr - internal to the conversion functions - will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, giving the number of characters that were processed by the conversion.
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @param base the number base
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	uint32_t StringToUint32(const String& str, size_t* pos, int32_t base)
+	{
+		return static_cast<uint32_t>(StringToInt32(str, pos, base));
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts a string to a unsigned integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	uint32_t StringToUint32(const String& str, size_t* pos)
+	{
+		return StringToUint32(str, pos, 10);
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts a string to a unsigned integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * @param str the string to convert
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	uint32_t StringToUint32(const String& str)
+	{
+		return StringToUint32(str, nullptr, 10);
+	}
+
+	/**
+	 *
+  	 * @brief (2) Converts a string to a unsigned integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * 			If pos is not a null pointer, 
+	 * 			then a pointer ptr - internal to the conversion functions - will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, giving the number of characters that were processed by the conversion.
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @param base the number base
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	uint64_t StringToUint64(const String& str, size_t* pos, int32_t base)
+	{
+		return static_cast<uint64_t>(StringToInt64(str, pos, base));
+	}
+
+	/**
+	 *
+  	 * @brief (2) Converts a string to a unsigned integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * 			If pos is not a null pointer, 
+	 * 			then a pointer ptr - internal to the conversion functions - will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, giving the number of characters that were processed by the conversion.
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	uint64_t StringToUint64(const String& str, size_t* pos)
+	{
+		return StringToUint64(str, pos, 10);
+	}
+
+	/**
+	 *
+  	 * @brief (2) Converts a string to a unsigned integer
+	 * @details Interprets a signed integer value in the string str.@n
+	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
+	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
+	 * 			* (optional) plus or minus sign@n
+	 * 			* (optional) prefix (0) indicating octal base (applies only when the base is 8 or ​0​)@n
+	 * 			* (optional) prefix (0x or 0X) indicating hexadecimal base (applies only when the base is 16 or ​0​)@n
+	 * 			* a sequence of digits @n
+	 * 			The set of valid values for base is {0,2,3,...,36}. 
+	 * 			The set of valid digits for base-2 integers is {0,1}, for base-3 integers is {0,1,2}, and so on. 
+	 * 			For bases larger than 10, valid digits include alphabetic characters, 
+	 * 			starting from Aa for base-11 integer, to Zz for base-36 integer. 
+	 * 			The case of the characters is ignored.@n
+	 * 			Additional numeric formats may be accepted by the currently installed C locale.@n
+	 * 			If the value of base is ​0​, the numeric base is auto-detected: 
+	 * 			if the prefix is 0, the base is octal, if the prefix is 0x or 0X, the base is hexadecimal, otherwise the base is decimal.@n
+	 * 			If the minus sign was part of the input sequence, 
+	 * 			the numeric value calculated from the sequence of digits is negated as if by unary minus in the result type.@n
+	 * @param str the string to convert
+	 * @return Integer value corresponding to the content of str.
+	 *
+	 */
+	uint64_t StringToUint64(const String& str)
+	{
+		return StringToUint64(str, nullptr, 10);
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts a string to a floating point value
+	 * @details Interprets a floating point value in a string str. @n
+	 * 			Function discards any whitespace characters (as determined by std::isspace()) until first non-whitespace character is found. 
+	 * 			Then it takes as many characters as possible to form a valid floating-point representation and converts them to a floating-point value. 
+	 * 			The valid floating-point value can be one of the following: @n
+	 * 			* decimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign
+	 * 				* nonempty sequence of decimal digits optionally containing decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand)@n
+	 * 				* (optional) e or E followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 10) @n
+	 * 			* hexadecimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* 0x or 0X @n
+	 * 				* nonempty sequence of hexadecimal digits optionally containing a decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand) @n
+	 * 				* (optional) p or P followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 2) @n
+	 * 			* infinity expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* INF or INFINITY ignoring case @n
+	 * 			* not-a-number expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* NAN or NAN(char_sequence) ignoring case of the NAN part. char_sequence can only contain digits, 
+	 * 					Latin letters, and underscores. The result is a quiet NaN floating-point value. @n
+	 * 			* any other expression that may be accepted by the currently installed C locale @n
+	 * 			If pos is not a null pointer, then a pointer ptr, internal to the conversion functions, 
+	 * 			will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, 
+	 * 			giving the number of characters that were processed by the conversion. 
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @return The string converted to the specified floating point type.
+	 *
+	 */
+	float StringToFloat(const String& str, size_t* pos)
+	{
+		return static_cast<float>(StringToLongDouble(str, pos));
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts a string to a floating point value
+	 * @details Interprets a floating point value in a string str. @n
+	 * 			Function discards any whitespace characters (as determined by std::isspace()) until first non-whitespace character is found. 
+	 * 			Then it takes as many characters as possible to form a valid floating-point representation and converts them to a floating-point value. 
+	 * 			The valid floating-point value can be one of the following: @n
+	 * 			* decimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign
+	 * 				* nonempty sequence of decimal digits optionally containing decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand)@n
+	 * 				* (optional) e or E followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 10) @n
+	 * 			* hexadecimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* 0x or 0X @n
+	 * 				* nonempty sequence of hexadecimal digits optionally containing a decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand) @n
+	 * 				* (optional) p or P followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 2) @n
+	 * 			* infinity expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* INF or INFINITY ignoring case @n
+	 * 			* not-a-number expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* NAN or NAN(char_sequence) ignoring case of the NAN part. char_sequence can only contain digits, 
+	 * 					Latin letters, and underscores. The result is a quiet NaN floating-point value. @n
+	 * 			* any other expression that may be accepted by the currently installed C locale @n
+	 * @param str the string to convert
+	 * @return The string converted to the specified floating point type.
+	 *
+	 */
+	float StringToFloat(const String& str)
+	{
+		return StringToFloat(str, nullptr);
+	}
+
+	/**
+	 *
+  	 * @brief (2) Converts a string to a floating point value
+	 * @details Interprets a floating point value in a string str. @n
+	 * 			Function discards any whitespace characters (as determined by std::isspace()) until first non-whitespace character is found. 
+	 * 			Then it takes as many characters as possible to form a valid floating-point representation and converts them to a floating-point value. 
+	 * 			The valid floating-point value can be one of the following: @n
+	 * 			* decimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign
+	 * 				* nonempty sequence of decimal digits optionally containing decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand)@n
+	 * 				* (optional) e or E followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 10) @n
+	 * 			* hexadecimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* 0x or 0X @n
+	 * 				* nonempty sequence of hexadecimal digits optionally containing a decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand) @n
+	 * 				* (optional) p or P followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 2) @n
+	 * 			* infinity expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* INF or INFINITY ignoring case @n
+	 * 			* not-a-number expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* NAN or NAN(char_sequence) ignoring case of the NAN part. char_sequence can only contain digits, 
+	 * 					Latin letters, and underscores. The result is a quiet NaN floating-point value. @n
+	 * 			* any other expression that may be accepted by the currently installed C locale @n
+	 * 			If pos is not a null pointer, then a pointer ptr, internal to the conversion functions, 
+	 * 			will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, 
+	 * 			giving the number of characters that were processed by the conversion. 
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @return The string converted to the specified floating point type.
+	 *
+	 */
+	double StringToDouble(const String& str, size_t* pos)
+	{
+		return static_cast<double>(StringToLongDouble(str, pos));
+	}
+
+	/**
+	 *
+  	 * @brief (2) Converts a string to a floating point value
+	 * @details Interprets a floating point value in a string str. @n
+	 * 			Function discards any whitespace characters (as determined by std::isspace()) until first non-whitespace character is found. 
+	 * 			Then it takes as many characters as possible to form a valid floating-point representation and converts them to a floating-point value. 
+	 * 			The valid floating-point value can be one of the following: @n
+	 * 			* decimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign
+	 * 				* nonempty sequence of decimal digits optionally containing decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand)@n
+	 * 				* (optional) e or E followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 10) @n
+	 * 			* hexadecimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* 0x or 0X @n
+	 * 				* nonempty sequence of hexadecimal digits optionally containing a decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand) @n
+	 * 				* (optional) p or P followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 2) @n
+	 * 			* infinity expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* INF or INFINITY ignoring case @n
+	 * 			* not-a-number expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* NAN or NAN(char_sequence) ignoring case of the NAN part. char_sequence can only contain digits, 
+	 * 					Latin letters, and underscores. The result is a quiet NaN floating-point value. @n
+	 * 			* any other expression that may be accepted by the currently installed C locale @n
+	 * @param str the string to convert
+	 * @return The string converted to the specified floating point type.
+	 *
+	 */
+	double StringToDouble(const String& str)
+	{
+		return StringToDouble(str, nullptr);
+	}
+
+	/**
+	 *
+  	 * @brief (3) Converts a string to a floating point value
+	 * @details Interprets a floating point value in a string str. @n
+	 * 			Function discards any whitespace characters (as determined by std::isspace()) until first non-whitespace character is found. 
+	 * 			Then it takes as many characters as possible to form a valid floating-point representation and converts them to a floating-point value. 
+	 * 			The valid floating-point value can be one of the following: @n
+	 * 			* decimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign
+	 * 				* nonempty sequence of decimal digits optionally containing decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand)@n
+	 * 				* (optional) e or E followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 10) @n
+	 * 			* hexadecimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* 0x or 0X @n
+	 * 				* nonempty sequence of hexadecimal digits optionally containing a decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand) @n
+	 * 				* (optional) p or P followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 2) @n
+	 * 			* infinity expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* INF or INFINITY ignoring case @n
+	 * 			* not-a-number expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* NAN or NAN(char_sequence) ignoring case of the NAN part. char_sequence can only contain digits, 
+	 * 					Latin letters, and underscores. The result is a quiet NaN floating-point value. @n
+	 * 			* any other expression that may be accepted by the currently installed C locale @n
+	 * 			If pos is not a null pointer, then a pointer ptr, internal to the conversion functions, 
+	 * 			will receive the address of the first unconverted character in str.GetCString(), 
+	 * 			and the index of that character will be calculated and stored in *pos, 
+	 * 			giving the number of characters that were processed by the conversion. 
+	 * @param str the string to convert
+	 * @param pos address of an integer to store the number of characters processed
+	 * @return The string converted to the specified floating point type.
+	 *
+	 */
+	long double StringToLongDouble(const String& str, size_t* pos)
+	{
+		if (pos != nullptr)
+		{
+			*pos = 0;
+		}
+		size_t index = 0;
+		long double result = 0l;
+		for (; std::isspace(str.mString[index]); ++index)
+		{
+		}
+		
+		// PLUS OR MINUS SIGN
+		bool isNegative = false;
+		if (str.mString[index] == '-' || str.mString[index] == '+')
+		{
+			isNegative = str.mString[index] == '-';
+			++index;
+			if (pos != nullptr)
+			{
+				++(*pos);
+			}
+		}
+
+		assert(
+			('0' <= str.mString[index] && str.mString[index] <= '9')
+			|| ('a' <= str.mString[index] && str.mString[index] <= 'f')
+			|| ('A' <= str.mString[index] && str.mString[index] <= 'F')
+			|| (str.mString[index] == '.')
+		);
+
+		// HEXADECIMAL or INFINITY EXPRESSION or NOT-A-NUMBER EXPRESSION
+		bool isHexadecimal = false;
+		long double base = 10.0l;
+		if (str.mString[index] == '0')
+		{
+			if (str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X')
+			{
+				index += 2;
+				isHexadecimal = true;
+				base = 16.0f;
+				if (pos != nullptr)
+				{
+					(*pos) += 2;
+				}
+			}
+		}
+		else if (
+			((strncmp(&str.mString[index], "INF", 3) == 0
+			|| strncmp(&str.mString[index], "inf", 3) == 0) && std::isspace(str.mString[index + 3]))
+			|| ((strncmp(&str.mString[index], "INFINITY", 8) == 0
+			|| strncmp(&str.mString[index], "infinity", 8) == 0) && std::isspace(str.mString[index + 8]))
+		)
+		{
+			result = INFINITY;
+		}
+		else if (
+			(strncmp(&str.mString[index], "NAN", 3) == 0
+			|| strncmp(&str.mString[index], "nan", 3) == 0)
+			&& ('0' <= str.mString[index + 3] && str.mString[index + 3] <= '9'
+			|| 'a' <= str.mString[index + 3] && str.mString[index + 3] <= 'z'
+			|| 'A' <= str.mString[index + 3] && str.mString[index + 3] <= 'Z'
+			|| str.mString[index + 3] == '_')
+		)
+		{
+			result = NAN;
+		}
+		
+		bool isFractionalPart = false;
+		bool isExponential = false;
+		int32_t exponential = 0;
+		bool isNegativeExponential = false;
+		long double multiplier = base;
+		while (result != INFINITY || result != NAN)
+		{
+			uint8_t digit = 0;
+			if (!isFractionalPart && str.mString[index] == '.')
+			{
+				isFractionalPart = true;
+				++index;
+				if (pos != nullptr)
+				{
+					++(*pos);
+				}
+				continue;
+			}
+
+			if (
+				!isExponential && (str.mString[index] == 'e' || str.mString[index] == 'E')
+				&& (str.mString[index + 1] == '+' || str.mString[index + 1] == '-')
+			)
+			{
+				isExponential = true;
+				isNegativeExponential = str.mString[index + 1] == '-';
+				index += 2;
+				if (pos != nullptr)
+				{
+					(*pos) += 2;
+				}
+				continue;
+			}
+
+			if (!isHexadecimal)
+			{
+				if ('0' <= str.mString[index] && str.mString[index] <= '9')
+				{
+					digit = str.mString[index] - '0';
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				if ('0' <= str.mString[index] && str.mString[index] <= '9')
+				{
+					digit = str.mString[index] - '0';
+				}
+				else if ('a' <= str.mString[index] && str.mString[index] <= 'f')
+				{
+					digit = str.mString[index] - 'a';
+				}
+				else if ('A' <= str.mString[index] && str.mString[index] <= 'F')
+				{
+					digit = str.mString[index] - 'A';
+				}
+				else
+				{
+					break;
+				}
+			}
+			if (
+				!isExponential && result == 0.0f && digit == 0
+				|| isExponential && exponential == 0 && digit == 0
+			)
+			{
+				++index;
+				if (pos != nullptr)
+				{
+					++(*pos);
+				}
+				continue;
+			}
+
+			if (!isFractionalPart && !isExponential)
+			{
+				assert(result < base * result + digit);
+
+				result = base * result + digit;
+			}
+			else if (isFractionalPart && !isExponential)
+			{
+				result = result + static_cast<long double>(digit) / multiplier;
+				multiplier *= base;
+			}
+			else
+			{
+				exponential = exponential * static_cast<int32_t>(base) + static_cast<int32_t>(digit);
+			}
+
+			if (pos != nullptr)
+			{
+				++(*pos);
+			}
+			++index;
+		}
+
+		multiplier = base;
+		for (int32_t i = 0; i < exponential; ++i)
+		{
+			if (isNegativeExponential)
+			{
+				result /= base;
+			}
+			else
+			{
+				result *= base;
+			}
+		}
+
+		return isNegative ? -result : result;
+	}
+
+	/**
+	 *
+  	 * @brief (3) Converts a string to a floating point value
+	 * @details Interprets a floating point value in a string str. @n
+	 * 			Function discards any whitespace characters (as determined by std::isspace()) until first non-whitespace character is found. 
+	 * 			Then it takes as many characters as possible to form a valid floating-point representation and converts them to a floating-point value. 
+	 * 			The valid floating-point value can be one of the following: @n
+	 * 			* decimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign
+	 * 				* nonempty sequence of decimal digits optionally containing decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand)@n
+	 * 				* (optional) e or E followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 10) @n
+	 * 			* hexadecimal floating-point expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* 0x or 0X @n
+	 * 				* nonempty sequence of hexadecimal digits optionally containing a decimal-point character 
+	 * 					(as determined by the current C locale) (defines significand) @n
+	 * 				* (optional) p or P followed with optional minus or plus sign and nonempty sequence of decimal digits (defines exponent to base 2) @n
+	 * 			* infinity expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* INF or INFINITY ignoring case @n
+	 * 			* not-a-number expression. It consists of the following parts: @n
+	 * 				* (optional) plus or minus sign @n
+	 * 				* NAN or NAN(char_sequence) ignoring case of the NAN part. char_sequence can only contain digits, 
+	 * 					Latin letters, and underscores. The result is a quiet NaN floating-point value. @n
+	 * 			* any other expression that may be accepted by the currently installed C locale @n
+	 * @param str the string to convert
+	 * @return The string converted to the specified floating point type.
+	 *
+	 */
+	long double StringToLongDouble(const String& str)
+	{
+		return StringToLongDouble(str, nullptr);
+	}
+
+	/**
+	 *
+  	 * @brief (1) Converts an integral or floating point value to string
+	 * @details Converts a numeric value to String. @n
+	 * 			Converts a signed integer to a string with the same content as what 
+	 * 			std::sprintf(buf, "%d", value) would produce for sufficiently large buf.
+	 * @param value a numeric value to convert
+	 * @return a string holding the converted value
+	 *
+	 */
+	String ToString(int32_t value)
+	{
+		int32_t tempValue = value;
+		size_t size = 1ul;
+		while (tempValue >= 10)
+		{
+			tempValue /= 10;
+			++size;
+		}
+
+		char s[size] = { '\0', };
+		snprintf(s, size, "%d", value);
+
+		return String{s};
+	}
+	
+	/**
+	 *
+  	 * @brief (2) Converts an integral or floating point value to string
+	 * @details Converts a numeric value to String. @n
+	 * 			Converts a signed integer to a string with the same content as what 
+	 * 			std::sprintf(buf, "%ld", value) would produce for sufficiently large buf.
+	 * @param value a numeric value to convert
+	 * @return a string holding the converted value
+	 *
+	 */
+	String ToString(int64_t value)
+	{
+		int64_t tempValue = value;
+		size_t size = 1ul;
+		while (tempValue >= 10l)
+		{
+			tempValue /= 10l;
+			++size;
+		}
+
+		char s[size] = { '\0', };
+		snprintf(s, size, "%ld", value);
+
+		return String{s};
+	}
+
+	/**
+	 *
+  	 * @brief (3) Converts an integral or floating point value to string
+	 * @details Converts a numeric value to String. @n
+	 * 			Converts an unsigned integer to a string with the same content as what 
+	 * 			std::sprintf(buf, "%u", value) would produce for sufficiently large buf.
+	 * @param value a numeric value to convert
+	 * @return a string holding the converted value
+	 *
+	 */
+	String ToString(uint32_t value)
+	{
+		uint32_t tempValue = value;
+		size_t size = 1ul;
+		while (tempValue >= 10u)
+		{
+			tempValue /= 10u;
+			++size;
+		}
+
+		char s[size] = { '\0', };
+		snprintf(s, size, "%u", value);
+
+		return String{s};
+	}
+
+	/**
+	 *
+  	 * @brief (4) Converts an integral or floating point value to string
+	 * @details Converts a numeric value to String. @n
+	 * 			Converts an unsigned integer to a string with the same content as what 
+	 * 			std::sprintf(buf, "%lu", value) would produce for sufficiently large buf.
+	 * @param value a numeric value to convert
+	 * @return a string holding the converted value
+	 *
+	 */
+	String ToString(uint64_t value)
+	{
+		uint64_t tempValue = value;
+		size_t size = 1ul;
+		while (tempValue >= 10ul)
+		{
+			tempValue /= 10ul;
+			++size;
+		}
+
+		char s[size] = { '\0', };
+		snprintf(s, size, "%lu", value);
+
+		return String{s};
+	}
+
+	/**
+	 *
+  	 * @brief (5) Converts an integral or floating point value to string
+	 * @details Converts a numeric value to String. @n
+	 * 			Converts a floating point value to a string with the same content as what 
+	 * 			std::sprintf(buf, "%f", value) would produce for sufficiently large buf.
+	 * @param value a numeric value to convert
+	 * @return a string holding the converted value
+	 *
+	 */
+	String ToString(float value)
+	{
+		float tempValue = value;
+		size_t size = 1ul;
+		while (tempValue >= 10.0f)
+		{
+			tempValue /= 10.0f;
+			++size;
+		}
+
+		char s[size + 1 + 6] = { '\0', };
+		snprintf(s, size + 1 + 6 + 1, "%f", value);
+
+		return String{s};
+	}
+
+	/**
+	 *
+  	 * @brief (6) Converts an integral or floating point value to string
+	 * @details Converts a numeric value to String. @n
+	 * 			Converts a floating point value to a string with the same content as what 
+	 * 			std::sprintf(buf, "%f", value) would produce for sufficiently large buf.
+	 * @param value a numeric value to convert
+	 * @return a string holding the converted value
+	 *
+	 */
+	String ToString(double value)
+	{
+		double tempValue = value;
+		size_t size = 1ul;
+		while (tempValue >= 10.0)
+		{
+			tempValue /= 10.0;
+			++size;
+		}
+
+		char s[size + 1 + 6] = { '\0', };
+		snprintf(s, size + 1 + 6 + 1, "%f", value);
+
+		return String{s};
+	}
+
+	/**
+	 *
+  	 * @brief (7) Converts an integral or floating point value to string
+	 * @details Converts a numeric value to String. @n
+	 * 			Converts a floating point value to a string with the same content as what 
+	 * 			std::sprintf(buf, "%Lf", value) would produce for sufficiently large buf.
+	 * @param value a numeric value to convert
+	 * @return a string holding the converted value
+	 *
+	 */
+	String ToString(long double value)
+	{
+		long double tempValue = value;
+		size_t size = 1ul;
+		while (tempValue >= 10.0l)
+		{
+			tempValue /= 10.0l;
+			++size;
+		}
+
+		char s[size + 1 + 6] = { '\0', };
+		snprintf(s, size + 1 + 6 + 1, "%Lf", value);
+
+		return String{s};
+	}
+
+	/**
+	 *
+  	 * @brief Converts a character array literal to String
+	 * @details Forms a string literal of the desired type. @n
+	 * 			Returns String{str, len}
+	 * @param str pointer to the beginning of the raw character array literal
+	 * @param len length of the raw character array literal 
+	 * @return The string literal.
+	 *
+	 */
+	String operator""s(const char* str, size_t len)
+	{
+		return String{str, len};
 	}
 
 #ifdef CAVE_BUILD_DEBUG
@@ -2051,6 +3822,7 @@ namespace cave
 	{
 		void Test()
 		{
+			// LogManager::SetVerbosity(eLogVerbosity::Error);
 			Constructor();
 			AssignmentOperator();
 			SubscriptOperator();
@@ -2075,6 +3847,13 @@ namespace cave
 			Resize();
 			GetIndexOf();
 			GetLastIndexOf();
+			AdditionOperator();
+			ComparisonOperator();
+			StreamOperator();
+			// GetLine();
+			StringToInt();
+			StringToFloat();
+			ToString();
 		}
 
 		void Constructor()
@@ -2132,8 +3911,8 @@ namespace cave
 			}
 
 			{
-				// 
 				String s(String("C++ by ") + String("example"));
+				assert(s.GetLength() == strlen("C++ by example"));
 				assert(strncmp(s.GetCString(), "C++ by example", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String::String(String&& str) TEST SUCCESS");
 			}
@@ -2545,11 +4324,11 @@ namespace cave
 			assert(sub2.GetLength() == strlen("567"));
 			assert(strncmp(sub2.GetCString(), "567", sub2.GetLength()) == 0);
 		
-			// pos is within bounds, pos+count is not, returns [pos, size()) 
+			// pos is within bounds, pos+count is not, returns [pos, GetLength()) 
 			String sub4 = a.GetSubstring(a.GetLength() - 3, 50);
 			// this is effectively equivalent to
-			// std::string sub4 = a.substr(17, 3);
-			// since a.size() == 20, pos == a.size()-3 == 17, and a.size()-pos == 3
+			// String sub4 = a.GetSubstring(17, 3);
+			// since a.GetLength() == 20, pos == a.GetLength()-3 == 17, and a.GetLength()-pos == 3
 		
 			assert(sub4.GetLength() == strlen("hij"));
 			assert(strncmp(sub4.GetCString(), "hij", sub4.GetLength()) == 0);
@@ -2641,6 +4420,322 @@ namespace cave
 			assert(n == String::NPOS);
 
 			LOGD(eLogChannel::CORE_STRING, std::cout, "size_t String::GetIndexOf(char ch, size_t pos) TEST SUCCESS");
+		}
+	
+		void AdditionOperator()
+		{
+			{
+				String lhs = "hello ";
+				String rhs = "world!";
+				String result = lhs + rhs;
+				assert(result.GetLength() == strlen("hello world!"));
+				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const String& lhs, const String& rhs) TEST SUCCESS");
+			}
+
+			{
+				String lhs = "hello ";
+				const char* rhs = "world!";
+				String result = lhs + rhs;
+				assert(result.GetLength() == strlen("hello world!"));
+				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const String& lhs, const char* rhs) TEST SUCCESS");
+			}
+
+			{
+				String lhs = "hello";
+				char rhs = '!';
+				String result = lhs + rhs;
+				assert(result.GetLength() == strlen("hello!"));
+				assert(strncmp(result.GetCString(), "hello!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const String& lhs, char rhs) TEST SUCCESS");
+			}
+			
+			{
+				const char* lhs = "hello ";
+				String rhs = "world!";
+				String result = lhs + rhs;
+				assert(result.GetLength() == strlen("hello world!"));
+				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const char* lhs, const String& rhs) TEST SUCCESS");
+			}
+
+			{
+				char lhs = 'h';
+				String rhs = "ello!";
+				String result = lhs + rhs;
+				assert(result.GetLength() == strlen("hello!"));
+				assert(strncmp(result.GetCString(), "hello!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(char lhs, const String& rhs) TEST SUCCESS");
+			}
+
+			{
+				String lhs = "hello ";
+				String rhs = "world!";
+				String result = std::move(lhs) + std::move(rhs);
+				assert(result.GetLength() == strlen("hello world!"));
+				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(String&& lhs, String&& rhs) TEST SUCCESS");
+			}
+
+			{
+				String lhs = "hello ";
+				String rhs = "world!";
+				String result = std::move(lhs) + rhs;
+				assert(result.GetLength() == strlen("hello world!"));
+				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(String&& lhs, const String& rhs) TEST SUCCESS");
+			}
+			
+			{
+				String lhs = "hello ";
+				const char* rhs = "world!";
+				String result = std::move(lhs) + rhs;
+				assert(result.GetLength() == strlen("hello world!"));
+				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(String&& lhs, const char* rhs) TEST SUCCESS");
+			}
+			
+			{
+				String lhs = "hello";
+				char rhs = '!';
+				String result = std::move(lhs) + rhs;
+				assert(result.GetLength() == strlen("hello!"));
+				assert(strncmp(result.GetCString(), "hello!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(String&& lhs, char rhs) TEST SUCCESS");
+			}
+			
+			{
+				String lhs = "hello ";
+				String rhs = "world!";
+				String result = lhs + std::move(rhs);
+				assert(result.GetLength() == strlen("hello world!"));
+				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const String& lhs, String&& rhs) TEST SUCCESS");
+			}
+			
+			{
+				const char* lhs = "hello ";
+				String rhs = "world!";
+				String result = lhs + std::move(rhs);
+				assert(result.GetLength() == strlen("hello world!"));
+				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const char* lhs, String&& rhs) TEST SUCCESS");
+			}
+			
+			{
+				char lhs = 'h';
+				String rhs = "ello!";
+				String result = lhs + std::move(rhs);
+				assert(result.GetLength() == strlen("hello!"));
+				assert(strncmp(result.GetCString(), "hello!", result.GetLength()) == 0);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(char lhs, String&& rhs) TEST SUCCESS");
+			}
+		}
+	
+		void ComparisonOperator()
+		{
+			{
+				String lhs1("hello");
+				String rhs1("hello");
+				assert(lhs1 == rhs1);
+
+				String lhs2("hello");
+				String rhs2("hellm");
+				assert(!(lhs2 == rhs2));
+
+				String lhs3;
+				String rhs3;
+				assert(lhs3 == rhs3);
+
+				String lhs4("");
+				String rhs4("");
+				assert(lhs4 == rhs4);
+
+				String lhs5;
+				String rhs5("");
+				assert(lhs5 == rhs5);
+
+				String lhs6("\0");
+				String rhs6("");
+				assert(lhs6 == rhs6);
+				LOGD(eLogChannel::CORE_STRING, std::cout, "bool operator==(const String& lhs, const String& rhs) TEST SUCCESS");
+			}
+
+			{
+				String lhs1("hello");
+				const char* rhs1 = "hello";
+				assert(lhs1 == rhs1);
+
+				String lhs2("hello");
+				const char* rhs2 = "hellm";
+				assert(!(lhs2 == rhs2));
+
+				String lhs3;
+				const char* rhs3 = "";
+				assert(lhs3 == rhs3);
+
+				String lhs4("");
+				const char* rhs4 = "";
+				assert(lhs4 == rhs4);
+
+				String lhs5("some");
+				char rhs5[] = {'s', 'o', 'm', 'e'};
+				assert(lhs5 == rhs5);
+
+				String lhs6("\0");
+				const char* rhs6 = "";
+				assert(lhs6 == rhs6);
+
+				LOGD(eLogChannel::CORE_STRING, std::cout, "bool operator==(const String& lhs, const char* rhs) TEST SUCCESS");
+			}
+
+			{
+				String lhs1("hello");
+				String rhs1("hell");
+				assert(lhs1 != rhs1);
+
+				String lhs2("hello");
+				String rhs2("hellm");
+				assert(lhs2 != rhs2);
+
+				String lhs3;
+				String rhs3;
+				assert(!(lhs3 != rhs3));
+
+				String lhs4(".");
+				String rhs4("");
+				assert(lhs4 != rhs4);
+
+				String lhs5("\0");
+				String rhs5("");
+				assert(!(lhs5 != rhs5));
+				
+				LOGD(eLogChannel::CORE_STRING, std::cout, "bool operator!=(const String& lhs, const String& rhs) TEST SUCCESS");
+			}
+
+			{
+				String lhs1("hello");
+				const char* rhs1 = "hell";
+				assert(lhs1 != rhs1);
+
+				String lhs2("hello");
+				const char* rhs2 = "hellm";
+				assert(lhs2 != rhs2);
+
+				String lhs3;
+				const char* rhs3 = "";
+				assert(!(lhs3 != rhs3));
+
+				String lhs4("");
+				const char* rhs4 = ".";
+				assert(lhs4 != rhs4);
+
+				String lhs5("some");
+				char rhs5[] = {'s', 'o', 'm', 'm'};
+				assert(lhs5 != rhs5);
+
+				String lhs6("\0");
+				const char* rhs6 = "";
+				assert(!(lhs6 != rhs6));
+
+				LOGD(eLogChannel::CORE_STRING, std::cout, "bool operator!=(const String& lhs, const char* rhs) TEST SUCCESS");
+			}
+		}
+	
+		void StreamOperator()
+		{
+			{
+				String s = "hello";
+				std::cout << s << std::endl;
+
+				LOGD(eLogChannel::CORE_STRING, std::cout, "std::ostream& operator<<(std::ostream& os, const String& str) TEST SUCCESS");
+			}
+
+			// {
+			// 	String s;
+			// 	std::cin >> s;
+			// 	std::cout << "s: " << s << std::endl;
+			// 	LOGD(eLogChannel::CORE_STRING, std::cout, "std::istream& operator>>(std::istream& is, String& str) TEST SUCCESS");
+			// }
+		}
+	
+		void GetLine()
+		{
+			// greet the user
+			String name;
+			std::cout << "What is your name? ";
+			GetLine(std::cin, name);
+			std::cout << "Hello " << name << ", nice to meet you.\n";
+		
+			// read file line by line
+			std::istringstream input;
+			input.str("1\n2\n3\n4\n5\n6\n7\n");
+			int32_t sum = 0;
+			for (String line; GetLine(input, line); )
+			{
+				sum += StringToInt32(line);
+			}
+			assert(sum == 28);
+
+			LOGD(eLogChannel::CORE_STRING, std::cout, "std::istream& GetLine(std::istream& input, String& str, char delim) TEST SUCCESS");
+		}
+
+		void StringToInt()
+		{
+			String str1 = "45";
+			String str2 = "3.14159";
+			String str3 = "31337 with words";
+			String str4 = "words and 2";
+		
+			int32_t myint1 = StringToInt32(str1);
+			int32_t myint2 = StringToInt32(str2);
+			int32_t myint3 = StringToInt32(str3);
+			// error
+			// int myint4 = StringToInt32(str4);
+		
+			assert(myint1 == 45);
+			assert(myint2 == 3);
+			assert(myint3 == 31337);
+			// std::cout << "StringToInt32(\"" << str4 << "\") is " << myint4 << '\n';
+
+			LOGD(eLogChannel::CORE_STRING, std::cout, "int32_t StringToInt32(const String& str, size_t* pos, int32_t base) TEST SUCCESS");
+		}
+	
+		void StringToFloat()
+		{
+			String orbits("686.97 365.24");
+			size_t sz;
+
+			float mars = StringToFloat(orbits, &sz);
+			float earth = StringToFloat(orbits.GetSubstring(sz));
+
+			assert(mars == 686.97f);
+			assert(earth == 365.24f);
+
+			LOGD(eLogChannel::CORE_STRING, std::cout, "int32_t StringToInt32(const String& str, size_t* pos, int32_t base) TEST SUCCESS");
+		}
+
+		void ToString()
+		{
+			double f = 23.43;
+			double f2 = 1e-9;
+			double f3 = 1e40;
+			double f4 = 1e-40;
+			double f5 = 123456789;
+			String fStr = cave::ToString(f);
+			String fStr2 = cave::ToString(f2); // Note: returns "0.000000"
+			String fStr3 = cave::ToString(f3); // Note: Does not return "1e+40".
+			String fStr4 = cave::ToString(f4); // Note: returns "0.000000"
+			String fStr5 = cave::ToString(f5);
+
+			assert(fStr == "23.430000");
+			assert(fStr2 == "0.000000");
+			assert(fStr3 == "10000000000000000303786028427003666890752.000000");
+			assert(fStr4 == "0.000000");
+			assert(fStr5 == "123456789.000000");
+
+			LOGD(eLogChannel::CORE_STRING, std::cout, "String ToString(double value) TEST SUCCESS");
 		}
 	}
 #endif
