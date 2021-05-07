@@ -34,7 +34,7 @@ namespace cave
 	private:
 		eResult createShader(Shader& shader) override;
 		eResult createShaders() override;
-		eResult createObject(DrawableObject& object) override;
+		eResult createObject(Sprite& object) override;
 		eResult createObjects() override;
 		void createView() override;
 		void createPerspective() override;

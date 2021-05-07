@@ -3812,7 +3812,7 @@ namespace cave
 	 * @return The string literal.
 	 *
 	 */
-	String operator""s(const char* str, size_t len)
+	String operator""_s(const char* str, size_t len)
 	{
 		return String{str, len};
 	}

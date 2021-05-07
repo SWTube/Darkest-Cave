@@ -6,6 +6,6 @@
 #pragma once
 
 #include "CoreTypes.h"
-#include "Object/GenericDrawableObject.h"
+#include "Sprite/GenericSprite.h"
 
-#include GET_PLATFORM_HEADER(DrawableObject.h)
+#include GET_PLATFORM_HEADER(Sprite.h)

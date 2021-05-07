@@ -7,24 +7,39 @@
 
 namespace cave
 {
-	GenericRenderer::GenericRenderer(DeviceResources* deviceResources)
-		: mDeviceResources(deviceResources)
+	GenericRenderer::GenericRenderer(DeviceResources* deviceResources, MemoryPool& pool)
+		: mPool(&pool)
+		, mDeviceResources(deviceResources)
 		, mFrameCount(0u)
 	{
-		mDrawableObjects.reserve(1);
+		mSprites.reserve(1);
 	}
 
 	GenericRenderer::~GenericRenderer()
 	{
-		for (Shader* const shader : mShaders)
+		Destroy();
+	}
+
+	void GenericRenderer::Destroy()
+	{
+		while (!mShaders.empty())
 		{
-			delete shader;
+			Shader* shader = mShaders.back();
+			shader->~Shader();
+			mPool->Deallocate(shader, sizeof(Shader));
+			mShaders.pop_back();
 		}
 
-		for (DrawableObject* const drawableObject : mDrawableObjects)
+		while (!mSprites.empty())
 		{
-			delete drawableObject;
+			Sprite* sprite = mSprites.back();
+			sprite->Destroy();
+			mPool->Deallocate(sprite, sizeof(Sprite));
+			mSprites.pop_back();
 		}
+
+		mShaders.clear();
+		mSprites.clear();
 	}
 
 	DeviceResources* const GenericRenderer::GetDeviceResources() const
@@ -32,15 +47,18 @@ namespace cave
 		return mDeviceResources;
 	}
 
-	void GenericRenderer::AddDrawableObject(DrawableObject*&& object)
+	void GenericRenderer::AddSprite(Sprite* object)
 	{
-		mDrawableObjects.push_back(std::move(object));
-		createObject(*mDrawableObjects.back());
+		assert(mPool == object->GetMemoryPool());
+		mSprites.push_back(std::move(object));
+		createObject(*mSprites.back());
 	}
 
-	void GenericRenderer::AddShader(Shader*&& shader)
+	void GenericRenderer::AddShader(Shader* shader)
 	{
+		typedef std::vector<Shader*>::pointer cavePointer;
 		mShaders.push_back(std::move(shader));
+		
 		createShader(*mShaders.back());
 		CreateWindowSizeDependentResources();
 	}

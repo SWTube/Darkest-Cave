@@ -3,34 +3,39 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Object/UnixDrawableObject.h"
+#include "Sprite/UnixSprite.h"
 
 #include "lodepng.h"
 
 #ifdef __UNIX__
 namespace cave
 {
-	UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
-		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices))
+	UnixSprite::UnixSprite(Texture* texture, MemoryPool& pool)
+		: GenericSprite(texture, pool)
 	{
 	}
 
-	UnixDrawableObject::UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
-		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices), textureFilePath)
+	UnixSprite::UnixSprite(const Texture& texture, MemoryPool& pool)
+		: GenericSprite(texture, pool)
 	{
 	}
 
-	UnixDrawableObject::UnixDrawableObject(const UnixDrawableObject&& other)
-		: GenericDrawableObject(std::move(other))
+	UnixSprite::UnixSprite(Texture&& texture, MemoryPool& pool)
+		: GenericSprite(std::move(texture), pool)
+	{
+	}
+
+	UnixSprite::UnixSprite(UnixSprite&& other)
+		: GenericSprite(std::move(other))
 	{
 	}
 
 
-	UnixDrawableObject& UnixDrawableObject::operator=(const UnixDrawableObject&& other)
+	UnixSprite& UnixSprite::operator=(UnixSprite&& other)
 	{
 		if (this != &other)
 		{
-			GenericDrawableObject::operator=(other);
+			GenericSprite::operator=(other);
 			mVertexArrayObject = other.mVertexArrayObject;
 			memcpy(mBuffers, other.mBuffers, BUFFER_COUNT);
 			mProgram = other.mProgram;
@@ -39,32 +44,32 @@ namespace cave
 		return *this;
 	}
 
-	eResult UnixDrawableObject::Init(uint32_t program)
+	eResult UnixSprite::Init(uint32_t program)
 	{
 		eResult result = eResult::CAVE_OK;
 		uint32_t glError = GL_NO_ERROR;
 		mProgram = program;
 
 		// 14. Create Buffer ---------------------------------------------------------------------------------------------
-		glCreateBuffers(DrawableObject::BUFFER_COUNT, mBuffers);
+		glCreateBuffers(Sprite::BUFFER_COUNT, mBuffers);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glCreateBuffers error code: 0x%x", glError);
 			return eResult::CAVE_FAIL;
 		}
-		for (uint32_t i = 0; i < DrawableObject::BUFFER_COUNT; ++i)
+		for (uint32_t i = 0; i < Sprite::BUFFER_COUNT; ++i)
 		{
 			LOGDF(eLogChannel::GRAPHICS, std::cerr, "buffer: %u", mBuffers[i]);
 		}
 
 		// 15. Bind Buffer ---------------------------------------------------------------------------------------------
-		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[DrawableObject::ARRAY_BUFFER]);
+		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[Sprite::ARRAY_BUFFER]);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindBuffer error code: 0x%x", glError);
 			return eResult::CAVE_FAIL;
 		}
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[DrawableObject::ELEMENT_ARRAY_BUFFER]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[Sprite::ELEMENT_ARRAY_BUFFER]);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindBuffer error code: 0x%x", glError);
@@ -85,7 +90,7 @@ namespace cave
 			return eResult::CAVE_FAIL;
 		}
 		
-		glVertexAttribPointer(V_POSITION, 3, GL_FLOAT, GL_FALSE, mVertices[0].GetSize(), BUFFER_OFFSET(0u));
+		glVertexAttribPointer(V_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(VertexT), BUFFER_OFFSET(0u));
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexAttribPointer error code: 0x%x", glError);
@@ -98,7 +103,7 @@ namespace cave
 			return eResult::CAVE_FAIL;
 		}
 
-		glVertexAttribPointer(V_TEX_COORD, 2, GL_FLOAT, GL_FALSE, mVertices[0].GetSize(), BUFFER_OFFSET(sizeof(Vertex)));
+		glVertexAttribPointer(V_TEX_COORD, 2, GL_FLOAT, GL_FALSE, sizeof(VertexT), BUFFER_OFFSET(sizeof(Vertex)));
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexAttribPointer error code: 0x%x", glError);
@@ -114,14 +119,14 @@ namespace cave
 		// Preparing to Send Data to OpenGL
 		// All data must be stored in buffer objects (chunks of memory managed by OpenGL)
 		// Common way is to specify the data at the same time as you specify the buffer's size
-		glNamedBufferStorage(mBuffers[DrawableObject::ARRAY_BUFFER], mVerticesCount * mVertices[0].GetSize(), mVertices, 0);
+		glNamedBufferStorage(mBuffers[Sprite::ARRAY_BUFFER], sizeof(VERTICES), VERTICES, 0);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glNamedBufferStorage error code: 0x%x", glError);
 			return eResult::CAVE_FAIL;
 		}
 
-		glNamedBufferStorage(mBuffers[DrawableObject::ELEMENT_ARRAY_BUFFER], mIndicesCount * sizeof(*mIndices), mIndices, 0);
+		glNamedBufferStorage(mBuffers[Sprite::ELEMENT_ARRAY_BUFFER], sizeof(INDICES), INDICES, 0);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glNamedBufferStorage error code: 0x%x", glError);
@@ -129,12 +134,6 @@ namespace cave
 		}
 
 		// 16. Load Textures ---------------------------------------------------------------------------------------------
-		uint32_t error = lodepng_decode24_file(&mTextureData, &mTextureWidth, &mTextureHeight, mTextureFilePath);
-		if (error != 0)
-		{
-			LOGEF(eLogChannel::GRAPHICS, std::cout, "The png file %s cannot be loaded. Error Code: %u", mTextureFilePath, error);
-			return eResult::CAVE_FAIL;
-		}
 
 		// LOGDF(eLogChannel::GRAPHICS, std::cout, "vector size: %lu", TextureData.size());
 		glCreateTextures(GL_TEXTURE_2D, 1u, &mTexture);
@@ -147,7 +146,7 @@ namespace cave
 		glBindTextureUnit(mTexture - 1u, mTexture);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindTextureUnit error code: 0x%x", glError);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindTextureUnit error code: 0x%x, Texture: %u", glError, mTexture);
 			return eResult::CAVE_FAIL;
 		}
 
@@ -165,13 +164,13 @@ namespace cave
 		glTextureParameteri(mTexture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTextureParameteri(mTexture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTextureStorage2D(mTexture, 1, GL_RGB8, mTextureWidth, mTextureHeight);
+		glTextureStorage2D(mTexture, 1, GL_RGB8, mTextureData->GetWidth(), mTextureData->GetHeight());
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureStorage2D error code: 0x%x", glError);
 			return eResult::CAVE_FAIL;
 		}
-		glTextureSubImage2D(mTexture, 0, 0, 0, mTextureWidth, mTextureHeight, GL_RGB, GL_UNSIGNED_BYTE, mTextureData);
+		glTextureSubImage2D(mTexture, 0, 0, 0, mTextureData->GetWidth(), mTextureData->GetHeight(), GL_RGB, GL_UNSIGNED_BYTE, mTextureData->GetTexture());
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureSubImage2D error code: 0x%x", glError);
@@ -198,42 +197,52 @@ namespace cave
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, error code: 0x%x", "World", glGetError());
 			return eResult::CAVE_FAIL;
 		}
+		mWorld = glm::scale(
+			glm::vec3(
+				static_cast<float>(mWidth) / static_cast<float>(mTextureData->GetWidth()), 
+				static_cast<float>(mHeight) / static_cast<float>(mTextureData->GetHeight()), 
+				1.0f
+			)
+		);
 		glUniformMatrix4fv(worldLocation, 1, false, glm::value_ptr(mWorld));
 
 		// glCreateSamplers(1, &msBackgroundSampler);
 		// LOGDF(eLogChannel::GRAPHICS, std::cout, "sampler: %u", msBackgroundSampler);
 		// glBindSampler(msBackgroundIndex, msBackgroundSampler);
-		free(mTextureData);
-		mTextureData = nullptr;
 
-		LOGDF(eLogChannel::GRAPHICS, std::cout, "\n\tArray Buffer: %u\n\tElement Array Buffer: %u\n\tVertexArrayObject: %u\n\tTexture: %u, %s", mBuffers[ARRAY_BUFFER], mBuffers[ELEMENT_ARRAY_BUFFER], mVertexArrayObject, mTexture, mTextureFilePath);
+		LOGDF(eLogChannel::GRAPHICS, std::cout, "\n\tArray Buffer: %u\n\tElement Array Buffer: %u\n\tVertexArrayObject: %u\n\tTexture: %u, %s", mBuffers[ARRAY_BUFFER], mBuffers[ELEMENT_ARRAY_BUFFER], mVertexArrayObject, mTexture, mTextureData->GetCStringFilePath());
+		mTextureData->~Texture();
+		mPool->Deallocate(mTextureData, sizeof(Texture));
+		mTextureData = nullptr;
 
 		return result;
 	}
 
-	void UnixDrawableObject::Destroy()
+	void UnixSprite::Destroy()
 	{
-		glDeleteTextures(mTexture - 1u, &mTexture);
+		GenericSprite::Destroy();
 
+		glDeleteTextures(mTexture - 1u, &mTexture);
 		
 		glDeleteBuffers(BUFFER_COUNT, mBuffers);
 
 		if (mTextureData != nullptr)
 		{
-			free(mTextureData);
+			mTextureData->~Texture();
+			mTextureData = nullptr;
 		}
 	}
 
-	uint32_t* const UnixDrawableObject::GetBuffers()
+	uint32_t* const UnixSprite::GetBuffers()
 	{
 		return mBuffers;
 	}
 
-	void UnixDrawableObject::Update()
+	void UnixSprite::Update()
 	{
 	}
 
-	void UnixDrawableObject::Render()
+	void UnixSprite::Render()
 	{
 		int32_t glError = GL_NO_ERROR;
 
@@ -256,7 +265,7 @@ namespace cave
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindVertexArray error code: 0x%x", glError);
 		}
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[DrawableObject::ELEMENT_ARRAY_BUFFER]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[Sprite::ELEMENT_ARRAY_BUFFER]);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindBuffer error code: 0x%x", glError);
@@ -271,7 +280,7 @@ namespace cave
 			// vertex == bundle of data values that are processed together
 				// almost always includes positional data
 				// values needed to determine the pixel's final color
-		glDrawElements(GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_BYTE, nullptr);
+		glDrawElements(GL_TRIANGLES, INDICES_COUNT, GL_UNSIGNED_BYTE, nullptr);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glDrawElements error code: 0x%x", glError);

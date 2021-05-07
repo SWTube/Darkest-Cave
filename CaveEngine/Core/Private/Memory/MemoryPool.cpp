@@ -96,12 +96,12 @@ namespace cave
 
 		// Memory Pool can give pointer stored in corresponding Data Block
 		mFreeSize -= memorySize;
-		return mDataBlocks[memoryIndex]->Get();
+		void* pointer = mDataBlocks[memoryIndex]->Get();
+		return pointer;
 	}
 
 	void MemoryPool::Deallocate(void* item, size_t size)
 	{
-		static size_t counter = 0ul;
 		// item should not be nullptr
 		// If user tries to deallocate pointer already returned to Data Block, neglect.
 		size_t memorySize = GetUpperPowerOfTwo(size);
@@ -111,7 +111,6 @@ namespace cave
 		if (item == nullptr || mDataBlocks[memoryIndex]->HasItem(item))
 		{
 			LOGE(eLogChannel::CORE_MEMORY, std::cerr, "item is nullptr");
-			++counter;
 			return;
 		}
 
@@ -120,7 +119,6 @@ namespace cave
 		if (mDataBlocks[memoryIndex] == nullptr || (mFreeSize == mPoolSize && mFreeSize > 0))
 		{
 			LOGE(eLogChannel::CORE_MEMORY, std::cerr, "datablock is nullptr");
-			++counter;
 			free(item);
 			return;
 		}
@@ -128,7 +126,6 @@ namespace cave
 		// Return pointer to Data Block
 		mDataBlocks[memoryIndex]->Return(item);
 		mFreeSize += memorySize;
-		++counter;
 	}
 
 	size_t MemoryPool::GetCurrentStorage() const

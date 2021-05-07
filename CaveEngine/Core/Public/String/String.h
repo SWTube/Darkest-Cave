@@ -186,7 +186,7 @@ namespace cave
 	String ToString(double value);
 	String ToString(long double value);
 
-	String operator""s(const char* str, size_t len);
+	String operator""_s(const char* str, size_t len);
 
 #ifdef CAVE_BUILD_DEBUG
 	namespace StringTest

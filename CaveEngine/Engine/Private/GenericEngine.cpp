@@ -7,6 +7,11 @@
 
 namespace cave
 {
+	GenericEngine::GenericEngine()
+		: mPool(&gCoreMemoryPool)
+	{
+	}
+
 	const wchar_t* GenericEngine::msWindowClassName = L"GenericWindowClass";
 
 	Window* GenericEngine::GetWindowHandle()

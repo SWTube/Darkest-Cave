@@ -48,6 +48,7 @@ namespace cave
 	void WindowsRenderer::Destroy()
 	{
 		cleanupDevice();
+		GenericRenderer::Destroy();
 		mDeviceResources = nullptr;
 	}
 
@@ -77,7 +78,7 @@ namespace cave
 		// �츮�� �׸� buffer ����
 		context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
-		for (DrawableObject* const object : mDrawableObjects)
+		for (Sprite* const object : mSprites)
 		{
 			object->Render();
 		}
@@ -116,7 +117,7 @@ namespace cave
 
 	void WindowsRenderer::Update()
 	{
-		for (DrawableObject* const object : mDrawableObjects)
+		for (Sprite* const object : mSprites)
 		{
 			object->Update();
 		}
@@ -135,9 +136,9 @@ namespace cave
 
 	eResult WindowsRenderer::createObjects()
 	{
-		LOGDF(eLogChannel::GRAPHICS, "number of objects: %u", mDrawableObjects.size());
+		LOGDF(eLogChannel::GRAPHICS, "number of objects: %u", mSprites.size());
 
-		for (DrawableObject* const object : mDrawableObjects)
+		for (Sprite* const object : mSprites)
 		{
 			if (eResult result = object->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext()); result != eResult::CAVE_OK)
 			{
@@ -148,7 +149,7 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	eResult WindowsRenderer::createObject(DrawableObject& object)
+	eResult WindowsRenderer::createObject(Sprite& object)
 	{
 		return object.Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
 	}

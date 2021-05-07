@@ -12,25 +12,34 @@
 #ifdef __UNIX__
 namespace cave
 {
-	UnixShader::~UnixShader()
+	UnixShader::UnixShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath)
+		: GenericShader(vertexShaderFilePath, fragmentShaderFilePath)
 	{
-		delete[] mVertexShaderFilePath;
-		delete[] mFragmentShaderFilePath;
 	}
 
+	UnixShader::UnixShader(UnixShader&& other)
+		: GenericShader(std::move(other))
+		, mProgram(other.mProgram)
+	{
+	}
+
+	UnixShader& UnixShader::operator=(UnixShader&& other)
+	{
+		if (this != &other)
+		{
+			GenericShader::operator=(std::move(other));
+			mProgram = other.mProgram;
+		}
+
+		return *this;
+	}
+	
 	eResult UnixShader::Compile()
 	{
 		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
-		std::filesystem::path vertexShaderPath = PROJECT_DIR;
-		vertexShaderPath += "/CaveEngine/Graphics/Shader/";
-		vertexShaderPath += mVertexShaderFilePath;
-		std::filesystem::path fragmentShaderPath = PROJECT_DIR;
-		fragmentShaderPath += "/CaveEngine/Graphics/Shader/";
-		fragmentShaderPath += mFragmentShaderFilePath;
-		
 		ShaderInfo shaders[] = {
-			{ GL_VERTEX_SHADER, vertexShaderPath.c_str()},
-			{ GL_FRAGMENT_SHADER, fragmentShaderPath.c_str() },
+			{ GL_VERTEX_SHADER, mVertexShaderFilePath.c_str()},
+			{ GL_FRAGMENT_SHADER, mFragmentShaderFilePath.c_str() },
 			{ GL_NONE, nullptr }
 		};
 

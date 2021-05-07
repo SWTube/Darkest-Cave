@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <filesystem>
+
 #include "CoreTypes.h"
 #include "GraphicsApiPch.h"
 
@@ -14,12 +16,14 @@ namespace cave
 	{
 	public:
 		GenericShader() = delete;
-		constexpr GenericShader(const char* vertexShaderFilePath, const char* fragmentShaderFilePath);
-		constexpr GenericShader(const char* shaderFilePath);
+		GenericShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool = gCoreMemoryPool);
+		GenericShader(const std::filesystem::path& shaderFilePath, MemoryPool& pool = gCoreMemoryPool);
 		GenericShader(const GenericShader&) = delete;
-		GenericShader(const GenericShader&&) = delete;
+		GenericShader(GenericShader&& other);
 		GenericShader& operator=(const GenericShader&) = delete;
-		virtual ~GenericShader() = default;
+		GenericShader& operator=(GenericShader&& other);
+		virtual ~GenericShader();
+		constexpr MemoryPool* const GetMemoryPool() const;
 		
 #ifdef __WIN32__
 		virtual eResult Compile(ID3D11Device* device) = 0;
@@ -27,19 +31,9 @@ namespace cave
 		virtual eResult Compile() = 0;
 #endif
 	protected:
-		const char* mShaderFilePath = nullptr;
-		const char* mVertexShaderFilePath = nullptr;
-		const char* mFragmentShaderFilePath = nullptr;
+		MemoryPool* mPool = nullptr;
+		std::filesystem::path mShaderFilePath = PROJECT_DIR;
+		std::filesystem::path mVertexShaderFilePath = PROJECT_DIR;
+		std::filesystem::path mFragmentShaderFilePath = PROJECT_DIR;
 	};
-
-	constexpr GenericShader::GenericShader(const char* vertexShaderFilePath, const char* fragmentShaderFilePath)
-		: mVertexShaderFilePath(vertexShaderFilePath)
-		, mFragmentShaderFilePath(fragmentShaderFilePath)
-	{
-	}
-
-	constexpr GenericShader::GenericShader(const char* shaderFilePath)
-		: mShaderFilePath(shaderFilePath)
-	{
-	}
 } // namespace cave

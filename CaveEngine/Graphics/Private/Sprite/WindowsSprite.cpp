@@ -3,34 +3,25 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Object/WindowsDrawableObject.h"
+#include "Sprite/WindowsSprite.h"
 
 #ifdef __WIN32__
 import DdsTextureLoader;
 
 namespace cave
 {
-	WindowsDrawableObject::WindowsDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
-		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices))
+	WindowsSprite::WindowsSprite(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
+		: GenericSprite(verticesCount, std::move(vertices), indicesCount, std::move(indices))
 	{
 	}
 
-	WindowsDrawableObject::WindowsDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
-		: GenericDrawableObject(verticesCount, std::move(vertices), indicesCount, std::move(indices), textureFilePath)
+	WindowsSprite::WindowsSprite(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
+		: GenericSprite(verticesCount, std::move(vertices), indicesCount, std::move(indices), textureFilePath)
 	{
 	}
 
-	WindowsDrawableObject::WindowsDrawableObject(const WindowsDrawableObject& other)
-		: GenericDrawableObject(other)
-	{
-		if (this != &other)
-		{
-
-		}
-	}
-
-	WindowsDrawableObject::WindowsDrawableObject(const WindowsDrawableObject&& other)
-		: GenericDrawableObject(other)
+	WindowsSprite::WindowsSprite(const WindowsSprite& other)
+		: GenericSprite(other)
 	{
 		if (this != &other)
 		{
@@ -38,21 +29,30 @@ namespace cave
 		}
 	}
 
-	constexpr WindowsDrawableObject& WindowsDrawableObject::operator=(const WindowsDrawableObject& other)
+	WindowsSprite::WindowsSprite(WindowsSprite&& other)
+		: GenericSprite(other)
+	{
+		if (this != &other)
+		{
+
+		}
+	}
+
+	constexpr WindowsSprite& WindowsSprite::operator=(const WindowsSprite& other)
 	{
 		return *this;
 	}
 
-	constexpr WindowsDrawableObject& WindowsDrawableObject::operator=(const WindowsDrawableObject&& other)
+	constexpr WindowsSprite& WindowsSprite::operator=(WindowsSprite&& other)
 	{
 		return *this;
 	}
 
-	WindowsDrawableObject::~WindowsDrawableObject()
+	WindowsSprite::~WindowsSprite()
 	{
 	}
 
-	eResult WindowsDrawableObject::Init(ID3D11Device* device, ID3D11DeviceContext* context)
+	eResult WindowsSprite::Init(ID3D11Device* device, ID3D11DeviceContext* context)
 	{
 		assert(device != nullptr && context != nullptr);
 		mDevice = device;
@@ -126,7 +126,7 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	eResult WindowsDrawableObject::SetInputLayout(ID3DBlob* vsBlob)
+	eResult WindowsSprite::SetInputLayout(ID3DBlob* vsBlob)
 	{
 		// Define the input layout
 		D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -149,7 +149,7 @@ namespace cave
 		mContext->IASetInputLayout(mVertexLayout);
 	}
 
-	void WindowsDrawableObject::Destroy()
+	void WindowsSprite::Destroy()
 	{
 		if (mSamplerLinear != nullptr)
 		{
@@ -190,11 +190,11 @@ namespace cave
 		}
 	}
 
-	void WindowsDrawableObject::Update()
+	void WindowsSprite::Update()
 	{
 	}
 
-	void WindowsDrawableObject::Render()
+	void WindowsSprite::Render()
 	{
 		//
 		// Update variables for the first cube

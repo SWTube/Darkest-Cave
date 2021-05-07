@@ -14,14 +14,12 @@ namespace cave
 	{
 		eResult result = eResult::CAVE_OK;
 
-#ifdef __WIN32__
-		mWindow = new Window(640u, 480u, L"Test", msInstance, StaticWindowProc);
-#else
-		mWindow = new Window(640u, 480u, "Test", nullptr);
-#endif
+		mWindow = reinterpret_cast<Window*>(mPool->Allocate(sizeof(Window)));
+		new(mWindow) Window(640u, 480u, L"Test", msInstance, StaticWindowProc);
 
 		// Instantiate the device manager class.
-		mDeviceResources = new DeviceResources();
+		mDeviceResources = reinterpret_cast<DeviceResources*>(mPool->Allocate(sizeof(DeviceResources)));
+		new(mDeviceResources) DeviceResources();
 		// Create device resources.
 		result = mDeviceResources->CreateDeviceResources();
 		if (result != eResult::CAVE_OK)
@@ -30,7 +28,8 @@ namespace cave
 		}
 
 		// Instantiate the renderer.
-		mRenderer = new Renderer(mDeviceResources);
+		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
+		new(mRenderer) Renderer(mDeviceResources);
 		mRenderer->CreateDeviceDependentResources();
 	
 		// We have a window, so initialize window size-dependent resources.
@@ -50,18 +49,18 @@ namespace cave
 		if (mRenderer != nullptr)
 		{
 			mRenderer->Destroy();
-			delete mRenderer;
+			mPool->Deallocate(mRenderer, sizeof(Renderer));
 		}
 
 		if (mDeviceResources != nullptr)
 		{
 			mDeviceResources->Destroy();
-			delete mDeviceResources;
+			mPool->Deallocate(mDeviceResources, sizeof(DeviceResources));
 		}
 
 		if (mWindow != nullptr)
 		{
-			delete mWindow;
+			mPool->Deallocate(mWindow, sizeof(Window));
 		}
 	}
 

@@ -8,22 +8,22 @@
 #include "GraphicsApiPch.h"
 
 #include "CoreMinimal.h"
-#include "Object/GenericDrawableObject.h"
+#include "Sprite/GenericSprite.h"
 
 #ifdef __WIN32__
 namespace cave
 {
-	class WindowsDrawableObject final : public GenericDrawableObject
+	class WindowsSprite final : public GenericSprite
 	{
 	public:
-		WindowsDrawableObject() = delete;
-		WindowsDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
-		WindowsDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
-		WindowsDrawableObject(const WindowsDrawableObject& object);
-		WindowsDrawableObject(const WindowsDrawableObject&& object);
-		constexpr WindowsDrawableObject& operator=(const WindowsDrawableObject& object);
-		constexpr WindowsDrawableObject& operator=(const WindowsDrawableObject&& object);
-		virtual ~WindowsDrawableObject();
+		WindowsSprite() = delete;
+		WindowsSprite(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
+		WindowsSprite(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
+		WindowsSprite(const WindowsSprite& object);
+		WindowsSprite(WindowsSprite&& object);
+		constexpr WindowsSprite& operator=(const WindowsSprite& object);
+		constexpr WindowsSprite& operator=(WindowsSprite&& object);
+		virtual ~WindowsSprite();
 
 		eResult Init(ID3D11Device* device, ID3D11DeviceContext* context) override;
 		eResult SetInputLayout(ID3DBlob* vsBlob);
@@ -41,6 +41,6 @@ namespace cave
 		ID3D11SamplerState* mSamplerLinear = nullptr;
 	};
 
-	typedef WindowsDrawableObject DrawableObject;
+	typedef WindowsSprite Sprite;
 } // namespace cave
 #endif

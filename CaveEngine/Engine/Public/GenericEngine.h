@@ -14,7 +14,7 @@ namespace cave
 	class GenericEngine
 	{
 	public:
-		GenericEngine() = default;
+		GenericEngine();
 		virtual ~GenericEngine() = default;
 
 		virtual eResult Init() = 0;
@@ -27,6 +27,7 @@ namespace cave
 
 		virtual Renderer* const GetRenderer();
 	protected:
+		MemoryPool* mPool = nullptr;
 		DeviceResources* mDeviceResources = nullptr;
 		Renderer* mRenderer = nullptr;
 		Window* mWindow = nullptr;
