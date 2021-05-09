@@ -29,16 +29,9 @@ namespace cave
             mChildren.insert(mChildren.begin() + addPos, node);
         }
         mChildrenCount = mChildren.size();
-    }
-    void BTCompositeNode::DeleteChild(int startPos, int endPos)
-    {
-        if (endPos == -1) {
-            mChildren.erase(mChildren.begin() + startPos, mChildren.begin() + startPos + 1);
-        }
-        else {
-            mChildren.erase(mChildren.begin() + startPos, mChildren.begin() + endPos);
-        }
-        mChildrenCount = mChildren.size();
+
+        node->SetParentNode(this);
+        node->SetTreeDepth(this->GetTreeDepth() + 1);
     }
 
     BTNode* BTCompositeNode::GetChild(int childNum) const

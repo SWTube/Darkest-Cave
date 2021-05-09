@@ -18,9 +18,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     cave::BTRootNode* a = new cave::BTRootNode("a");
     cave::BTCompositeNode* b = new cave::BTCompositeNode("b");
     cave::BTCompositeNode* c = new cave::BTCompositeNode("c");
+    cave::BTCompositeNode* d = new cave::BTCompositeNode("d");
 
     a->AddChild(b, -1);
     b->AddChild(c);
+    b->AddChild(d);
     
     
 
