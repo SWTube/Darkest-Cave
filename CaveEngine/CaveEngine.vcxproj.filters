@@ -135,6 +135,9 @@
     <ClInclude Include="AI\Public\BehaviorTree.h">
       <Filter>Source Files\AI</Filter>
     </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\BTActionNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -171,6 +174,9 @@
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
     <ClCompile Include="AI\Private\BehaviorTree\BTRootNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\BTActionNode.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
   </ItemGroup>

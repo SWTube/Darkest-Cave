@@ -199,6 +199,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AI\Public\BehaviorTree.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\BTActionNode.h" />
     <ClInclude Include="AI\Public\BehaviorTree\BTCompositeNode.h" />
     <ClInclude Include="AI\Public\BehaviorTree\BTNode.h" />
     <ClInclude Include="AI\Public\BehaviorTree\BTRootNode.h" />
@@ -221,6 +222,7 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AI\Private\BehaviorTree\BTActionNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\BTCompositeNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\BTNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\BTRootNode.cpp" />

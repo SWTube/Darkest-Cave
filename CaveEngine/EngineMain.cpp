@@ -12,6 +12,12 @@ import Renderer;
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
+
+bool hello() 
+{
+    return true;
+}
+
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
     cave::BTNode* x = new cave::BTNode("x");
@@ -19,10 +25,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     cave::BTCompositeNode* b = new cave::BTCompositeNode("b");
     cave::BTCompositeNode* c = new cave::BTCompositeNode("c");
     cave::BTCompositeNode* d = new cave::BTCompositeNode("d");
+    cave::BTActionNode* e = new cave::BTActionNode("e", hello);
 
     a->AddChild(b, -1);
     b->AddChild(c);
     b->AddChild(d);
+    d->AddChild(e);
     
     
 

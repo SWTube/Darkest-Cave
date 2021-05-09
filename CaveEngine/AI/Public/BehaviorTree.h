@@ -7,3 +7,4 @@
 #include "BehaviorTree/BTNode.h"
 #include "BehaviorTree/BTCompositeNode.h"
 #include "BehaviorTree/BTRootNode.h"
+#include "BehaviorTree/BTActionNode.h"
