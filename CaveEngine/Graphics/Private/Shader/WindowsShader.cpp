@@ -22,8 +22,8 @@ namespace cave
 		shaderPath += "/CaveEngine/Graphics/Shader/";
 		shaderPath += mShaderFilePath;
 
-		ID3DBlob* vsBlob = nullptr;
-		eResult error = compileShaderFromFile(shaderPath.c_str(), "VS", "vs_4_0", &vsBlob);
+		mVsBlob = nullptr;
+		eResult error = compileShaderFromFile(shaderPath.c_str(), "VS", "vs_4_0", &mVsBlob);
 		if (error != eResult::CAVE_OK)
 		{
 			LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
@@ -31,16 +31,16 @@ namespace cave
 		}
 
 		// Create the vertex shader
-		int32_t result = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &mVertexShader);
+		int32_t result = device->CreateVertexShader(mVsBlob->GetBufferPointer(), mVsBlob->GetBufferSize(), nullptr, &mVertexShader);
 		if (FAILED(result))
 		{
-			vsBlob->Release();
+			mVsBlob->Release();
 			return eResult::CAVE_FAIL;
 		}
 
 		// Compile the pixel shader
-		ID3DBlob* psBlob = nullptr;
-		error = compileShaderFromFile(shaderPath.c_str(), "PS", "ps_4_0", &psBlob);
+		mPsBlob = nullptr;
+		error = compileShaderFromFile(shaderPath.c_str(), "PS", "ps_4_0", &mPsBlob);
 		if (error != eResult::CAVE_OK)
 		{
 			LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
@@ -48,14 +48,24 @@ namespace cave
 		}
 
 		// Create the pixel shader
-		result = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &mPixelShader);
-		psBlob->Release();
+		result = device->CreatePixelShader(mPsBlob->GetBufferPointer(), mPsBlob->GetBufferSize(), nullptr, &mPixelShader);
 		if (FAILED(result))
 		{
 			return eResult::CAVE_FAIL;
 		}
 
 		return eResult::CAVE_OK;
+	}
+
+	void WindowsShader::Render(ID3D11DeviceContext* context)
+	{
+		context->VSSetShader(mVertexShader, nullptr, 0);
+		context->PSSetShader(mPixelShader, nullptr, 0);
+	}
+
+	ID3DBlob* const WindowsShader::GetVertexShaderBlob()
+	{
+		return mVsBlob;
 	}
 
 	//--------------------------------------------------------------------------------------

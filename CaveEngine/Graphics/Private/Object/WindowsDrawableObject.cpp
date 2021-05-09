@@ -73,6 +73,12 @@ namespace cave
 			return eResult::CAVE_FAIL;
 		}
 
+		// ���� context�� �����ֱ�
+		// Set vertex buffer
+		uint32_t stride = mVertices[0].GetSize();
+		uint32_t offset = 0;
+		mContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
+
 		bd.Usage = D3D11_USAGE_DEFAULT;
 		bd.ByteWidth = sizeof(uint8_t) * mIndicesCount;
 		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -83,6 +89,12 @@ namespace cave
 		{
 			return eResult::CAVE_FAIL;
 		}
+
+		// Set index buffer
+		mContext->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+		// Set primitive topology
+		mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		// 12. Define, create, set the input layout ---------------------------------------------------------------------------------------------
 
@@ -101,11 +113,23 @@ namespace cave
 		free(mTextureData);
 		mTextureData = nullptr;*/
 
+
+		// Create the constant buffers
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(ConstantBuffer);
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.CPUAccessFlags = 0;
+		result = mDevice->CreateBuffer(&bd, nullptr, &mConstantBuffer);
+		if (FAILED(result))
+		{
+			return static_cast<eResult>(result);
+		}
+
 		// Load the Texture
 		result = DdsTextureLoader::CreateDDSTextureFromFile(device, L"Graphics/Resource/seafloor.dds", nullptr, &mTextureRv);
-		if(FAILED(result))
+		if (FAILED(result))
 		{
-			return eResult::CAVE_FAIL;
+			return static_cast<eResult>(result);
 		}
 
 		// Create the sample state
@@ -117,11 +141,13 @@ namespace cave
 		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		sampDesc.MinLOD = 0;
 		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-		result = device->CreateSamplerState(&sampDesc, &mSamplerLinear);
+		result = mDevice->CreateSamplerState(&sampDesc, &mSamplerLinear);
 		if (FAILED(result))
 		{
-			return eResult::CAVE_FAIL;
+			return static_cast<eResult>(result);
 		}
+
+		mWorld = DirectX::XMMatrixIdentity();
 
 		return eResult::CAVE_OK;
 	}
@@ -132,7 +158,7 @@ namespace cave
 		D3D11_INPUT_ELEMENT_DESC layout[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(Float3), D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 		UINT numElements = ARRAYSIZE(layout);
 
@@ -222,8 +248,8 @@ namespace cave
 		//
 		// Render the first cube
 		//
-		mContext->VSSetConstantBuffers(2, 1, &mConstantBuffer);
-		mContext->PSSetConstantBuffers(2, 1, &mConstantBuffer);
+		mContext->VSSetConstantBuffers(0, 1, &mConstantBuffer);
+		mContext->PSSetConstantBuffers(0, 1, &mConstantBuffer);
 		mContext->PSSetShaderResources(0, 1, &mTextureRv);
 		mContext->PSSetSamplers(0, 1, &mSamplerLinear);
 

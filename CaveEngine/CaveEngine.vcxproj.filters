@@ -97,6 +97,15 @@
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
       <Filter>Source Files\Graphics\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Private\Memory\MemoryPool.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Memory\DataBlock.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Node.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
@@ -223,6 +232,12 @@
     <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Public\Memory\DataBlock.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Node.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -313,6 +328,9 @@
     </Filter>
     <Filter Include="Header Files\Graphics\Shader">
       <UniqueIdentifier>{ce661392-408e-4ca9-811d-9ec6fda3af15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Containers">
+      <UniqueIdentifier>{9349ca78-182b-42fe-b049-dd8829e1e840}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

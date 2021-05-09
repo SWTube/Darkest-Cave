@@ -84,9 +84,11 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	cave::MemoryPool pool(MEMORY_POOL_SIZE);
+	/*cave::MemoryPool pool(MEMORY_POOL_SIZE);
 	MemoryTest1<100ul>(pool);
-	// MemoryTest2<100ul>(pool);
+	MemoryTest2<100ul>(pool);*/
+
+	RenderTest();
 	
 	// Cleanup is handled in destructors.
     return 0;
@@ -124,7 +126,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto endTimeRec0 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec0 = endTimeRec0 - startTimeRec0;
 		memoryPoolAllocSum += elapsedTimeRec0.count() * 1000;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
 
 		auto startTimeRec1 = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < N; ++i)
@@ -135,7 +137,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto endTimeRec1 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec1 = endTimeRec1 - startTimeRec1;
 		memoryPoolDeallocSum += elapsedTimeRec1.count() * 1000;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
 
 		std::vector<void*> pointersByNew;
 		pointersByNew.reserve(N);
@@ -147,7 +149,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		}
 		auto endTimeRec2 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec2 = endTimeRec2 - startTimeRec2;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
 		mallocAllocSum += elapsedTimeRec2.count() * 1000;
 
 		auto startTimeRec3 = std::chrono::high_resolution_clock::now();
@@ -158,11 +160,14 @@ void MemoryTest1(cave::MemoryPool& pool)
 		}
 		auto endTimeRec3 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec3 = endTimeRec3 - startTimeRec3;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
 		freeDeallocSum += elapsedTimeRec3.count() * 1000;
 	}
-	
+#ifdef __WIN32__
+	LOGDF(cave::eLogChannel::CORE_MEMORY, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
+#else
 	LOGDF(cave::eLogChannel::CORE_MEMORY, std::cout, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
+#endif
 }
 
 template <size_t N>
@@ -209,7 +214,9 @@ void RenderTest()
 	// Begin initialization.
 
 	// Instantiate the window manager class.
-	cave::Engine* main = new cave::Engine();
+	cave::MemoryPool pool(MEMORY_POOL_SIZE);
+	cave::Engine* main = reinterpret_cast<cave::Engine*>(pool.Allocate(sizeof(cave::Engine)));
+	new(main) cave::Engine();
 	// Create a window.
 	cave::eResult result = main->Init();
 
@@ -250,8 +257,11 @@ void RenderTest()
 	LOGDF(cave::eLogChannel::GRAPHICS, std::cout, "size of float: %u, size of uint32_t: %u", sizeof(float), sizeof(uint32_t));
 #endif
 
-	cave::DrawableObject* object = new cave::DrawableObject(4u, std::move(vertices), 6u, std::move(indices), "Graphics/Resource/8471.png");
-	cave::DrawableObject* object2 = new cave::DrawableObject(4u, std::move(vertices2), 6u, std::move(indices2), "Graphics/Resource/orange_mushroom.png");
+	cave::DrawableObject* object = reinterpret_cast<cave::DrawableObject*>(pool.Allocate(sizeof(cave::DrawableObject)));
+	new(object) cave::DrawableObject(4u, std::move(vertices), 6u, std::move(indices), "Graphics/Resource/8471.png");
+	cave::DrawableObject* object2 = reinterpret_cast<cave::DrawableObject*>(pool.Allocate(sizeof(cave::DrawableObject)));
+	new(object2) cave::DrawableObject(4u, std::move(vertices2), 6u, std::move(indices2), "Graphics/Resource/orange_mushroom.png");
+
 #ifdef __WIN32__
 	cave::Shader* shader = new cave::Shader("DirectXTest.fxh");
 #else
@@ -276,5 +286,7 @@ void RenderTest()
 		result = main->Run();
 	}
 
-	delete main;
+	main->Destroy();
+
+	pool.Deallocate(main, sizeof(cave::Engine));
 }

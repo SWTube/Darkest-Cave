@@ -3,6 +3,8 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <cstdlib>
+
 #include "Containers/Node.h"
 
 namespace cave

@@ -77,6 +77,14 @@ namespace cave
 		// �츮�� �׸� buffer ����
 		context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
+		for (Shader* const shader : mShaders)
+		{
+			shader->Render(context);
+		}
+
+		context->VSSetConstantBuffers(0, 1, &mConstantBufferNeverChanges);
+		context->VSSetConstantBuffers(1, 1, &mConstantBufferChangeOnResize);
+
 		for (DrawableObject* const object : mDrawableObjects)
 		{
 			object->Render();
@@ -139,7 +147,14 @@ namespace cave
 
 		for (DrawableObject* const object : mDrawableObjects)
 		{
-			if (eResult result = object->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext()); result != eResult::CAVE_OK)
+			eResult result = object->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
+			if (result != eResult::CAVE_OK)
+			{
+				return result;
+			}
+
+			result = object->SetInputLayout(mShaders.front()->GetVertexShaderBlob());
+			if (result != eResult::CAVE_OK)
 			{
 				return result;
 			}
@@ -150,7 +165,19 @@ namespace cave
 
 	eResult WindowsRenderer::createObject(DrawableObject& object)
 	{
-		return object.Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
+		eResult result = object.Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
+
+		result = object.SetInputLayout(mShaders.front()->GetVertexShaderBlob());
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
+
+		return result;
 	}
 
 	eResult WindowsRenderer::createShaders()
@@ -199,8 +226,6 @@ namespace cave
 
 	void WindowsRenderer::createPerspective()
 	{
-		mView = DirectX::XMMatrixIdentity();
-
 		float aspectRatioX = mDeviceResources->GetAspectRatio();
 		float aspectRatioY = aspectRatioX < (16.0f / 9.0f) ? aspectRatioX / (16.0f / 9.0f) : 1.0f;
 

@@ -5,9 +5,11 @@
 
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 #include "CoreTypes.h"
+#include "Debug/Log.h"
 #include "Memory/DataBlock.h"
 
 namespace cave
@@ -57,7 +59,7 @@ namespace cave
 	{
 		if (!number || (number & (number - 1)))
 		{
-			return -1ul;
+			return 0ul;
 		}
 
 		size_t exponent = 0ul;

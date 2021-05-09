@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cassert>
+
 #include "CoreTypes.h"
 
 #include "Containers/Node.h"

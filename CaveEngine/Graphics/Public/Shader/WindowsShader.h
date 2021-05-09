@@ -23,11 +23,16 @@
 			virtual ~WindowsShader();
 
 			virtual eResult Compile(ID3D11Device* device) override;
+			void Render(ID3D11DeviceContext* context);
+
+			ID3DBlob* const GetVertexShaderBlob();
 		private:
 			eResult compileShaderFromFile(const wchar_t* fileName, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut);
 
 			ID3D11VertexShader* mVertexShader = nullptr;
 			ID3D11PixelShader* mPixelShader = nullptr;
+			ID3DBlob* mVsBlob = nullptr;
+			ID3DBlob* mPsBlob = nullptr;
 		};
 
 		constexpr WindowsShader::WindowsShader(const char* shaderFilePath)
