@@ -18,16 +18,9 @@ namespace cave
         SetParentNode(NULL);
         SetTreeDepth(0);
     }
-    void BTCompositeNode::AddChild(BTNode* node, int addPos)
+    void BTCompositeNode::AddChild(BTNode* node)
     {
-        if (addPos == -1) 
-        {
-            mChildren.push_back(node);
-        }
-        else if(addPos >= 0 && addPos <= mChildrenCount) 
-        {
-            mChildren.insert(mChildren.begin() + addPos, node);
-        }
+        mChildren.push_back(node);
         mChildrenCount = mChildren.size();
 
         node->SetParentNode(this);

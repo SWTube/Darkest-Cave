@@ -5,11 +5,11 @@
 #pragma once
 
 #include <vector>
-#include "BTCompositeNode.h"
+#include "BTSequencer.h"
 
 namespace cave
 {
-    class BTRootNode : public BTCompositeNode
+    class BTRootNode : public BTSequencer
     {
     public:
         BTRootNode();

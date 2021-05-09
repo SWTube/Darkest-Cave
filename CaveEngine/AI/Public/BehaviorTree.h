@@ -8,3 +8,5 @@
 #include "BehaviorTree/BTCompositeNode.h"
 #include "BehaviorTree/BTRootNode.h"
 #include "BehaviorTree/BTActionNode.h"
+#include "BehaviorTree/BTSequencer.h"
+#include "BehaviorTree/BTSelector.h"

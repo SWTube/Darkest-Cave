@@ -14,6 +14,11 @@ namespace cave
     public:
         BTActionNode();
         BTActionNode(const char*, bool (*)());
+
+        virtual bool Invoke() override {
+            return mNodeFunction();
+        }
+
         void SetNodeFunction(bool (*)());
     private:
         bool (*mNodeFunction)();

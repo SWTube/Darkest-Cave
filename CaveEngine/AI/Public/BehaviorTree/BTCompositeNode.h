@@ -15,7 +15,7 @@ namespace cave
         BTCompositeNode();
         BTCompositeNode(const char*);
         // Add child back or at position
-        void AddChild(BTNode*, int = -1);
+        void AddChild(BTNode*);
         // return child node at given index
         BTNode* GetChild(int) const;
         // return children 

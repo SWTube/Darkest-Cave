@@ -14,6 +14,8 @@ namespace cave
             BTNode();
             BTNode(const char*);
 
+            virtual bool Invoke() = 0;
+
             // Get node name
             const char* GetNodeName() const;
             // Get tree depth

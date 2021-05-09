@@ -13,26 +13,29 @@ import Renderer;
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
 
-bool hello() 
+bool returnFalse() 
+{
+    return false;
+}
+
+bool returnTrue()
 {
     return true;
 }
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-    cave::BTNode* x = new cave::BTNode("x");
+    bool value;
     cave::BTRootNode* a = new cave::BTRootNode("a");
-    cave::BTCompositeNode* b = new cave::BTCompositeNode("b");
-    cave::BTCompositeNode* c = new cave::BTCompositeNode("c");
-    cave::BTCompositeNode* d = new cave::BTCompositeNode("d");
-    cave::BTActionNode* e = new cave::BTActionNode("e", hello);
+    cave::BTSelector* b = new cave::BTSelector("b");
+    cave::BTActionNode* c = new cave::BTActionNode("c", returnFalse);
+    cave::BTActionNode* d = new cave::BTActionNode("d", returnTrue);
 
-    a->AddChild(b, -1);
+    a->AddChild(b);
     b->AddChild(c);
     b->AddChild(d);
-    d->AddChild(e);
     
-    
+    value = a->Invoke();
 
 
     UNREFERENCED_PARAMETER(hPrevInstance);

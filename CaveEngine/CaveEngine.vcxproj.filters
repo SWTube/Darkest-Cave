@@ -138,6 +138,12 @@
     <ClInclude Include="AI\Public\BehaviorTree\BTActionNode.h">
       <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\BTSelector.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\BTSequencer.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -177,6 +183,12 @@
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
     <ClCompile Include="AI\Private\BehaviorTree\BTActionNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\BTSelector.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\BTSequencer.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
   </ItemGroup>
