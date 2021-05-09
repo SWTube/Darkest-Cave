@@ -5,6 +5,9 @@
 
 #pragma once
 
+#ifdef __WIN32__
+import String;
+#else
 #include <iostream>
 
 #include "CoreTypes.h"
@@ -16,22 +19,22 @@ namespace cave
 {
 	/**
 	 *
-  	 * @brief String stores and manipulates sequences of <code>char</code> objects, 
-	 * 			which are non-array objects of 
+	 * @brief String stores and manipulates sequences of <code>char</code> objects,
+	 * 			which are non-array objects of
 	 * 			[trivial](https://en.cppreference.com/w/cpp/named_req/TrivialType)
 	 * 			[standard-layout](https://en.cppreference.com/w/cpp/named_req/StandardLayoutType) type.
-	 * @details The class is dependent on the character type and the nature of operations on that type. 
+	 * @details The class is dependent on the character type and the nature of operations on that type.
 	 * 			@n@n
-	 * 			The elements of a <code>String</code> are stored contiguously, that is, for as <code>String s</code>, 
-	 * 			<code>&*(s.GetCString() + n) == &*s.GetString() + n</code> for any <code>n</code> in [0, <code>s.GetLength()</code>], 
+	 * 			The elements of a <code>String</code> are stored contiguously, that is, for as <code>String s</code>,
+	 * 			<code>&*(s.GetCString() + n) == &*s.GetString() + n</code> for any <code>n</code> in [0, <code>s.GetLength()</code>],
 	 * 			or equivalently, a pointer to <code>s[0]</code> can be passed to functions that expect a pointer to the first element of a null-terminated
 	 * 			char[] array.
 	 * @author Alegruz
 	 * @date 2021-04-30
 	 * @version 0.0.1
-	 * @todo check if cave::String satisfies the requirements of 
+	 * @todo check if cave::String satisfies the requirements of
 	 * 			[AllocatorAwareContainer](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer),
-	 * 			[SequenceContainer](https://en.cppreference.com/w/cpp/named_req/SequenceContainer)</a> and 
+	 * 			[SequenceContainer](https://en.cppreference.com/w/cpp/named_req/SequenceContainer)</a> and
 	 * 			[ContiguousContainer](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer)</a>
 	 *
 	 */
@@ -54,14 +57,14 @@ namespace cave
 		friend constexpr bool operator!=(const String& lhs, const String& rhs) noexcept;
 		friend constexpr bool operator==(const String& lhs, const char* rhs) noexcept;
 		friend constexpr bool operator!=(const String& lhs, const char* rhs) noexcept;
-			// input / output
+		// input / output
 		friend std::ostream& operator<<(std::ostream& os, const String& str);
 		friend std::istream& operator>>(std::istream& is, String& str);
 		friend std::istream& GetLine(std::istream& input, String& str, char delim);
 		friend std::istream& GetLine(std::istream&& input, String& str, char delim);
 		friend std::istream& GetLine(std::istream& input, String& str);
 		friend std::istream& GetLine(std::istream&& input, String& str);
-			// numeric conversions
+		// numeric conversions
 		friend int32_t StringToInt32(const String& str, size_t* pos, int32_t base);
 		friend int32_t StringToInt32(const String& str, size_t* pos);
 		friend int32_t StringToInt32(const String& str);
@@ -154,7 +157,7 @@ namespace cave
 		constexpr String& Replace(size_t pos, size_t count, size_t count2, char ch);
 		String GetSubstring(size_t pos = 0ul, size_t count = NPOS) const;
 		constexpr void Resize(size_t count);
-		constexpr void Resize(size_t count, char ch);	
+		constexpr void Resize(size_t count, char ch);
 
 		// Search
 		constexpr size_t GetIndexOf(const String& str, size_t pos = 0ul) const noexcept;
@@ -226,3 +229,4 @@ namespace cave
 	}
 #endif
 } // namespace cave
+#endif

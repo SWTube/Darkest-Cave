@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include "CoreTypes.h"
 #include "GraphicsApiPch.h"
+
+#include "CoreTypes.h"
 #include "Device/GenericDeviceResources.h"
 
 #ifdef __UNIX__

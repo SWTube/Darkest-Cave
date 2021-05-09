@@ -5,11 +5,6 @@
 
 #pragma once
 
-#include <cstdarg>
-
-#include "CoreTypes.h"
-#include "String/String.h"
-
 #if defined(__WIN32__)
 	import Log;
 
@@ -26,7 +21,10 @@
 	#define LOGAF(channel, message, ...) cave::Log::AssertF(channel, __FILE__, __func__, __LINE__, message, __VA_ARGS__)
 	#define LOGA(channel, message) cave::Log::Assert(channel, __FILE__, __func__, __LINE__, message)
 #else
+	#include <cstdarg>
 	#include <iostream>
+
+	#include "CoreTypes.h"
 	
 	namespace cave
 	{

@@ -7,6 +7,7 @@
 
 #include "String/String.h"
 
+#ifdef __UNIX__
 namespace cave
 {
 	template <size_t N>
@@ -4740,3 +4741,4 @@ namespace cave
 	}
 #endif
 } // namespace cave
+#endif

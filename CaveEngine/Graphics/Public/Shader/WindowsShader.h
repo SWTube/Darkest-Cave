@@ -6,7 +6,9 @@
 #pragma once
 
 #include <filesystem>
+
 #include "GraphicsApiPch.h"
+
 #include "Shader/GenericShader.h"
 
 #ifdef __WIN32__
@@ -16,7 +18,7 @@
 		{
 		public:
 			WindowsShader() = delete;
-			constexpr WindowsShader(const char* shaderFilePath);
+			WindowsShader(const char* shaderFilePath);
 			WindowsShader(const WindowsShader&) = delete;
 			WindowsShader(const WindowsShader&&) = delete;
 			WindowsShader& operator=(const WindowsShader&) = delete;
@@ -34,11 +36,6 @@
 			ID3DBlob* mVsBlob = nullptr;
 			ID3DBlob* mPsBlob = nullptr;
 		};
-
-		constexpr WindowsShader::WindowsShader(const char* shaderFilePath)
-			: GenericShader(shaderFilePath)
-		{
-		}
 
 		typedef WindowsShader Shader;
 	} // namespace cave

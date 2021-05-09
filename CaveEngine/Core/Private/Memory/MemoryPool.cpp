@@ -67,9 +67,7 @@ namespace cave
 		// Terminate if user requests memory larger than what pool can provide
 		if (memoryIndex >= mDataBlocks.size())
 		{
-#ifdef __WIN32__
-			LOGEF(eLogChannel::CORE_MEMORY, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
-#else
+#ifdef __UNIX__
 			LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
 #endif
 			assert(memoryIndex < mDataBlocks.size());
@@ -114,7 +112,7 @@ namespace cave
 
 		if (item == nullptr || mDataBlocks[memoryIndex]->HasItem(item))
 		{
-			LOGE(eLogChannel::CORE_MEMORY, "item is nullptr");
+			//LOGE(eLogChannel::CORE_MEMORY, "item is nullptr");
 			return;
 		}
 
@@ -122,7 +120,7 @@ namespace cave
 		// if Data Block can't store the returned pointer, free it
 		if (mDataBlocks[memoryIndex] == nullptr || (mFreeSize == mPoolSize && mFreeSize > 0))
 		{
-			LOGE(eLogChannel::CORE_MEMORY, "datablock is nullptr");
+			//LOGE(eLogChannel::CORE_MEMORY, "datablock is nullptr");
 			free(item);
 			return;
 		}
@@ -164,17 +162,13 @@ namespace cave
 			DataBlock* dataBlock = mDataBlocks[i];
 			if (dataBlock == nullptr)
 			{
-#ifdef __WIN32__
-				LOGIF(eLogChannel::CORE_MEMORY, "DataBlock[%2u] = %7u / %2u / %u (bit/free/allocated)", i, GetPowerOfTwo(i), 0u, 0u);
-#else
+#ifdef __UNIX__
 				LOGIF(eLogChannel::CORE_MEMORY, os, "DataBlock[%2u] = %7u / %2u / %u (bit/free/allocated)", i, GetPowerOfTwo(i), 0u, 0u);
 #endif
 			}
 			else
 			{
-#ifdef __WIN32__
-				LOGIF(eLogChannel::CORE_MEMORY, "DataBlock[%2u] = %7u / %2u / %u (bit/free/allocated)", i, dataBlock->GetSize(), dataBlock->GetFreeSize(), dataBlock->GetAllocatedSize());
-#else
+#ifdef __UNIX__
 				LOGIF(eLogChannel::CORE_MEMORY, os, "DataBlock[%2u] = %7u / %2u / %u (bit/free/allocated)", i, dataBlock->GetSize(), dataBlock->GetFreeSize(), dataBlock->GetAllocatedSize());
 #endif
 			}

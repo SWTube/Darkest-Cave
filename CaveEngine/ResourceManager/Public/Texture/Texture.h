@@ -47,12 +47,16 @@ namespace cave
 			{
 			}
 
-			constexpr TexturePointer(TexturePointer&& other)
+			constexpr TexturePointer(const TexturePointer& other) = delete;
+
+			constexpr TexturePointer(TexturePointer&& other) noexcept
 				: ReferenceCount(other.ReferenceCount)
 				, Texture(other.Texture)
 			{
 				other.Texture = nullptr;
 			}
+
+			constexpr TexturePointer& operator=(const TexturePointer& other) = delete;
 
 			~TexturePointer()
 			{

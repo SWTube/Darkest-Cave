@@ -5,10 +5,8 @@
 
 #pragma once
 
-#include <cassert>
-
 #include "CoreTypes.h"
-
+#include "Assertion/Assert.h"
 #include "Containers/Node.h"
 
 namespace cave

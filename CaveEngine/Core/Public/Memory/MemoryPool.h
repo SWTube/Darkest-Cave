@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "CoreTypes.h"
-#include "Debug/Log.h"
 #include "Memory/DataBlock.h"
 
 namespace cave
@@ -58,7 +57,7 @@ namespace cave
 		{
 		}
 
-		return 1 << count;
+		return 1ul << count;
 	}
 
 	FORCEINLINE constexpr size_t GetExponent(size_t number)

@@ -1,16 +1,15 @@
 module;
 
-#include <cassert>
 #include <cstdarg>
 #include <cstdio>
-#include <cstring>
 #include <iostream>
 
 #include <windows.h>
 
 #include "CoreTypes.h"
-
+#include "Assertion/Assert.h"
 #include "String/String.h"
+#include "Utils/Crt.h"
 
 export module Log;
 
@@ -230,7 +229,7 @@ namespace cave
 				}
 
 				char output[255];
-				snprintf(output, 255, "%s%s/%s/line:%d :\t%s\n", buffer.c_str(), fileName, functionName, lineNumber, message);
+				snprintf(output, 255, "%s%s/%s/line:%d :\t%s\n", buffer.GetCString(), fileName, functionName, lineNumber, message);
 				OutputDebugStringA(output);
 			}
 		}

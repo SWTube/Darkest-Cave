@@ -4,10 +4,12 @@
  */
 
 #include "lodepng.h"
+
+#include "Debug/Log.h"
 #include "Texture/Texture.h"
 
 #ifdef __WIN32__
-	import DdsTextureLoader.ixx;
+	import DdsTextureLoader;
 #endif
 
 namespace cave
@@ -16,26 +18,26 @@ namespace cave
 		: mPool(&pool)
 		, mFormat(textureFormat)
 	{
-		mFilePath /= "CaveEngine/Graphics/Resource";
-		std::filesystem::create_directories(mFilePath / "Textures");
-		mFilePath /= "Textures";
+		mFilePath /= L"CaveEngine/Graphics/Resource";
+		std::filesystem::create_directories(mFilePath / L"Textures");
+		mFilePath /= L"Textures";
 		mFilePath /= filePath;
 
 		mTexture = reinterpret_cast<TexturePointer*>(mPool->Allocate(sizeof(TexturePointer)));
 		mTexture->ReferenceCount = 1u;
 		mTexture->Texture = nullptr;
 
-		const char* extension = mFilePath.extension().c_str();
-		if (strncmp(extension, ".png", 4) == 0)
+		const wchar_t* extension = mFilePath.extension().c_str();
+		if (wcsncmp(extension, L".png", 4) == 0)
 		{
 			uint32_t error = 0u;
 			switch (mFormat)
 			{
 			case eTextureFormat::RGB:
-				error = lodepng_decode24_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
+				error = lodepng_decode24_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.string().c_str());
 				break;
 			case eTextureFormat::RGBA:
-				error = lodepng_decode32_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
+				error = lodepng_decode32_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.string().c_str());
 				break;
 			default:
 				assert(false);
@@ -44,10 +46,10 @@ namespace cave
 			
 			if (error != 0)
 			{
-				LOGEF(eLogChannel::GRAPHICS, std::cout, "The png file %s cannot be loaded. Error Code: %u", mFilePath.c_str(), error);
+				LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mFilePath.string().c_str(), error);
 			}
 		}
-		else if (strncmp(extension, ".dds", 4) == 0)
+		else if (wcsncmp(extension, L".dds", 4) == 0)
 		{
 
 		}
@@ -136,7 +138,7 @@ namespace cave
 
 	const char* const Texture::GetCStringFilePath() const
 	{
-		return mFilePath.c_str();
+		return mFilePath.string().c_str();
 	}
 
 	const std::filesystem::path& Texture::GetFilePath() const

@@ -17,12 +17,13 @@ namespace cave
 	{
 	public:
 		WindowsSprite() = delete;
-		WindowsSprite(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
-		WindowsSprite(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
+		WindowsSprite(Texture* texture, MemoryPool& pool = gCoreMemoryPool);
+		WindowsSprite(const Texture& texture, MemoryPool& pool = gCoreMemoryPool);
+		WindowsSprite(Texture&& texture, MemoryPool& pool = gCoreMemoryPool);
 		WindowsSprite(const WindowsSprite& object);
 		WindowsSprite(WindowsSprite&& object);
-		constexpr WindowsSprite& operator=(const WindowsSprite& object);
-		constexpr WindowsSprite& operator=(WindowsSprite&& object);
+		WindowsSprite& operator=(const WindowsSprite& object);
+		WindowsSprite& operator=(WindowsSprite&& object);
 		virtual ~WindowsSprite();
 
 		eResult Init(ID3D11Device* device, ID3D11DeviceContext* context) override;

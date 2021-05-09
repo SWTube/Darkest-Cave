@@ -9,10 +9,15 @@
 #ifdef __WIN32__
 namespace cave
 {
+	WindowsShader::WindowsShader(const char* shaderFilePath)
+		: GenericShader(shaderFilePath)
+	{
+	}
+
 	WindowsShader::~WindowsShader()
 	{
-		delete[] mVertexShaderFilePath;
-		delete[] mFragmentShaderFilePath;
+		mVertexShaderFilePath.clear();
+		mFragmentShaderFilePath.clear();
 	}
 
 	eResult WindowsShader::Compile(ID3D11Device* device)

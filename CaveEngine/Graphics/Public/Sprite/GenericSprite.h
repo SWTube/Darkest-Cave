@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include "CoreTypes.h"
 #include "GraphicsApiPch.h"
+
+#include "CoreTypes.h"
 #include "Sprite/Vertex.h"
 #include "Texture/Texture.h"
 
