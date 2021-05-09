@@ -14,11 +14,12 @@
 		{
 		public:
 			UnixShader() = delete;
-			constexpr UnixShader(const char* vertexShaderFilePath, const char* fragmentShaderFilePath);
+			UnixShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath);
 			UnixShader(const UnixShader&) = delete;
-			UnixShader(const UnixShader&&) = delete;
+			UnixShader(UnixShader&& other);
 			UnixShader& operator=(const UnixShader&) = delete;
-			virtual ~UnixShader();
+			UnixShader& operator=(UnixShader&& other);
+			virtual ~UnixShader() = default;
 
 			virtual eResult Compile() override;
 			virtual uint32_t GetProgram();
@@ -36,11 +37,6 @@
 
 			uint32_t mProgram = 0u;
 		};
-
-		constexpr UnixShader::UnixShader(const char* vertexShaderFilePath, const char* fragmentShaderFilePath)
-			: GenericShader(vertexShaderFilePath, fragmentShaderFilePath)
-		{
-		}
 
 		typedef UnixShader Shader;
 	} // namespace cave

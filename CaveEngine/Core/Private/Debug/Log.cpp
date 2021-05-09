@@ -104,7 +104,7 @@ namespace cave
 	{
 		if (msCurrentVerbosity == eLogVerbosity::All || verbosity == msCurrentVerbosity)
 		{
-			std::string buffer;
+			String buffer;
 
 			switch (channel)
 			{
@@ -125,6 +125,9 @@ namespace cave
 				break;
 			case eLogChannel::CORE:
 				buffer = "Core/";
+				break;
+			case eLogChannel::CORE_MODULE:
+				buffer = "Core/Module/";
 				break;
 			case eLogChannel::CORE_UNIT_TEST:
 				buffer = "Core/UnitTest/";

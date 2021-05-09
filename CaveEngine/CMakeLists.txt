@@ -205,9 +205,11 @@ add_subdirectory(Engine)
 # elseif (UNIX)
 # 	add_executable(CaveEngineDemo EngineMainUnix.cpp)
 # endif()
+
 add_executable(CaveEngineDemo EngineMain.cpp)
 # add_library(CaveEngine ${CAVE_ENGINE_LIB_TYPE} ${CaveEngine_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
+target_link_libraries(CaveEngineDemo PUBLIC Engine Gameplay Graphics Core Gl3w)
 target_include_directories(CaveEngineDemo PUBLIC ${PROJECT_BINARY_DIR})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
@@ -219,8 +221,6 @@ target_include_directories(CaveEngineDemo PUBLIC ${PROJECT_BINARY_DIR})
 #     NO_EXPORT_MACRO_NAME _OgrePrivate
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
-
-target_link_libraries(CaveEngineDemo PUBLIC Core Gameplay Graphics Gl3w Engine)
 
 # # In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
 # if(WIN32 AND MSVC10 AND CMAKE_CL_64)

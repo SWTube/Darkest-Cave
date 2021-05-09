@@ -32,6 +32,8 @@ namespace cave
 		size_t GetFreeSize() const;
 		size_t GetAllocatedSize() const;
 		size_t GetPoolSize() const;
+		void PrintFreedNodes() const;
+		void PrintAllocatedNodes() const;
 	private:
 		FORCEINLINE void addItem(void* item);
 

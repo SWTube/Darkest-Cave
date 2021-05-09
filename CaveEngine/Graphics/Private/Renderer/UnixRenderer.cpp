@@ -45,9 +45,9 @@ namespace cave
 
 	eResult UnixRenderer::createObjects()
 	{
-		LOGDF(eLogChannel::GRAPHICS, std::cout, "number of objects: %u", mDrawableObjects.size());
+		LOGDF(eLogChannel::GRAPHICS, std::cout, "number of objects: %u", mSprites.size());
 
-		for (DrawableObject* const object : mDrawableObjects)
+		for (Sprite* const object : mSprites)
 		{
 			if (eResult result = object->Init(mDeviceResources->GetProgram()); result != eResult::CAVE_OK)
 			{
@@ -58,7 +58,7 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	eResult UnixRenderer::createObject(DrawableObject& object)
+	eResult UnixRenderer::createObject(Sprite& object)
 	{
 		return object.Init(mDeviceResources->GetProgram());
 	}
@@ -118,7 +118,7 @@ namespace cave
 
 	void UnixRenderer::Update()
 	{
-		for (DrawableObject* const object : mDrawableObjects)
+		for (Sprite* const object : mSprites)
 		{
 			object->Update();
 		}
@@ -135,7 +135,7 @@ namespace cave
 	//--------------------------------------------------------------------------------------
 	void UnixRenderer::cleanupDevice()
 	{
-		for (DrawableObject* const object : mDrawableObjects)
+		for (Sprite* const object : mSprites)
 		{
 			object->Destroy();
 		}
@@ -173,7 +173,7 @@ namespace cave
 		glClearBufferfv(GL_COLOR, 0, midnightBlue);
 
 		// 3. Set Render Data ---------------------------------------------------------------------------------------------
-		for (DrawableObject* const object : mDrawableObjects)
+		for (Sprite* const object : mSprites)
 		{
 			object->Render();
 		}
@@ -182,6 +182,7 @@ namespace cave
 	void UnixRenderer::Destroy()
 	{
 		cleanupDevice();
+		GenericRenderer::Destroy();
 		mDeviceResources = nullptr;
 	}
 }

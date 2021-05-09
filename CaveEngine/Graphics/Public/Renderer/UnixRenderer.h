@@ -9,7 +9,7 @@
 
 #include "CoreMinimal.h"
 #include "Device/DeviceResources.h"
-#include "Object/Vertex.h"
+#include "Sprite/Vertex.h"
 #include "Renderer/GenericRenderer.h"
 
 #define BUFFER_OFFSET(a) (reinterpret_cast<void*>(a))
@@ -52,7 +52,7 @@ namespace cave
 	private:
 		eResult createShader(Shader& shader) override;
 		eResult createShaders() override;
-		eResult createObject(DrawableObject& object) override;
+		eResult createObject(Sprite& object) override;
 		eResult createObjects() override;
 		void createView() override;
 		void createPerspective() override;

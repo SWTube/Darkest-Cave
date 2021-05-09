@@ -3,6 +3,7 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include "Debug/Log.h"
 #include "Memory/DataBlock.h"
 
 namespace cave
@@ -77,5 +78,29 @@ namespace cave
 	size_t DataBlock::GetPoolSize() const
 	{
 		return mSize * mFreeSize;
+	}
+
+	void DataBlock::PrintFreedNodes() const
+	{
+		MemoryNode* iterator = mFree;
+
+		while (iterator != nullptr)
+		{
+			LOGDF(eLogChannel::CORE_MEMORY, std::cout, "Freed Node: %s", iterator->Data);
+			iterator = iterator->Next;
+		}
+	}
+
+	void DataBlock::PrintAllocatedNodes() const
+	{
+		MemoryNode* iterator = mAllocated;
+		size_t i = 0ul;
+
+		while (iterator != nullptr)
+		{
+			LOGDF(eLogChannel::CORE_MEMORY, std::cout, "%d: Allocated Node: %s", i, iterator->Data);
+			iterator = iterator->Next;
+			++i;
+		}
 	}
 }

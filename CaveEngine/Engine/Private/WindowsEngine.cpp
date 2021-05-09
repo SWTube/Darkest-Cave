@@ -15,16 +15,11 @@ namespace cave
 		eResult result = eResult::CAVE_OK;
 
 		mWindow = reinterpret_cast<Window*>(mPool->Allocate(sizeof(Window)));
-#ifdef __WIN32__
 		new(mWindow) Window(640u, 480u, L"Test", msInstance, StaticWindowProc);
-#else
-		new(mWindow) Window(640u, 480u, "Test", nullptr);
-#endif
 
 		// Instantiate the device manager class.
 		mDeviceResources = reinterpret_cast<DeviceResources*>(mPool->Allocate(sizeof(DeviceResources)));
 		new(mDeviceResources) DeviceResources();
-
 		// Create device resources.
 		result = mDeviceResources->CreateDeviceResources();
 		if (result != eResult::CAVE_OK)

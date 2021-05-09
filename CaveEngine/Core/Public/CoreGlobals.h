@@ -6,6 +6,12 @@
 #pragma once
 
 #include "CoreTypes.h"
-#include "Object/GenericDrawableObject.h"
 
-#include GET_PLATFORM_HEADER(DrawableObject.h)
+#include "Memory/MemoryPool.h"
+
+namespace cave
+{
+	constexpr size_t CORE_MEMORY_POOL_SIZE = 1048576;
+
+	extern MemoryPool gCoreMemoryPool;
+} // namespace cave

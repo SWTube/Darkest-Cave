@@ -9,7 +9,7 @@
 
 #include "CoreTypes.h"
 #include "Device/DeviceResources.h"
-#include "Object/DrawableObject.h"
+#include "Sprite/Sprite.h"
 #include "Shader/Shader.h"
 
 namespace cave
@@ -17,7 +17,7 @@ namespace cave
 	class GenericRenderer
 	{
 	public:
-		GenericRenderer(DeviceResources* deviceResources);
+		GenericRenderer(DeviceResources* deviceResources, MemoryPool& pool = gCoreMemoryPool);
 		virtual ~GenericRenderer();
 
 		GenericRenderer(const GenericRenderer&) = delete;
@@ -28,20 +28,22 @@ namespace cave
 		virtual void CreateWindowSizeDependentResources() = 0;
     	virtual void Update() = 0;
     	virtual void Render() = 0;
-		virtual void Destroy() = 0;
+		virtual void Destroy();
 
-		virtual void AddDrawableObject(DrawableObject*&& object);
-		virtual void AddShader(Shader*&& shader);
+		virtual void AddSprite(Sprite* object);
+		virtual void AddShader(Shader* shader);
 
 		virtual bool WindowShouldClose() = 0;
 		DeviceResources* const GetDeviceResources() const;
 	protected:
 		virtual eResult createShader(Shader& shader) = 0;
 		virtual eResult createShaders() = 0;
-		virtual eResult createObject(DrawableObject& object) = 0;
+		virtual eResult createObject(Sprite& object) = 0;
 		virtual eResult createObjects() = 0;
 		virtual void createView() = 0;
 		virtual void createPerspective() = 0;
+
+		MemoryPool* mPool = nullptr;
 
 #ifdef __WIN32__
 		DirectX::XMMATRIX mView;
@@ -54,7 +56,7 @@ namespace cave
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 
-		std::vector<DrawableObject*> mDrawableObjects;
+		std::vector<Sprite*> mSprites;
 		std::vector<Shader*> mShaders;
 	};
 }

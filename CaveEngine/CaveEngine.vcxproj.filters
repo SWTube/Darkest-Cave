@@ -76,16 +76,16 @@
     <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Object\GenericDrawableObject.cpp">
+    <ClCompile Include="Graphics\Private\Object\GenericSprite.cpp">
       <Filter>Source Files\Graphics\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Object\UnixDrawableObject.cpp">
+    <ClCompile Include="Graphics\Private\Object\UnixSprite.cpp">
       <Filter>Source Files\Graphics\Object</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Object\Vertex.cpp">
       <Filter>Source Files\Graphics\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Object\WindowsDrawableObject.cpp">
+    <ClCompile Include="Graphics\Private\Object\WindowsSprite.cpp">
       <Filter>Source Files\Graphics\Object</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
@@ -214,19 +214,19 @@
     <ClInclude Include="Graphics\Public\Shader\UnixShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\DrawableObject.h">
+    <ClInclude Include="Graphics\Public\Object\Sprite.h">
       <Filter>Header Files\Graphics\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\GenericDrawableObject.h">
+    <ClInclude Include="Graphics\Public\Object\GenericSprite.h">
       <Filter>Header Files\Graphics\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\UnixDrawableObject.h">
+    <ClInclude Include="Graphics\Public\Object\UnixSprite.h">
       <Filter>Header Files\Graphics\Object</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Object\Vertex.h">
       <Filter>Header Files\Graphics\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\WindowsDrawableObject.h">
+    <ClInclude Include="Graphics\Public\Object\WindowsSprite.h">
       <Filter>Header Files\Graphics\Object</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">

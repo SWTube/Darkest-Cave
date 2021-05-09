@@ -61,7 +61,6 @@ namespace cave
 
 	void* MemoryPool::Allocate(size_t size)
 	{
-		static size_t counter = 0ul;
 		size_t memorySize = GetUpperPowerOfTwo(size);
 		size_t memoryIndex = GetExponent(memorySize);
 
@@ -83,7 +82,7 @@ namespace cave
 			mDataBlocks[memoryIndex] = new DataBlock(memorySize, 1ul);
 		}
 
-		// LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "%u memorySize: %u, Datablock[%u]: %u / %u", counter, memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
+		// LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "memorySize: %u, Datablock[%u]: %u / %u", memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
 
 		// If Data Block is empty, allocate new memory and push back
 		// If user requires larger memory than current free memory, return corresponding pointer but don't store
@@ -96,19 +95,17 @@ namespace cave
 				mFreeSize -= memorySize;
 				mMaxBlockSize += memorySize;
 			}
-			++counter;
 			return newPointer;
 		}
 
 		// Memory Pool can give pointer stored in corresponding Data Block
 		mFreeSize -= memorySize;
-		++counter;
-		return mDataBlocks[memoryIndex]->Get();
+		void* pointer = mDataBlocks[memoryIndex]->Get();
+		return pointer;
 	}
 
 	void MemoryPool::Deallocate(void* item, size_t size)
 	{
-		static size_t counter = 0ul;
 		// item should not be nullptr
 		// If user tries to deallocate pointer already returned to Data Block, neglect.
 		size_t memorySize = GetUpperPowerOfTwo(size);
@@ -117,8 +114,7 @@ namespace cave
 
 		if (item == nullptr || mDataBlocks[memoryIndex]->HasItem(item))
 		{
-			//LOGE(eLogChannel::CORE_MEMORY, std::cerr, "item is nullptr");
-			++counter;
+			LOGE(eLogChannel::CORE_MEMORY, "item is nullptr");
 			return;
 		}
 
@@ -126,8 +122,7 @@ namespace cave
 		// if Data Block can't store the returned pointer, free it
 		if (mDataBlocks[memoryIndex] == nullptr || (mFreeSize == mPoolSize && mFreeSize > 0))
 		{
-			//LOGE(eLogChannel::CORE_MEMORY, std::cerr, "datablock is nullptr");
-			++counter;
+			LOGE(eLogChannel::CORE_MEMORY, "datablock is nullptr");
 			free(item);
 			return;
 		}
@@ -135,12 +130,6 @@ namespace cave
 		// Return pointer to Data Block
 		mDataBlocks[memoryIndex]->Return(item);
 		mFreeSize += memorySize;
-		++counter;
-	}
-
-	size_t MemoryPool::GetFreeMemorySize() const
-	{
-		return mFreeSize;
 	}
 
 	size_t MemoryPool::GetCurrentStorage() const
@@ -190,5 +179,14 @@ namespace cave
 #endif
 			}
 		}
+	}
+
+	void MemoryPool::PrintDataBlockByByte(size_t byte) const
+	{
+		size_t memorySize = GetUpperPowerOfTwo(byte);
+		size_t memoryIndex = GetExponent(memorySize);
+
+		// mDataBlocks[memoryIndex]->PrintFreedNodes();
+		mDataBlocks[memoryIndex]->PrintAllocatedNodes();
 	}
 } // namespace neople

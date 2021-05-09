@@ -26,11 +26,12 @@ namespace cave
 
 		void* Allocate(size_t size);
 		void Deallocate(void* item, size_t size);
-		size_t GetFreeMemorySize() const;
+		constexpr size_t GetFreeMemorySize() const;
 		size_t GetCurrentStorage() const;
 		size_t GetMaxNumDataBlocks() const;
 		size_t GetPoolSize() const;
 		void PrintPoolStatus(std::ostream& os) const;
+		void PrintDataBlockByByte(size_t byte) const;
 	private:
 		size_t mPoolSize;
 		size_t mFreeSize;
@@ -40,7 +41,12 @@ namespace cave
 		std::vector<DataBlock*> mDataBlocks;
 	};
 
-	FORCEINLINE size_t GetUpperPowerOfTwo(size_t number)
+	constexpr size_t MemoryPool::GetFreeMemorySize() const
+	{
+		return mFreeSize;
+	}
+
+	FORCEINLINE constexpr size_t GetUpperPowerOfTwo(size_t number)
 	{
 		if (number && !(number & (number - 1ul)))
 		{
@@ -55,7 +61,7 @@ namespace cave
 		return 1 << count;
 	}
 
-	FORCEINLINE size_t GetExponent(size_t number)
+	FORCEINLINE constexpr size_t GetExponent(size_t number)
 	{
 		if (!number || (number & (number - 1)))
 		{
@@ -70,7 +76,7 @@ namespace cave
 		return exponent;
 	}
 
-	FORCEINLINE size_t GetPowerOfTwo(size_t exponent)
+	FORCEINLINE constexpr size_t GetPowerOfTwo(size_t exponent)
 	{
 		size_t result = 1ul;
 

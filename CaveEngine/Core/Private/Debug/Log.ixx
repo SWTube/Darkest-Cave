@@ -5,11 +5,12 @@ module;
 #include <cstdio>
 #include <cstring>
 #include <iostream>
-#include <string>
 
 #include <windows.h>
 
 #include "CoreTypes.h"
+
+#include "String/String.h"
 
 export module Log;
 
@@ -156,7 +157,7 @@ namespace cave
 		{
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
 			{
-				std::string buffer;
+				String buffer;
 
 				switch (channel)
 				{
@@ -323,7 +324,7 @@ namespace cave
 		{
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
 			{
-				std::string buffer;
+				String buffer;
 
 				switch (channel)
 				{

@@ -13,5 +13,5 @@
 	#include "Renderer/CaveNode.h" 
 	#include "Renderer/CaveRenderer.h"
 #elif defined(__UNIX__)
-	#include "Object/DrawableObject.h"
+	#include "Sprite/Sprite.h"
 #endif

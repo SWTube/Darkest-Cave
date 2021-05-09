@@ -15,8 +15,7 @@ namespace cave
 	{
 	public:
 		GenericEngine();
-		GenericEngine(MemoryPool& pool);
-		virtual ~GenericEngine();
+		virtual ~GenericEngine() = default;
 
 		virtual eResult Init() = 0;
 		virtual void Destroy() = 0;

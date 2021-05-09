@@ -8,22 +8,23 @@
 #include "GraphicsApiPch.h"
 
 #include "CoreMinimal.h"
-#include "Object/GenericDrawableObject.h"
+#include "Sprite/GenericSprite.h"
 
 #ifdef __UNIX__
 namespace cave
 {
-	class UnixDrawableObject final : public GenericDrawableObject
+	class UnixSprite final : public GenericSprite
 	{
 	public:
-		UnixDrawableObject() = delete;
-		UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices);
-		UnixDrawableObject(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath);
-		UnixDrawableObject(const UnixDrawableObject& object) = default;
-		UnixDrawableObject(const UnixDrawableObject&& object);
-		UnixDrawableObject& operator=(const UnixDrawableObject& object) = default;
-		UnixDrawableObject& operator=(const UnixDrawableObject&& object);
-		~UnixDrawableObject() = default;
+		UnixSprite() = delete;
+		UnixSprite(Texture* texture, MemoryPool& pool = gCoreMemoryPool);
+		UnixSprite(const Texture& texture, MemoryPool& pool = gCoreMemoryPool);
+		UnixSprite(Texture&& texture, MemoryPool& pool = gCoreMemoryPool);
+		UnixSprite(const UnixSprite& object) = default;
+		UnixSprite(UnixSprite&& object);
+		UnixSprite& operator=(const UnixSprite& object) = default;
+		UnixSprite& operator=(UnixSprite&& object);
+		~UnixSprite() = default;
 
 		eResult Init(uint32_t program) override;
 		void Destroy() override;
@@ -42,6 +43,6 @@ namespace cave
 		uint32_t mProgram = 0u;
 	};
 
-	typedef UnixDrawableObject DrawableObject;
+	typedef UnixSprite Sprite;
 } // namespace cave
 #endif
