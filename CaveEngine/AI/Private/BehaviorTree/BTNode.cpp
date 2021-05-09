@@ -12,13 +12,13 @@ namespace cave
 		mParentNode = NULL;
 		mTreeDepth = 0;
 	}
-	BTNode::BTNode(std::string nodeName)
+	BTNode::BTNode(const char* nodeName)
 	{
 		mNodeName = nodeName;
 		mParentNode = NULL;
 		mTreeDepth = 0;
 	}
-	std::string BTNode::GetNodeName() const
+	const char* BTNode::GetNodeName() const
 	{
 		return mNodeName;
 	}
@@ -26,7 +26,7 @@ namespace cave
 	{
 		return mTreeDepth;
 	}
-	void BTNode::SetNodeName(std::string nodeName)
+	void BTNode::SetNodeName(const char* nodeName)
 	{
 		mNodeName = nodeName;
 	}

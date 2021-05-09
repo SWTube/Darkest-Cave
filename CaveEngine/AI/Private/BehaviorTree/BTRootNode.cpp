@@ -12,7 +12,7 @@ namespace cave
         SetParentNode(NULL);
         SetTreeDepth(0);
     }
-    BTRootNode::BTRootNode(std::string nodeName)
+    BTRootNode::BTRootNode(const char* nodeName)
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);

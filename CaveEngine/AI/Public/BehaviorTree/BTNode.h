@@ -5,7 +5,6 @@
 #pragma once
 
 #include <iostream>
-#include <string>
 
 namespace cave
 {
@@ -13,21 +12,21 @@ namespace cave
     {
         public:
             BTNode();
-            BTNode(std::string);
+            BTNode(const char*);
 
             // Get node name
-            std::string GetNodeName() const;
+            const char* GetNodeName() const;
             // Get tree depth
             int GetTreeDepth() const;
             // Set node name
-            void SetNodeName(std::string);
+            void SetNodeName(const char*);
             // Set parent node
             void SetParentNode(BTNode*);
             // Set tree depth
             void SetTreeDepth(int);
         private:
     	    BTNode* mParentNode = NULL;
-            std::string mNodeName = "";
+            const char* mNodeName = "";
             int mTreeDepth = 0;
     };
 }

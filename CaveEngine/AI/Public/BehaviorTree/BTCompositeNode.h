@@ -13,7 +13,7 @@ namespace cave
     {
     public:
         BTCompositeNode();
-        BTCompositeNode(std::string);
+        BTCompositeNode(const char*);
         // Add child back or at position
         void AddChild(BTNode*, int = -1);
         // Delete child back or at position

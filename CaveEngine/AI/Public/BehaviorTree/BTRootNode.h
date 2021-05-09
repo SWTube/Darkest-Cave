@@ -13,7 +13,7 @@ namespace cave
     {
     public:
         BTRootNode();
-        BTRootNode(std::string);
+        BTRootNode(const char*);
     private:
     };
 }
