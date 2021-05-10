@@ -34,10 +34,10 @@ namespace cave
 
 	eResult UnixRenderer::createShaders()
 	{
-		for (Shader* const shader : mShaders)
+		for (Shader& shader : mShaders)
 		{
-			shader->Compile();
-			mDeviceResources->SetProgram(shader->GetProgram());
+			shader.Compile();
+			mDeviceResources->SetProgram(shader.GetProgram());
 		}
 
 		return eResult::CAVE_OK;
@@ -47,9 +47,9 @@ namespace cave
 	{
 		LOGDF(eLogChannel::GRAPHICS, std::cout, "number of objects: %u", mSprites.size());
 
-		for (Sprite* const object : mSprites)
+		for (Sprite& object : mSprites)
 		{
-			if (eResult result = object->Init(mDeviceResources->GetProgram()); result != eResult::CAVE_OK)
+			if (eResult result = object.Init(mDeviceResources->GetProgram()); result != eResult::CAVE_OK)
 			{
 				return result;
 			}
@@ -118,9 +118,9 @@ namespace cave
 
 	void UnixRenderer::Update()
 	{
-		for (Sprite* const object : mSprites)
+		for (Sprite& object : mSprites)
 		{
-			object->Update();
+			object.Update();
 		}
 
 		++mFrameCount;
@@ -135,9 +135,9 @@ namespace cave
 	//--------------------------------------------------------------------------------------
 	void UnixRenderer::cleanupDevice()
 	{
-		for (Sprite* const object : mSprites)
+		for (Sprite& object : mSprites)
 		{
-			object->Destroy();
+			object.Destroy();
 		}
 	}
 
@@ -173,9 +173,9 @@ namespace cave
 		glClearBufferfv(GL_COLOR, 0, midnightBlue);
 
 		// 3. Set Render Data ---------------------------------------------------------------------------------------------
-		for (Sprite* const object : mSprites)
+		for (Sprite& object : mSprites)
 		{
-			object->Render();
+			object.Render();
 		}
 	}
 

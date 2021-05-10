@@ -37,12 +37,15 @@ namespace cave
 		: mPool(other.mPool)
 		, mWorld(other.mWorld)
 		, mTexture(other.mTexture)
-		, mTextureData(reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture))))
 		, mTextureSampler(other.mTextureSampler)
 		, mWidth(other.mWidth)
 		, mHeight(other.mHeight)
 	{
-		new(mTextureData) Texture(*other.mTextureData);
+		if (other.mTextureData != nullptr)
+		{
+			mTextureData = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
+			new(mTextureData) Texture(*other.mTextureData);
+		}
 	}
 
 	GenericSprite::GenericSprite(GenericSprite&& other)
@@ -66,7 +69,15 @@ namespace cave
 			mTexture = other.mTexture;
 
 			mTextureData->~Texture();
-			new(mTextureData) Texture(*other.mTextureData);
+			if (other.mTextureData != nullptr)
+			{
+				new(mTextureData) Texture(*other.mTextureData);
+			}
+			else
+			{
+				mPool->Deallocate(mTextureData, sizeof(Texture));
+				mTextureData = nullptr;
+			}
 
 			mTextureSampler = other.mTextureSampler;
 			mWidth = other.mWidth;

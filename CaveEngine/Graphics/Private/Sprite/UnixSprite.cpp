@@ -44,6 +44,11 @@ namespace cave
 		return *this;
 	}
 
+	UnixSprite::~UnixSprite()
+	{
+		Destroy();
+	}
+
 	eResult UnixSprite::Init(uint32_t program)
 	{
 		eResult result = eResult::CAVE_OK;
@@ -90,7 +95,7 @@ namespace cave
 			return eResult::CAVE_FAIL;
 		}
 		
-		glVertexAttribPointer(V_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(VertexT), BUFFER_OFFSET(0u));
+		glVertexAttribPointer(V_POSITION, 3, GL_FLOAT, GL_FALSE, VERTICES[0].GetSize() * VERTICES_COUNT, BUFFER_OFFSET(0u));
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexAttribPointer error code: 0x%x", glError);
@@ -103,7 +108,7 @@ namespace cave
 			return eResult::CAVE_FAIL;
 		}
 
-		glVertexAttribPointer(V_TEX_COORD, 2, GL_FLOAT, GL_FALSE, sizeof(VertexT), BUFFER_OFFSET(sizeof(Vertex)));
+		glVertexAttribPointer(V_TEX_COORD, 2, GL_FLOAT, GL_FALSE, VERTICES[0].GetSize() * VERTICES_COUNT, BUFFER_OFFSET(sizeof(Vertex)));
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexAttribPointer error code: 0x%x", glError);
@@ -119,7 +124,7 @@ namespace cave
 		// Preparing to Send Data to OpenGL
 		// All data must be stored in buffer objects (chunks of memory managed by OpenGL)
 		// Common way is to specify the data at the same time as you specify the buffer's size
-		glNamedBufferStorage(mBuffers[Sprite::ARRAY_BUFFER], sizeof(VERTICES), VERTICES, 0);
+		glNamedBufferStorage(mBuffers[Sprite::ARRAY_BUFFER], VERTICES[0].GetSize() * VERTICES_COUNT, VERTICES, 0);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glNamedBufferStorage error code: 0x%x", glError);

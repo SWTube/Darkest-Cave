@@ -251,9 +251,12 @@ void RenderTest()
 #endif
 
 	cave::Renderer* renderer = main.GetRenderer();
-	renderer->AddShader(shader);
-	renderer->AddSprite(object);
-	renderer->AddSprite(object2);
+	renderer->AddShader(std::move(*shader));
+	renderer->AddSprite(std::move(*object));
+	renderer->AddSprite(std::move(*object2));
+	shader = nullptr;
+	object = nullptr;
+	object2 = nullptr;
 
 	if (result == cave::eResult::CAVE_OK)
 	{

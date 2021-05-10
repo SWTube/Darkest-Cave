@@ -24,17 +24,17 @@ namespace cave
 	{
 		while (!mShaders.empty())
 		{
-			Shader* shader = mShaders.back();
-			shader->~Shader();
-			mPool->Deallocate(shader, sizeof(Shader));
+			Shader& shader = mShaders.back();
+			// shader.~Shader();
+			mPool->Deallocate(&shader, sizeof(Shader));
 			mShaders.pop_back();
 		}
 
 		while (!mSprites.empty())
 		{
-			Sprite* sprite = mSprites.back();
-			sprite->Destroy();
-			mPool->Deallocate(sprite, sizeof(Sprite));
+			Sprite& sprite = mSprites.back();
+			// sprite.Destroy();
+			mPool->Deallocate(&sprite, sizeof(Sprite));
 			mSprites.pop_back();
 		}
 
@@ -47,19 +47,18 @@ namespace cave
 		return mDeviceResources;
 	}
 
-	void GenericRenderer::AddSprite(Sprite* object)
+	void GenericRenderer::AddSprite(Sprite&& object)
 	{
-		assert(mPool == object->GetMemoryPool());
+		assert(mPool == object.GetMemoryPool());
 		mSprites.push_back(std::move(object));
-		createObject(*mSprites.back());
+		createObject(mSprites.back());
 	}
 
-	void GenericRenderer::AddShader(Shader* shader)
+	void GenericRenderer::AddShader(Shader&& shader)
 	{
-		typedef std::vector<Shader*>::pointer cavePointer;
 		mShaders.push_back(std::move(shader));
 		
-		createShader(*mShaders.back());
+		createShader(mShaders.back());
 		CreateWindowSizeDependentResources();
 	}
 }

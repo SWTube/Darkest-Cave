@@ -24,7 +24,7 @@ namespace cave
 		UnixSprite(UnixSprite&& object);
 		UnixSprite& operator=(const UnixSprite& object) = default;
 		UnixSprite& operator=(UnixSprite&& object);
-		~UnixSprite() = default;
+		virtual ~UnixSprite();
 
 		eResult Init(uint32_t program) override;
 		void Destroy() override;

@@ -72,7 +72,7 @@ namespace cave
 		constexpr Vertex(float* array);
 		constexpr Vertex(const Float3& array);
 		constexpr Vertex(const Float3&& array);
-		constexpr uint32_t GetSize();
+		constexpr uint32_t GetSize() const;
 	} Vertex;
 
 	constexpr Vertex::Vertex(float x, float y, float z)
@@ -80,7 +80,7 @@ namespace cave
 	{
 	}
 
-	constexpr uint32_t Vertex::GetSize()
+	constexpr uint32_t Vertex::GetSize() const
 	{
 		uint32_t size = 0u;
 		if (VertexFlag | VERTEX_POSITION)

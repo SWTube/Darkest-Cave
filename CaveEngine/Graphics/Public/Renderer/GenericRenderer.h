@@ -30,8 +30,8 @@ namespace cave
     	virtual void Render() = 0;
 		virtual void Destroy();
 
-		virtual void AddSprite(Sprite* object);
-		virtual void AddShader(Shader* shader);
+		virtual void AddSprite(Sprite&& object);
+		virtual void AddShader(Shader&& shader);
 
 		virtual bool WindowShouldClose() = 0;
 		DeviceResources* const GetDeviceResources() const;
@@ -56,7 +56,7 @@ namespace cave
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 
-		std::vector<Sprite*> mSprites;
-		std::vector<Shader*> mShaders;
+		std::vector<Sprite> mSprites;
+		std::vector<Shader> mShaders;
 	};
 }
