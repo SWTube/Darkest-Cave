@@ -96,7 +96,7 @@ namespace cave
 		Destroy();
 	}
 
-	eResult WindowsSprite::Init(ID3D11Device* device, ID3D11DeviceContext* context)
+	eResult WindowsSprite::initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context)
 	{
 		assert(device != nullptr && context != nullptr);
 		mDevice = device;

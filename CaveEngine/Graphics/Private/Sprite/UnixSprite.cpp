@@ -49,7 +49,7 @@ namespace cave
 		Destroy();
 	}
 
-	eResult UnixSprite::Init(uint32_t program)
+	eResult UnixSprite::initializeBuffers(uint32_t program)
 	{
 		eResult result = eResult::CAVE_OK;
 		uint32_t glError = GL_NO_ERROR;

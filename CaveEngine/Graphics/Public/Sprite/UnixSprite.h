@@ -26,13 +26,13 @@ namespace cave
 		UnixSprite& operator=(UnixSprite&& object);
 		virtual ~UnixSprite();
 
-		eResult Init(uint32_t program) override;
 		void Destroy() override;
 		void Update() override;
 		void Render() override;
 
 		uint32_t* const GetBuffers();
 	private:
+		eResult initializeBuffers(uint32_t program) override;
 		uint32_t mVertexArrayObject = 0u;
 		static constexpr uint32_t ARRAY_BUFFER = 0u;
 		static constexpr uint32_t ELEMENT_ARRAY_BUFFER = 1u;

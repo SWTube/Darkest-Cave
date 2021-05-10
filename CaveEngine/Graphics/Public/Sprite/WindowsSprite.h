@@ -26,12 +26,12 @@ namespace cave
 		WindowsSprite& operator=(WindowsSprite&& object);
 		virtual ~WindowsSprite();
 
-		eResult Init(ID3D11Device* device, ID3D11DeviceContext* context) override;
 		eResult SetInputLayout(ID3DBlob* vsBlob);
 		void Destroy() override;
 		void Update() override;
 		void Render() override;
 	private:
+		eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context) override;
 		ID3D11Device* mDevice = nullptr;
 		ID3D11DeviceContext* mContext = nullptr;
 		ID3D11Buffer* mVertexBuffer = nullptr;

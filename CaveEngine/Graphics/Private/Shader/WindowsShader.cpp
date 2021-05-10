@@ -9,8 +9,13 @@
 #ifdef __WIN32__
 namespace cave
 {
-	WindowsShader::WindowsShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath)
-		: GenericShader(vertexShaderFilePath, fragmentShaderFilePath)
+	WindowsShader::WindowsShader(const std::filesystem::path& shaderFilePath, MemoryPool& pool)
+		: GenericShader(shaderFilePath, pool)
+	{
+	}
+
+	WindowsShader::WindowsShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool)
+		: GenericShader(vertexShaderFilePath, fragmentShaderFilePath, pool)
 	{
 	}
 
@@ -23,7 +28,7 @@ namespace cave
 	{
 	}
 
-	WindowsShader& WindowsShader::operator=(UnixShader&& other)
+	WindowsShader& WindowsShader::operator=(WindowsShader&& other)
 	{
 		if (this != &other)
 		{

@@ -117,6 +117,27 @@ namespace cave
 		return mPool;
 	}
 
+#ifdef __WIN32__
+	eResult GenericSprite::Init(ID3D11Device* device, ID3D11DeviceContext* context, uint32_t screenWidth, uint32_t screenHeight)
+#else
+	eResult GenericSprite::Init(uint32_t program, uint32_t screenWidth, uint32_t screenHeight)
+#endif
+	{
+		mScreenWidth = screenWidth;
+		mScreenHeight = screenHeight;
+
+		mPreviousPosition = Vertex(-1.0f, -1.0f, 1.0f);
+		mPosition = Vertex(mScreenWidth / 2.0f, mScreenHeight / 2.0f, 1.0f);
+
+#ifdef __WIN32__
+		eResult result = initializeBuffers(device, context);
+#else
+		eResult result = initializeBuffers(program);
+#endif
+
+		return result;
+	}
+
 	void GenericSprite::Destroy()
 	{
 		if (mTextureData != nullptr)

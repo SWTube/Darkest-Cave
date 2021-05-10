@@ -28,15 +28,20 @@ namespace cave
 		MemoryPool* const GetMemoryPool() const;
 
 #ifdef __WIN32__
-		virtual eResult Init(ID3D11Device* device, ID3D11DeviceContext* context) = 0;
+		virtual eResult Init(ID3D11Device* device, ID3D11DeviceContext* context, uint32_t screenWidth, uint32_t screenHeight);
 #else
-		virtual eResult Init(uint32_t program) = 0;
+		virtual eResult Init(uint32_t program, uint32_t screenWidth, uint32_t screenHeight);
 #endif
 		virtual void Destroy();
 		virtual void Update() = 0;
 		virtual void Render() = 0;
 
 	protected:
+#ifdef __WIN32__
+		virtual eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context) = 0;
+#else
+		virtual eResult initializeBuffers(uint32_t program) = 0;
+#endif
 		static constexpr uint32_t VERTICES_COUNT = 4u;
 		static constexpr uint32_t INDICES_COUNT = 6u;
 

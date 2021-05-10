@@ -247,7 +247,7 @@ void RenderTest()
 
 #ifdef __WIN32__
 	cave::Shader* shader = reinterpret_cast<cave::Shader*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Shader)));
-	new(shader) cave::Shader("DirectXTest.fxh");
+	new(shader) cave::Shader(L"DirectXTest.fxh");
 #else
 	cave::Shader* shader = reinterpret_cast<cave::Shader*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Shader)));
 	new(shader) cave::Shader("sprite.vert", "sprite.frag");

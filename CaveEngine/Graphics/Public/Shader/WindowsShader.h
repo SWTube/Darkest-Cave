@@ -18,7 +18,8 @@
 		{
 		public:
 			WindowsShader() = delete;
-			WindowsShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath);
+			WindowsShader(const std::filesystem::path& shaderFilePath, MemoryPool& pool = gCoreMemoryPool);
+			WindowsShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool = gCoreMemoryPool);
 			WindowsShader(const WindowsShader&) = delete;
 			WindowsShader(WindowsShader&& other);
 			WindowsShader& operator=(const WindowsShader&) = delete;
