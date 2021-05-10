@@ -138,7 +138,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto endTimeRec0 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec0 = endTimeRec0 - startTimeRec0;
 		memoryPoolAllocSum += elapsedTimeRec0.count() * 1000;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
 
 		auto startTimeRec1 = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < N; ++i)
@@ -149,7 +149,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto endTimeRec1 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec1 = endTimeRec1 - startTimeRec1;
 		memoryPoolDeallocSum += elapsedTimeRec1.count() * 1000;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
 
 		std::vector<void*> pointersByNew;
 		pointersByNew.reserve(N);
@@ -161,7 +161,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		}
 		auto endTimeRec2 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec2 = endTimeRec2 - startTimeRec2;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
 		mallocAllocSum += elapsedTimeRec2.count() * 1000;
 
 		auto startTimeRec3 = std::chrono::high_resolution_clock::now();
@@ -172,11 +172,14 @@ void MemoryTest1(cave::MemoryPool& pool)
 		}
 		auto endTimeRec3 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec3 = endTimeRec3 - startTimeRec3;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
 		freeDeallocSum += elapsedTimeRec3.count() * 1000;
 	}
-	
+#ifdef __WIN32__
+	LOGDF(cave::eLogChannel::CORE_MEMORY, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
+#else
 	LOGDF(cave::eLogChannel::CORE_MEMORY, std::cout, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
+#endif
 }
 
 template <size_t N>

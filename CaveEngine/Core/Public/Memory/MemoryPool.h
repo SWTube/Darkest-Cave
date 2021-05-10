@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 #include "CoreTypes.h"
@@ -56,14 +57,14 @@ namespace cave
 		{
 		}
 
-		return 1 << count;
+		return 1ul << count;
 	}
 
 	FORCEINLINE constexpr size_t GetExponent(size_t number)
 	{
 		if (!number || (number & (number - 1)))
 		{
-			return -1ul;
+			return 0ul;
 		}
 
 		size_t exponent = 0ul;

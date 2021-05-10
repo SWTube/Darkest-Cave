@@ -6,6 +6,7 @@
 #pragma once
 
 #include <cassert>
+#include <cstring>
 #include <float.h>
 #include <math.h>
 #include <new>
@@ -13,6 +14,5 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <time.h>
 #include <wchar.h>

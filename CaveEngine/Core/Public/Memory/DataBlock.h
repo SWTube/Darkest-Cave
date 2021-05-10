@@ -6,7 +6,7 @@
 #pragma once
 
 #include "CoreTypes.h"
-
+#include "Assertion/Assert.h"
 #include "Containers/Node.h"
 
 namespace cave

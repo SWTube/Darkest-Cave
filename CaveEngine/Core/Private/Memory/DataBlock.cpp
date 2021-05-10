@@ -3,8 +3,8 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Debug/Log.h"
 #include "Memory/DataBlock.h"
+import Log;
 
 namespace cave
 {
@@ -86,7 +86,7 @@ namespace cave
 
 		while (iterator != nullptr)
 		{
-			LOGDF(eLogChannel::CORE_MEMORY, std::cout, "Freed Node: %s", iterator->Data);
+			//LOGDF(eLogChannel::CORE_MEMORY, "Freed Node: %s", iterator->Data);
 			iterator = iterator->Next;
 		}
 	}
@@ -98,7 +98,7 @@ namespace cave
 
 		while (iterator != nullptr)
 		{
-			LOGDF(eLogChannel::CORE_MEMORY, std::cout, "%d: Allocated Node: %s", i, iterator->Data);
+			//LOGDF(eLogChannel::CORE_MEMORY, "%d: Allocated Node: %s", i, iterator->Data);
 			iterator = iterator->Next;
 			++i;
 		}

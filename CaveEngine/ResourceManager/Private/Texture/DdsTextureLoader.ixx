@@ -1,11 +1,12 @@
 module;
 
-#include <assert.h>
 #include <algorithm>
 #include <memory>
 
-#include "CoreMinimal.h"
 #include "GraphicsApiPch.h"
+
+#include "CoreMinimal.h"
+#include "Assertion/Assert.h"
 
 #ifdef __clang__
 	#pragma clang diagnostic ignored "-Wcovered-switch-default"

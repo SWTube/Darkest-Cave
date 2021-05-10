@@ -10,46 +10,90 @@ import DdsTextureLoader;
 
 namespace cave
 {
-	WindowsSprite::WindowsSprite(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices)
-		: GenericSprite(verticesCount, std::move(vertices), indicesCount, std::move(indices))
+	WindowsSprite::WindowsSprite(Texture* texture, MemoryPool& pool)
+		: GenericSprite(texture, pool)
 	{
 	}
 
-	WindowsSprite::WindowsSprite(uint32_t verticesCount, Vertex*&& vertices, uint32_t indicesCount, uint8_t*&& indices, const char* textureFilePath)
-		: GenericSprite(verticesCount, std::move(vertices), indicesCount, std::move(indices), textureFilePath)
+	WindowsSprite::WindowsSprite(const Texture& texture, MemoryPool& pool)
+		: GenericSprite(texture, pool)
+	{
+	}
+
+	WindowsSprite::WindowsSprite(Texture&& texture, MemoryPool& pool)
+		: GenericSprite(std::move(texture), pool)
 	{
 	}
 
 	WindowsSprite::WindowsSprite(const WindowsSprite& other)
 		: GenericSprite(other)
+		, mDevice(other.mDevice)
+		, mContext(other.mContext)
+		, mVertexBuffer(other.mVertexBuffer)
+		, mIndexBuffer(other.mIndexBuffer)
+		, mVertexLayout(other.mVertexLayout)
+		, mConstantBuffer(other.mConstantBuffer)
+		, mTextureRv(other.mTextureRv)
+		, mSamplerLinear(other.mSamplerLinear)
 	{
-		if (this != &other)
-		{
-
-		}
 	}
 
 	WindowsSprite::WindowsSprite(WindowsSprite&& other)
-		: GenericSprite(other)
+		: GenericSprite(std::move(other))
+	{
+		mDevice = other.mDevice;
+		mContext = other.mContext;
+		mVertexBuffer = other.mVertexBuffer;
+		mIndexBuffer = other.mIndexBuffer;
+		mVertexLayout = other.mVertexLayout;
+		mConstantBuffer = other.mConstantBuffer;
+		mTextureRv = other.mTextureRv;
+		mSamplerLinear = other.mSamplerLinear;
+
+		other.Destroy();
+	}
+
+	WindowsSprite& WindowsSprite::operator=(const WindowsSprite& other)
 	{
 		if (this != &other)
 		{
-
+			GenericSprite::operator=(other);
+			mDevice = other.mDevice;
+			mContext = other.mContext;
+			mVertexBuffer = other.mVertexBuffer;
+			mIndexBuffer = other.mIndexBuffer;
+			mVertexLayout = other.mVertexLayout;
+			mConstantBuffer = other.mConstantBuffer;
+			mTextureRv = other.mTextureRv;
+			mSamplerLinear = other.mSamplerLinear;
 		}
-	}
 
-	constexpr WindowsSprite& WindowsSprite::operator=(const WindowsSprite& other)
-	{
 		return *this;
 	}
 
-	constexpr WindowsSprite& WindowsSprite::operator=(WindowsSprite&& other)
+	WindowsSprite& WindowsSprite::operator=(WindowsSprite&& other)
 	{
+		if (this != &other)
+		{
+			GenericSprite::operator=(std::move(other));
+			mDevice = other.mDevice;
+			mContext = other.mContext;
+			mVertexBuffer = other.mVertexBuffer;
+			mIndexBuffer = other.mIndexBuffer;
+			mVertexLayout = other.mVertexLayout;
+			mConstantBuffer = other.mConstantBuffer;
+			mTextureRv = other.mTextureRv;
+			mSamplerLinear = other.mSamplerLinear;
+
+			other.Destroy();
+		}
+
 		return *this;
 	}
 
 	WindowsSprite::~WindowsSprite()
 	{
+		Destroy();
 	}
 
 	eResult WindowsSprite::Init(ID3D11Device* device, ID3D11DeviceContext* context)
@@ -61,28 +105,40 @@ namespace cave
 
 		D3D11_BUFFER_DESC bd = {};
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = mVertices[0].GetSize() * mVerticesCount;
+		bd.ByteWidth = sizeof(VERTICES);
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
 		D3D11_SUBRESOURCE_DATA InitData = {};
-		InitData.pSysMem = mVertices;
+		InitData.pSysMem = VERTICES;
 		result = device->CreateBuffer(&bd, &InitData, &mVertexBuffer);
 		if(FAILED(result))
 		{
 			return eResult::CAVE_FAIL;
 		}
 
+		// ���� context�� �����ֱ�
+		// Set vertex buffer
+		uint32_t stride = sizeof(VertexT);
+		uint32_t offset = 0;
+		mContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
+
 		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(uint8_t) * mIndicesCount;
+		bd.ByteWidth = sizeof(INDICES);
 		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		bd.CPUAccessFlags = 0;
-		InitData.pSysMem = mIndices;
+		InitData.pSysMem = INDICES;
 		result = device->CreateBuffer(&bd, &InitData, &mIndexBuffer);
 		if(FAILED(result))
 		{
 			return eResult::CAVE_FAIL;
 		}
+
+		// Set index buffer
+		mContext->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+		// Set primitive topology
+		mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		// 12. Define, create, set the input layout ---------------------------------------------------------------------------------------------
 
@@ -101,11 +157,23 @@ namespace cave
 		free(mTextureData);
 		mTextureData = nullptr;*/
 
+
+		// Create the constant buffers
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(ConstantBuffer);
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.CPUAccessFlags = 0;
+		result = mDevice->CreateBuffer(&bd, nullptr, &mConstantBuffer);
+		if (FAILED(result))
+		{
+			return static_cast<eResult>(result);
+		}
+
 		// Load the Texture
 		result = DdsTextureLoader::CreateDDSTextureFromFile(device, L"Graphics/Resource/seafloor.dds", nullptr, &mTextureRv);
-		if(FAILED(result))
+		if (FAILED(result))
 		{
-			return eResult::CAVE_FAIL;
+			return static_cast<eResult>(result);
 		}
 
 		// Create the sample state
@@ -117,11 +185,13 @@ namespace cave
 		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		sampDesc.MinLOD = 0;
 		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-		result = device->CreateSamplerState(&sampDesc, &mSamplerLinear);
+		result = mDevice->CreateSamplerState(&sampDesc, &mSamplerLinear);
 		if (FAILED(result))
 		{
-			return eResult::CAVE_FAIL;
+			return static_cast<eResult>(result);
 		}
+
+		mWorld = DirectX::XMMatrixIdentity();
 
 		return eResult::CAVE_OK;
 	}
@@ -132,7 +202,7 @@ namespace cave
 		D3D11_INPUT_ELEMENT_DESC layout[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(Float3), D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 		UINT numElements = ARRAYSIZE(layout);
 
@@ -154,39 +224,48 @@ namespace cave
 		if (mSamplerLinear != nullptr)
 		{
 			mSamplerLinear->Release();
+			mSamplerLinear = nullptr;
 		}
 		if (mTextureRv != nullptr)
 		{
 			mTextureRv->Release();
+			mTextureRv = nullptr;
 		}
 		if (mVertexBuffer != nullptr)
 		{
 			mVertexBuffer->Release();
+			mVertexBuffer = nullptr;
 		}
 		if (mIndexBuffer != nullptr)
 		{
 			mIndexBuffer->Release();
+			mIndexBuffer = nullptr;
 		}
 		if (mVertexLayout != nullptr)
 		{
 			mVertexLayout->Release();
+			mVertexLayout = nullptr;
 		}
 		if (mConstantBuffer)
 		{
 			mConstantBuffer->Release();
+			mConstantBuffer = nullptr;
 		}
 		if (mContext != nullptr)
 		{
 			mContext->Release();
+			mContext = nullptr;
 		}
 		if (mDevice != nullptr)
 		{
 			mDevice->Release();
+			mDevice = nullptr;
 		}
 
 		if (mTextureData != nullptr)
 		{
-			free(mTextureData);
+			mTextureData->~Texture();
+			mTextureData = nullptr;
 		}
 	}
 
@@ -205,7 +284,7 @@ namespace cave
 
 		// ���� context�� �����ֱ�
 		// Set vertex buffer
-		uint32_t stride = mVertices[0].GetSize();
+		uint32_t stride = sizeof(VertexT);
 		uint32_t offset = 0;
 		mContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
@@ -222,8 +301,8 @@ namespace cave
 		//
 		// Render the first cube
 		//
-		mContext->VSSetConstantBuffers(2, 1, &mConstantBuffer);
-		mContext->PSSetConstantBuffers(2, 1, &mConstantBuffer);
+		mContext->VSSetConstantBuffers(0, 1, &mConstantBuffer);
+		mContext->PSSetConstantBuffers(0, 1, &mConstantBuffer);
 		mContext->PSSetShaderResources(0, 1, &mTextureRv);
 		mContext->PSSetSamplers(0, 1, &mSamplerLinear);
 
@@ -231,7 +310,7 @@ namespace cave
 		// ù��°�� ���ؽ� ����. 3
 		// back buffer�� �׸���
 		//context->Draw(3, 0);
-		mContext->DrawIndexed(mIndicesCount, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
+		mContext->DrawIndexed(INDICES_COUNT, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 	}
 } // namespace cave
 

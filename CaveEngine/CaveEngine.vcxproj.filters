@@ -16,23 +16,11 @@
     <ClCompile Include="Core\Private\Memory\Allocator.cpp">
       <Filter>Source Files\Core\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Debug\Log.ixx">
       <Filter>Source Files\Core\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx">
-      <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Memory\Memory.cpp">
       <Filter>Source Files\Core\Memory</Filter>
@@ -76,17 +64,17 @@
     <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Object\GenericSprite.cpp">
-      <Filter>Source Files\Graphics\Object</Filter>
+    <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Object\UnixSprite.cpp">
-      <Filter>Source Files\Graphics\Object</Filter>
+    <ClCompile Include="Graphics\Private\Sprite\UnixSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Object\Vertex.cpp">
-      <Filter>Source Files\Graphics\Object</Filter>
+    <ClCompile Include="Graphics\Private\Sprite\Vertex.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Object\WindowsSprite.cpp">
-      <Filter>Source Files\Graphics\Object</Filter>
+    <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
       <Filter>Source Files\Graphics\Shader</Filter>
@@ -96,6 +84,30 @@
     </ClCompile>
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
       <Filter>Source Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Memory\MemoryPool.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Memory\DataBlock.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Node.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\String\String.cpp">
+      <Filter>Source Files\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\String\String.ixx">
+      <Filter>Source Files\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\CoreGlobals.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp">
+      <Filter>Source Files\ThirdParty\Lodepng</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,15 +123,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\Array.h">
       <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\CaveNode.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\CaveRenderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
       <Filter>Header Files\Core\Containers</Filter>
@@ -205,23 +208,53 @@
     <ClInclude Include="Graphics\Public\Shader\UnixShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\Sprite.h">
-      <Filter>Header Files\Graphics\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\GenericSprite.h">
-      <Filter>Header Files\Graphics\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\UnixSprite.h">
-      <Filter>Header Files\Graphics\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\Vertex.h">
-      <Filter>Header Files\Graphics\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Object\WindowsSprite.h">
-      <Filter>Header Files\Graphics\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Memory\DataBlock.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Node.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Assertion\Assert.h">
+      <Filter>Header Files\Core\Assertion</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Utils\Crt.h">
+      <Filter>Header Files\Core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Utils\Defines.h">
+      <Filter>Header Files\Core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\String\String.h">
+      <Filter>Header Files\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\CoreGlobals.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\GenericSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\Sprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\UnixSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\Vertex.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\CorePch.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Public\Texture\Texture.h">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
+      <Filter>Header Files\ThirdParty\Lodepng</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -302,17 +335,47 @@
     <Filter Include="Source Files\ResourceManager\Texture">
       <UniqueIdentifier>{c5ca6e59-115e-4980-bf79-e267882ab430}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Graphics\Object">
-      <UniqueIdentifier>{1e5df92c-e828-4393-a60b-e98d2f61d888}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Graphics\Shader">
       <UniqueIdentifier>{030d19f1-44a2-41ce-86e0-0619d311dc89}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Graphics\Object">
-      <UniqueIdentifier>{b16c34d6-b973-42a7-90e8-142191610b55}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Graphics\Shader">
       <UniqueIdentifier>{ce661392-408e-4ca9-811d-9ec6fda3af15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Containers">
+      <UniqueIdentifier>{9349ca78-182b-42fe-b049-dd8829e1e840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Assertion">
+      <UniqueIdentifier>{87ba8e6b-0ee7-4565-bb3c-47aaf145beb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Assertion">
+      <UniqueIdentifier>{8f39a529-cab6-4a4d-9e82-817b005f7cde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Utils">
+      <UniqueIdentifier>{75cb8509-9447-46dc-bc44-0ed1c43b66ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\String">
+      <UniqueIdentifier>{6115d0c5-76d5-48bd-a013-ad953368f922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\String">
+      <UniqueIdentifier>{76ee51c6-4c3c-49f0-a250-abed91f597f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Sprite">
+      <UniqueIdentifier>{b16c34d6-b973-42a7-90e8-142191610b55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Sprite">
+      <UniqueIdentifier>{1e5df92c-e828-4393-a60b-e98d2f61d888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ThirdParty">
+      <UniqueIdentifier>{61744675-e393-4d0f-8d2a-1e54715b1c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ThirdParty\Lodepng">
+      <UniqueIdentifier>{3dcf469a-9233-48bc-a20d-df32c38ab396}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ThirdParty">
+      <UniqueIdentifier>{a80557e4-261c-4105-be9f-9fc3a97a1d1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ThirdParty\Lodepng">
+      <UniqueIdentifier>{2331adf6-6487-4115-b9ef-6f230b6dde99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

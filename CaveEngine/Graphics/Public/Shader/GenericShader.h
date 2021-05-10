@@ -7,8 +7,11 @@
 
 #include <filesystem>
 
-#include "CoreTypes.h"
 #include "GraphicsApiPch.h"
+
+#include "CoreGlobals.h"
+#include "CoreTypes.h"
+#include "Memory/MemoryPool.h"
 
 namespace cave
 {

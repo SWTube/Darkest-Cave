@@ -5,9 +5,10 @@
 
 #pragma once
 
+#include "GraphicsApiPch.h"
+
 #include "CoreTypes.h"
 #include "Device/Window.h"
-#include "GraphicsApiPch.h"
 
 namespace cave
 {

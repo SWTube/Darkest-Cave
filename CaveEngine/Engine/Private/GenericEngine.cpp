@@ -14,6 +14,14 @@ namespace cave
 
 	const wchar_t* GenericEngine::msWindowClassName = L"GenericWindowClass";
 
+	GenericEngine::~GenericEngine()
+	{
+		if (mPool != &gCoreMemoryPool)
+		{
+			delete mPool;
+		}
+	}
+
 	Window* GenericEngine::GetWindowHandle()
 	{
 		return mWindow;
