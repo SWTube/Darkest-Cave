@@ -5,6 +5,7 @@
 
 #include "Sprite/WindowsSprite.h"
 
+
 #ifdef __WIN32__
 import DdsTextureLoader;
 
@@ -221,7 +222,7 @@ namespace cave
 
 	void WindowsSprite::Destroy()
 	{
-		GeneralSprite::Destroy();
+		GenericSprite::Destroy();
 		
 		if (mSamplerLinear != nullptr)
 		{

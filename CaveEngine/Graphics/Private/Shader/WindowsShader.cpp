@@ -84,9 +84,11 @@ namespace cave
 	eResult WindowsShader::Compile(ID3D11Device* device)
 	{
 		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
-		std::filesystem::path shaderPath = PROJECT_DIR;
-		shaderPath += "/CaveEngine/Graphics/Shader/";
-		shaderPath += mShaderFilePath;
+		//std::filesystem::path shaderPath = PROJECT_DIR;
+		std::filesystem::path shaderPath = mShaderFilePath;
+		//shaderPath += "CaveEngine\\Graphics\\Shader\\"; 
+		//shaderPath += mShaderFilePath;
+		//shaderPath += "DirectXTest.fxh";
 
 		mVsBlob = nullptr;
 		eResult error = compileShaderFromFile(shaderPath.c_str(), "VS", "vs_4_0", &mVsBlob);
