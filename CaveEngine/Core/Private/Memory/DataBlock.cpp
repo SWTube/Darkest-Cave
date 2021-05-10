@@ -4,7 +4,6 @@
  */
 
 #include "Memory/DataBlock.h"
-import Log;
 
 namespace cave
 {

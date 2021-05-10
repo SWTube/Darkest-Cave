@@ -142,7 +142,7 @@ namespace cave
 	{
 		if (mTextureData != nullptr)
 		{
-			mTextureData->~Texture();
+			mTextureData->Destroy();
 			mPool->Deallocate(mTextureData, sizeof(Texture));
 		}
 	}

@@ -221,6 +221,8 @@ namespace cave
 
 	void WindowsSprite::Destroy()
 	{
+		GeneralSprite::Destroy();
+		
 		if (mSamplerLinear != nullptr)
 		{
 			mSamplerLinear->Release();
@@ -260,12 +262,6 @@ namespace cave
 		{
 			mDevice->Release();
 			mDevice = nullptr;
-		}
-
-		if (mTextureData != nullptr)
-		{
-			mTextureData->~Texture();
-			mTextureData = nullptr;
 		}
 	}
 

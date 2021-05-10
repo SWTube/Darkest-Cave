@@ -60,7 +60,7 @@ namespace cave
 
 	eResult UnixRenderer::createObject(Sprite& object)
 	{
-		return object.Init(mDeviceResources->GetProgram());
+		return object.Init(mDeviceResources->GetProgram(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 	}
 
 	void UnixRenderer::createView()

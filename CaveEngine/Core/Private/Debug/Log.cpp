@@ -4,6 +4,7 @@
  */
 
 #include "Debug/Log.h"
+#include "String/String.h"
 
 #ifdef __UNIX__
 namespace cave
