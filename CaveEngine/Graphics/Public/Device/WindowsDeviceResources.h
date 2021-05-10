@@ -34,6 +34,9 @@ namespace cave
 
 		float GetAspectRatio() override;
 
+		uint32_t GetWidth() const override;
+		uint32_t GetHeight() const override;
+
 		ID3D11Device* GetDevice();
 		ID3D11DeviceContext* GetDeviceContext();
 		ID3D11RenderTargetView* GetRenderTarget();

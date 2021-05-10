@@ -49,7 +49,7 @@ namespace cave
 
 		for (Sprite& object : mSprites)
 		{
-			if (eResult result = object.Init(mDeviceResources->GetProgram()); result != eResult::CAVE_OK)
+			if (eResult result = object.Init(mDeviceResources->GetProgram(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight()); result != eResult::CAVE_OK)
 			{
 				return result;
 			}

@@ -451,6 +451,16 @@ namespace cave
 		return static_cast<float>(mBackBufferDesc.Width) / static_cast<float>(mBackBufferDesc.Height);
 	}
 
+	uint32_t UnixDeviceResources::GetWidth() const
+	{
+		return mBackBufferDesc.Width;
+	}
+
+	uint32_t UnixDeviceResources::GetHeight() const
+	{
+		return mBackBufferDesc.Height;
+	}
+
 	ID3D11Device* WindowsDeviceResources::GetDevice()
 	{
 		return mD3dDevice;
