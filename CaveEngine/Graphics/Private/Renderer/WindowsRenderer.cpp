@@ -154,7 +154,7 @@ namespace cave
 				return result;
 			}
 
-			result = object.SetInputLayout(mShaders.front()->GetVertexShaderBlob());
+			result = object.SetInputLayout(mShaders.front().GetVertexShaderBlob());
 			if (result != eResult::CAVE_OK)
 			{
 				return result;
@@ -172,7 +172,7 @@ namespace cave
 			return result;
 		}
 
-		result = object.SetInputLayout(mShaders.front()->GetVertexShaderBlob());
+		result = object.SetInputLayout(mShaders.front().GetVertexShaderBlob());
 		if (result != eResult::CAVE_OK)
 		{
 			return result;
