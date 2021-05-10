@@ -18,6 +18,7 @@ namespace cave
 		: mPool(&pool)
 		, mFormat(textureFormat)
 	{
+#ifdef __WIN32__
 		mFilePath /= L"CaveEngine/Graphics/Resource";
 		std::filesystem::create_directories(mFilePath / L"Textures");
 		mFilePath /= L"Textures";
@@ -53,6 +54,43 @@ namespace cave
 		{
 
 		}
+#else
+		mFilePath /= "CaveEngine/Graphics/Resource";
+		std::filesystem::create_directories(mFilePath / "Textures");
+		mFilePath /= "Textures";
+		mFilePath /= filePath;
+
+		mTexture = reinterpret_cast<TexturePointer*>(mPool->Allocate(sizeof(TexturePointer)));
+		mTexture->ReferenceCount = 1u;
+		mTexture->Texture = nullptr;
+
+		const char* extension = mFilePath.extension().c_str();
+		if (strncmp(extension, ".png", 4) == 0)
+		{
+			uint32_t error = 0u;
+			switch (mFormat)
+			{
+			case eTextureFormat::RGB:
+				error = lodepng_decode24_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
+				break;
+			case eTextureFormat::RGBA:
+				error = lodepng_decode32_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
+				break;
+			default:
+				assert(false);
+				break;
+			}
+			
+			if (error != 0)
+			{
+				LOGEF(eLogChannel::GRAPHICS, std::cerr, "The png file %s cannot be loaded. Error Code: %u", mFilePath.c_str(), error);
+			}
+		}
+		else if (strncmp(extension, ".dds", 4) == 0)
+		{
+
+		}
+#endif
 	}
 
 	Texture::Texture(const Texture& other)
@@ -63,7 +101,10 @@ namespace cave
 		, mFormat(other.mFormat)
 		, mTexture(other.mTexture)
 	{
-		++mTexture->ReferenceCount;
+		if (mTexture != nullptr)
+		{
+			++mTexture->ReferenceCount;
+		}
 	}
 
 	Texture::Texture(Texture&& other)
@@ -88,9 +129,15 @@ namespace cave
 			mWidth = other.mWidth;
 			mHeight = other.mHeight;
 			mFormat = other.mFormat;
-			--mTexture->ReferenceCount;
+			if (mTexture != nullptr)
+			{
+				--mTexture->ReferenceCount;
+			}
 			mTexture = other.mTexture;
-			++mTexture->ReferenceCount;
+			if (mTexture != nullptr)
+			{
+				++mTexture->ReferenceCount;
+			}
 		}
 
 		return *this;
@@ -105,7 +152,10 @@ namespace cave
 			mWidth = other.mWidth;
 			mHeight = other.mHeight;
 			mFormat = other.mFormat;
-			--mTexture->ReferenceCount;
+			if (mTexture != nullptr)
+			{
+				--mTexture->ReferenceCount;
+			}
 			mTexture = other.mTexture;
 
 			other.mPool = nullptr;
@@ -118,11 +168,19 @@ namespace cave
 
 	Texture::~Texture()
 	{
-		--mTexture->ReferenceCount;
-		if (mTexture->ReferenceCount == 0u)
+		Destroy();
+	}
+
+	void Texture::Destroy()
+	{
+		if (mTexture != nullptr)
 		{
-			mTexture->~TexturePointer();
-			mPool->Deallocate(mTexture, sizeof(TexturePointer));
+			--mTexture->ReferenceCount;
+			if (mTexture->ReferenceCount == 0u)
+			{
+				mTexture->~TexturePointer();
+				mPool->Deallocate(mTexture, sizeof(TexturePointer));
+			}
 		}
 	}
 
@@ -133,12 +191,21 @@ namespace cave
 
 	const uint8_t* const Texture::GetTexture() const
 	{
-		return mTexture->Texture;
+		if (mTexture != nullptr)
+		{
+			return mTexture->Texture;
+		}
+
+		return nullptr;
 	}
 
 	const char* const Texture::GetCStringFilePath() const
 	{
+#ifdef __WIN32__
 		return mFilePath.string().c_str();
+#else
+		return mFilePath.c_str();
+#endif
 	}
 
 	const std::filesystem::path& Texture::GetFilePath() const

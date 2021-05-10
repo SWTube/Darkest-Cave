@@ -451,12 +451,12 @@ namespace cave
 		return static_cast<float>(mBackBufferDesc.Width) / static_cast<float>(mBackBufferDesc.Height);
 	}
 
-	uint32_t UnixDeviceResources::GetWidth() const
+	uint32_t WindowsDeviceResources::GetWidth() const
 	{
 		return mBackBufferDesc.Width;
 	}
 
-	uint32_t UnixDeviceResources::GetHeight() const
+	uint32_t WindowsDeviceResources::GetHeight() const
 	{
 		return mBackBufferDesc.Height;
 	}

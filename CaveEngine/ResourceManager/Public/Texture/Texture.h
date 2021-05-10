@@ -29,6 +29,8 @@ namespace cave
 		~Texture();
 		MemoryPool* const GetMemoryPool();
 
+		void Destroy();
+
 		const uint8_t* const GetTexture() const;
 		const char* const GetCStringFilePath() const;
 		const std::filesystem::path& GetFilePath() const;

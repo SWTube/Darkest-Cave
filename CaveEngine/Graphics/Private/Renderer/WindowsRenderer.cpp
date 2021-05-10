@@ -148,7 +148,7 @@ namespace cave
 
 		for (Sprite& object : mSprites)
 		{
-			eResult result = object.Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
+			eResult result = object.Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 			if (result != eResult::CAVE_OK)
 			{
 				return result;
