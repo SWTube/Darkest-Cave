@@ -9,15 +9,71 @@
 #ifdef __WIN32__
 namespace cave
 {
-	WindowsShader::WindowsShader(const char* shaderFilePath)
-		: GenericShader(shaderFilePath)
+	WindowsShader::WindowsShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath)
+		: GenericShader(vertexShaderFilePath, fragmentShaderFilePath)
 	{
+	}
+
+	WindowsShader::WindowsShader(WindowsShader&& other)
+		: GenericShader(std::move(other))
+		, mVertexShader(other.mVertexShader)
+		, mPixelShader(other.mPixelShader)
+		, mVsBlob(other.mVsBlob)
+		, mPsBlob(other.mPsBlob)
+	{
+	}
+
+	WindowsShader& WindowsShader::operator=(UnixShader&& other)
+	{
+		if (this != &other)
+		{
+			GenericShader::operator=(std::move(other));
+			mVertexShader = other.mVertexShader;
+			mPixelShader = other.mPixelShader;
+			mVsBlob = other.mVsBlob;
+			mPsBlob = other.mPsBlob;
+
+			other.mVertexShader->Release();
+			other.mPixelShader->Release();
+			other.mVsBlob->Release();
+			other.mPsBlob->Release();
+			
+			other.mVertexShader = nullptr;
+			other.mPixelShader = nullptr;
+			other.mVsBlob = nullptr;
+			other.mPsBlob = nullptr;
+		}
+
+		return *this;
 	}
 
 	WindowsShader::~WindowsShader()
 	{
 		mVertexShaderFilePath.clear();
 		mFragmentShaderFilePath.clear();
+
+		if (mVertexShader != nullptr)
+		{
+			mVertexShader->Release();
+			mVertexShader = nullptr;
+		}
+
+		if (mPixelShader != nullptr)
+		{
+			mPixelShader->Release();
+			mPixelShader = nullptr;
+		}
+
+		if (mVsBlob != nullptr)
+		{
+			mVsBlob->Release();
+		}
+
+		if (mPsBlob != nullptr)
+		{
+			mPsBlob->Release();
+			mPsBlob = nullptr;
+		}
 	}
 
 	eResult WindowsShader::Compile(ID3D11Device* device)

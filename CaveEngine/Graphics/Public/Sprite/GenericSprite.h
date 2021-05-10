@@ -75,5 +75,10 @@ namespace cave
 		uint32_t mHeight = 0u;
 		uint32_t mScreenWidth = 0u;
 		uint32_t mScreenHeight = 0u;
+
+		Vertex mPosition;
+		Vertex mPreviousPosition;
+
+		bool mbNeedsUpdate = false;
 	};
 } // namespace cave

@@ -18,10 +18,11 @@
 		{
 		public:
 			WindowsShader() = delete;
-			WindowsShader(const char* shaderFilePath);
+			WindowsShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath);
 			WindowsShader(const WindowsShader&) = delete;
-			WindowsShader(const WindowsShader&&) = delete;
+			WindowsShader(WindowsShader&& other);
 			WindowsShader& operator=(const WindowsShader&) = delete;
+			WindowsShader& operator=(WindowsShader&& other);
 			virtual ~WindowsShader();
 
 			virtual eResult Compile(ID3D11Device* device) override;
