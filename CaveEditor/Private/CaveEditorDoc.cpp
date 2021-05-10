@@ -36,6 +36,7 @@ CCaveEditorDoc::CCaveEditorDoc() noexcept
 
 CCaveEditorDoc::~CCaveEditorDoc()
 {
+	
 }
 
 BOOL CCaveEditorDoc::OnNewDocument()

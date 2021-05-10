@@ -29,7 +29,7 @@ private:
 	CEdit m_height;
 	CComboBox m_textureComboBox;
 
-	HWND p_hwnd;
+	HWND p_hwnd = nullptr;
 
 public:
 	bool isCreateDlg = false;

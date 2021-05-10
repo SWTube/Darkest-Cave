@@ -14,11 +14,11 @@ IMPLEMENT_DYNAMIC(ObjectInfoDlg, CDialogEx)
 ObjectInfoDlg::ObjectInfoDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG1, pParent)
 {
-
 }
 
 ObjectInfoDlg::~ObjectInfoDlg()
 {
+
 }
 
 void ObjectInfoDlg::Init(CString name, float posX, float posY,int width,int height, int textureIndex)

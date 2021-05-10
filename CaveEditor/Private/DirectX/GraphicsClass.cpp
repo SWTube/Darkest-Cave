@@ -24,6 +24,7 @@ GraphicsClass::GraphicsClass(const GraphicsClass& other)
 
 GraphicsClass::~GraphicsClass()
 {
+	Shutdown();
 }
 
 
@@ -55,28 +56,28 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// 카메라 포지션 설정
 	m_Camera->SetPosition(0.0f, 0.0f, -100.0f);
 
-	// m_Model 객체 생성
-	m_Model = new ModelClass;
-	if (!m_Model)
-	{
-		return false;
-	}
-	m_Model->SetMoveX(-3);
-	m_Model->SetColor(XMFLOAT4(1, 0.5f, 0.0f, 1));
+	//m_Model 객체 생성
+	//m_Model = new ModelClass;
+	//if (!m_Model)
+	//{
+	//	return false;
+	//}
+	//m_Model->SetMoveX(-3);
+	//m_Model->SetColor(XMFLOAT4(1, 0.5f, 0.0f, 1));
+
 	// m_Model 객체 초기화
-	if (!m_Model->Initialize(m_Direct3D->GetDevice()))
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
+	//if (!m_Model->Initialize(m_Direct3D->GetDevice()))
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
+	//m_Squere = new Squere;
 
-	m_Squere = new Squere;
-
-	if (!m_Squere->Initialize(m_Direct3D->GetDevice(),screenWidth,screenHeight, L"seafloor.dds",100,100)) {
-		MessageBox(hwnd, L"Could not initialize the squere object", L"Error", MB_OK);
-		return false;
-	}
+	//if (!m_Squere->Initialize(m_Direct3D->GetDevice(),screenWidth,screenHeight, L"seafloor.dds",100,100)) {
+	//	MessageBox(hwnd, L"Could not initialize the squere object", L"Error", MB_OK);
+	//	return false;
+	//}
 
 	//m_Bitmap = new BitmapClass;
 	//
@@ -112,7 +113,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-
 	return true;
 }
 
@@ -120,19 +120,24 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 void GraphicsClass::Shutdown()
 {
 	if (!m_Textures.empty()) {
-		for (TextureClass* i : m_Textures) {
-			i->Shutdown();
-			delete i;
+		for (int i = 0; i < m_Textures.size();i++) {
+			m_Textures[i]->Shutdown();
+			delete m_Textures[i];
 		}
-		m_Textures.clear();
 	}
+	m_Textures.clear();
+	std::vector<TextureClass*>().swap(m_Textures);
+	
 	if (!m_Bitmaps.empty()) {
-		for (BitmapClass* i : m_Bitmaps) {
-			i->Shutdown();
-			delete i;
+		for (int i = 0; i < m_Bitmaps.size(); i++) {
+			m_Bitmaps[i]->Shutdown();
+			delete m_Bitmaps[i];
 		}
-		m_Bitmaps.clear();
 	}
+	m_Bitmaps.clear();
+	std::vector<BitmapClass*>().swap(m_Bitmaps);
+
+
 	// m_TextureShader 객체 반환
 	if (m_TextureShader)
 	{
@@ -146,26 +151,6 @@ void GraphicsClass::Shutdown()
 		m_ColorShader->Shutdown();
 		delete m_ColorShader;
 		m_ColorShader = 0;
-	}
-
-	if (m_Bitmap) {
-		m_Bitmap->Shutdown();
-		delete m_Bitmap;
-		m_Bitmap = 0;
-	}
-
-	if (m_Squere) {
-		m_Squere->Shutdown();
-		delete m_Squere;
-		m_Squere = 0;
-	}
-
-	// m_Model 객체 반환
-	if (m_Model)
-	{
-		m_Model->Shutdown();
-		delete m_Model;
-		m_Model = 0;
 	}
 
 	// m_Camera 객체 반환
@@ -218,12 +203,6 @@ bool GraphicsClass::AddBitmap(int bitmapWidth, int bitmapHeight)
 	temp->SetTextureIndex(0);
 	m_Bitmaps.push_back(temp);
 
-	//TextureClass* tex = new TextureClass;
-	//tex->Initialize(m_Direct3D->GetDevice(), filename);
-
-	//m_Textures.push_back(tex);
-	//temp->SetTextureIndex(m_Textures.size() - 1);
-
 	return true;
 	
 }
@@ -239,15 +218,19 @@ bool GraphicsClass::AddTexture(WCHAR* filename)
 
 void GraphicsClass::DeleteBitmap(int objIndex)
 {
-	m_Bitmaps[objIndex]->Shutdown();
-	delete(m_Bitmaps[objIndex]);
+	BitmapClass* temp = m_Bitmaps[objIndex];
+	temp->Shutdown();
+	//m_Bitmaps[objIndex]->Shutdown();
+	delete m_Bitmaps[objIndex];
 	m_Bitmaps.erase(m_Bitmaps.begin() + objIndex);
 }
 
 void GraphicsClass::DeleteTexture(int texIndex)
 {
-	m_Textures[texIndex]->Shutdown();
-	delete(m_Textures[texIndex]);
+	TextureClass* temp = m_Textures[texIndex];
+	temp->Shutdown();
+	//m_Textures[texIndex]->Shutdown();
+	delete m_Textures[texIndex];
 	m_Textures.erase(m_Textures.begin() + texIndex);
 }
 
@@ -332,7 +315,6 @@ bool GraphicsClass::Render(float rotation)
 				return false;
 			}
 		
-
 	}
 
 	/*

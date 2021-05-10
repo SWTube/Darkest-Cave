@@ -10,6 +10,7 @@
 #include "GraphicsClass.h"
 // ListBoxFormView
 
+
 IMPLEMENT_DYNCREATE(ListBoxFormView, CFormView)
 
 ListBoxFormView::ListBoxFormView()
@@ -20,6 +21,10 @@ ListBoxFormView::ListBoxFormView()
 
 ListBoxFormView::~ListBoxFormView()
 {
+	m_infoDlg->DestroyWindow();
+	delete m_infoDlg;
+	m_infoDlg = nullptr;
+	p_dView = nullptr;
 }
 
 void ListBoxFormView::DoDataExchange(CDataExchange* pDX)
@@ -148,6 +153,7 @@ void ListBoxFormView::AddObject()
 	m_listBox1.SetCurSel(m_listBox1.GetCount()-1);
 	p_dView->SetSelectedObject(m_listBox1.GetCurSel());
 	m_infoDlg->isCreateDlg = false;
+
 }
 
 LRESULT ListBoxFormView::OnInfoDlgOkButton(WPARAM wParam, LPARAM lParam)

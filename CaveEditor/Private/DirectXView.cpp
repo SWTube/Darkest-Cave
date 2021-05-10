@@ -20,6 +20,7 @@ DirectXView::DirectXView()
 
 DirectXView::~DirectXView()
 {
+	
 }
 
 BEGIN_MESSAGE_MAP(DirectXView, CView)
@@ -28,7 +29,15 @@ BEGIN_MESSAGE_MAP(DirectXView, CView)
 	ON_WM_LBUTTONUP()
 //	ON_WM_MOUSEHWHEEL()
 ON_WM_MOUSEWHEEL()
+ON_WM_CLOSE()
 END_MESSAGE_MAP()
+
+void DirectXView::OnClose()
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CView::OnClose();
+}
 
 
 // DirectXView 그리기
@@ -82,6 +91,7 @@ void DirectXView::Shutdown()
 	if (GraphicsClass::GetInstance())
 	{
 		m_Graphics->Shutdown();
+		delete m_Graphics;
 		m_Graphics = 0;
 	}
 
@@ -125,15 +135,10 @@ void DirectXView::OnInitialUpdate()
 	int i = strPathName.Find(L"Darkist-Cave");
 	strPathName = strPathName.Left(i) + _T("Darkist-Cave\\CaveEditor\\Resource\\default.bmp");
 	//L"D:\\Desktop\\SW-Project\\Darkist-Cave\\CaveEditor\\Resource\\default.bmp"
+
+
 	AddImageFile(T2W(strPathName.GetBuffer(0)));
 }
-
-BOOL DirectXView::DestroyWindow()
-{
-	Shutdown();
-	return CView::DestroyWindow();
-}
-
 
 void DirectXView::OnLButtonDown(UINT nFlags, CPoint point)
 {

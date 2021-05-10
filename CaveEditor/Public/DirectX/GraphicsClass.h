@@ -24,6 +24,7 @@ public:
 		if (instance == nullptr) instance = new GraphicsClass();
 		return instance;
 	}
+	~GraphicsClass();
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	bool Frame();
@@ -44,7 +45,7 @@ public:
 private:
 	GraphicsClass();
 	GraphicsClass(const GraphicsClass&);
-	~GraphicsClass();
+
 	bool Render(float);
 
 
@@ -55,14 +56,13 @@ private:
 
 	D3DClass* m_Direct3D = nullptr;
 	CameraClass* m_Camera = nullptr;
-	ModelClass* m_Model = nullptr;
-	Squere* m_Squere = nullptr;
-	BitmapClass* m_Bitmap = nullptr;
+
 
 	std::vector<BitmapClass*> m_Bitmaps;
 	std::vector<TextureClass*> m_Textures;
 
 	ColorShaderClass* m_ColorShader = nullptr;
 	TextureShaderClass* m_TextureShader = nullptr;
+
 };
 
