@@ -78,17 +78,17 @@ namespace cave
 		// �츮�� �׸� buffer ����
 		context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
-		for (Shader* const shader : mShaders)
+		for (Shader& shader : mShaders)
 		{
-			shader->Render(context);
+			shader.Render(context);
 		}
 
 		context->VSSetConstantBuffers(0, 1, &mConstantBufferNeverChanges);
 		context->VSSetConstantBuffers(1, 1, &mConstantBufferChangeOnResize);
 
-		for (Sprite* const object : mSprites)
+		for (Sprite& object : mSprites)
 		{
-			object->Render();
+			object.Render();
 		}
 
 		// ���� flip�̳� swap ���ؼ� front buffer�� ����
@@ -125,9 +125,9 @@ namespace cave
 
 	void WindowsRenderer::Update()
 	{
-		for (Sprite* const object : mSprites)
+		for (Sprite& object : mSprites)
 		{
-			object->Update();
+			object.Update();
 		}
 
 		++mFrameCount;
@@ -146,15 +146,15 @@ namespace cave
 	{
 		LOGDF(eLogChannel::GRAPHICS, "number of objects: %u", mSprites.size());
 
-		for (Sprite* const object : mSprites)
+		for (Sprite& object : mSprites)
 		{
-			eResult result = object->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
+			eResult result = object.Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
 			if (result != eResult::CAVE_OK)
 			{
 				return result;
 			}
 
-			result = object->SetInputLayout(mShaders.front()->GetVertexShaderBlob());
+			result = object.SetInputLayout(mShaders.front()->GetVertexShaderBlob());
 			if (result != eResult::CAVE_OK)
 			{
 				return result;
@@ -184,9 +184,9 @@ namespace cave
 	eResult WindowsRenderer::createShaders()
 	{
 		ID3D11Device* device = mDeviceResources->GetDevice();
-		for (Shader* const shader : mShaders)
+		for (Shader& shader : mShaders)
 		{
-			if (eResult result = shader->Compile(mDeviceResources->GetDevice()); result != eResult::CAVE_OK)
+			if (eResult result = shader.Compile(mDeviceResources->GetDevice()); result != eResult::CAVE_OK)
 			{
 				return result;
 			}
