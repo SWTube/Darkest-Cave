@@ -30,10 +30,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     cave::Selector* b = new cave::Selector("b");
     cave::ActionNode* c = new cave::ActionNode("c", returnFalse);
     cave::ActionNode* d = new cave::ActionNode("d", returnTrue);
+    cave::IfDecorator* e = new cave::IfDecorator("e", returnFalse);
 
-    a->AddChild(b);
-    b->AddChild(c);
-    b->AddChild(d);
+    a->AddChild(e);
+    e->SetChild(c);
     
     value = a->Invoke();
 

@@ -144,6 +144,12 @@
     <ClInclude Include="AI\Public\BehaviorTree\RootNode.h">
       <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\IfDecorator.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\Decorator.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -189,6 +195,12 @@
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
     <ClCompile Include="AI\Private\BehaviorTree\Node.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\Decorator.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\IfDecorator.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
   </ItemGroup>

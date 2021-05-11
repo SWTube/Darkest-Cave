@@ -10,3 +10,5 @@
 #include "BehaviorTree/ActionNode.h"
 #include "BehaviorTree/Sequencer.h"
 #include "BehaviorTree/Selector.h"
+#include "BehaviorTree/Decorator.h"
+#include "BehaviorTree/IfDecorator.h"

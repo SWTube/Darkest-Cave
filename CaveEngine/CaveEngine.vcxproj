@@ -201,6 +201,8 @@
     <ClInclude Include="AI\Public\BehaviorTree.h" />
     <ClInclude Include="AI\Public\BehaviorTree\ActionNode.h" />
     <ClInclude Include="AI\Public\BehaviorTree\CompositeNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\Decorator.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\IfDecorator.h" />
     <ClInclude Include="AI\Public\BehaviorTree\Node.h" />
     <ClInclude Include="AI\Public\BehaviorTree\RootNode.h" />
     <ClInclude Include="AI\Public\BehaviorTree\Selector.h" />
@@ -226,6 +228,8 @@
   <ItemGroup>
     <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\Decorator.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\IfDecorator.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\Node.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\RootNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp" />
