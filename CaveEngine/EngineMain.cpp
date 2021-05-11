@@ -13,6 +13,8 @@ import Renderer;
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
 
+bool value = true;
+
 bool returnFalse() 
 {
     return false;
@@ -23,19 +25,23 @@ bool returnTrue()
     return true;
 }
 
+void setValue()
+{
+    value = false;
+}
+
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
     bool value;
     cave::RootNode* a = new cave::RootNode("a");
     cave::Selector* b = new cave::Selector("b");
-    cave::ActionNode* c = new cave::ActionNode("c", returnFalse);
-    cave::ActionNode* d = new cave::ActionNode("d", returnTrue);
-    cave::IfDecorator* e = new cave::IfDecorator("e", returnFalse);
+    cave::ActionNode* c = new cave::ActionNode("c", setValue);
+    cave::IfDecorator* d = new cave::IfDecorator("d", returnTrue);
 
-    a->AddChild(e);
-    e->SetChild(c);
+    a->AddChild(d);
+    d->SetChild(c);
     
-    value = a->Invoke();
+    a->Invoke();
 
 
     UNREFERENCED_PARAMETER(hPrevInstance);

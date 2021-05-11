@@ -13,14 +13,14 @@ namespace cave
         SetTreeDepth(0);
         SetNodeFunction(NULL);
     }
-    ActionNode::ActionNode(const char* nodeName, bool (*nodeFunction)())
+    ActionNode::ActionNode(const char* nodeName, void (*nodeFunction)())
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);
         SetTreeDepth(0);
         SetNodeFunction(nodeFunction);
     }
-    void ActionNode::SetNodeFunction(bool (*nodeFunction)()) 
+    void ActionNode::SetNodeFunction(void (*nodeFunction)())
     {
         mNodeFunction = nodeFunction;
     }

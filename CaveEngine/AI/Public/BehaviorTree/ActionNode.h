@@ -13,14 +13,16 @@ namespace cave
     {
     public:
         ActionNode();
-        ActionNode(const char*, bool (*)());
+        ActionNode(const char*, void (*)());
 
-        virtual bool Invoke() override {
-            return mNodeFunction();
+        virtual bool Invoke() override 
+        {
+            mNodeFunction();
+            return true;
         }
 
-        void SetNodeFunction(bool (*)());
+        void SetNodeFunction(void (*)());
     private:
-        bool (*mNodeFunction)();
+        void (*mNodeFunction)();
     };
 }
