@@ -5,15 +5,15 @@
 #pragma once
 
 #include <vector>
-#include "BTNode.h"
+#include "Node.h"
 
 namespace cave
 {
-    class BTActionNode : public BTNode
+    class ActionNode : public Node
     {
     public:
-        BTActionNode();
-        BTActionNode(const char*, bool (*)());
+        ActionNode();
+        ActionNode(const char*, bool (*)());
 
         virtual bool Invoke() override {
             return mNodeFunction();

@@ -5,26 +5,26 @@
 #pragma once
 
 #include <vector>
-#include "BTNode.h"
+#include "Node.h"
 
 namespace cave
 {
-    class BTCompositeNode: public BTNode
+    class CompositeNode: public Node
     {
     public:
-        BTCompositeNode();
-        BTCompositeNode(const char*);
+        CompositeNode();
+        CompositeNode(const char*);
         // Add child back or at position
-        void AddChild(BTNode*);
+        void AddChild(Node*);
         // return child node at given index
-        BTNode* GetChild(int) const;
+        Node* GetChild(int) const;
         // return children 
-        std::vector<BTNode*>& GetChildren();
+        std::vector<Node*>& GetChildren();
         // return children count
         int GetChildrenCount() const;
 
     private:
-        std::vector<BTNode*> mChildren;
+        std::vector<Node*> mChildren;
         int mChildrenCount = 0;
     };
 }

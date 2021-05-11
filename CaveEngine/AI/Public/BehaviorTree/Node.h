@@ -8,11 +8,11 @@
 
 namespace cave
 {
-    class BTNode
+    class Node
     {
         public:
-            BTNode();
-            BTNode(const char*);
+            Node();
+            Node(const char*);
 
             virtual bool Invoke() = 0;
 
@@ -23,11 +23,11 @@ namespace cave
             // Set node name
             void SetNodeName(const char*);
             // Set parent node
-            void SetParentNode(BTNode*);
+            void SetParentNode(Node*);
             // Set tree depth
             void SetTreeDepth(int);
         private:
-    	    BTNode* mParentNode = NULL;
+    	    Node* mParentNode = NULL;
             const char* mNodeName = "";
             int mTreeDepth = 0;
     };

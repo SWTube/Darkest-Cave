@@ -5,15 +5,15 @@
 #pragma once
 
 #include <vector>
-#include "BTSequencer.h"
+#include "Sequencer.h"
 
 namespace cave
 {
-    class BTRootNode : public BTSequencer
+    class RootNode : public Sequencer
     {
     public:
-        BTRootNode();
-        BTRootNode(const char*);
+        RootNode();
+        RootNode(const char*);
     private:
     };
 }

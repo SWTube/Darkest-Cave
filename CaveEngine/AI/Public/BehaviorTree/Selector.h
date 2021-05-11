@@ -5,25 +5,25 @@
 #pragma once
 
 #include <vector>
-#include "BTCompositeNode.h"
+#include "CompositeNode.h"
 
 namespace cave
 {
-    class BTSequencer : public BTCompositeNode
+    class Selector: public CompositeNode
     {
     public:
-        BTSequencer();
-        BTSequencer(const char*);
+        Selector();
+        Selector(const char*);
 
         virtual bool Invoke() override {
             for (const auto& child : GetChildren()) {
-                if (!child->Invoke()) {
-                    return false;
+                if (child->Invoke()) {
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
     private:
-
+        
     };
 }

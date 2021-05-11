@@ -123,25 +123,25 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
-    <ClInclude Include="AI\Public\BehaviorTree\BTNode.h">
-      <Filter>Header Files\AI\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="AI\Public\BehaviorTree\BTRootNode.h">
-      <Filter>Header Files\AI\BehaviorTree</Filter>
-    </ClInclude>
-    <ClInclude Include="AI\Public\BehaviorTree\BTCompositeNode.h">
-      <Filter>Header Files\AI\BehaviorTree</Filter>
-    </ClInclude>
     <ClInclude Include="AI\Public\BehaviorTree.h">
       <Filter>Source Files\AI</Filter>
     </ClInclude>
-    <ClInclude Include="AI\Public\BehaviorTree\BTActionNode.h">
+    <ClInclude Include="AI\Public\BehaviorTree\Selector.h">
       <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="AI\Public\BehaviorTree\BTSelector.h">
+    <ClInclude Include="AI\Public\BehaviorTree\Sequencer.h">
       <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="AI\Public\BehaviorTree\BTSequencer.h">
+    <ClInclude Include="AI\Public\BehaviorTree\ActionNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\CompositeNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\Node.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\RootNode.h">
       <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClInclude>
   </ItemGroup>
@@ -173,22 +173,22 @@
     <ClCompile Include="Renderer.ixx">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="AI\Private\BehaviorTree\BTCompositeNode.cpp">
+    <ClCompile Include="AI\Private\BehaviorTree\RootNode.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="AI\Private\BehaviorTree\BTNode.cpp">
+    <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="AI\Private\BehaviorTree\BTRootNode.cpp">
+    <ClCompile Include="AI\Private\BehaviorTree\Sequencer.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="AI\Private\BehaviorTree\BTActionNode.cpp">
+    <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="AI\Private\BehaviorTree\BTSelector.cpp">
+    <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="AI\Private\BehaviorTree\BTSequencer.cpp">
+    <ClCompile Include="AI\Private\BehaviorTree\Node.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
   </ItemGroup>

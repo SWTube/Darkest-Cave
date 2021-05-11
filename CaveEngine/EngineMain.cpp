@@ -26,10 +26,10 @@ bool returnTrue()
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
     bool value;
-    cave::BTRootNode* a = new cave::BTRootNode("a");
-    cave::BTSelector* b = new cave::BTSelector("b");
-    cave::BTActionNode* c = new cave::BTActionNode("c", returnFalse);
-    cave::BTActionNode* d = new cave::BTActionNode("d", returnTrue);
+    cave::RootNode* a = new cave::RootNode("a");
+    cave::Selector* b = new cave::Selector("b");
+    cave::ActionNode* c = new cave::ActionNode("c", returnFalse);
+    cave::ActionNode* d = new cave::ActionNode("d", returnTrue);
 
     a->AddChild(b);
     b->AddChild(c);

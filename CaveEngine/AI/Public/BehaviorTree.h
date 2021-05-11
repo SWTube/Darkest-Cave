@@ -4,9 +4,9 @@
  */
 #pragma once
 
-#include "BehaviorTree/BTNode.h"
-#include "BehaviorTree/BTCompositeNode.h"
-#include "BehaviorTree/BTRootNode.h"
-#include "BehaviorTree/BTActionNode.h"
-#include "BehaviorTree/BTSequencer.h"
-#include "BehaviorTree/BTSelector.h"
+#include "BehaviorTree/Node.h"
+#include "BehaviorTree/CompositeNode.h"
+#include "BehaviorTree/RootNode.h"
+#include "BehaviorTree/ActionNode.h"
+#include "BehaviorTree/Sequencer.h"
+#include "BehaviorTree/Selector.h"

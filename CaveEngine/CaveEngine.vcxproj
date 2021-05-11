@@ -199,12 +199,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AI\Public\BehaviorTree.h" />
-    <ClInclude Include="AI\Public\BehaviorTree\BTActionNode.h" />
-    <ClInclude Include="AI\Public\BehaviorTree\BTCompositeNode.h" />
-    <ClInclude Include="AI\Public\BehaviorTree\BTNode.h" />
-    <ClInclude Include="AI\Public\BehaviorTree\BTRootNode.h" />
-    <ClInclude Include="AI\Public\BehaviorTree\BTSelector.h" />
-    <ClInclude Include="AI\Public\BehaviorTree\BTSequencer.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\ActionNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\CompositeNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\Node.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\RootNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\Selector.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\Sequencer.h" />
     <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Core.h" />
@@ -224,12 +224,12 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AI\Private\BehaviorTree\BTActionNode.cpp" />
-    <ClCompile Include="AI\Private\BehaviorTree\BTCompositeNode.cpp" />
-    <ClCompile Include="AI\Private\BehaviorTree\BTNode.cpp" />
-    <ClCompile Include="AI\Private\BehaviorTree\BTRootNode.cpp" />
-    <ClCompile Include="AI\Private\BehaviorTree\BTSelector.cpp" />
-    <ClCompile Include="AI\Private\BehaviorTree\BTSequencer.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\Node.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\RootNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\Sequencer.cpp" />
     <ClCompile Include="Core\Private\Debug\LogManager.cpp" />
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />

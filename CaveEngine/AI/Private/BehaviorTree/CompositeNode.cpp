@@ -2,23 +2,23 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-#include "BehaviorTree/BTCompositeNode.h"
+#include "BehaviorTree/CompositeNode.h"
 
 namespace cave
 {
-    BTCompositeNode::BTCompositeNode()
+    CompositeNode::CompositeNode()
     {
         SetNodeName("");
         SetParentNode(NULL);
         SetTreeDepth(0);
     }
-    BTCompositeNode::BTCompositeNode(const char* nodeName)
+    CompositeNode::CompositeNode(const char* nodeName)
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);
         SetTreeDepth(0);
     }
-    void BTCompositeNode::AddChild(BTNode* node)
+    void CompositeNode::AddChild(Node* node)
     {
         mChildren.push_back(node);
         mChildrenCount = mChildren.size();
@@ -27,17 +27,17 @@ namespace cave
         node->SetTreeDepth(this->GetTreeDepth() + 1);
     }
 
-    BTNode* BTCompositeNode::GetChild(int childNum) const
+    Node* CompositeNode::GetChild(int childNum) const
     {
         return mChildren[childNum];
     }
 
-    std::vector<BTNode*>& BTCompositeNode::GetChildren()
+    std::vector<Node*>& CompositeNode::GetChildren()
     {
         return mChildren;
     }
 
-    int BTCompositeNode::GetChildrenCount() const
+    int CompositeNode::GetChildrenCount() const
     {
         return mChildrenCount;
     }
