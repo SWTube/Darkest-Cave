@@ -5,15 +5,14 @@
 
 #include <filesystem>
 
-#include "GraphicsApiPch.h"
-
 #include "Shader/UnixShader.h"
+#include "Sprite/Vertex.h"
 
 #ifdef __UNIX__
 namespace cave
 {
-	UnixShader::UnixShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath)
-		: GenericShader(vertexShaderFilePath, fragmentShaderFilePath)
+	UnixShader::UnixShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool)
+		: GenericShader(vertexShaderFilePath, fragmentShaderFilePath, pool)
 	{
 	}
 
@@ -32,6 +31,71 @@ namespace cave
 		}
 
 		return *this;
+	}
+
+	void UnixShader::Render(uint32_t indexCount, const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, uint32_t texture)
+	{
+		int32_t worldLocation = glGetUniformLocation(mProgram, "World");
+		if (worldLocation < 0)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, location: %d, error code: 0x%x", "World", worldLocation, glGetError());
+		}
+		glUniformMatrix4fv(worldLocation, 1, false, glm::value_ptr(worldMatrix));
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniformMatrix4fv location: %u, error code: 0x%x", worldLocation, glError);
+		}
+
+		// int32_t viewLocation = glGetUniformLocation(mProgram, "View");
+		// if (viewLocation < 0)
+		// {
+		// 	LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, location: %d, error code: 0x%x", "View", worldLocation, glGetError());
+		// 	assert(false);
+		// }
+		// glUniformMatrix4fv(viewLocation, 1, false, glm::value_ptr(viewMatrix));
+		// if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		// {
+		// 	LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniformMatrix4fv location: %u, error code: 0x%x", viewLocation, glError);
+		// }
+
+		int32_t projectionLocation = glGetUniformLocation(mProgram, "Projection");
+		if (projectionLocation < 0)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, error code: 0x%x", "Projection", glGetError());
+			assert(false);
+		}
+		glUniformMatrix4fv(projectionLocation, 1, false, glm::value_ptr(projectionMatrix));
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniformMatrix4fv location: %u, error code: 0x%x", projectionMatrix, glError);
+		}
+
+		glBindTextureUnit(texture - 1u, texture);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindTextureUnit error code: 0x%x, %u", glError, texture);
+		}
+
+		int32_t textureIndexLocation = glGetUniformLocation(mProgram, "textureIndex");
+		glUniform1i(textureIndexLocation, texture - 1u);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniform1i location: %u, error code: 0x%x", textureIndexLocation, glError);
+		}
+
+		// glUseProgram(mProgram);
+
+		// 5. Render ---------------------------------------------------------------------------------------------
+		// Sending Data to OpenGL
+			// Drawing == transferring vertex data to the OpenGL server
+			// vertex == bundle of data values that are processed together
+				// almost always includes positional data
+				// values needed to determine the pixel's final color
+		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_BYTE, nullptr);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glDrawElements error code: 0x%x", glError);
+		}
 	}
 	
 	eResult UnixShader::Compile()
@@ -53,6 +117,88 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
+	eResult UnixShader::SetInputLayout(const Sprite& sprite)
+	{
+		// 12. Define, create, set the input layout ---------------------------------------------------------------------------------------------
+		uint32_t vertexArrayObject = sprite.GetVertexArrayObject();
+
+		glVertexArrayVertexBuffer(vertexArrayObject, 0, sprite.GetBuffers()[Sprite::ARRAY_BUFFER], 0, sizeof(VertexT));
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexArrayVertexBuffer error code: 0x%x", glError);
+		}
+		glVertexArrayElementBuffer(vertexArrayObject, sprite.GetBuffers()[Sprite::ELEMENT_ARRAY_BUFFER]);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexArrayElementBuffer error code: 0x%x", glError);
+		}
+		
+		// glBindVertexArray(mVertexArrayObject);
+		// if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		// {
+		// 	LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindVertexArray error code: 0x%x", glError);
+		// 	return eResult::CAVE_FAIL;
+		// }
+
+		// glVertexAttribPointer(V_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(VertexT), BUFFER_OFFSET(0u));
+		// if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		// {
+		// 	LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexAttribPointer error code: 0x%x", glError);
+		// 	return eResult::CAVE_FAIL;
+		// }
+
+		glEnableVertexArrayAttrib(vertexArrayObject, V_POSITION);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glEnableVertexArrayAttrib error code: 0x%x", glError);
+			return eResult::CAVE_FAIL;
+		}
+		
+
+		// glVertexAttribPointer(V_TEX_COORD, 2, GL_FLOAT, GL_FALSE, sizeof(VertexT), BUFFER_OFFSET(sizeof(VertexT)));
+		// if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		// {
+		// 	LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexAttribPointer error code: 0x%x", glError);
+		// 	return eResult::CAVE_FAIL;
+		// }
+		glEnableVertexArrayAttrib(vertexArrayObject, V_TEX_COORD);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glEnableVertexArrayAttrib error code: 0x%x", glError);
+			return eResult::CAVE_FAIL;
+		}
+
+		glVertexArrayAttribFormat(vertexArrayObject, V_POSITION, 3, GL_FLOAT, GL_FALSE, 0u);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexArrayAttribFormat error code: 0x%x", glError);
+			return eResult::CAVE_FAIL;
+		}
+
+		glVertexArrayAttribFormat(vertexArrayObject, V_TEX_COORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex));
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexArrayAttribFormat error code: 0x%x", glError);
+			return eResult::CAVE_FAIL;
+		}
+
+		glVertexArrayAttribBinding(vertexArrayObject, 0, 0);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexArrayAttribBinding error code: 0x%x", glError);
+			return eResult::CAVE_FAIL;
+		}
+
+		glVertexArrayAttribBinding(vertexArrayObject, 1, 0);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glVertexArrayAttribBinding error code: 0x%x", glError);
+			return eResult::CAVE_FAIL;
+		}
+
+		return eResult::CAVE_OK;
+	}
+
 	uint32_t UnixShader::GetProgram()
 	{
 		return mProgram;
@@ -67,6 +213,10 @@ namespace cave
 	{
 		mProgram = loadShaders(shaders);
 		glUseProgram(mProgram);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUseProgram error code: 0x%x", glError);
+		}
 
 		return eResult::CAVE_OK;
 	}
@@ -109,8 +259,8 @@ namespace cave
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 			if (!compiled)
 			{
-#ifdef __Debug__
-			uint32_t len;
+#ifdef CAVE_BUILD_DEBUG
+			int32_t len;
 			glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &len );
 
 			char* log = new char[len+1];
@@ -134,8 +284,8 @@ namespace cave
 		glGetProgramiv(program, GL_LINK_STATUS, &linked);
 		if (!linked)
 		{
-#ifdef __Debug__
-			uint32_t len;
+#ifdef CAVE_BUILD_DEBUG
+			int32_t len;
 			glGetProgramiv( program, GL_INFO_LOG_LENGTH, &len );
 
 			char* log = new char[len + 1];
@@ -167,7 +317,7 @@ namespace cave
 
 		if (!infile)
 		{
-#ifdef _DEBUG
+#ifdef CAVE_BUILD_DEBUG
 			LOGAF(eLogChannel::GRAPHICS, std::cout, "Unable to open file '%s' ", filename);
 #endif /* DEBUG */
 			return nullptr;

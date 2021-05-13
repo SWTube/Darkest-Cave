@@ -156,7 +156,7 @@ namespace cave
 		template<UINT TNameLength>
 		inline void SetDebugObjectName(_In_ ID3D11DeviceChild* resource, _In_ const char(&name)[TNameLength]) noexcept
 		{
-#if defined(_DEBUG) || defined(PROFILE)
+#if defined(CAVE_BUILD_DEBUG) || defined(PROFILE)
 			resource->SetPrivateData(WKPDID_D3DDebugObjectName, TNameLength - 1, name);
 #else
 			UNREFERENCED_PARAMETER(resource);
@@ -1666,7 +1666,7 @@ namespace cave
             _In_opt_ ID3D11Resource** texture,
             _In_opt_ ID3D11ShaderResourceView** textureView) noexcept
         {
-#if !defined(NO_D3D11_DEBUG_NAME) && ( defined(_DEBUG) || defined(PROFILE) )
+#if !defined(NO_D3D11_DEBUG_NAME) && ( defined(CAVE_BUILD_DEBUG) || defined(PROFILE) )
             if (texture || textureView)
             {
                 CHAR strFileA[MAX_PATH];

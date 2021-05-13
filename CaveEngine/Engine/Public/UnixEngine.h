@@ -17,7 +17,7 @@ namespace cave
 		UnixEngine() = default;
 		virtual ~UnixEngine() = default;
 
-		eResult Init() override;
+		eResult Init(uint32_t screenWidth, uint32_t screenHeight) override;
 		void Destroy() override;
 		eResult Run() override;
 	};

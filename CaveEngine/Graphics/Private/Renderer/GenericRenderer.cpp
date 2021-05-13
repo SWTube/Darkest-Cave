@@ -7,12 +7,12 @@
 
 namespace cave
 {
-	GenericRenderer::GenericRenderer(DeviceResources* deviceResources, MemoryPool& pool)
-		: mPool(&pool)
-		, mDeviceResources(deviceResources)
+
+	GenericRenderer::GenericRenderer()
+		: mPool(reinterpret_cast<MemoryPool*>(gCoreMemoryPool.Allocate(sizeof(MemoryPool))))
 		, mFrameCount(0u)
 	{
-		mSprites.reserve(1);
+		new(mPool) MemoryPool(RENDERER_MEMORY_SIZE);
 	}
 
 	GenericRenderer::~GenericRenderer()
@@ -22,24 +22,49 @@ namespace cave
 
 	void GenericRenderer::Destroy()
 	{
-		while (!mShaders.empty())
+		while (!mTextures.empty())
 		{
-			Shader& shader = mShaders.back();
-			// shader.~Shader();
-			mPool->Deallocate(&shader, sizeof(Shader));
-			mShaders.pop_back();
+			Texture* texture = mTextures.back();
+			texture->Destroy();
+			mPool->Deallocate(texture, sizeof(Sprite));
+			texture = nullptr;
+			mTextures.pop_back();
 		}
+		mTextures.clear();
+		// std::vector<Texture*>().swap(mTextures);
 
 		while (!mSprites.empty())
 		{
-			Sprite& sprite = mSprites.back();
-			// sprite.Destroy();
-			mPool->Deallocate(&sprite, sizeof(Sprite));
+			Sprite* sprite = mSprites.back();
+			sprite->Destroy();
+			mPool->Deallocate(sprite, sizeof(Sprite));
+			sprite = nullptr;
 			mSprites.pop_back();
 		}
-
-		mShaders.clear();
 		mSprites.clear();
+
+		if (mShader != nullptr)
+		{
+			mShader->Destroy();
+			mPool->Deallocate(&mShader, sizeof(Shader));
+			mShader = nullptr;
+		}
+
+		if (mCamera != nullptr)
+		{
+			mPool->Deallocate(mCamera, sizeof(Camera));
+			mCamera = nullptr;
+		}
+
+		if (mDeviceResources != nullptr)
+		{
+			mDeviceResources->Destroy();
+			mPool->Deallocate(mDeviceResources, sizeof(DeviceResources));
+			mDeviceResources = nullptr;
+		}
+
+		mPool->~MemoryPool();
+		gCoreMemoryPool.Deallocate(mPool, sizeof(MemoryPool));
 	}
 
 	DeviceResources* const GenericRenderer::GetDeviceResources() const
@@ -47,18 +72,101 @@ namespace cave
 		return mDeviceResources;
 	}
 
-	void GenericRenderer::AddSprite(Sprite&& object)
+	eResult GenericRenderer::AddSprite(Sprite&& object)
 	{
-		assert(mPool == object.GetMemoryPool());
-		mSprites.push_back(std::move(object));
-		createObject(mSprites.back());
+		Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
+		new(newSprite) Sprite(std::move(object));
+		newSprite->SetTextureIndex(0u);
+		eResult result = newSprite->Init(mDeviceResources->GetProgram(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
+
+#if !defined(__WIN32__)
+		mShader->SetInputLayout(*newSprite);
+		newSprite->InitTexture();
+#endif
+
+		mSprites.push_back(newSprite);
+
+		return result;
 	}
 
-	void GenericRenderer::AddShader(Shader&& shader)
+	eResult GenericRenderer::AddTexture(Texture&& texture)
 	{
-		mShaders.push_back(std::move(shader));
-		
-		createShader(mShaders.back());
-		CreateWindowSizeDependentResources();
+		Texture* newTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
+		new(newTexture) Texture(std::move(texture));
+		mTextures.push_back(newTexture);
+
+		return eResult::CAVE_OK;
+	}
+
+	eResult GenericRenderer::RemoveSprite(uint32_t index)
+	{
+		assert(index < mSprites.size());
+
+		Sprite* sprite = mSprites[index];
+		sprite->Destroy();
+		mPool->Deallocate(sprite, sizeof(Sprite));
+		mSprites.erase(mSprites.begin() + index);
+
+		return eResult::CAVE_OK;
+	}
+
+	eResult GenericRenderer::RemoveTexture(uint32_t index)
+	{
+		assert(index < mTextures.size());
+
+		Texture* texture = mTextures[index];
+		texture->Destroy();
+		mPool->Deallocate(texture, sizeof(Texture));
+		mTextures.erase(mTextures.begin() + index);
+
+		return eResult::CAVE_OK;
+	}
+
+	void GenericRenderer::SetSpriteTexture(uint32_t index, uint32_t textureIndex)
+	{
+		assert(index < mSprites.size());
+
+		mSprites[index]->SetTextureIndex(textureIndex);
+	}
+
+	uint32_t GenericRenderer::GetSpriteTextureIndex(uint32_t index) const
+	{
+		assert(index < mSprites.size());
+
+		return mSprites[index]->GetTextureIndex();
+	}
+
+	void GenericRenderer::SetSpriteSize(uint32_t index, uint32_t width, uint32_t height)
+	{
+		assert(index < mSprites.size());
+
+		mSprites[index]->SetSize(width, height);
+	}
+
+	void GenericRenderer::GetSpriteSize(uint32_t index, uint32_t& outWidth, uint32_t& outHeight) const
+	{
+		assert(index < mSprites.size());
+
+		mSprites[index]->GetSize(outWidth, outHeight);
+	}
+
+	void GenericRenderer::GetSpritePosition(uint32_t index, float& outX, float& outY)
+	{
+		assert(index < mSprites.size());
+
+		outX = mSprites[index]->GetPositionX();
+		outY = mSprites[index]->GetPositionY();
+	}
+
+	Float2 GenericRenderer::GetSpritePosition(uint32_t index) const
+	{
+		assert(index < mSprites.size());
+
+		Float2 position = mSprites[index]->GetPosition();
+		return position;
 	}
 }

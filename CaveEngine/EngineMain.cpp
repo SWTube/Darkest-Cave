@@ -87,21 +87,8 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	// cave::StringTest::Test();
 	RenderTest();
-	// cave::Vertex* vertex1 = new cave::Vertex(0.0f, 0.1f, 0.2f);
-	// cave::Vertex* vertex2 = new cave::Vertex(0.3f, 0.4f, 0.5f);
-	// std::vector<cave::Vertex*> vec;
-	// vec.reserve(1);
-	// vec.push_back(vertex1);
-	// vec.push_back(vertex2);
 
-	// for (cave::Vertex* item : vec)
-	// {
-	// 	delete item;
-	// }
-	// vec.clear();
-	
 	// Cleanup is handled in destructors.
     return 0;
 }
@@ -228,7 +215,7 @@ void RenderTest()
 	// Instantiate the window manager class.
 	cave::Engine main;
 	// Create a window.
-	cave::eResult result = main.Init();
+	cave::eResult result = main.Init(1600u, 900u);
 
 	cave::Texture* texture1 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
 	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGB);
@@ -236,28 +223,29 @@ void RenderTest()
 	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGB);
 
 	cave::Sprite* object = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
-	new(object) cave::Sprite(*texture1, cave::gCoreMemoryPool);
+	new(object) cave::Sprite(texture1, cave::gCoreMemoryPool);
 	cave::Sprite* object2 = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
-	new(object2) cave::Sprite(*texture2, cave::gCoreMemoryPool);
+	new(object2) cave::Sprite(texture2, cave::gCoreMemoryPool);
 
-	texture1->~Texture();
-	texture2->~Texture();
+	texture1->Destroy();
+	texture2->Destroy();
 	cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
 	cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
-
-#ifdef __WIN32__
-	cave::Shader* shader = reinterpret_cast<cave::Shader*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Shader)));
-	new(shader) cave::Shader(L"DirectXTest.fxh");
-#else
-	cave::Shader* shader = reinterpret_cast<cave::Shader*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Shader)));
-	new(shader) cave::Shader("sprite.vert", "sprite.frag");
-#endif
+	texture1 = nullptr;
+	texture2 = nullptr;
 
 	cave::Renderer* renderer = main.GetRenderer();
-	renderer->AddShader(std::move(*shader));
-	renderer->AddSprite(std::move(*object));
+	// renderer->AddSprite(std::move(*object));
 	renderer->AddSprite(std::move(*object2));
-	shader = nullptr;
+	// renderer->AddTexture(std::move(*texture1));
+	// renderer->AddTexture(std::move(*texture2));
+	// renderer->SetSpriteTexture(0u, 1u);
+	// renderer->SetSpriteTexture(1u, 2u);
+
+	object->Destroy();
+	object2->Destroy();
+	cave::gCoreMemoryPool.Deallocate(object, sizeof(cave::Sprite));
+	cave::gCoreMemoryPool.Deallocate(object2, sizeof(cave::Sprite));
 	object = nullptr;
 	object2 = nullptr;
 

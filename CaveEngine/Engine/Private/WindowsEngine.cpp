@@ -10,22 +10,12 @@ namespace cave
 {
 	HINSTANCE	WindowsEngine::msInstance = nullptr;
 
-	eResult WindowsEngine::Init()
+	eResult WindowsEngine::Init(uint32_t screenWidth, uint32_t screenHeight)
 	{
 		eResult result = eResult::CAVE_OK;
 
 		mWindow = reinterpret_cast<Window*>(mPool->Allocate(sizeof(Window)));
-		new(mWindow) Window(640u, 480u, L"Test", msInstance, StaticWindowProc);
-
-		// Instantiate the device manager class.
-		mDeviceResources = reinterpret_cast<DeviceResources*>(mPool->Allocate(sizeof(DeviceResources)));
-		new(mDeviceResources) DeviceResources();
-		// Create device resources.
-		result = mDeviceResources->CreateDeviceResources();
-		if (result != eResult::CAVE_OK)
-		{
-			return result;
-		}
+		new(mWindow) Window(screenWidth, screenHeight, L"Test", msInstance, StaticWindowProc);
 
 		// Instantiate the renderer.
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
@@ -67,10 +57,11 @@ namespace cave
 	eResult WindowsEngine::Run()
 	{
 		int32_t hr = S_OK;
-		HWND window = mWindow->GetWindow();
+		Window* window = mWindow->GetWindow();
+		HWND hWindow = window->GetWindow();
 		if (!IsWindowVisible(window))
 		{
-			ShowWindow(window, SW_SHOW);
+			ShowWindow(hWindow, SW_SHOW);
 		}
 
 		// The render loop is controlled here.

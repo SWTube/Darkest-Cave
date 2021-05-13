@@ -13,11 +13,6 @@ import DdsTextureLoader;
 
 namespace cave
 {
-	WindowsRenderer::WindowsRenderer(DeviceResources* deviceResources)
-		: GenericRenderer(deviceResources)
-	{
-	}
-
 	//--------------------------------------------------------------------------------------
 	// Destroy Renderer
 	//--------------------------------------------------------------------------------------
@@ -26,11 +21,28 @@ namespace cave
 		Destroy();
 	}
 
-	
+	eResult WindowsRenderer::Init(uint32_t screenWidth, uint32_t screenHeight, Window* window)
+	{
+		// Instantiate the device manager class.
+		mDeviceResources = reinterpret_cast<DeviceResources*>(mPool->Allocate(sizeof(DeviceResources)));
+		new(mDeviceResources) DeviceResources(*mPool);
+		// Create device resources.
+		eResult result = mDeviceResources->CreateDeviceResources();
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
+
+		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
+		new(mShader) cave::Shader(L"DirectXTest.fxh", *mPool);
+
+		mShader->Compile(mDeviceResources->GetDevice());
+	}
+
 	//--------------------------------------------------------------------------------------
-	// Clean up the objects we've created
+	// Destroy Renderer
 	//--------------------------------------------------------------------------------------
-	void WindowsRenderer::cleanupDevice()
+	void WindowsRenderer::Destroy()
 	{
 		if (mConstantBufferNeverChanges)
 		{
@@ -40,16 +52,8 @@ namespace cave
 		{
 			mConstantBufferChangeOnResize->Release();
 		}
-	}
 
-	//--------------------------------------------------------------------------------------
-	// Destroy Renderer
-	//--------------------------------------------------------------------------------------
-	void WindowsRenderer::Destroy()
-	{
-		cleanupDevice();
 		GenericRenderer::Destroy();
-		mDeviceResources = nullptr;
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -62,33 +66,21 @@ namespace cave
 		ID3D11RenderTargetView* renderTarget = mDeviceResources->GetRenderTarget();
 		ID3D11DepthStencilView* depthStencil = mDeviceResources->GetDepthStencil();
 
-		// ���� layout ����, topology �ٲٴ°�, vertex buffer �ٲٴ°� rendering �Լ� �ȿ� ���� ��찡 ����
-		// vertex buffer�� pixel shader �� ���� �ʼ�
-		// Clear the back buffer 
-		context->ClearRenderTargetView(renderTarget, DirectX::Colors::MidnightBlue);
+		mDeviceResources->RenderStart();
 
-		//
-		// Clear the depth buffer to 1.0 (max depth)
-		//
-		context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		mCamera->Render();
 
-		// ���� target ���� ����. ������ 8 ����� ����
-		// ������ parameter�� depth buffer.
-		// �տ� OM �پ��ִٴ� �� Output Manager. ���ۿ� ���� ���ϰ� �ϴ� ���� ���ξ OM���� �Ǿ�����
-		// �츮�� �׸� buffer ����
-		context->OMSetRenderTargets(1, &renderTarget, depthStencil);
+		DirectX::XMMATRIX& worldMatrix = mDeviceResources->GetWorldMatrix();
+		const DirectX::XMMATRIX& viewMatrix = mCamera->GetViewMatrix();
+		DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
+		DirectX::XMMATRIX& ortho = mDeviceResources->GetOrthoMatrix();
 
-		for (Shader& shader : mShaders)
+		// 3. Set Render Data ---------------------------------------------------------------------------------------------
+		for (Sprite* const object : mSprites)
 		{
-			shader.Render(context);
-		}
+			object->Render();
 
-		context->VSSetConstantBuffers(0, 1, &mConstantBufferNeverChanges);
-		context->VSSetConstantBuffers(1, 1, &mConstantBufferChangeOnResize);
-
-		for (Sprite& object : mSprites)
-		{
-			object.Render();
+			mShader->Render(context, object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, mTextures[object->GetTextureIndex()]->GetTexture());
 		}
 
 		// ���� flip�̳� swap ���ؼ� front buffer�� ����
@@ -96,9 +88,13 @@ namespace cave
 		// ���� �׷����� ������ GPU Driver���� �ٸ�. ������ ���������� �񵿱�� �Ͼ
 		// Present the information rendered to the back buffer to the front buffer (the screen)
 		// gSwapChain->Present(0, 0);
+
+		mDeviceResources->TurnZBufferOn();
+		// Present the frame to the screen.
+		mDeviceResources->RenderEnd();
 	}
 
-	void WindowsRenderer::CreateDeviceDependentResources()
+	eResult WindowsRenderer::CreateDeviceDependentResources()
 	{
 		//auto createShadersTask = Concurrency::create_task(
 		//	[this]()
@@ -113,21 +109,21 @@ namespace cave
 		//		createCube();
 		//	}
 		//);
-		createShaders();
-		createObjects();
+		// createShaders();
+		// createObjects();
 	}
 
-	void WindowsRenderer::CreateWindowSizeDependentResources()
+	eResult WindowsRenderer::CreateWindowSizeDependentResources(Window* window)
 	{
-		createView();
-		createPerspective();
+
+		return eResult::CAVE_OK;
 	}
 
 	void WindowsRenderer::Update()
 	{
-		for (Sprite& object : mSprites)
+		for (Sprite* const object : mSprites)
 		{
-			object.Update();
+			object->Update();
 		}
 
 		++mFrameCount;
@@ -137,112 +133,40 @@ namespace cave
 		}
 	}
 
-	eResult WindowsRenderer::createShader(Shader& shader)
-	{
-		return shader.Compile(mDeviceResources->GetDevice());
-	}
+	// eResult WindowsRenderer::createShaders()
+	// {
+	// 	ID3D11Device* device = mDeviceResources->GetDevice();
+	// 	for (Shader& shader : mShaders)
+	// 	{
+	// 		if (eResult result = shader.Compile(mDeviceResources->GetDevice()); result != eResult::CAVE_OK)
+	// 		{
+	// 			return result;
+	// 		}
+	// 	}
 
-	eResult WindowsRenderer::createObjects()
-	{
-		LOGDF(eLogChannel::GRAPHICS, "number of objects: %u", mSprites.size());
-
-		for (Sprite& object : mSprites)
-		{
-			eResult result = object.Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
-			if (result != eResult::CAVE_OK)
-			{
-				return result;
-			}
-
-			result = object.SetInputLayout(mShaders.front().GetVertexShaderBlob());
-			if (result != eResult::CAVE_OK)
-			{
-				return result;
-			}
-		}
-
-		return eResult::CAVE_OK;
-	}
-
-	eResult WindowsRenderer::createObject(Sprite& object)
-	{
-		eResult result = object.Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
-		if (result != eResult::CAVE_OK)
-		{
-			return result;
-		}
-
-		result = object.SetInputLayout(mShaders.front().GetVertexShaderBlob());
-		if (result != eResult::CAVE_OK)
-		{
-			return result;
-		}
-
-		return result;
-	}
-
-	eResult WindowsRenderer::createShaders()
-	{
-		ID3D11Device* device = mDeviceResources->GetDevice();
-		for (Shader& shader : mShaders)
-		{
-			if (eResult result = shader.Compile(mDeviceResources->GetDevice()); result != eResult::CAVE_OK)
-			{
-				return result;
-			}
-		}
-
-		// Create the constant buffers
-		D3D11_BUFFER_DESC bd = {};
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(ConstantBufferNeverChanges);
-		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		bd.CPUAccessFlags = 0;
-		int32_t result = device->CreateBuffer(&bd, nullptr, &mConstantBufferNeverChanges);
-		if(FAILED(result))
-		{
-			return eResult::CAVE_FAIL;
-		}
+	// 	// Create the constant buffers
+	// 	D3D11_BUFFER_DESC bd = {};
+	// 	bd.Usage = D3D11_USAGE_DEFAULT;
+	// 	bd.ByteWidth = sizeof(ConstantBufferNeverChanges);
+	// 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	// 	bd.CPUAccessFlags = 0;
+	// 	int32_t result = device->CreateBuffer(&bd, nullptr, &mConstantBufferNeverChanges);
+	// 	if(FAILED(result))
+	// 	{
+	// 		return eResult::CAVE_FAIL;
+	// 	}
 		
-		bd.ByteWidth = sizeof(ConstantBufferChangeOnResize);
-		result = device->CreateBuffer(&bd, nullptr, &mConstantBufferChangeOnResize);
-		if(FAILED(result))
-		{
-			return eResult::CAVE_FAIL;
-		}
+	// 	bd.ByteWidth = sizeof(ConstantBufferChangeOnResize);
+	// 	result = device->CreateBuffer(&bd, nullptr, &mConstantBufferChangeOnResize);
+	// 	if(FAILED(result))
+	// 	{
+	// 		return eResult::CAVE_FAIL;
+	// 	}
 		
-		device->Release();
+	// 	device->Release();
 
-		return eResult::CAVE_OK;
-	}
-
-	void WindowsRenderer::createView()
-	{
-		// Initialize the view matrix
-		DirectX::XMVECTOR eye = DirectX::XMVectorSet( 0.0f, 3.0f, -6.0f, 0.0f );
-		DirectX::XMVECTOR at = DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-		DirectX::XMVECTOR up = DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-		mView = DirectX::XMMatrixLookAtLH(eye, at, up);
-	}
-
-	void WindowsRenderer::createPerspective()
-	{
-		float aspectRatioX = mDeviceResources->GetAspectRatio();
-		float aspectRatioY = aspectRatioX < (16.0f / 9.0f) ? aspectRatioX / (16.0f / 9.0f) : 1.0f;
-
-		ID3D11DeviceContext* context = mDeviceResources->GetDeviceContext();
-
-		ConstantBufferNeverChanges constantBufferNeverChanges;
-		constantBufferNeverChanges.mView = DirectX::XMMatrixTranspose(mView);
-		context->UpdateSubresource(mConstantBufferNeverChanges, 0, nullptr, &constantBufferNeverChanges, 0, 0);
-
-		// 2.0f * std::atan(std::tan(DirectX::XMConvertToRadians(70) * 0.5f)
-		mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, aspectRatioX, 0.01f, 100.0f);
-
-		ConstantBufferChangeOnResize constantBufferChangesOnResize;
-		constantBufferChangesOnResize.mProjection = DirectX::XMMatrixTranspose(mProjection);
-		context->UpdateSubresource(mConstantBufferChangeOnResize, 0, nullptr, &constantBufferChangesOnResize, 0, 0);
-	}
+	// 	return eResult::CAVE_OK;
+	// }
 
 	bool WindowsRenderer::WindowShouldClose()
 	{

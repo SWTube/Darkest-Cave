@@ -17,9 +17,9 @@ namespace cave
 	{
 	public:
 		UnixSprite() = delete;
-		UnixSprite(Texture* texture, MemoryPool& pool = gCoreMemoryPool);
-		UnixSprite(const Texture& texture, MemoryPool& pool = gCoreMemoryPool);
-		UnixSprite(Texture&& texture, MemoryPool& pool = gCoreMemoryPool);
+		UnixSprite(Texture* texture, MemoryPool& pool);
+		UnixSprite(const Texture& texture, MemoryPool& pool);
+		UnixSprite(Texture&& texture, MemoryPool& pool);
 		UnixSprite(const UnixSprite& object) = default;
 		UnixSprite(UnixSprite&& object);
 		UnixSprite& operator=(const UnixSprite& object) = default;
@@ -30,18 +30,24 @@ namespace cave
 		void Update() override;
 		void Render() override;
 
-		uint32_t* const GetBuffers();
-	private:
-		eResult initializeBuffers(uint32_t program) override;
-		uint32_t mVertexArrayObject = 0u;
+		const uint32_t* const GetBuffers() const;
+		constexpr uint32_t GetVertexArrayObject() const;
+		virtual eResult InitTexture() override;
+
 		static constexpr uint32_t ARRAY_BUFFER = 0u;
 		static constexpr uint32_t ELEMENT_ARRAY_BUFFER = 1u;
 		static constexpr uint32_t BUFFER_COUNT = 2u;
-		static constexpr uint32_t V_POSITION = 0u;
-		static constexpr uint32_t V_TEX_COORD = 1u;
+	private:
+		eResult initializeBuffers(uint32_t program) override;
+		uint32_t mVertexArrayObject = 0u;
 		uint32_t mBuffers[BUFFER_COUNT] = { 0u, };
 		uint32_t mProgram = 0u;
 	};
+
+	constexpr uint32_t UnixSprite::GetVertexArrayObject() const
+	{
+		return mVertexArrayObject;
+	}
 
 	typedef UnixSprite Sprite;
 } // namespace cave

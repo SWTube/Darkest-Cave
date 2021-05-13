@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <iostream>
+
 #include "CoreTypes.h"
 
 namespace cave
@@ -25,6 +27,8 @@ namespace cave
 		constexpr Float3& operator=(const Float3&& other);
 		constexpr Float3(float x, float y, float z);
 		constexpr Float3(float* array);
+
+		constexpr bool operator==(const Float3& rhs) const;
 	} Float3;
 
 	constexpr Float3::Float3(const Float3&& other)
@@ -61,6 +65,11 @@ namespace cave
 		, Y(y)
 		, Z(z)
 	{
+	}
+
+	constexpr bool Float3::operator==(const Float3& rhs) const
+	{
+		return (X == rhs.X) && (Y == rhs.Y) && (Z == rhs.Z);
 	}
 
 	struct Float2
@@ -122,6 +131,8 @@ namespace cave
 		constexpr Vertex(const Float3& array);
 		constexpr Vertex(const Float3&& array);
 		constexpr uint32_t GetSize() const;
+
+		constexpr bool operator==(const Vertex& rhs) const;
 	} Vertex;
 
 	constexpr Vertex& Vertex::operator=(const Vertex&& other)
@@ -165,12 +176,12 @@ namespace cave
 	constexpr uint32_t Vertex::GetSize() const
 	{
 		uint32_t size = 0u;
-		if (VertexFlag | VERTEX_POSITION)
+		if (VertexFlag & VERTEX_POSITION)
 		{
 			size += 3u;
 		}
 
-		if (VertexFlag | VERTEX_TEXCOORD)
+		if (VertexFlag & VERTEX_TEXCOORD)
 		{
 			size += 2u;
 		}
@@ -184,6 +195,11 @@ namespace cave
 		}
 
 		return size;
+	}
+
+	constexpr bool Vertex::operator==(const Vertex& rhs) const
+	{
+		return (Position == rhs.Position) && (VertexFlag == rhs.VertexFlag);
 	}
 
 	typedef struct VertexT : public Vertex

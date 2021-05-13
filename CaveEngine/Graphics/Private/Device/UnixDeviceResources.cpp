@@ -44,49 +44,29 @@ namespace cave
 		int32_t result = GLFW_NO_ERROR;
 
 		assert(window != nullptr);
-		mWindow = window->GetWindow();
-		mWidth = window->GetWidth();
-		mHeight = window->GetHeight();
-
-		// 2. Make Context Current ---------------------------------------------------------------------------------------------
-		glfwMakeContextCurrent(mWindow);
-		if (result = glfwGetError(nullptr); result != GLFW_NO_ERROR)
-		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glfwMakeContextCurrent error code: 0x%x", result);
-		}
-		gl3wInit();
-
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "Renderer: %s", glGetString(GL_RENDERER));
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %s", glGetString(GL_VERSION));
-		int32_t major = 0;
-		int32_t minor = 0;
-		glGetIntegerv(GL_MAJOR_VERSION, &major);
-		glGetIntegerv(GL_MINOR_VERSION, &minor);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", major);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", minor);
-
-		return eResult::CAVE_OK;
-	}
-
-	eResult UnixDeviceResources::CreateWindowResources(GLFWwindow* window)
-	{
-		int32_t result = GLFW_NO_ERROR;
-
-		assert(window != nullptr);
 		mWindow = window;
-
-		mWidth = 1024;
-		mHeight = 960;
-		// Register class
+		mWidth = mWindow->GetWidth();
+		mHeight = mWindow->GetHeight();
+		GLFWwindow* glfwWindow = mWindow->GetWindow();
 
 		// 2. Make Context Current ---------------------------------------------------------------------------------------------
-		glfwMakeContextCurrent(mWindow);
+		glfwMakeContextCurrent(glfwWindow);
 		if (result = glfwGetError(nullptr); result != GLFW_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glfwMakeContextCurrent error code: 0x%x", result);
 		}
 		gl3wInit();
 
+		const char* vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+		size_t vendorStringSize = strlen(vendor);
+		const char* renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+		size_t rendererStringSize = strlen(renderer);
+		strncpy(mVideoCardDescription, vendor, vendorStringSize);
+		mVideoCardDescription[vendorStringSize] = ' ';
+		strncpy(&mVideoCardDescription[vendorStringSize + 1], renderer, strlen(renderer));
+		memset(&mVideoCardDescription[vendorStringSize + 1 + rendererStringSize], 0, 128 - vendorStringSize - rendererStringSize - 1);
+
+		LOGIF(eLogChannel::GRAPHICS, std::cout, "Vendor: %s", glGetString(GL_VENDOR));
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "Renderer: %s", glGetString(GL_RENDERER));
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %s", glGetString(GL_VERSION));
 		int32_t major = 0;
@@ -95,6 +75,10 @@ namespace cave
 		glGetIntegerv(GL_MINOR_VERSION, &minor);
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", major);
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", minor);
+
+		glViewport(0, 0, mWidth, mHeight);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		return eResult::CAVE_OK;
 	}
@@ -102,6 +86,19 @@ namespace cave
 	int32_t UnixDeviceResources::ConfigureBackBuffer()
 	{
 		int32_t result = GLFW_NO_ERROR;
+
+		// 투영 행렬을 설정합니다
+		float fieldOfView = glm::quarter_pi<float>();
+		float screenAspect = static_cast<float>(mWidth) / static_cast<float>(mHeight);
+
+		// 3D 렌더링을위한 투영 행렬을 만듭니다
+		mProjection = glm::perspectiveLH(fieldOfView, screenAspect, mWindow->GetNear(), mWindow->GetFar());
+
+		// 세계 행렬을 항등 행렬로 초기화합니다
+		mWorld = glm::mat4(1.0f);
+
+		// 2D 렌더링을위한 직교 투영 행렬을 만듭니다
+		mOrtho = glm::ortho(0.0f, static_cast<float>(mWidth), 0.0f, static_cast<float>(mHeight), mWindow->GetNear(), mWindow->GetFar());
 
 		return result;
 	}
@@ -118,8 +115,8 @@ namespace cave
 		int32_t result = GLFW_NO_ERROR;
 
 		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowMonitor(mWindow, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
-		if (mWindow == nullptr)
+		glfwSetWindowMonitor(mWindow->GetWindow(), glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
+		if (mWindow->GetWindow() == nullptr)
 		{
 			return glfwGetError(nullptr);
 		}
@@ -132,8 +129,8 @@ namespace cave
 		int32_t result = GLFW_NO_ERROR;
 
 		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowMonitor(mWindow, nullptr, 0, 0, static_cast<int32_t>(mWidth), static_cast<int32_t>(mHeight), mode->refreshRate);
-		if (mWindow == nullptr)
+		glfwSetWindowMonitor(mWindow->GetWindow(), nullptr, 0, 0, static_cast<int32_t>(mWidth), static_cast<int32_t>(mHeight), mode->refreshRate);
+		if (mWindow->GetWindow() == nullptr)
 		{
 			return glfwGetError(nullptr);
 		}
@@ -146,10 +143,33 @@ namespace cave
 		return static_cast<float>(mWidth) / static_cast<float>(mHeight);
 	}
 
-	void UnixDeviceResources::Present()
+	void UnixDeviceResources::RenderStart()
+	{
+		// 2. Clear buffer ---------------------------------------------------------------------------------------------
+		static const float midnightBlue[] = { 0.098039225f, 0.098039225f, 0.439215720f, 0.000000000f };
+
+		glClearBufferfv(GL_COLOR, 0, midnightBlue);
+	}
+
+	void UnixDeviceResources::RenderEnd()
 	{
 		// 6. Swap buffers ---------------------------------------------------------------------------------------------
-		glfwSwapBuffers(mWindow);
+		glfwSwapBuffers(mWindow->GetWindow());
+	}
+
+	void UnixDeviceResources::GetVideoCardInfo(char* cardName, int& memory)
+	{
+		strncpy(cardName, mVideoCardDescription, 128);
+		memory = mVideoCardMemory;
+	}
+
+	void UnixDeviceResources::TurnZBufferOn()
+	{
+	}
+
+
+	void UnixDeviceResources::TurnZBufferOff()
+	{
 	}
 
 	void UnixDeviceResources::errorCallback(int32_t errorCode, const char* description)
@@ -159,9 +179,9 @@ namespace cave
 
 	void UnixDeviceResources::Destroy()
 	{
-		if (mWindow != nullptr)
+		if (mWindow->GetWindow() != nullptr)
 		{
-			glfwDestroyWindow(mWindow);
+			glfwDestroyWindow(mWindow->GetWindow());
 		}
 
 		glfwTerminate();
@@ -175,11 +195,6 @@ namespace cave
 	void UnixDeviceResources::SetProgram(uint32_t program)
 	{
 		mProgram = program;
-	}
-
-	GLFWwindow* const UnixDeviceResources::GetWindow() const
-	{
-		return mWindow;
 	}
 
 	uint32_t UnixDeviceResources::GetWidth() const

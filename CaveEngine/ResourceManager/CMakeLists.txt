@@ -203,7 +203,11 @@ add_library(ResourceManager SHARED ${HEADER_FILES} ${SOURCE_FILES} ${TEXTURE_HEA
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
+target_precompile_headers(ResourceManager PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Public/ResourceManagerApiPch.h")
+
 target_link_libraries(ResourceManager PUBLIC Core)
+target_link_libraries(ResourceManager PUBLIC Gl3w)
+target_link_libraries(ResourceManager PUBLIC Glfw)
 target_link_libraries(ResourceManager PUBLIC Lodepng)
 
 target_include_directories(ResourceManager PUBLIC

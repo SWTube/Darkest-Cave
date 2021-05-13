@@ -34,10 +34,7 @@ namespace cave
 
 	GenericShader::~GenericShader()
 	{
-		mPool = nullptr;
-		mShaderFilePath.clear();
-		mVertexShaderFilePath.clear();
-		mFragmentShaderFilePath.clear();
+		Destroy();
 	}
 
 	constexpr MemoryPool* const GenericShader::GetMemoryPool() const
@@ -58,5 +55,13 @@ namespace cave
 		}
 
 		return *this;
+	}
+
+	void GenericShader::Destroy()
+	{
+		mPool = nullptr;
+		mShaderFilePath.clear();
+		mVertexShaderFilePath.clear();
+		mFragmentShaderFilePath.clear();
 	}
 } // namespace cave

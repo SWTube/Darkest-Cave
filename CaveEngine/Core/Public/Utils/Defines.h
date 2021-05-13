@@ -50,6 +50,7 @@
 #else
 #endif
 
+#include <float.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <utility>

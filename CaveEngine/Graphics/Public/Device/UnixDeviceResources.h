@@ -16,7 +16,7 @@ namespace cave
 	class UnixDeviceResources final : public GenericDeviceResources
 	{
 	public:
-		constexpr UnixDeviceResources() = default;
+		constexpr UnixDeviceResources(MemoryPool& pool);
 		constexpr UnixDeviceResources(const UnixDeviceResources&) = default;
 		UnixDeviceResources& operator=(const UnixDeviceResources&) = default;
 		virtual ~UnixDeviceResources() = default;
@@ -36,12 +36,17 @@ namespace cave
 
 		uint32_t GetProgram() const;
 		void SetProgram(uint32_t program);
-		GLFWwindow* const GetWindow() const;
 
 		uint32_t GetWidth() const override;
 		uint32_t GetHeight() const override;
 
-		void Present() override;
+		virtual void GetVideoCardInfo(char* cardName, int& memory) override;
+
+		virtual void TurnZBufferOn() override;
+		virtual void TurnZBufferOff() override;
+
+		virtual void RenderStart() override;
+		virtual void RenderEnd() override;
 	private:
 		static void errorCallback(int32_t errorCode, const char* description);
 
@@ -51,8 +56,12 @@ namespace cave
 		uint32_t	mProgram = 0u;
 		uint32_t	mWidth = 0u;
 		uint32_t	mHeight = 0u;
-		GLFWwindow*	mWindow = nullptr;
 	};
+
+	constexpr UnixDeviceResources::UnixDeviceResources(MemoryPool& pool)
+		: GenericDeviceResources(pool)
+	{
+	}
 
 	typedef UnixDeviceResources DeviceResources;
 }

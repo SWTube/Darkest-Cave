@@ -26,31 +26,10 @@
 	#define __FORCEINLINE__ __forceinline
 #endif
 
-#if defined(__UNIX__)
-	#include <cstdio>
+#ifdef __WIN32__
+	#include <d3d11_1.h>
+#else
 	#define GLFW_INCLUDE_NONE
 	#include "GL/gl3w.h"
 	#include "Glfw.h"
-	#include "glm/glm.hpp"
-	#include "glm/gtc/constants.hpp"
-	#include "glm/gtc/matrix_transform.hpp"
-	#include "glm/gtc/type_ptr.hpp"
-	#include "glm/gtx/transform.hpp"
-
-	#define BUFFER_OFFSET(a) (reinterpret_cast<void*>(a))
-#elif defined(__WIN32__)
-	#define SAFE_DELETE(p) { if(p) { delete (p); (p) = nullptr;} }
-	#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p) = nullptr;} }
-
-	#include <vector>
-
-	#include <windows.h>
-	#include <d3d11_1.h>
-	#include <d3dcompiler.h>
-	#include <directxmath.h>
-	#include <directxcolors.h>
-	#include <d2d1.h>
-	#include <d2d1helper.h>
-	#include <dwrite.h>
-	#include <wincodec.h>
 #endif

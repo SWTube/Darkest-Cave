@@ -9,13 +9,16 @@ layout( location = 0 ) in vec4 vPosition;
 layout( location = 1 ) in vec2 vTexCoord;
 
 uniform mat4 World;
-uniform mat4 View;
+// uniform mat4 View;
 uniform mat4 Projection;
 
 out vec2 fTexCoord;
 
 void main()
 {
-	gl_Position = Projection * View * World * vPosition;
+	// gl_Position = Projection * View * World * vec4(vec3(vPosition), 1.0f);
+	gl_Position = Projection * World * vPosition;
+	// gl_Position = World * vPosition;
+	// gl_Position = vPosition;
 	fTexCoord = vTexCoord;
 }

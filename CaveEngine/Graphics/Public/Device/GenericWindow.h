@@ -34,13 +34,51 @@ namespace cave
 #endif
 		uint32_t GetWidth() const;
 		uint32_t GetHeight() const;
+		constexpr float GetNear() const;
+		constexpr float GetFar() const;
+
+		constexpr bool IsFullScreen() const;
+		constexpr void SetFullScreen();
+		constexpr void SetWindowed();
 	protected:
+		bool mbIsFullScreen = false;
 		uint32_t mWidth = 0u;
 		uint32_t mHeight = 0u;
+#ifdef __WIN32__
+		float mNear = 0.0f;
+#else
+		float mNear = -1.0f;
+#endif
+		float mFar = 1.0f;;
 #ifdef __WIN32__
 		const wchar_t* mTitle = nullptr;
 #else
 		const char* mTitle = nullptr;
 #endif
 	};
+
+	constexpr bool GenericWindow::IsFullScreen() const
+	{
+		return mbIsFullScreen;
+	}
+
+	constexpr void GenericWindow::SetFullScreen()
+	{
+		mbIsFullScreen = true;
+	}
+
+	constexpr void GenericWindow::SetWindowed()
+	{
+		mbIsFullScreen = false;
+	}
+
+	constexpr float GenericWindow::GetNear() const
+	{
+		return mNear;
+	}
+
+	constexpr float GenericWindow::GetFar() const
+	{
+		return mFar;
+	}
 }

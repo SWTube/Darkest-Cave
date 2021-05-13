@@ -15,30 +15,23 @@ namespace cave
 	class WindowsRenderer final : public GenericRenderer
 	{
 	public:
-		WindowsRenderer() = delete;
-		WindowsRenderer(DeviceResources* deviceResources);
+		WindowsRenderer() = default;
 		WindowsRenderer(const WindowsRenderer&) = delete;
 		WindowsRenderer(const WindowsRenderer&&) = delete;
 		WindowsRenderer& operator=(const WindowsRenderer&) = delete;
 		WindowsRenderer& operator=(const WindowsRenderer&&) = delete;
-		~WindowsRenderer();
+		virtual ~WindowsRenderer();
 
 		bool WindowShouldClose() override;
 
-		void CreateDeviceDependentResources() override;
-		void CreateWindowSizeDependentResources() override;
+		virtual eResult Init(uint32_t screenWidth, uint32_t screenHeight, Window* window = nullptr) override;
+		eResult CreateDeviceDependentResources() override;
+		eResult CreateWindowSizeDependentResources(Window* window = nullptr) override;
 		void Update() override;
 		void Render() override;
 		void Destroy() override;
 
 	private:
-		eResult createShader(Shader& shader) override;
-		eResult createShaders() override;
-		eResult createObject(Sprite& object) override;
-		eResult createObjects() override;
-		void createView() override;
-		void createPerspective() override;
-
 		void cleanupDevice();
 
 		struct ConstantBufferNeverChanges
@@ -61,11 +54,11 @@ namespace cave
 		// Global Variables
 		//--------------------------------------------------------------------------------------
 		
-		ID3D11Buffer*				mConstantBufferNeverChanges = nullptr;
-		ID3D11Buffer*				mConstantBufferChangeOnResize = nullptr;
+		ID3D11Buffer*		mConstantBufferNeverChanges = nullptr;
+		ID3D11Buffer*		mConstantBufferChangeOnResize = nullptr;
 		
-		DirectX::XMMATRIX			mView;
-		DirectX::XMMATRIX			mProjection;
+		DirectX::XMMATRIX	mView = DirectX::XMMatrixIdentity();
+		DirectX::XMMATRIX	mProjection = DirectX::XMMatrixIdentity();
 		// �ؽ�ó ������� �����Ƿ� shader resource view�� ������� ����
 
 		//-----------------------------------------------------------------------------

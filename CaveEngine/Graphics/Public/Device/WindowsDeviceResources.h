@@ -16,7 +16,7 @@ namespace cave
 	class WindowsDeviceResources final : public GenericDeviceResources
 	{
 	public:
-		WindowsDeviceResources() = default;
+		constexpr WindowsDeviceResources(MemoryPool& pool);
 		constexpr WindowsDeviceResources(const WindowsDeviceResources&) = delete;
 		WindowsDeviceResources& operator=(const WindowsDeviceResources&) = delete;
 		virtual ~WindowsDeviceResources();
@@ -43,7 +43,13 @@ namespace cave
 		ID3D11DepthStencilView* GetDepthStencil();
 		D3D_DRIVER_TYPE GetDriverType() const;
 
-		void Present() override;
+		virtual void GetVideoCardInfo(char* cardName, int& memory) override;
+
+		virtual void TurnZBufferOn() override;
+		virtual void TurnZBufferOff() override;
+
+		virtual void RenderStart() override;
+		virtual void RenderEnd() override;
 	private:
 		HINSTANCE	mInstance = nullptr;
 
@@ -68,8 +74,11 @@ namespace cave
 		//-----------------------------------------------------------------------------
 		// Direct3D device resources for the depth stencil
 		//-----------------------------------------------------------------------------
-		ID3D11Texture2D*         mDepthStencil = nullptr;
-		ID3D11DepthStencilView*  mDepthStencilView = nullptr;
+		ID3D11Texture2D*        	mDepthStencil = nullptr;
+		ID3D11DepthStencilState*	mDepthStencilState = nullptr;
+		ID3D11DepthStencilState*	mDepthDisabledStencilState = nullptr;
+		ID3D11DepthStencilView*  	mDepthStencilView = nullptr;
+		ID3D11RasterizerState*		mRasterizerState = nullptr;
 
 
 		//-----------------------------------------------------------------------------
@@ -80,6 +89,11 @@ namespace cave
 		D3D11_VIEWPORT          mViewport;
 		D3D_DRIVER_TYPE			mDriverType = D3D_DRIVER_TYPE_NULL;
 	};
+
+	constexpr WindowsDeviceResources::WindowsDeviceResources(MemoryPool& pool)
+		: GenericDeviceResources(pool)
+	{
+	}
 
 	typedef WindowsDeviceResources DeviceResources;
 }

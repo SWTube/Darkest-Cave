@@ -64,6 +64,20 @@ namespace cave
 		mTexture->ReferenceCount = 1u;
 		mTexture->Texture = nullptr;
 
+		// 16. Load Textures ---------------------------------------------------------------------------------------------
+
+		// LOGDF(eLogChannel::GRAPHICS, std::cout, "vector size: %lu", TextureData.size());
+		glCreateTextures(GL_TEXTURE_2D, 1u, &mIndex);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glCreateTextures error code: 0x%x", glError);
+		}
+
+		glTextureParameteri(mIndex, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTextureParameteri(mIndex, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTextureParameteri(mIndex, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTextureParameteri(mIndex, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 		const char* extension = mFilePath.extension().c_str();
 		if (strncmp(extension, ".png", 4) == 0)
 		{
@@ -71,11 +85,52 @@ namespace cave
 			switch (mFormat)
 			{
 			case eTextureFormat::RGB:
-				error = lodepng_decode24_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
-				break;
+				{
+					error = lodepng_decode24_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
+
+					glTextureStorage2D(mIndex, 1, GL_RGB8, mWidth, mHeight);
+					if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+					{
+						LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureStorage2D error code: 0x%x", glError);
+					}
+					glTextureSubImage2D(mIndex, 0, 0, 0, mWidth, mHeight, GL_RGB, GL_UNSIGNED_BYTE, mTexture->Texture);
+					if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+					{
+						LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureSubImage2D error code: 0x%x", glError);
+					}
+					break;
+				}
 			case eTextureFormat::RGBA:
-				error = lodepng_decode32_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
-				break;
+				{
+					error = lodepng_decode32_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
+
+					std::vector<uint8_t> image;
+					image.resize(mWidth * mHeight * 4);
+					for (uint32_t y = 0; y < mHeight; ++y)
+					{
+						for (uint32_t x = 0; x < mWidth; ++x)
+						{
+							image[4 * mWidth * y + 4 * x + 0] = 255 * !(x & y);
+							image[4 * mWidth * y + 4 * x + 1] = x ^ y;
+							image[4 * mWidth * y + 4 * x + 2] = x | y;
+							image[4 * mWidth * y + 4 * x + 3] = 255;
+						}
+					}
+
+					lodepng::encode("what.png", image, mWidth, mHeight);
+
+					glTextureStorage2D(mIndex, 1, GL_RGBA8, mWidth, mHeight);
+					if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+					{
+						LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureStorage2D error code: 0x%x", glError);
+					}
+					glTextureSubImage2D(mIndex, 0, 0, 0, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_BYTE, mTexture->Texture);
+					if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+					{
+						LOGEF(eLogChannel::GRAPHICS, std::cerr, "glTextureSubImage2D error code: 0x%x", glError);
+					}
+					break;
+				}
 			default:
 				assert(false);
 				break;
@@ -84,6 +139,22 @@ namespace cave
 			if (error != 0)
 			{
 				LOGEF(eLogChannel::GRAPHICS, std::cerr, "The png file %s cannot be loaded. Error Code: %u", mFilePath.c_str(), error);
+			}
+
+			// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, TextureWidth, TextureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureData);
+			glGenerateTextureMipmap(mIndex);
+			if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+			{
+				LOGEF(eLogChannel::GRAPHICS, std::cerr, "glGenerateTextureMipmap error code: 0x%x", glError);
+			}
+			// glCreateSamplers(1, &msBackgroundSampler);
+			// LOGDF(eLogChannel::GRAPHICS, std::cout, "sampler: %u", msBackgroundSampler);
+			// glBindSampler(msBackgroundIndex, msBackgroundSampler);
+			
+			if (mTexture != nullptr)
+			{
+				mTexture->Destroy();
+				mTexture = nullptr;
 			}
 		}
 		else if (strncmp(extension, ".dds", 4) == 0)
@@ -100,6 +171,7 @@ namespace cave
 		, mHeight(other.mHeight)
 		, mFormat(other.mFormat)
 		, mTexture(other.mTexture)
+		, mIndex(other.mIndex)
 	{
 		if (mTexture != nullptr)
 		{
@@ -114,10 +186,12 @@ namespace cave
 		, mHeight(other.mHeight)
 		, mFormat(other.mFormat)
 		, mTexture(other.mTexture)
+		, mIndex(other.mIndex)
 	{
 		other.mPool = nullptr;
 		other.mFilePath.clear();
 		other.mTexture = nullptr;
+		other.mIndex = 0u;
 	}
 
 	Texture& Texture::operator=(const Texture& other)
@@ -173,30 +247,18 @@ namespace cave
 
 	void Texture::Destroy()
 	{
+		glDeleteTextures(mIndex - 1u, &mIndex);
+
 		if (mTexture != nullptr)
 		{
-			--mTexture->ReferenceCount;
-			if (mTexture->ReferenceCount == 0u)
-			{
-				mTexture->~TexturePointer();
-				mPool->Deallocate(mTexture, sizeof(TexturePointer));
-			}
+			mTexture->Destroy();
+			mTexture = nullptr;
 		}
 	}
 
 	MemoryPool* const Texture::GetMemoryPool()
 	{
 		return mPool;
-	}
-
-	const uint8_t* const Texture::GetTexture() const
-	{
-		if (mTexture != nullptr)
-		{
-			return mTexture->Texture;
-		}
-
-		return nullptr;
 	}
 
 	const char* const Texture::GetCStringFilePath() const
@@ -206,25 +268,5 @@ namespace cave
 #else
 		return mFilePath.c_str();
 #endif
-	}
-
-	const std::filesystem::path& Texture::GetFilePath() const
-	{
-		return mFilePath;
-	}
-
-	uint32_t Texture::GetWidth() const
-	{
-		return mWidth;
-	}
-
-	uint32_t Texture::GetHeight() const
-	{
-		return mHeight;
-	}
-
-	eTextureFormat Texture::GetFormat() const
-	{
-		return mFormat;
 	}
 } // namespace cave

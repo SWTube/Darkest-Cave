@@ -17,4 +17,5 @@ void main()
 {
 	// fColor = texture(tex, fTexCoord);
 	fColor = texture(tex[textureIndex], fTexCoord);
+	// fColor = vec4(fTexCoord, 1.0f, 1.0f);
 }

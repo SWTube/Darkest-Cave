@@ -8,37 +8,23 @@
 #ifdef __UNIX__
 namespace cave
 {
-	eResult UnixEngine::Init()
+	eResult UnixEngine::Init(uint32_t screenWidth, uint32_t screenHeight)
 	{
 		eResult result = eResult::CAVE_OK;
 
-		// Instantiate the device manager class.
-		mDeviceResources = reinterpret_cast<DeviceResources*>(mPool->Allocate(sizeof(DeviceResources)));
-		new(mDeviceResources) DeviceResources();
-		// Create device resources.
-		result = mDeviceResources->CreateDeviceResources();
-		if (result != eResult::CAVE_OK)
-		{
-			return result;
-		}
-
-		mWindow = reinterpret_cast<Window*>(mPool->Allocate(sizeof(Window)));
-		new(mWindow) Window(640u, 480u, "Test", nullptr, nullptr);
-
-		result = mDeviceResources->CreateWindowResources(mWindow);
-		if (result != eResult::CAVE_OK)
-		{
-			return result;
-		}
-		
-		// We have a window, so initialize window size-dependent resources.
-		mDeviceResources->CreateWindowResources(mWindow);
-
 		// Instantiate the renderer.
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
-		new(mRenderer) Renderer(mDeviceResources);
+		new(mRenderer) Renderer();
 		mRenderer->CreateDeviceDependentResources();
-		mRenderer->CreateWindowSizeDependentResources();
+
+		mWindow = reinterpret_cast<Window*>(mPool->Allocate(sizeof(Window)));
+		new(mWindow) Window(screenWidth, screenHeight, "Test", nullptr, nullptr);
+		
+		result = mRenderer->CreateWindowSizeDependentResources(mWindow);
+		if (result != eResult::CAVE_OK)
+		{
+			return result;
+		}
 		
 		return result;
 	}
@@ -90,9 +76,6 @@ namespace cave
 
 			// Render frames during idle time (when no messages are waiting).
 			mRenderer->Render();
-
-			// Present the frame to the screen.
-			mDeviceResources->Present();
 
 			glfwPollEvents();
 			clock_gettime(CLOCK_MONOTONIC, &tp);

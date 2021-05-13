@@ -17,7 +17,7 @@ namespace cave
 		GenericEngine();
 		virtual ~GenericEngine();
 
-		virtual eResult Init() = 0;
+		virtual eResult Init(uint32_t screenWidth, uint32_t screenHeight) = 0;
 		virtual void Destroy() = 0;
 
 		virtual Window* GetWindowHandle();

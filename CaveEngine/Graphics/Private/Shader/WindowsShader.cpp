@@ -23,8 +23,6 @@ namespace cave
 		: GenericShader(std::move(other))
 		, mVertexShader(other.mVertexShader)
 		, mPixelShader(other.mPixelShader)
-		, mVsBlob(other.mVsBlob)
-		, mPsBlob(other.mPsBlob)
 	{
 	}
 
@@ -35,18 +33,12 @@ namespace cave
 			GenericShader::operator=(std::move(other));
 			mVertexShader = other.mVertexShader;
 			mPixelShader = other.mPixelShader;
-			mVsBlob = other.mVsBlob;
-			mPsBlob = other.mPsBlob;
 
 			other.mVertexShader->Release();
 			other.mPixelShader->Release();
-			other.mVsBlob->Release();
-			other.mPsBlob->Release();
 			
 			other.mVertexShader = nullptr;
 			other.mPixelShader = nullptr;
-			other.mVsBlob = nullptr;
-			other.mPsBlob = nullptr;
 		}
 
 		return *this;
@@ -54,8 +46,195 @@ namespace cave
 
 	WindowsShader::~WindowsShader()
 	{
-		mVertexShaderFilePath.clear();
-		mFragmentShaderFilePath.clear();
+		Destroy();
+	}
+
+	eResult WindowsShader::Compile(ID3D11Device* device)
+	{
+		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
+		std::filesystem::path shaderPath = PROJECT_DIR;
+		shaderPath += "/CaveEngine/Graphics/Shader/";
+		shaderPath += mShaderFilePath;
+
+		ID3DBlob* vsBlob = nullptr;
+		eResult error = compileShaderFromFile(shaderPath.c_str(), "VS", "vs_4_0", &vsBlob);
+		if (error != eResult::CAVE_OK)
+		{
+			LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
+			vsBlob->Release();
+			vsBlob = nullptr;
+			return error;
+		}
+
+		// Create the vertex shader
+		int32_t result = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &mVertexShader);
+		if (FAILED(result))
+		{
+			vsBlob->Release();
+			vsBlob = nullptr;
+			return eResult::CAVE_FAIL;
+		}
+
+		// Compile the pixel shader
+		ID3DBlob* psBlob = nullptr;
+		error = compileShaderFromFile(shaderPath.c_str(), "PS", "ps_4_0", &psBlob);
+		if (error != eResult::CAVE_OK)
+		{
+			LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
+			vsBlob->Release();
+			psBlob->Release();
+
+			vsBlob = nullptr;
+			psBlob = nullptr;
+			return error;
+		}
+
+		// Create the pixel shader
+		result = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &mPixelShader);
+		if (FAILED(result))
+		{
+			vsBlob->Release();
+			psBlob->Release();
+
+			vsBlob = nullptr;
+			psBlob = nullptr;
+			return eResult::CAVE_FAIL;
+		}
+
+		SetInputLayout();
+
+		return eResult::CAVE_OK;
+	}
+
+	eResult WindowsShader::SetInputLayout()
+	{
+		// Define the input layout
+		D3D11_INPUT_ELEMENT_DESC layout[] =
+		{
+			{ 
+				.SemanticName="POSITION", 
+				.SemanticIndex=0, 
+				.Format=DXGI_FORMAT_R32G32B32_FLOAT, 
+				.InputSlot=0, 
+				.AlignedByteOffset=0, 
+				.InputSlotClass=D3D11_INPUT_PER_VERTEX_DATA, 
+				.InstanceDataStepRate=0 
+			},
+			{ 
+				.SemanticName="TEXCOORD", 
+				.SemanticIndex0, 
+				.FormatDXGI_FORMAT_R32G32_FLOAT, 
+				.InputSlot0, 
+				.AlignedByteOffset=sizeof(Float3), 
+				.InputSlotClass=D3D11_INPUT_PER_VERTEX_DATA, 
+				// .InputSlotClass=D3D11_APPEND_ALIGNED_ELEMENT, 
+				.InstanceDataStepRate=0 
+			},
+		};
+		UINT numElements = ARRAYSIZE(layout);
+
+		// Create the input layout
+		int32_t result = mDevice->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(),
+			vsBlob->GetBufferSize(), &mVertexLayout);
+		vsBlob->Release();
+		psBlob->Release();
+		vsBlob = nullptr;
+		psBlob = nullptr;
+		if (FAILED(result))
+		{
+			return eResult::CAVE_FAIL;
+		}
+
+		// Create the constant buffers
+		D3D11_BUFFER_DESC bufferDesc = {};
+		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		bufferDesc.ByteWidth = sizeof(Buffer);
+		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bufferDesc.CPUAccessFlags = 0;
+		// bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		bufferDesc.MiscFlags = 0;
+		bufferDesc.StructureByteStride = 0;
+		result = mDevice->CreateBuffer(&bufferDesc, nullptr, &mBuffer);
+		if (FAILED(result))
+		{
+			return static_cast<eResult>(result);
+		}
+
+		// Create the sample state
+		D3D11_SAMPLER_DESC samplerDesc = {};
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.MaxAnisotropy = 1;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		samplerDesc.BorderColor[0] = 0;
+		samplerDesc.BorderColor[1] = 0;
+		samplerDesc.BorderColor[2] = 0;
+		samplerDesc.BorderColor[3] = 0;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+		result = mDevice->CreateSamplerState(&samplerDesc, &mSamplerLinear);
+		if (FAILED(result))
+		{
+			return static_cast<eResult>(result);
+		}
+
+		return eResult::CAVE_OK;
+	}
+
+	void WindowsShader::Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix)
+	{
+		// 상수 버퍼의 내용을 쓸 수 있도록 잠급니다.
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		if(FAILED(deviceContext->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		{
+			return false;
+		}
+
+		// 상수 버퍼의 데이터에 대한 포인터를 가져옵니다.
+		MatrixBufferType* dataPtr = reinterpret_cast<MatrixBufferType*>(mappedResource.pData);
+
+		// 상수 버퍼에 행렬을 복사합니다.
+		dataPtr->World = XMMatrixTranspose(worldMatrix);
+		dataPtr->View = XMMatrixTranspose(viewMatrix);
+		dataPtr->Projection = XMMatrixTranspose(projectionMatrix);
+
+		// 상수 버퍼의 잠금을 풉니다.
+		deviceContext->Unmap(mBuffer, 0);
+
+		// 정점 셰이더에서의 상수 버퍼의 위치를 설정합니다.
+		uint32_t bufferNumber = 0;
+
+		// 마지막으로 정점 셰이더의 상수 버퍼를 바뀐 값으로 바꿉니다.
+		context->VSSetConstantBuffers(bufferNumber, 1, &mBuffer);
+		context->PSSetShaderResources(0, 1, &texture);
+
+		context->IASetInputLayout(mInputLayout);
+
+		context->VSSetShader(mVertexShader, nullptr, 0);
+		context->PSSetShader(mPixelShader, nullptr, 0);
+
+		context->PSSetSamplers(0, 1, &mSamplerLinear)
+
+		context->DrawIndexed(indexCount, 0, 0);
+	}
+
+	void WindowsShader::Destroy()
+	{
+		if (mSamplerLinear != nullptr)
+		{
+			mSamplerLinear->Release();
+			mSamplerLinear = nullptr;
+		}
+
+		if (mInputLayout != nullptr)
+		{
+			mInputLayout->Release();
+			mInputLayout = nullptr;
+		}
 
 		if (mVertexShader != nullptr)
 		{
@@ -67,71 +246,9 @@ namespace cave
 		{
 			mPixelShader->Release();
 			mPixelShader = nullptr;
-		}
+		}		
 
-		if (mVsBlob != nullptr)
-		{
-			mVsBlob->Release();
-		}
-
-		if (mPsBlob != nullptr)
-		{
-			mPsBlob->Release();
-			mPsBlob = nullptr;
-		}
-	}
-
-	eResult WindowsShader::Compile(ID3D11Device* device)
-	{
-		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
-		std::filesystem::path shaderPath = PROJECT_DIR;
-		shaderPath += "/CaveEngine/Graphics/Shader/";
-		shaderPath += mShaderFilePath;
-
-		mVsBlob = nullptr;
-		eResult error = compileShaderFromFile(shaderPath.c_str(), "VS", "vs_4_0", &mVsBlob);
-		if (error != eResult::CAVE_OK)
-		{
-			LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
-			return error;
-		}
-
-		// Create the vertex shader
-		int32_t result = device->CreateVertexShader(mVsBlob->GetBufferPointer(), mVsBlob->GetBufferSize(), nullptr, &mVertexShader);
-		if (FAILED(result))
-		{
-			mVsBlob->Release();
-			return eResult::CAVE_FAIL;
-		}
-
-		// Compile the pixel shader
-		mPsBlob = nullptr;
-		error = compileShaderFromFile(shaderPath.c_str(), "PS", "ps_4_0", &mPsBlob);
-		if (error != eResult::CAVE_OK)
-		{
-			LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
-			return error;
-		}
-
-		// Create the pixel shader
-		result = device->CreatePixelShader(mPsBlob->GetBufferPointer(), mPsBlob->GetBufferSize(), nullptr, &mPixelShader);
-		if (FAILED(result))
-		{
-			return eResult::CAVE_FAIL;
-		}
-
-		return eResult::CAVE_OK;
-	}
-
-	void WindowsShader::Render(ID3D11DeviceContext* context)
-	{
-		context->VSSetShader(mVertexShader, nullptr, 0);
-		context->PSSetShader(mPixelShader, nullptr, 0);
-	}
-
-	ID3DBlob* const WindowsShader::GetVertexShaderBlob()
-	{
-		return mVsBlob;
+		GenericShader::Destroy();
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -148,7 +265,7 @@ namespace cave
 
 		// ������ �ɼ�
 		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#ifdef _DEBUG
+#ifdef CAVE_BUILD_DEBUG
 		// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
 		// Setting this flag improves the shader debugging experience, but still allows 
 		// the shaders to be optimized and to run exactly the way they will run in 

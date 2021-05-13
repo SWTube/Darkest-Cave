@@ -17,19 +17,20 @@ namespace cave
 	{
 	public:
 		WindowsSprite() = delete;
-		WindowsSprite(Texture* texture, MemoryPool& pool = gCoreMemoryPool);
-		WindowsSprite(const Texture& texture, MemoryPool& pool = gCoreMemoryPool);
-		WindowsSprite(Texture&& texture, MemoryPool& pool = gCoreMemoryPool);
+		WindowsSprite(Texture* texture, MemoryPool& pool);
+		WindowsSprite(const Texture& texture, MemoryPool& pool);
+		WindowsSprite(Texture&& texture, MemoryPool& pool);
 		WindowsSprite(const WindowsSprite& object);
 		WindowsSprite(WindowsSprite&& object);
 		WindowsSprite& operator=(const WindowsSprite& object);
 		WindowsSprite& operator=(WindowsSprite&& object);
 		virtual ~WindowsSprite();
 
-		eResult SetInputLayout(ID3DBlob* vsBlob);
 		void Destroy() override;
 		void Update() override;
 		void Render() override;
+
+		virtual eResult InitTexture() override;
 	private:
 		eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context) override;
 		ID3D11Device* mDevice = nullptr;
@@ -37,9 +38,7 @@ namespace cave
 		ID3D11Buffer* mVertexBuffer = nullptr;
 		ID3D11Buffer* mIndexBuffer = nullptr;
 		ID3D11InputLayout* mVertexLayout = nullptr;
-		ID3D11Buffer* mConstantBuffer = nullptr;
 		ID3D11ShaderResourceView* mTextureRv = nullptr;
-		ID3D11SamplerState* mSamplerLinear = nullptr;
 	};
 
 	typedef WindowsSprite Sprite;

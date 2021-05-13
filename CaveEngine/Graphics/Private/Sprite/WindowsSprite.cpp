@@ -14,7 +14,7 @@ namespace cave
 		: GenericSprite(texture, pool)
 	{
 	}
-
+	
 	WindowsSprite::WindowsSprite(const Texture& texture, MemoryPool& pool)
 		: GenericSprite(texture, pool)
 	{
@@ -103,92 +103,37 @@ namespace cave
 		mContext = context;
 		int32_t result = S_OK;
 
-		D3D11_BUFFER_DESC bd = {};
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(VERTICES);
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bd.CPUAccessFlags = 0;
+		// create static vertex buffer
+		D3D11_BUFFER_DESC bufferDesc = {};
+		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		bufferDesc.ByteWidth = sizeof(VertexT) * VERTICES_COUNT;
+		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		// bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		bufferDesc.CPUAccessFlags = 0;
+		bufferDesc.MiscFlags = 0;
+		bufferDesc.StructureByteStride = 0;
 
-		D3D11_SUBRESOURCE_DATA InitData = {};
-		InitData.pSysMem = VERTICES;
-		result = device->CreateBuffer(&bd, &InitData, &mVertexBuffer);
+		D3D11_SUBRESOURCE_DATA vertexData = {};
+		vertexData.pSysMem = mVertices;
+		vertexData.SysMemPitch = 0;
+		vertexData.SysMemSlicePitch = 0;
+		result = device->CreateBuffer(&bufferDesc, &vertexData, &mVertexBuffer);
 		if(FAILED(result))
 		{
 			return eResult::CAVE_FAIL;
 		}
 
-		// ���� context�� �����ֱ�
-		// Set vertex buffer
-		uint32_t stride = sizeof(VertexT);
-		uint32_t offset = 0;
-		mContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
+		// create static index buffer
+		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		bufferDesc.ByteWidth = sizeof(uint8_t) * sizeof(INDICES);
+		bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bufferDesc.CPUAccessFlags = 0;
 
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(INDICES);
-		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-		InitData.pSysMem = INDICES;
-		result = device->CreateBuffer(&bd, &InitData, &mIndexBuffer);
+		vertexData.pSysMem = INDICES;
+		result = device->CreateBuffer(&bufferDesc, &vertexData, &mIndexBuffer);
 		if(FAILED(result))
 		{
 			return eResult::CAVE_FAIL;
-		}
-
-		// Set index buffer
-		mContext->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-
-		// Set primitive topology
-		mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		// 12. Define, create, set the input layout ---------------------------------------------------------------------------------------------
-
-		// Preparing to Send Data to OpenGL
-		// All data must be stored in buffer objects (chunks of memory managed by OpenGL)
-		// Common way is to specify the data at the same time as you specify the buffer's size
-
-		// 16. Load Textures ---------------------------------------------------------------------------------------------
-		/*uint32_t error = lodepng_decode24_file(&mTextureData, &mTextureWidth, &mTextureHeight, mTextureFilePath);
-		if (error != 0)
-		{
-			LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mTextureFilePath, error);
-			return eResult::CAVE_FAIL;
-		}
-
-		free(mTextureData);
-		mTextureData = nullptr;*/
-
-
-		// Create the constant buffers
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(ConstantBuffer);
-		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		bd.CPUAccessFlags = 0;
-		result = mDevice->CreateBuffer(&bd, nullptr, &mConstantBuffer);
-		if (FAILED(result))
-		{
-			return static_cast<eResult>(result);
-		}
-
-		// Load the Texture
-		result = DdsTextureLoader::CreateDDSTextureFromFile(device, L"Graphics/Resource/seafloor.dds", nullptr, &mTextureRv);
-		if (FAILED(result))
-		{
-			return static_cast<eResult>(result);
-		}
-
-		// Create the sample state
-		D3D11_SAMPLER_DESC sampDesc = {};
-		sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-		sampDesc.MinLOD = 0;
-		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-		result = mDevice->CreateSamplerState(&sampDesc, &mSamplerLinear);
-		if (FAILED(result))
-		{
-			return static_cast<eResult>(result);
 		}
 
 		mWorld = DirectX::XMMatrixIdentity();
@@ -196,33 +141,15 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	eResult WindowsSprite::SetInputLayout(ID3DBlob* vsBlob)
+	eResult WindowsSprite::InitTexture()
 	{
-		// Define the input layout
-		D3D11_INPUT_ELEMENT_DESC layout[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(Float3), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		};
-		UINT numElements = ARRAYSIZE(layout);
-
-		// Create the input layout
-		int32_t result = mDevice->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(),
-			vsBlob->GetBufferSize(), &mVertexLayout);
-		vsBlob->Release();
-		if (FAILED(result))
-		{
-			return eResult::CAVE_FAIL;
-		}
-
-		// Set the input layout
-		mContext->IASetInputLayout(mVertexLayout);
+		return eResult::CAVE_OK;
 	}
 
 	void WindowsSprite::Destroy()
 	{
-		GeneralSprite::Destroy();
-		
+		GenericSprite::Destroy();
+
 		if (mSamplerLinear != nullptr)
 		{
 			mSamplerLinear->Release();
@@ -274,9 +201,38 @@ namespace cave
 		//
 		// Update variables for the first cube
 		//
-		ConstantBuffer constantBuffer;
-		constantBuffer.mWorld = DirectX::XMMatrixTranspose(mWorld);
-		mContext->UpdateSubresource(mConstantBuffer, 0, nullptr, &constantBuffer, 0, 0);
+		float left = 0.0f;
+		float right = 0.0f;
+		float top = 0.0f;
+		float bottom = 0.0f;
+		Vertex* vertices = nullptr;
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		Vertex* verticesPtr = nullptr;
+		eResult result = eResult::CAVE_OK;
+
+		if (!mbNeedsUpdate && (mPosition == mPreviousPosition))
+		{
+			return;
+		}
+
+		mPreviousPosition = mPosition;
+
+		left = static_cast<float>((mScreenWidth / 2) * -1) + mPosition.X - static_cast<float>(mWidth) / 2.0f;
+		right = left + static_cast<float>(mWidth);
+		top = static_cast<float>((mScreenHeight / 2) * -1) - mPosition.Y + static_cast<float>(mHeight) / 2.0f;
+		bottom = top - static_cast<float>(mHeight);
+
+		mVertices[0] = std::move(VertexT(Float3( left,    top, 0.0f), Float2(0.0f, 0.0f)));		// top left
+		mVertices[1] = std::move(VertexT(Float3( right,    top, 0.0f), Float2(1.0f, 0.0f)));	// top right
+		mVertices[2] = std::move(VertexT(Float3(right, bottom, 0.0f), Float2(1.0f, 1.0f)));		// bottom right
+		mVertices[3] = std::move(VertexT(Float3( left, bottom, 0.0f), Float2(0.0f, 1.0f)));		// bottom left
+
+		HRESULT hResult = mContext->Map(mVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		verticesPtr = reinterpret_cast<VertexT*>(mappedResource.pData);
+		memcpy(verticesPtr, reinterpret_cast<void*>(mVertices), (sizeof(VertexT) * VERTICES_COUNT));
+		mContext->Unmap(mVertexBuffer, 0);
+
+		mbIsNeedUpdate = false;
 
 		// ���� context�� �����ֱ�
 		// Set vertex buffer
@@ -289,24 +245,6 @@ namespace cave
 
 		// Set primitive topology
 		mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		// IA. Input Assembly
-		// Set the input layout
-		mContext->IASetInputLayout(mVertexLayout);
-
-		//
-		// Render the first cube
-		//
-		mContext->VSSetConstantBuffers(0, 1, &mConstantBuffer);
-		mContext->PSSetConstantBuffers(0, 1, &mConstantBuffer);
-		mContext->PSSetShaderResources(0, 1, &mTextureRv);
-		mContext->PSSetSamplers(0, 1, &mSamplerLinear);
-
-		// ���� production level���� Draw���ٴ� DrawIndexed�� �� ���� ���
-		// ù��°�� ���ؽ� ����. 3
-		// back buffer�� �׸���
-		//context->Draw(3, 0);
-		mContext->DrawIndexed(INDICES_COUNT, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 	}
 } // namespace cave
 

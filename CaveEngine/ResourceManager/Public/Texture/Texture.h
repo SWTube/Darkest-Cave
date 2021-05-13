@@ -7,6 +7,8 @@
 
 #include <filesystem>
 
+#include "ResourceManagerApiPch.h"
+
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
 
@@ -31,17 +33,26 @@ namespace cave
 
 		void Destroy();
 
-		const uint8_t* const GetTexture() const;
+#ifdef __WIN32__
+		constexpr ID3D11ShaderResourceView* GetTexture();
+#else
+		constexpr uint8_t* const GetTexture();
+#endif
 		const char* const GetCStringFilePath() const;
-		const std::filesystem::path& GetFilePath() const;
-		uint32_t GetWidth() const;
-		uint32_t GetHeight() const;
-		eTextureFormat GetFormat() const;
+		constexpr const std::filesystem::path& GetFilePath() const;
+		constexpr uint32_t GetWidth() const;
+		constexpr uint32_t GetHeight() const;
+		constexpr eTextureFormat GetFormat() const;
+		constexpr uint32_t GetIndex() const;
 	private:
 		typedef struct TexturePointer
 		{
 			uint32_t ReferenceCount = 0u;
+#ifdef __WIN32__
+			ID3D11ShaderResourceView* Texture = nullptr;
+#else
 			uint8_t* Texture = nullptr;
+#endif
 
 			constexpr TexturePointer()
 				: ReferenceCount(0u)
@@ -55,6 +66,9 @@ namespace cave
 				: ReferenceCount(other.ReferenceCount)
 				, Texture(other.Texture)
 			{
+#ifdef __WIN32__
+				other.Texture->Release();
+#endif
 				other.Texture = nullptr;
 			}
 
@@ -62,9 +76,20 @@ namespace cave
 
 			~TexturePointer()
 			{
+				Destroy();
+			}
+
+			constexpr void Destroy()
+			{
 				if (Texture != nullptr)
 				{
+#ifdef __WIN32__
+					Texture->Release();
+#endif
+#ifdef __UNIX__
 					free(Texture);
+#endif
+					Texture = nullptr;
 				}
 			}
 		} TexturePointer;
@@ -75,5 +100,45 @@ namespace cave
 		uint32_t mHeight = 0u;
 		eTextureFormat mFormat = eTextureFormat::RGBA;
 		TexturePointer* mTexture = nullptr;
+		uint32_t mIndex = 0u;
 	};
+
+#ifdef __WIN32__
+	constexpr ID3D11ShaderResourceView* Texture::GetTexture()
+#else
+	constexpr uint8_t* const Texture::GetTexture()
+#endif
+	{
+		if (mTexture != nullptr)
+		{
+			return mTexture->Texture;
+		}
+
+		return nullptr;
+	}
+
+	constexpr uint32_t Texture::GetIndex() const
+	{
+		return mIndex;
+	}
+
+	constexpr const std::filesystem::path& Texture::GetFilePath() const
+	{
+		return mFilePath;
+	}
+
+	constexpr uint32_t Texture::GetWidth() const
+	{
+		return mWidth;
+	}
+
+	constexpr uint32_t Texture::GetHeight() const
+	{
+		return mHeight;
+	}
+
+	constexpr eTextureFormat Texture::GetFormat() const
+	{
+		return mFormat;
+	}
 } // namespace cave

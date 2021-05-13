@@ -28,8 +28,7 @@ namespace cave
 	class UnixRenderer final : public GenericRenderer
 	{
 	public:
-		UnixRenderer() = delete;
-		UnixRenderer(DeviceResources* deviceResources);
+		UnixRenderer() = default;
 		virtual ~UnixRenderer();
 
 		UnixRenderer(const UnixRenderer&) = delete;
@@ -38,8 +37,9 @@ namespace cave
 
 		bool WindowShouldClose() override;
 
-		void CreateDeviceDependentResources() override;
-		void CreateWindowSizeDependentResources() override;
+		virtual eResult Init(uint32_t screenWidth, uint32_t screenHeight, Window* window = nullptr) override;
+		eResult CreateDeviceDependentResources() override;
+		eResult CreateWindowSizeDependentResources(Window* window = nullptr) override;
 		void Update() override;
 		// Render steps:
 			// 1. Clear the window by calling glClearBufferfv()
@@ -50,17 +50,7 @@ namespace cave
 		void Destroy() override;
 
 	private:
-		eResult createShader(Shader& shader) override;
-		eResult createShaders() override;
-		eResult createObject(Sprite& object) override;
-		eResult createObjects() override;
-		void createView() override;
-		void createPerspective() override;
-
 		void cleanupDevice();
-
-		static constexpr uint8_t V_POSITION = 0u;
-		static constexpr uint8_t V_TEX_COORD = 1u;
 
 		std::vector<uint32_t> mVertexArrayObjects;
 		// GLuint msTextures[TEXTURE_COUNT];
