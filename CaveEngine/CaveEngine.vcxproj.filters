@@ -109,6 +109,12 @@
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp">
       <Filter>Source Files\ThirdParty\Lodepng</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\GenericDeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
@@ -255,6 +261,9 @@
     </ClInclude>
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
       <Filter>Header Files\ThirdParty\Lodepng</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\Camera.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

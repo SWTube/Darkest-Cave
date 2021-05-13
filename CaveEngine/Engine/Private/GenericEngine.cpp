@@ -27,14 +27,6 @@ namespace cave
 		return mWindow;
 	}
 
-	eResult GenericEngine::Run(DeviceResources* deviceResources, Renderer* renderer)
-	{
-		mDeviceResources = deviceResources;
-		mRenderer = renderer;
-
-		return Run();
-	}
-
 	Renderer* const GenericEngine::GetRenderer()
 	{
 		return mRenderer;

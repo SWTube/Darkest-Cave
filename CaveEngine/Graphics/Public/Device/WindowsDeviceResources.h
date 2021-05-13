@@ -16,7 +16,7 @@ namespace cave
 	class WindowsDeviceResources final : public GenericDeviceResources
 	{
 	public:
-		constexpr WindowsDeviceResources(MemoryPool& pool);
+		WindowsDeviceResources(MemoryPool& pool);
 		constexpr WindowsDeviceResources(const WindowsDeviceResources&) = delete;
 		WindowsDeviceResources& operator=(const WindowsDeviceResources&) = delete;
 		virtual ~WindowsDeviceResources();
@@ -89,11 +89,6 @@ namespace cave
 		D3D11_VIEWPORT          mViewport;
 		D3D_DRIVER_TYPE			mDriverType = D3D_DRIVER_TYPE_NULL;
 	};
-
-	constexpr WindowsDeviceResources::WindowsDeviceResources(MemoryPool& pool)
-		: GenericDeviceResources(pool)
-	{
-	}
 
 	typedef WindowsDeviceResources DeviceResources;
 }

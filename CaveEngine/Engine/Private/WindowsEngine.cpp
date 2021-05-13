@@ -19,17 +19,19 @@ namespace cave
 
 		// Instantiate the renderer.
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
-		new(mRenderer) Renderer(mDeviceResources);
-		mRenderer->CreateDeviceDependentResources();
-	
-		// We have a window, so initialize window size-dependent resources.
-		mDeviceResources->CreateWindowResources(mWindow);
-		if (result != eResult::CAVE_OK)
-		{
-			return result;
-		}
+		//new(mRenderer) Renderer(mDeviceResources);
+		new(mRenderer) Renderer();
+		//mRenderer->CreateDeviceDependentResources();
 
-		mRenderer->CreateWindowSizeDependentResources();
+
+		//// We have a window, so initialize window size-dependent resources.
+		//mDeviceResources->CreateWindowResources(mWindow);
+		//if (result != eResult::CAVE_OK)
+		//{
+		//	return result;
+		//}
+
+		//mRenderer->CreateWindowSizeDependentResources();
 		
 		return result;
 	}
@@ -42,12 +44,6 @@ namespace cave
 			mPool->Deallocate(mRenderer, sizeof(Renderer));
 		}
 
-		if (mDeviceResources != nullptr)
-		{
-			mDeviceResources->Destroy();
-			mPool->Deallocate(mDeviceResources, sizeof(DeviceResources));
-		}
-
 		if (mWindow != nullptr)
 		{
 			mPool->Deallocate(mWindow, sizeof(Window));
@@ -57,9 +53,9 @@ namespace cave
 	eResult WindowsEngine::Run()
 	{
 		int32_t hr = S_OK;
-		Window* window = mWindow->GetWindow();
-		HWND hWindow = window->GetWindow();
-		if (!IsWindowVisible(window))
+		Window* window = mWindow; // 이전 : mWindow->GetWindow()
+		HWND hWindow = window->GetWindow(); 
+		if (!IsWindowVisible(hWindow)) // 이전 : window
 		{
 			ShowWindow(hWindow, SW_SHOW);
 		}
@@ -90,7 +86,7 @@ namespace cave
 				mRenderer->Render();
 
 				// Present the frame to the screen.
-				mDeviceResources->Present();
+				//mDeviceResources->Present();  mDeviceResources에 Present 없어서 일단 지워둠.
 			}
 		}
 

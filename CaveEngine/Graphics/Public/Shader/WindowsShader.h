@@ -16,6 +16,13 @@
 	{
 		class WindowsShader final : public GenericShader
 		{
+			struct MatrixBufferType
+			{
+				DirectX::XMMATRIX world;
+				DirectX::XMMATRIX view;
+				DirectX::XMMATRIX projection;
+			};
+
 		public:
 			WindowsShader() = delete;
 			WindowsShader(const std::filesystem::path& shaderFilePath, MemoryPool& pool);

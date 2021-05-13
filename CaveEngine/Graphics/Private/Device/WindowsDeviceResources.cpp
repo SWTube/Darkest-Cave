@@ -8,6 +8,11 @@
 #ifdef __WIN32__
 namespace cave
 {
+	WindowsDeviceResources::WindowsDeviceResources(MemoryPool& pool)
+		: GenericDeviceResources(pool)
+	{
+	}
+
 	WindowsDeviceResources::~WindowsDeviceResources()
 	{
 		Destroy();
@@ -118,13 +123,13 @@ namespace cave
 					new(displayModeList) DXGI_MODE_DESC[numModes];
 					if (displayModeList == nullptr)
 					{
-						return false;
+						return eResult::CAVE_FAIL;
 					}
 
 					// 이제 디스플레이 모드에 대한 리스트를 채웁니다
 					if (FAILED(adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList)))
 					{
-						return false;
+						return eResult::CAVE_FAIL;
 					}
 
 					// 이제 모든 디스플레이 모드에 대해 화면 너비/높이에 맞는 디스플레이 모드를 찾습니다.
@@ -145,7 +150,7 @@ namespace cave
 					DXGI_ADAPTER_DESC adapterDesc;
 					if (FAILED(adapter->GetDesc(&adapterDesc)))
 					{
-						return false;
+						return eResult::CAVE_FAIL;
 					}
 
 					// 비디오카드 메모리 용량 단위를 메가바이트 단위로 저장합니다
@@ -155,7 +160,7 @@ namespace cave
 					size_t stringLength = 0;
 					if (wcstombs_s(&stringLength, mVideoCardDescription, 128, adapterDesc.Description, 128) != 0)
 					{
-						return false;
+						return eResult::CAVE_FAIL;
 					}
 					mPool->Deallocate(displayModeList, numModes * sizeof(displayModeList));
 					displayModeList = nullptr;
@@ -340,14 +345,15 @@ namespace cave
 		depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 		// 깊이 스텐실 상태를 생성합니다
-		result = mD3dDevice->CreateDepthStencilState(&depthStencilDesc, &mDepthStencilState)
+		result = mD3dDevice->CreateDepthStencilState(&depthStencilDesc, &mDepthStencilState);
 		if (FAILED(result))
 		{
 			return result;
 		}
 
 		// 깊이 스텐실 상태를 설정합니다
-		m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
+		//m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
+		mImmediateContext->OMSetDepthStencilState(mDepthStencilState, 1);
 
 		// Create the depth stencil view
 		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
@@ -377,7 +383,7 @@ namespace cave
 		rasterDesc.SlopeScaledDepthBias = 0.0f;
 
 		// 방금 작성한 구조체에서 래스터 라이저 상태를 만듭니다
-		if (FAILED(m_device->CreateRasterizerState(&rasterDesc, &mRasterizerState)))
+		if (FAILED(mD3dDevice->CreateRasterizerState(&rasterDesc, &mRasterizerState)))
 		{
 			return false;
 		}
@@ -428,7 +434,7 @@ namespace cave
 		depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 		// 장치를 사용하여 상태를 만듭니다.
-		if (FAILED(m_device->CreateDepthStencilState(&depthDisabledStencilDesc, &mDepthDisabledStencilState)))
+		if (FAILED(mD3dDevice->CreateDepthStencilState(&depthDisabledStencilDesc, &mDepthDisabledStencilState)))
 		{
 			return false;
 		}
@@ -619,7 +625,7 @@ namespace cave
 		if (mSwapChain != nullptr)
 		{
 			mSwapChain->SetFullscreenState(false, nullptr);
-			window->SetWindowed();
+			mWindow->SetWindowed();
 		}
 
 		if (mImmediateContext != nullptr)
@@ -654,7 +660,7 @@ namespace cave
 		if (mDepthStencilState != nullptr)
 		{
 			mDepthStencilState->Release();
-			mDepthStencilState = nullptr
+			mDepthStencilState = nullptr;
 		}
 
 		if (mBackBuffer != nullptr)

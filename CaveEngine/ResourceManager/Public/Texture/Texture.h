@@ -45,6 +45,10 @@ namespace cave
 		constexpr eTextureFormat GetFormat() const;
 		constexpr uint32_t GetIndex() const;
 	private:
+
+#ifdef __WIN32__
+		void LoadFromPngData(ID3D11Device* device ,unsigned char* pngData);
+#endif
 		typedef struct TexturePointer
 		{
 			uint32_t ReferenceCount = 0u;
@@ -53,7 +57,6 @@ namespace cave
 #else
 			uint8_t* Texture = nullptr;
 #endif
-
 			constexpr TexturePointer()
 				: ReferenceCount(0u)
 				, Texture(nullptr)

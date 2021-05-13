@@ -38,7 +38,8 @@ namespace cave
 
 #ifdef __WIN32__
 		// XMVECTOR 구조체에 로드한다.
-		upVector = XMLoadFloat3(&up);
+		DirectX::XMFLOAT3 dUp = DirectX::XMFLOAT3(up.X, up.Y, up.Z);
+		upVector = DirectX::XMLoadFloat3(&dUp);
 #else
 		upVector.x = up.X;
 		upVector.y = up.Y;
@@ -50,7 +51,8 @@ namespace cave
 
 #ifdef __WIN32__
 		// XMVECTOR 구조체에 로드한다.
-		positionVector = XMLoadFloat3(&position);
+		DirectX::XMFLOAT3 dPosition = DirectX::XMFLOAT3(position.X, position.Y, position.Z);
+		positionVector = DirectX::XMLoadFloat3(&dPosition);
 #else
 		positionVector.x = position.X;
 		positionVector.y = position.Y;
@@ -64,7 +66,8 @@ namespace cave
 
 #ifdef __WIN32__
 		// XMVECTOR 구조체에 로드한다.
-		lookAtVector = XMLoadFloat3(&lookAt);
+		DirectX::XMFLOAT3 dLookAt = DirectX::XMFLOAT3(lookAt.X, lookAt.Y, lookAt.Z);
+		lookAtVector = DirectX::XMLoadFloat3(&dLookAt);
 #else
 		lookAtVector.x = lookAt.X;
 		lookAtVector.y = lookAt.Y;
@@ -79,17 +82,17 @@ namespace cave
 
 #ifdef __WIN32__
 		//  yaw, pitch, roll 값을 통해 회전 행렬을 만듭니다.
-		rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
+		rotationMatrix = DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 
 		// lookAt 및 up 벡터를 회전 행렬로 변형하여 뷰가 원점에서 올바르게 회전되도록 합니다.
 		lookAtVector = XMVector3TransformCoord(lookAtVector, rotationMatrix);
 		upVector = XMVector3TransformCoord(upVector, rotationMatrix);
 
 		// 회전 된 카메라 위치를 뷰어 위치로 변환합니다.
-		lookAtVector = XMVectorAdd(positionVector, lookAtVector);
+		lookAtVector = DirectX::XMVectorAdd(positionVector, lookAtVector);
 
 		// 마지막으로 세 개의 업데이트 된 벡터에서 뷰 행렬을 만듭니다.
-		mView = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
+		mView = DirectX::XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
 #else
 		rotationMatrix = glm::rotate(rotationMatrix, roll, glm::vec3(1.0f, 0.0f, 0.0f));
 		rotationMatrix = glm::rotate(rotationMatrix, pitch, glm::vec3(0.0f, 1.0f, 0.0f));

@@ -77,7 +77,7 @@ namespace cave
 		Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
 		new(newSprite) Sprite(std::move(object));
 		newSprite->SetTextureIndex(0u);
-		eResult result = newSprite->Init(mDeviceResources->GetProgram(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+		eResult result = newSprite->Init(mDeviceResources->GetDevice(),mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 		if (result != eResult::CAVE_OK)
 		{
 			return result;
