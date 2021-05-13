@@ -10,8 +10,8 @@ namespace cave
 	GenericShader::GenericShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool)
 		: mPool(&pool)
 	{
-		mVertexShaderFilePath /= "CaveEngine/Graphics/Shader";
-		mFragmentShaderFilePath /= "CaveEngine/Graphics/Shader";
+		mVertexShaderFilePath /= "CaveEngine\\Graphics\\Shader";
+		mFragmentShaderFilePath /= "CaveEngine\\Graphics\\Shader";
 		mVertexShaderFilePath /= vertexShaderFilePath;
 		mFragmentShaderFilePath /= fragmentShaderFilePath;
 	}
@@ -19,7 +19,7 @@ namespace cave
 	GenericShader::GenericShader(const std::filesystem::path& shaderFilePath, MemoryPool& pool)
 		: mPool(&pool)
 	{
-		mShaderFilePath /= "CaveEngine/Graphics/Shader";
+		mShaderFilePath /= "CaveEngine\\Graphics\\Shader";
 		mShaderFilePath /= shaderFilePath;
 	}
 

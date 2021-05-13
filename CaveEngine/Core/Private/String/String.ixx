@@ -483,9 +483,8 @@ export namespace cave
 				}
 
 				memset(mString, '\0', mLength);
-
+				strncpy_s(mString, mCapacity, s, sLength);
 				mLength = sLength;
-				strncpy_s(mString, mLength, s, mLength);
 			}
 
 			return *this;
