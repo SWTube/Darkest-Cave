@@ -36,7 +36,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     cave::RootNode* a = new cave::RootNode("a");
     cave::Selector* b = new cave::Selector("b");
     cave::ActionNode* c = new cave::ActionNode("c", setValue);
-    cave::WhileDecorator* d = new cave::WhileDecorator("d", returnTrue);
+    cave::RepeatDecorator* d = new cave::RepeatDecorator("d", 3);
 
     a->AddChild(d);
     d->SetChild(c);

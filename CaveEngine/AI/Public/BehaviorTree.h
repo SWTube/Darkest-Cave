@@ -13,3 +13,4 @@
 #include "BehaviorTree/Decorator.h"
 #include "BehaviorTree/IfDecorator.h"
 #include "BehaviorTree/WhileDecorator.h"
+#include "BehaviorTree/RepeatDecorator.h"
