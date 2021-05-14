@@ -9,13 +9,14 @@
 
 #include "CoreTypes.h"
 #include "Device/Window.h"
+#include "Memory/MemoryPool.h"
 
 namespace cave
 {
 	class GenericDeviceResources
 	{
 	public:
-		constexpr GenericDeviceResources(MemoryPool& pool);
+		GenericDeviceResources(MemoryPool& pool);
 		constexpr GenericDeviceResources(const GenericDeviceResources&) = default;
 		GenericDeviceResources& operator=(const GenericDeviceResources&) = default;
 		virtual ~GenericDeviceResources() = default;
@@ -71,11 +72,6 @@ namespace cave
 		glm::mat4 mOrtho= glm::mat4(1.0f);
 #endif
 	};
-
-	constexpr GenericDeviceResources::GenericDeviceResources(MemoryPool& pool)
-		: mPool(&pool)
-	{
-	}
 
 #ifdef __WIN32__
 	constexpr DirectX::XMMATRIX& GenericDeviceResources::GetProjectionMatrix()

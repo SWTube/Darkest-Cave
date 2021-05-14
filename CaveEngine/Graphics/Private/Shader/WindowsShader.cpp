@@ -102,46 +102,40 @@ namespace cave
 			psBlob = nullptr;
 			return eResult::CAVE_FAIL;
 		}
-
-		SetInputLayout();
-
-		return eResult::CAVE_OK;
-	}
-
-	eResult WindowsShader::SetInputLayout()
-	{
 		// Define the input layout
 		D3D11_INPUT_ELEMENT_DESC layout[] =
 		{
-			{ 
-				.SemanticName="POSITION", 
-				.SemanticIndex=0, 
-				.Format=DXGI_FORMAT_R32G32B32_FLOAT, 
-				.InputSlot=0, 
-				.AlignedByteOffset=0, 
-				.InputSlotClass=D3D11_INPUT_PER_VERTEX_DATA, 
-				.InstanceDataStepRate=0 
+			{
+				.SemanticName = "POSITION",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = 0,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0
 			},
-			{ 
-				.SemanticName="TEXCOORD", 
-				.SemanticIndex0, 
-				.FormatDXGI_FORMAT_R32G32_FLOAT, 
-				.InputSlot0, 
-				.AlignedByteOffset=sizeof(Float3), 
-				.InputSlotClass=D3D11_INPUT_PER_VERTEX_DATA, 
+			{
+				.SemanticName = "TEXCOORD",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = sizeof(Float3),
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
 				// .InputSlotClass=D3D11_APPEND_ALIGNED_ELEMENT, 
-				.InstanceDataStepRate=0 
+				.InstanceDataStepRate = 0
 			},
 		};
 		UINT numElements = ARRAYSIZE(layout);
 
 		// Create the input layout
-		int32_t result = mDevice->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(),
-			vsBlob->GetBufferSize(), &mVertexLayout);
+		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(),
+			vsBlob->GetBufferSize(), &mInputLayout);
+
 		vsBlob->Release();
 		psBlob->Release();
 		vsBlob = nullptr;
 		psBlob = nullptr;
+
 		if (FAILED(result))
 		{
 			return eResult::CAVE_FAIL;
@@ -156,7 +150,7 @@ namespace cave
 		// bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		bufferDesc.MiscFlags = 0;
 		bufferDesc.StructureByteStride = 0;
-		result = mDevice->CreateBuffer(&bufferDesc, nullptr, &mBuffer);
+		result = device->CreateBuffer(&bufferDesc, nullptr, &mBuffer);
 		if (FAILED(result))
 		{
 			return static_cast<eResult>(result);
@@ -178,34 +172,115 @@ namespace cave
 		samplerDesc.BorderColor[3] = 0;
 		samplerDesc.MinLOD = 0;
 		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-		result = mDevice->CreateSamplerState(&samplerDesc, &mSamplerLinear);
+		result = device->CreateSamplerState(&samplerDesc, &mSamplerLinear);
 		if (FAILED(result))
 		{
 			return static_cast<eResult>(result);
 		}
+		//SetInputLayout(); SetInputLayout에서도 device, vsBlob, psBlob 필요해서 함수 분리 안하고 그냥 여기서 다 처리해야할듯요?
+		//보시고 주석처리한거 지우세여.
 
 		return eResult::CAVE_OK;
 	}
 
-	void WindowsShader::Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix)
+	eResult WindowsShader::SetInputLayout()
+	{
+		//// Define the input layout
+		//D3D11_INPUT_ELEMENT_DESC layout[] =
+		//{
+		//	{ 
+		//		.SemanticName="POSITION", 
+		//		.SemanticIndex=0, 
+		//		.Format=DXGI_FORMAT_R32G32B32_FLOAT, 
+		//		.InputSlot=0, 
+		//		.AlignedByteOffset=0, 
+		//		.InputSlotClass=D3D11_INPUT_PER_VERTEX_DATA, 
+		//		.InstanceDataStepRate=0 
+		//	},
+		//	{ 
+		//		.SemanticName="TEXCOORD", 
+		//		.SemanticIndex=0, 
+		//		.Format=DXGI_FORMAT_R32G32_FLOAT, 
+		//		.InputSlot=0, 
+		//		.AlignedByteOffset=sizeof(Float3), 
+		//		.InputSlotClass=D3D11_INPUT_PER_VERTEX_DATA, 
+		//		// .InputSlotClass=D3D11_APPEND_ALIGNED_ELEMENT, 
+		//		.InstanceDataStepRate=0 
+		//	},
+		//};
+		//UINT numElements = ARRAYSIZE(layout);
+
+		//// Create the input layout
+		//int32_t result = mDevice->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(),
+		//	vsBlob->GetBufferSize(), &mVertexLayout);
+		//vsBlob->Release();
+		//psBlob->Release();
+		//vsBlob = nullptr;
+		//psBlob = nullptr;
+		//if (FAILED(result))
+		//{
+		//	return eResult::CAVE_FAIL;
+		//}
+
+		//// Create the constant buffers
+		//D3D11_BUFFER_DESC bufferDesc = {};
+		//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		//bufferDesc.ByteWidth = sizeof(Buffer);
+		//bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		//bufferDesc.CPUAccessFlags = 0;
+		//// bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		//bufferDesc.MiscFlags = 0;
+		//bufferDesc.StructureByteStride = 0;
+		//result = mDevice->CreateBuffer(&bufferDesc, nullptr, &mBuffer);
+		//if (FAILED(result))
+		//{
+		//	return static_cast<eResult>(result);
+		//}
+
+		//// Create the sample state
+		//D3D11_SAMPLER_DESC samplerDesc = {};
+		//samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		//samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		//samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		//samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		//samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		//samplerDesc.MipLODBias = 0.0f;
+		//samplerDesc.MaxAnisotropy = 1;
+		//samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		//samplerDesc.BorderColor[0] = 0;
+		//samplerDesc.BorderColor[1] = 0;
+		//samplerDesc.BorderColor[2] = 0;
+		//samplerDesc.BorderColor[3] = 0;
+		//samplerDesc.MinLOD = 0;
+		//samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+		//result = mDevice->CreateSamplerState(&samplerDesc, &mSamplerLinear);
+		//if (FAILED(result))
+		//{
+		//	return static_cast<eResult>(result);
+		//}
+
+		return eResult::CAVE_OK;
+	}
+
+	void WindowsShader::Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
 	{
 		// 상수 버퍼의 내용을 쓸 수 있도록 잠급니다.
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		if(FAILED(deviceContext->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		if(FAILED(context->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
 		{
-			return false;
+			return;// return false;
 		}
 
 		// 상수 버퍼의 데이터에 대한 포인터를 가져옵니다.
 		MatrixBufferType* dataPtr = reinterpret_cast<MatrixBufferType*>(mappedResource.pData);
 
 		// 상수 버퍼에 행렬을 복사합니다.
-		dataPtr->World = XMMatrixTranspose(worldMatrix);
-		dataPtr->View = XMMatrixTranspose(viewMatrix);
-		dataPtr->Projection = XMMatrixTranspose(projectionMatrix);
+		dataPtr->world = XMMatrixTranspose(worldMatrix);
+		dataPtr->view = XMMatrixTranspose(viewMatrix);
+		dataPtr->projection = XMMatrixTranspose(projectionMatrix);
 
 		// 상수 버퍼의 잠금을 풉니다.
-		deviceContext->Unmap(mBuffer, 0);
+		context->Unmap(mBuffer, 0);
 
 		// 정점 셰이더에서의 상수 버퍼의 위치를 설정합니다.
 		uint32_t bufferNumber = 0;
@@ -219,7 +294,7 @@ namespace cave
 		context->VSSetShader(mVertexShader, nullptr, 0);
 		context->PSSetShader(mPixelShader, nullptr, 0);
 
-		context->PSSetSamplers(0, 1, &mSamplerLinear)
+		context->PSSetSamplers(0, 1, &mSamplerLinear);
 
 		context->DrawIndexed(indexCount, 0, 0);
 	}

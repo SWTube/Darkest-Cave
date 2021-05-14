@@ -33,9 +33,7 @@ namespace cave
 		, mVertexBuffer(other.mVertexBuffer)
 		, mIndexBuffer(other.mIndexBuffer)
 		, mVertexLayout(other.mVertexLayout)
-		, mConstantBuffer(other.mConstantBuffer)
 		, mTextureRv(other.mTextureRv)
-		, mSamplerLinear(other.mSamplerLinear)
 	{
 	}
 
@@ -47,9 +45,7 @@ namespace cave
 		mVertexBuffer = other.mVertexBuffer;
 		mIndexBuffer = other.mIndexBuffer;
 		mVertexLayout = other.mVertexLayout;
-		mConstantBuffer = other.mConstantBuffer;
 		mTextureRv = other.mTextureRv;
-		mSamplerLinear = other.mSamplerLinear;
 
 		other.Destroy();
 	}
@@ -64,9 +60,7 @@ namespace cave
 			mVertexBuffer = other.mVertexBuffer;
 			mIndexBuffer = other.mIndexBuffer;
 			mVertexLayout = other.mVertexLayout;
-			mConstantBuffer = other.mConstantBuffer;
 			mTextureRv = other.mTextureRv;
-			mSamplerLinear = other.mSamplerLinear;
 		}
 
 		return *this;
@@ -82,9 +76,7 @@ namespace cave
 			mVertexBuffer = other.mVertexBuffer;
 			mIndexBuffer = other.mIndexBuffer;
 			mVertexLayout = other.mVertexLayout;
-			mConstantBuffer = other.mConstantBuffer;
 			mTextureRv = other.mTextureRv;
-			mSamplerLinear = other.mSamplerLinear;
 
 			other.Destroy();
 		}
@@ -146,11 +138,6 @@ namespace cave
 	{
 		GenericSprite::Destroy();
 		
-		if (mSamplerLinear != nullptr)
-		{
-			mSamplerLinear->Release();
-			mSamplerLinear = nullptr;
-		}
 		if (mTextureRv != nullptr)
 		{
 			mTextureRv->Release();
@@ -170,11 +157,6 @@ namespace cave
 		{
 			mVertexLayout->Release();
 			mVertexLayout = nullptr;
-		}
-		if (mConstantBuffer)
-		{
-			mConstantBuffer->Release();
-			mConstantBuffer = nullptr;
 		}
 		if (mContext != nullptr)
 		{
@@ -227,8 +209,6 @@ namespace cave
 		verticesPtr = reinterpret_cast<VertexT*>(mappedResource.pData);
 		memcpy(verticesPtr, reinterpret_cast<void*>(mVertices), (sizeof(VertexT) * VERTICES_COUNT));
 		mContext->Unmap(mVertexBuffer, 0);
-
-		mbIsNeedUpdate = false;
 
 		// ���� context�� �����ֱ�
 		// Set vertex buffer

@@ -23,13 +23,6 @@ namespace cave
 			mRenderer = nullptr;
 		}
 
-		if (mDeviceResources != nullptr)
-		{
-			mDeviceResources->~DeviceResources();
-			mPool->Deallocate(mDeviceResources, sizeof(DeviceResources));
-			mDeviceResources = nullptr;
-		}
-
 		if (mWindow != nullptr)
 		{
 			mWindow->~Window();
@@ -46,14 +39,6 @@ namespace cave
 	Window* GenericEngine::GetWindowHandle()
 	{
 		return mWindow;
-	}
-
-	eResult GenericEngine::Run(DeviceResources* deviceResources, Renderer* renderer)
-	{
-		mDeviceResources = deviceResources;
-		mRenderer = renderer;
-
-		return Run();
 	}
 
 	Renderer* GenericEngine::GetRenderer()

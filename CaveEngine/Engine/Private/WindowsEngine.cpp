@@ -20,7 +20,7 @@ namespace cave
 		// Instantiate the renderer.
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
 		new(mRenderer) Renderer();
-		mRenderer->Init(screenWidth, screenHeight, mWindow);
+		mRenderer->Init(mWindow);
 		
 		return result;
 	}
@@ -33,12 +33,6 @@ namespace cave
 			mPool->Deallocate(mRenderer, sizeof(Renderer));
 		}
 
-		if (mDeviceResources != nullptr)
-		{
-			mDeviceResources->Destroy();
-			mPool->Deallocate(mDeviceResources, sizeof(DeviceResources));
-		}
-
 		if (mWindow != nullptr)
 		{
 			mPool->Deallocate(mWindow, sizeof(Window));
@@ -48,9 +42,9 @@ namespace cave
 	eResult WindowsEngine::Run()
 	{
 		int32_t hr = S_OK;
-		Window* window = mWindow->GetWindow();
-		HWND hWindow = window->GetWindow();
-		if (!IsWindowVisible(window))
+		Window* window = mWindow; // ���� : mWindow->GetWindow()
+		HWND hWindow = window->GetWindow(); 
+		if (!IsWindowVisible(hWindow)) // ���� : window
 		{
 			ShowWindow(hWindow, SW_SHOW);
 		}
@@ -81,7 +75,7 @@ namespace cave
 				mRenderer->Render();
 
 				// Present the frame to the screen.
-				mDeviceResources->Present();
+				//mDeviceResources->Present();  mDeviceResources�� Present ��� �ϴ� ������.
 			}
 		}
 

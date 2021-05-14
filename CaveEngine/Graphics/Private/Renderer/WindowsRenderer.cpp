@@ -25,7 +25,6 @@ namespace cave
 	{
 		CreateDeviceDependentResources();
 		CreateWindowSizeDependentResources(window);
-
 		// set camera
 		mCamera = reinterpret_cast<Camera*>(mPool->Allocate(sizeof(Camera)));
 		new(mCamera) Camera();
@@ -34,16 +33,10 @@ namespace cave
 			return eResult::CAVE_OUT_OF_MEMORY;
 		}
 		mCamera->SetPosition(0.0f, 0.0f, -100.f);
-
 		// set color shader
-		
-
 		// set texture shader
-		mShader->Compile();
-
 		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
 		new(mShader) cave::Shader(L"DirectXTest.fxh", *mPool);
-
 		mShader->Compile(mDeviceResources->GetDevice());
 	}
 
@@ -118,13 +111,8 @@ namespace cave
 	eResult WindowsRenderer::CreateWindowSizeDependentResources(Window* window)
 	{
 		// We have a window, so initialize window size-dependent resources.
-		mDeviceResources->CreateWindowResources(mWindow);
-		if (result != eResult::CAVE_OK)
-		{
-			return result;
-		}
 
-		return eResult::CAVE_OK;
+		return 	mDeviceResources->CreateWindowResources(window);
 	}
 
 	void WindowsRenderer::Update()
