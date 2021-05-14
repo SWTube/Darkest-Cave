@@ -10,8 +10,13 @@ namespace cave
 	GenericShader::GenericShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool)
 		: mPool(&pool)
 	{
+#ifdef __WIN32__
 		mVertexShaderFilePath /= "CaveEngine\\Graphics\\Shader";
 		mFragmentShaderFilePath /= "CaveEngine\\Graphics\\Shader";
+#else
+		mVertexShaderFilePath /= "CaveEngine/Graphics/Shader";
+		mFragmentShaderFilePath /= "CaveEngine/Graphics/Shader";
+#endif
 		mVertexShaderFilePath /= vertexShaderFilePath;
 		mFragmentShaderFilePath /= fragmentShaderFilePath;
 	}
@@ -19,7 +24,11 @@ namespace cave
 	GenericShader::GenericShader(const std::filesystem::path& shaderFilePath, MemoryPool& pool)
 		: mPool(&pool)
 	{
+#ifdef __WIN32__
 		mShaderFilePath /= "CaveEngine\\Graphics\\Shader";
+#else
+		mShaderFilePath /= "CaveEngine/Graphics/Shader";
+#endif
 		mShaderFilePath /= shaderFilePath;
 	}
 
@@ -37,7 +46,7 @@ namespace cave
 		Destroy();
 	}
 
-	constexpr MemoryPool* const GenericShader::GetMemoryPool() const
+	constexpr MemoryPool* GenericShader::GetMemoryPool() const
 	{
 		return mPool;
 	}

@@ -25,7 +25,7 @@ namespace cave
 		GenericRenderer& operator=(const GenericRenderer&) = delete;
 		GenericRenderer& operator=(const GenericRenderer&&) = delete;
 
-		virtual eResult Init(uint32_t screenWidth, uint32_t screenHeight, Window* window = nullptr) = 0;
+		virtual eResult Init(Window* window) = 0;
 		virtual eResult CreateDeviceDependentResources() = 0;
 		virtual eResult CreateWindowSizeDependentResources(Window* window = nullptr) = 0;
     	virtual void Update() = 0;
@@ -44,7 +44,7 @@ namespace cave
 		virtual Float2 GetSpritePosition(uint32_t index) const;
 
 		virtual bool WindowShouldClose() = 0;
-		DeviceResources* const GetDeviceResources() const;
+		DeviceResources* GetDeviceResources() const;
 	protected:
 
 		static constexpr size_t RENDERER_MEMORY_SIZE = 1024ul * 1024ul * 10ul;

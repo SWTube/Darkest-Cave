@@ -3,6 +3,12 @@ file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
 
 add_library(Glfw SHARED ${HEADER_FILES} ${SOURCE_FILES})
 
+if(MSVC)
+	target_compile_options(Glfw PRIVATE /W4 /WX)
+else()
+	target_compile_options(Glfw PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
+
 if (UNIX)
 	set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 	set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)

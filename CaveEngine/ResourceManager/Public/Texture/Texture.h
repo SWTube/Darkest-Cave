@@ -29,21 +29,24 @@ namespace cave
 		Texture& operator=(const Texture& other);
 		Texture& operator=(Texture&& other);
 		~Texture();
-		MemoryPool* const GetMemoryPool();
+		MemoryPool* GetMemoryPool();
 
+		void Init();
 		void Destroy();
+		void DeleteTexture();
 
 #ifdef __WIN32__
 		constexpr ID3D11ShaderResourceView* GetTexture();
 #else
-		constexpr uint8_t* const GetTexture();
+		constexpr uint8_t* GetTexture();
 #endif
-		const char* const GetCStringFilePath() const;
+		const char* GetCStringFilePath() const;
 		constexpr const std::filesystem::path& GetFilePath() const;
 		constexpr uint32_t GetWidth() const;
 		constexpr uint32_t GetHeight() const;
 		constexpr eTextureFormat GetFormat() const;
 		constexpr uint32_t GetIndex() const;
+		constexpr int32_t GetTarget() const;
 	private:
 		typedef struct TexturePointer
 		{
@@ -70,6 +73,7 @@ namespace cave
 				other.Texture->Release();
 #endif
 				other.Texture = nullptr;
+				other.ReferenceCount = 0u;
 			}
 
 			constexpr TexturePointer& operator=(const TexturePointer& other) = delete;
@@ -81,7 +85,7 @@ namespace cave
 
 			constexpr void Destroy()
 			{
-				if (Texture != nullptr)
+				if (Texture != nullptr && ReferenceCount == 0u)
 				{
 #ifdef __WIN32__
 					Texture->Release();
@@ -93,6 +97,8 @@ namespace cave
 				}
 			}
 		} TexturePointer;
+
+		static int32_t msTextureCount;
 		
 		MemoryPool* mPool = nullptr;
 		std::filesystem::path mFilePath = PROJECT_DIR;
@@ -101,12 +107,13 @@ namespace cave
 		eTextureFormat mFormat = eTextureFormat::RGBA;
 		TexturePointer* mTexture = nullptr;
 		uint32_t mIndex = 0u;
+		int32_t mTarget = -1;
 	};
 
 #ifdef __WIN32__
 	constexpr ID3D11ShaderResourceView* Texture::GetTexture()
 #else
-	constexpr uint8_t* const Texture::GetTexture()
+	constexpr uint8_t* Texture::GetTexture()
 #endif
 	{
 		if (mTexture != nullptr)
@@ -140,5 +147,10 @@ namespace cave
 	constexpr eTextureFormat Texture::GetFormat() const
 	{
 		return mFormat;
+	}
+
+	constexpr int32_t Texture::GetTarget() const
+	{
+		return mTarget;
 	}
 } // namespace cave

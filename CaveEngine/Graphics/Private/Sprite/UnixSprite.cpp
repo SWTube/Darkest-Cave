@@ -3,6 +3,9 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <cstdlib>
+#include <ctime>
+
 #include "Sprite/UnixSprite.h"
 
 #include "lodepng.h"
@@ -50,6 +53,7 @@ namespace cave
 
 	eResult UnixSprite::initializeBuffers(uint32_t program)
 	{
+		srand(time(0));
 		eResult result = eResult::CAVE_OK;
 		uint32_t glError = GL_NO_ERROR;
 		mProgram = program;
@@ -83,14 +87,14 @@ namespace cave
 		// Preparing to Send Data to OpenGL
 		// All data must be stored in buffer objects (chunks of memory managed by OpenGL)
 		// Common way is to specify the data at the same time as you specify the buffer's size
-		glNamedBufferStorage(mBuffers[Sprite::ARRAY_BUFFER], sizeof(VertexT) * VERTICES_COUNT, mVertices, GL_DYNAMIC_STORAGE_BIT);
+		glNamedBufferStorage(mBuffers[Sprite::ARRAY_BUFFER], sizeof(mVertices), mVertices, GL_DYNAMIC_STORAGE_BIT);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glNamedBufferStorage error code: 0x%x", glError);
 			return eResult::CAVE_FAIL;
 		}
 
-		glNamedBufferStorage(mBuffers[Sprite::ELEMENT_ARRAY_BUFFER], sizeof(uint8_t) * INDICES_COUNT, INDICES, GL_DYNAMIC_STORAGE_BIT);
+		glNamedBufferStorage(mBuffers[Sprite::ELEMENT_ARRAY_BUFFER], sizeof(INDICES), INDICES, GL_DYNAMIC_STORAGE_BIT);
 		if (glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glNamedBufferStorage error code: 0x%x", glError);
@@ -107,32 +111,6 @@ namespace cave
 		return result;
 	}
 
-	eResult UnixSprite::InitTexture()
-	{
-		mTextureIndex = mTexture->GetIndex();
-
-		char tex[8] = "tex";
-		snprintf(tex, 8, "tex[%u]", mTextureIndex - 1u);
-		LOGDF(eLogChannel::GRAPHICS, std::cerr, "glBindTextureUnit %s %u", tex, mTextureIndex);
-		if (glGetUniformLocation(mProgram, tex) < 0)
-		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, error code: 0x%x", tex, glGetError());
-			return eResult::CAVE_FAIL;
-		}
-
-		int32_t texLocation = glGetUniformLocation(mProgram, tex);
-		if (texLocation >= 0)
-		{
-			glUniform1i(texLocation, mTextureIndex - 1u);
-			if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
-			{
-				LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniform1i location: %u error code: 0x%x", texLocation, glError);
-			}
-		}
-
-		return eResult::CAVE_OK;
-	}
-
 	void UnixSprite::Destroy()
 	{
 		GenericSprite::Destroy();
@@ -140,24 +118,26 @@ namespace cave
 		glDeleteBuffers(BUFFER_COUNT, mBuffers);
 	}
 
-	const uint32_t* const UnixSprite::GetBuffers() const
+	const uint32_t* UnixSprite::GetBuffers() const
 	{
 		return mBuffers;
 	}
 
 	void UnixSprite::Update()
 	{
+		mPosition.X += static_cast<float>(rand() % 10) - 5.0f;
+		mPosition.Y += static_cast<float>(rand() % 10) - 5.0f;
 	}
 
 	void UnixSprite::Render()
 	{
 		int32_t glError = GL_NO_ERROR;
 
-		float left = 0.0f;
-		float right = 0.0f;
-		float top = 0.0f;
-		float bottom = 0.0f;
-		eResult result = eResult::CAVE_OK;
+		glBindVertexArray(mVertexArrayObject);
+		if (glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindVertexArray error code: 0x%x", glError);
+		}
 
 		if (!mbNeedsUpdate && (mPosition == mPreviousPosition))
 		{
@@ -166,25 +146,25 @@ namespace cave
 
 		mPreviousPosition = mPosition;
 
-		left = -static_cast<float>(mScreenWidth / 2u) + mPosition.X - static_cast<float>(mWidth) / 2.0f;
-		right = left + static_cast<float>(mWidth);
-		top = -static_cast<float>((mScreenHeight / 2u)) - mPosition.Y + static_cast<float>(mHeight) / 2.0f;
-		bottom = top - static_cast<float>(mHeight);
+		glm::mat4 worldMatrix = glm::mat4(1.0f);
+		worldMatrix = glm::translate(worldMatrix, glm::vec3(mPosition.X, mPosition.Y, 0.0f));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
 
-		// mVertices[0] = std::move(VertexT(Float3( left,    top, 0.0f), Float2(0.0f, 0.0f)));		// top left
-		// mVertices[1] = std::move(VertexT(Float3( right,   top, 0.0f), Float2(1.0f, 0.0f)));		// top right
-		// mVertices[2] = std::move(VertexT(Float3(right, bottom, 0.0f), Float2(1.0f, 1.0f)));		// bottom right
-		// mVertices[3] = std::move(VertexT(Float3( left, bottom, 0.0f), Float2(0.0f, 1.0f)));		// bottom left
+		// worldMatrix = glm::translate(worldMatrix, glm::vec3(0.5f * mWidth, 0.5f * mHeight, 0.0f)); // move origin of rotation to center of quad
+		// worldMatrix = glm::rotate(worldMatrix, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
+		// worldMatrix = glm::translate(worldMatrix, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
 
-		// mVertices[0] = std::move(VertexT(Float3(-1.0f,  1.0f, 0.0f), Float2(0.0f, 0.0f)));		// top left
-		// mVertices[1] = std::move(VertexT(Float3( 1.0f,  1.0f, 0.0f), Float2(1.0f, 0.0f)));		// top right
-		// mVertices[2] = std::move(VertexT(Float3(-1.0f, -1.0f, 0.0f), Float2(1.0f, 1.0f)));		// bottom right
-		// mVertices[3] = std::move(VertexT(Float3( 1.0f, -1.0f, 0.0f), Float2(0.0f, 1.0f)));		// bottom left
+		worldMatrix = glm::scale(worldMatrix, glm::vec3(mWidth, mHeight, 1.0f)); // last scale
 
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f", mVertices[0].Position.X, mVertices[0].Position.Y, mVertices[0].Position.Z);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f", mVertices[1].Position.X, mVertices[1].Position.Y, mVertices[1].Position.Z);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f", mVertices[2].Position.X, mVertices[2].Position.Y, mVertices[2].Position.Z);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f", mVertices[3].Position.X, mVertices[3].Position.Y, mVertices[3].Position.Z);
+		// LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f %6f %6f", mVertices[0].Position.X, mVertices[0].Position.Y, mVertices[0].Position.Z, mVertices[0].TexCoord.X, mVertices[0].TexCoord.Y);
+		// LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f %6f %6f", mVertices[1].Position.X, mVertices[1].Position.Y, mVertices[1].Position.Z, mVertices[1].TexCoord.X, mVertices[1].TexCoord.Y);
+		// LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f %6f %6f", mVertices[2].Position.X, mVertices[2].Position.Y, mVertices[2].Position.Z, mVertices[2].TexCoord.X, mVertices[2].TexCoord.Y);
+		// LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f %6f %6f", mVertices[3].Position.X, mVertices[3].Position.Y, mVertices[3].Position.Z, mVertices[3].TexCoord.X, mVertices[3].TexCoord.Y);
+
+		LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f %6f", worldMatrix[0][0], worldMatrix[0][1], worldMatrix[0][2], worldMatrix[0][3]);
+		LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f %6f", worldMatrix[1][0], worldMatrix[1][1], worldMatrix[1][2], worldMatrix[1][3]);
+		LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f %6f", worldMatrix[2][0], worldMatrix[2][1], worldMatrix[2][2], worldMatrix[2][3]);
+		LOGIF(eLogChannel::GRAPHICS, std::cout, "%6f %6f %6f %6f", worldMatrix[3][0], worldMatrix[3][1], worldMatrix[3][2], worldMatrix[3][3]);
+
 
 		mbNeedsUpdate = false;
 
@@ -192,10 +172,16 @@ namespace cave
 
 		mTextureIndex = mTexture->GetIndex();
 
-		glBindVertexArray(mVertexArrayObject);
-		if (glError = glGetError(); glError != GL_NO_ERROR)
+		int32_t worldLocation = glGetUniformLocation(mProgram, "World");
+		if (worldLocation < 0)
 		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindVertexArray error code: 0x%x", glError);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, location: %d, error code: 0x%x", "World", worldLocation, glGetError());
+		}
+		// glUniformMatrix4fv(worldLocation, 1, false, glm::value_ptr(glm::mat4(1.0f)));
+		glUniformMatrix4fv(worldLocation, 1, false, glm::value_ptr(worldMatrix));
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniformMatrix4fv location: %u, error code: 0x%x", worldLocation, glError);
 		}
 	}
 } // namespace cave

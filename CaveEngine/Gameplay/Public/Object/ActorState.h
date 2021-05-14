@@ -23,5 +23,5 @@ namespace cave
 			Start,
 			End,
 		};
-	};
+	}
 }

@@ -21,7 +21,7 @@
 			UnixShader& operator=(UnixShader&& other);
 			virtual ~UnixShader() = default;
 
-			virtual void Render(uint32_t indexCount, const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, uint32_t texture) override;
+			virtual void Render(uint32_t indexCount, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, uint32_t texture) override;
 			virtual eResult Compile() override;
 			virtual eResult SetInputLayout(const Sprite& sprite) override;
 			virtual uint32_t GetProgram();

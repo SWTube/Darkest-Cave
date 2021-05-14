@@ -204,6 +204,12 @@ add_library(Gameplay SHARED ${HEADER_FILES} ${OBJECT_HEADER_FILES} ${OBJECT_SOUR
                                      ${WORLD_HEADER_FILES} ${WORLD_SOURCE_FILES} ${TIME_HEADER_FILES} ${TIME_SOURCE_FILES} 
                                      ${MESSAGE_HEADER_FILES} ${MESSAGE_SOURCE_FILES} ${HEADER_FILES} ${SOURCE_FILES})
 
+if(MSVC)
+	target_compile_options(Gameplay PRIVATE /W4 /WX)
+else()
+	target_compile_options(Gameplay PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
+
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
 # 	set_target_properties(OgreMain PROPERTIES VS_WINRT_COMPONENT "true")
 # endif ()

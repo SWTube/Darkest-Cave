@@ -19,36 +19,18 @@ namespace cave
 		Destroy();
 	}
 
-	eResult UnixRenderer::Init(uint32_t screenWidth, uint32_t screenHeight, Window* window)
+	eResult UnixRenderer::Init(Window* window)
 	{
-		// Instantiate the device manager class.
-		mDeviceResources = reinterpret_cast<DeviceResources*>(mPool->Allocate(sizeof(DeviceResources)));
-		new(mDeviceResources) DeviceResources(*mPool);
-		// Create device resources.
-		eResult result = mDeviceResources->CreateDeviceResources();
+		eResult result = CreateDeviceDependentResources();
 		if (result != eResult::CAVE_OK)
 		{
 			return result;
 		}
-
-		// set camera
-		mCamera = reinterpret_cast<Camera*>(mPool->Allocate(sizeof(Camera)));
-		new(mCamera) Camera();
-		if (mCamera == nullptr)
+		result = CreateWindowSizeDependentResources(window);
+		if (result != eResult::CAVE_OK)
 		{
-			return eResult::CAVE_OUT_OF_MEMORY;
+			return result;
 		}
-		mCamera->SetPosition(0.0f, 0.0f, -100.f);
-
-		// set color shader
-		
-
-		// set texture shader
-		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
-		new(mShader) Shader("sprite.vert", "sprite.frag", *mPool);
-
-		mShader->Compile();
-		mDeviceResources->SetProgram(mShader->GetProgram());
 
 		return result;
 	}
@@ -91,7 +73,7 @@ namespace cave
 		{
 			return eResult::CAVE_OUT_OF_MEMORY;
 		}
-		mCamera->SetPosition(0.0f, 0.0f, -100.0f);
+		mCamera->SetPosition(0.0f, 0.0f, -1.0f);
 
 		// set color shader
 		
@@ -116,7 +98,7 @@ namespace cave
 		++mFrameCount;
 		if (mFrameCount == UINT32_MAX)
 		{
-			mFrameCount == 0u;
+			mFrameCount = 0u;
 		}
 	}
 
@@ -125,10 +107,6 @@ namespace cave
 	//--------------------------------------------------------------------------------------
 	void UnixRenderer::cleanupDevice()
 	{
-		for (Sprite* const object : mSprites)
-		{
-			object->Destroy();
-		}
 	}
 
 	bool UnixRenderer::WindowShouldClose()
@@ -155,15 +133,13 @@ namespace cave
 	//--------------------------------------------------------------------------------------
 	void UnixRenderer::Render()
 	{
-		GLenum glError = GL_NO_ERROR;
-
 		mDeviceResources->RenderStart();
 
 		mCamera->Render();
 
-		glm::mat4& worldMatrix = mDeviceResources->GetWorldMatrix();
+		// glm::mat4& worldMatrix = mDeviceResources->GetWorldMatrix();
 		const glm::mat4& viewMatrix = mCamera->GetViewMatrix();
-		glm::mat4& projection = mDeviceResources->GetProjectionMatrix();
+		// glm::mat4& projection = mDeviceResources->GetProjectionMatrix();
 		glm::mat4& ortho = mDeviceResources->GetOrthoMatrix();
 
 		// 3. Set Render Data ---------------------------------------------------------------------------------------------
@@ -171,7 +147,7 @@ namespace cave
 		{
 			object->Render();
 
-			mShader->Render(object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, object->GetTextureIndex());
+			mShader->Render(object->GetIndicesCount(), viewMatrix, ortho, object->GetTextureIndex());
 		}
 
 		mDeviceResources->TurnZBufferOn();

@@ -37,7 +37,7 @@ namespace cave
 
 		bool WindowShouldClose() override;
 
-		virtual eResult Init(uint32_t screenWidth, uint32_t screenHeight, Window* window = nullptr) override;
+		virtual eResult Init(Window* window) override;
 		eResult CreateDeviceDependentResources() override;
 		eResult CreateWindowSizeDependentResources(Window* window = nullptr) override;
 		void Update() override;

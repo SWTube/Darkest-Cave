@@ -142,11 +142,6 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	eResult WindowsSprite::InitTexture()
-	{
-		return eResult::CAVE_OK;
-	}
-
 	void WindowsSprite::Destroy()
 	{
 		GenericSprite::Destroy();

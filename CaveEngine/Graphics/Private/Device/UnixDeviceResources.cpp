@@ -80,6 +80,8 @@ namespace cave
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		ConfigureBackBuffer();
+
 		return eResult::CAVE_OK;
 	}
 
@@ -92,13 +94,14 @@ namespace cave
 		float screenAspect = static_cast<float>(mWidth) / static_cast<float>(mHeight);
 
 		// 3D 렌더링을위한 투영 행렬을 만듭니다
-		mProjection = glm::perspectiveLH(fieldOfView, screenAspect, mWindow->GetNear(), mWindow->GetFar());
+		mProjection = glm::perspectiveRH(fieldOfView, screenAspect, mWindow->GetNear(), mWindow->GetFar());
 
 		// 세계 행렬을 항등 행렬로 초기화합니다
 		mWorld = glm::mat4(1.0f);
 
 		// 2D 렌더링을위한 직교 투영 행렬을 만듭니다
-		mOrtho = glm::ortho(0.0f, static_cast<float>(mWidth), 0.0f, static_cast<float>(mHeight), mWindow->GetNear(), mWindow->GetFar());
+		// mOrtho = glm::orthoRH(0.0f, static_cast<float>(mWidth), static_cast<float>(mHeight), 0.0f, mWindow->GetNear(), mWindow->GetFar());
+		mOrtho = glm::orthoRH(-static_cast<float>(mWidth) * 0.5f, static_cast<float>(mWidth), static_cast<float>(mWidth) * 0.5f, -static_cast<float>(mHeight) * 0.5f, mWindow->GetNear(), mWindow->GetFar());
 
 		return result;
 	}
@@ -174,7 +177,7 @@ namespace cave
 
 	void UnixDeviceResources::errorCallback(int32_t errorCode, const char* description)
 	{
-		LOGE(eLogChannel::GRAPHICS, std::cerr, description);
+		LOGEF(eLogChannel::GRAPHICS, std::cerr, "%s, errorCode: %d", description, errorCode);
 	}
 
 	void UnixDeviceResources::Destroy()

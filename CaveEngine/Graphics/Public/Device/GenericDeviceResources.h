@@ -35,8 +35,8 @@ namespace cave
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
 
-		constexpr MemoryPool* const GetMemoryPool();
-		constexpr Window* const GetWindow();
+		constexpr MemoryPool* GetMemoryPool();
+		constexpr Window* GetWindow();
 
 #ifdef __WIN32__
 		constexpr virtual DirectX::XMMATRIX& GetProjectionMatrix();
@@ -104,12 +104,12 @@ namespace cave
 		return mOrtho;
 	}
 
-	constexpr MemoryPool* const GenericDeviceResources::GetMemoryPool()
+	constexpr MemoryPool* GenericDeviceResources::GetMemoryPool()
 	{
 		return mPool;
 	}
 
-	constexpr Window* const GenericDeviceResources::GetWindow()
+	constexpr Window* GenericDeviceResources::GetWindow()
 	{
 		return mWindow;
 	}

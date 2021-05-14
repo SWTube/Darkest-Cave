@@ -8,7 +8,6 @@
 #include <cassert>
 
 #include "CoreTypes.h"
-#include "Memory/Allocator.h"
 
 namespace cave
 {
@@ -16,8 +15,6 @@ namespace cave
 	{
 	public:
 		static void* Malloc(size_t size);
-	private:
-		static Allocator mAllocator;
 	};
 
 	struct PlatformMemory

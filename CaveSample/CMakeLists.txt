@@ -4,6 +4,12 @@
 # Add source to this project's executable.
 add_executable(Template "Main.cpp")
 
+if(MSVC)
+	target_compile_options(Template PRIVATE /W4 /WX)
+else()
+	target_compile_options(Template PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
+
 target_link_libraries(Template PUBLIC Core)
 target_link_libraries(Template PUBLIC Gameplay)
 target_link_libraries(Template PUBLIC Graphics)

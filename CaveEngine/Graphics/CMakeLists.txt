@@ -198,6 +198,12 @@ file(GLOB SPRITE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Sprite/*.cpp"
 
 # get_native_precompiled_header(OgreMain)
 add_library(Graphics SHARED ${HEADER_FILES} ${SOURCE_FILES} ${DEVICE_HEADER_FILES} ${DEVICE_SOURCE_FILES} ${RENDERER_HEADER_FILES} ${RENDERER_SOURCE_FILES} ${SHADER_HEADER_FILES} ${SHADER_SOURCE_FILES} ${SPRITE_HEADER_FILES} ${SPRITE_SOURCE_FILES})
+
+if(MSVC)
+	target_compile_options(Graphics PRIVATE /W4 /WX)
+else()
+	target_compile_options(Graphics PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
 # add_library(OgreMain ${OGRE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)

@@ -25,7 +25,7 @@ namespace cave
 		virtual eResult Run(DeviceResources* deviceResources, Renderer* renderer);
 		virtual eResult Run() = 0;
 
-		virtual Renderer* const GetRenderer();
+		virtual Renderer* GetRenderer();
 	protected:
 		MemoryPool* mPool = nullptr;
 		DeviceResources* mDeviceResources = nullptr;

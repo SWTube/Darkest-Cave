@@ -25,7 +25,7 @@ namespace cave
 		virtual ~GenericSprite();
 		GenericSprite& operator=(const GenericSprite& other);
 		GenericSprite& operator=(GenericSprite&& other);
-		MemoryPool* const GetMemoryPool() const;
+		MemoryPool* GetMemoryPool() const;
 
 #ifdef __WIN32__
 		virtual eResult Init(ID3D11Device* device, ID3D11DeviceContext* context, uint32_t screenWidth, uint32_t screenHeight);
@@ -37,7 +37,7 @@ namespace cave
 		virtual void Render() = 0;
 
 		constexpr uint32_t GetIndicesCount() const;
-		constexpr const Texture* const GetTexture() const;
+		constexpr const Texture* GetTexture() const;
 		constexpr void SetPosition(float x, float y);
 		constexpr void SetPosition(const Float2& position);
 		constexpr void SetPosition(const Float2&& position);
@@ -52,7 +52,6 @@ namespace cave
 		constexpr void GetSize(uint32_t& outWidth, uint32_t& outHeight) const;
 		constexpr void SetSize(uint32_t width, uint32_t height);
 		virtual void SetTexture(const Texture& texture);
-		virtual eResult InitTexture() = 0;
 
 	protected:
 #ifdef __WIN32__
@@ -64,10 +63,10 @@ namespace cave
 		static constexpr uint32_t INDICES_COUNT = 6u;
 
 		VertexT mVertices[VERTICES_COUNT] = {
-			VertexT(-1.0f,  1.0f, 0.0f,	1.0f, 0.0f),	// top left
-			VertexT( 1.0f,  1.0f, 0.0f,	0.0f, 0.0f),	// top right
-			VertexT( 1.0f, -1.0f, 0.0f,	1.0f, 1.0f),	// bottom right
-			VertexT(-1.0f, -1.0f, 0.0f,	0.0f, 1.0f),	// bottom left
+			VertexT(-1.0f,  1.0f, 0.0f,	1.0f, 1.0f),	// top left
+			VertexT( 1.0f,  1.0f, 0.0f,	0.0f, 1.0f),	// top right
+			VertexT( 1.0f, -1.0f, 0.0f,	0.0f, 0.0f),	// bottom right
+			VertexT(-1.0f, -1.0f, 0.0f,	1.0f, 0.0f),	// bottom left
 		};
 
 		static constexpr uint8_t INDICES[INDICES_COUNT] = {
@@ -109,7 +108,7 @@ namespace cave
 		return INDICES_COUNT;
 	}
 
-	constexpr const Texture* const GenericSprite::GetTexture() const
+	constexpr const Texture* GenericSprite::GetTexture() const
 	{
 		return mTexture;
 	}
@@ -180,12 +179,12 @@ namespace cave
 
 	constexpr uint32_t GenericSprite::GetWidth() const
 	{
-		return mScreenWidth;
+		return mWidth;
 	}
 
 	constexpr uint32_t GenericSprite::GetHeight() const
 	{
-		return mScreenHeight;
+		return mHeight;
 	}
 
 	constexpr void GenericSprite::GetSize(uint32_t& outWidth, uint32_t& outHeight) const

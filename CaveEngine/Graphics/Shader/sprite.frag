@@ -10,12 +10,11 @@ in vec2 fTexCoord;
 layout( location = 0 ) out vec4 fColor;
 
 // uniform sampler2D tex;
-uniform sampler2D tex[2];
-uniform int textureIndex = 0;
+uniform layout (binding = 0) sampler2D tex;
 
 void main()
 {
-	// fColor = texture(tex, fTexCoord);
-	fColor = texture(tex[textureIndex], fTexCoord);
+	fColor = texture(tex, fTexCoord);
+	// fColor = texture(tex[textureIndex], fTexCoord);
 	// fColor = vec4(fTexCoord, 1.0f, 1.0f);
 }

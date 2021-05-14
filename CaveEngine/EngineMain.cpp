@@ -82,6 +82,7 @@ int main(int32_t argc, char** argv)
 				break;
 			}
 
+			cave::LogManager::SetVerbosity(verbosity);
 			commandFlag &= (~LOG_FLAG);
 		}
 	}
@@ -177,7 +178,7 @@ void MemoryTest2(cave::MemoryPool& pool)
 		pointersByPool.reserve(N);
 		sizes.reserve(N);
 
-		pool.PrintPoolStatus(std::cerr);
+		pool.PrintPoolStatus();
 
 		for (size_t i = 0; i < N; ++i)
 		{
@@ -204,7 +205,7 @@ void MemoryTest2(cave::MemoryPool& pool)
 			}
 		}
 
-		pool.PrintPoolStatus(std::cerr);
+		pool.PrintPoolStatus();
 }
 
 void RenderTest()
@@ -218,36 +219,25 @@ void RenderTest()
 	cave::eResult result = main.Init(1600u, 900u);
 
 	cave::Texture* texture1 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
-	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGB);
+	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGBA);
 	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
-	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGB);
+	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGBA);
 
-	cave::Sprite* object = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
-	new(object) cave::Sprite(texture1, cave::gCoreMemoryPool);
-	cave::Sprite* object2 = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
-	new(object2) cave::Sprite(texture2, cave::gCoreMemoryPool);
+	cave::Sprite object(texture1, cave::gCoreMemoryPool);
+	object.SetSize(object.GetWidth() / 2u, object.GetHeight() / 2u);
+	cave::Sprite object2(texture2, cave::gCoreMemoryPool);
+	object2.SetPosition(cave::Float2(1000.0f, 500.0f));
 
-	texture1->Destroy();
-	texture2->Destroy();
+	texture1->~Texture();
+	texture2->~Texture();
 	cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
 	cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
 	texture1 = nullptr;
 	texture2 = nullptr;
 
 	cave::Renderer* renderer = main.GetRenderer();
-	// renderer->AddSprite(std::move(*object));
-	renderer->AddSprite(std::move(*object2));
-	// renderer->AddTexture(std::move(*texture1));
-	// renderer->AddTexture(std::move(*texture2));
-	// renderer->SetSpriteTexture(0u, 1u);
-	// renderer->SetSpriteTexture(1u, 2u);
-
-	object->Destroy();
-	object2->Destroy();
-	cave::gCoreMemoryPool.Deallocate(object, sizeof(cave::Sprite));
-	cave::gCoreMemoryPool.Deallocate(object2, sizeof(cave::Sprite));
-	object = nullptr;
-	object2 = nullptr;
+	renderer->AddSprite(std::move(object));
+	renderer->AddSprite(std::move(object2));
 
 	if (result == cave::eResult::CAVE_OK)
 	{

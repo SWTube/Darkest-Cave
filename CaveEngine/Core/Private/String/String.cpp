@@ -1766,13 +1766,13 @@ namespace cave
 
 		char* temp = &mString[pos];
 		size_t index = pos;
-		const char* checkS = nullptr;
 
-		while (true)
+		while (index - pos < count)
 		{
-			checkS = s;
+			size_t counter = index - pos;
+			const char* checkS = s;
 			// Find first index of mString that either is NULL or is same to first character of s
-			for (; *temp != '\0' && *temp != *checkS; ++temp, ++index)
+			for (; counter < count && *temp != '\0' && *temp != *checkS; ++temp, ++index, ++counter)
 			{
 			}
 
@@ -1783,7 +1783,7 @@ namespace cave
 			}
 
 			// Check whether s and rest of characters of mString resembles
-			for (; *temp != '\0' && *temp == *checkS; ++temp, ++checkS)
+			for (; counter < count && *temp != '\0' && *temp == *checkS; ++temp, ++checkS, ++counter)
 			{
 			}
 
@@ -1795,6 +1795,8 @@ namespace cave
 
 			++index;
 		}
+
+		return NPOS;
 	}
 
 	/**
@@ -1826,7 +1828,7 @@ namespace cave
 	 */
 	constexpr size_t String::GetIndexOf(char ch, size_t pos) const
 	{
-		for (size_t i = 0ul; i < mLength; ++i)
+		for (size_t i = pos; i < mLength; ++i)
 		{
 			if (mString[i] == ch)
 			{
@@ -1904,14 +1906,13 @@ namespace cave
 
 		char* temp = mString + pos;
 		size_t index = pos;
-		const char* checkS = s;
-		char* firstCharacter = nullptr;
 
-		while (true)
+		while (index - pos < count)
 		{
-			checkS = s;
+			const char* checkS = s;
+			size_t counter = index - pos;
 			// Find last index of mString that either is first character or is same to first character of s
-			for (; temp != (mString - 1) && *temp != *checkS; --temp, --index)
+			for (; counter < count && temp != (mString - 1) && *temp != *checkS; --temp, --index, ++counter)
 			{
 			}
 
@@ -1921,9 +1922,9 @@ namespace cave
 				return NPOS;
 			}
 
-			firstCharacter = temp;
+			char* firstCharacter = temp;
 			// Check whether s and rest of characters of mString resembles
-			for (; *firstCharacter != '\0' && *firstCharacter == *checkS; ++firstCharacter, ++checkS)
+			for (; counter < count && *firstCharacter != '\0' && *firstCharacter == *checkS; ++firstCharacter, ++checkS, ++counter)
 			{
 			}
 
@@ -1936,6 +1937,8 @@ namespace cave
 			--temp;
 			--index;
 		}
+
+		return NPOS;
 	}
 
 	/**
@@ -1980,7 +1983,7 @@ namespace cave
 	 */
 	constexpr size_t String::GetLastIndexOf(char ch, size_t pos) const
 	{
-		for (size_t i = mLength; i > 0; --i)
+		for (size_t i = mLength; i > pos; --i)
 		{
 			if (mString[i - 1] == ch)
 			{
@@ -2389,11 +2392,11 @@ namespace cave
 	 */
 	std::ostream& operator<<(std::ostream& os, const String& str)
 	{
-		if (str.GetLength() >= os.width())
+		if (str.GetLength() >= static_cast<size_t>(os.width()))
 		{
 			os.rdbuf()->sputn(str.mString, str.GetLength());
 		}
-		else if (os.flags() & std::ios_base::adjustfield == std::ios_base::left)
+		else if (os.flags() & (std::ios_base::adjustfield == std::ios_base::left))
 		{
 			os.rdbuf()->sputn(str.mString, str.GetLength());
 			for (size_t i = 0ul; i < os.width() - str.GetLength(); ++i)
@@ -2436,15 +2439,17 @@ namespace cave
 		str.Clear();
 
 		size_t readCharacterCount = 0ul;
-		bool isEof = false;
+		// bool isEof = false;
 		size_t width = (is.width() > 0) ? is.width() : str.GetMaxSize();
-		for (
-			char c = static_cast<char>(is.get()), isEof = is.eof(); 
-			readCharacterCount < width && !isEof && !std::isspace(c, is.getloc()); 
-			++readCharacterCount, c = static_cast<char>(is.get()), isEof = is.eof()
+		for
+		(
+			char c = static_cast<char>(is.get()); 
+			readCharacterCount < width && !is.eof() && !std::isspace(c, is.getloc()); 
+			++readCharacterCount, c = static_cast<char>(is.get())
 		)
 		{
 			str.Append(1, c);
+			// isEof = is.eof();
 		}
 
 		if (str.GetLength() <= 0)
@@ -2489,14 +2494,16 @@ namespace cave
 		size_t readCharacterCount = 0ul;
 		size_t maxSize = str.GetMaxSize();
 		bool isEof = false;
-		size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
-		for (
-			char c = static_cast<char>(input.get()), isEof = input.eof(); 
-			!isEof && c != delim && readCharacterCount < maxSize; 
-			++readCharacterCount, c = static_cast<char>(input.get()), isEof = input.eof()
+		// size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
+		for
+		(
+			char c = static_cast<char>(input.get()); 
+			!input.eof() && c != delim && readCharacterCount < maxSize; 
+			++readCharacterCount, c = static_cast<char>(input.get())
 		)
 		{
 			str.Append(1, c);
+			isEof = input.eof();
 		}
 
 		if (isEof)
@@ -2552,14 +2559,15 @@ namespace cave
 		size_t readCharacterCount = 0ul;
 		size_t maxSize = str.GetMaxSize();
 		bool isEof = false;
-		size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
+		// size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
 		for (
-			char c = static_cast<char>(input.get()), isEof = input.eof(); 
-			!isEof && c != delim && readCharacterCount < maxSize; 
-			++readCharacterCount, c = static_cast<char>(input.get()), isEof = input.eof()
+			char c = static_cast<char>(input.get()); 
+			!input.eof() && c != delim && readCharacterCount < maxSize; 
+			++readCharacterCount, c = static_cast<char>(input.get())
 		)
 		{
 			str.Append(1, c);
+			isEof = input.eof();
 		}
 
 		if (isEof)
@@ -2697,7 +2705,7 @@ namespace cave
 				}
 			}
 
-			if (base == 16 && str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X')
+			if (base == 16 && (str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X'))
 			{
 				index += 2;
 				if (pos != nullptr)
@@ -2896,7 +2904,7 @@ namespace cave
 				}
 			}
 
-			if (base == 16 && str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X')
+			if (base == 16 && (str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X'))
 			{
 				index += 2;
 				if (pos != nullptr)
@@ -3449,22 +3457,30 @@ namespace cave
 				}
 			}
 		}
-		else if (
-			((strncmp(&str.mString[index], "INF", 3) == 0
-			|| strncmp(&str.mString[index], "inf", 3) == 0) && std::isspace(str.mString[index + 3]))
-			|| ((strncmp(&str.mString[index], "INFINITY", 8) == 0
-			|| strncmp(&str.mString[index], "infinity", 8) == 0) && std::isspace(str.mString[index + 8]))
+		else if
+		(
+			(
+				(strncmp(&str.mString[index], "INF", 3) == 0
+				|| strncmp(&str.mString[index], "inf", 3) == 0) && std::isspace(str.mString[index + 3])
+			)
+			||
+			(
+				(strncmp(&str.mString[index], "INFINITY", 8) == 0
+				|| strncmp(&str.mString[index], "infinity", 8) == 0) 
+				&& std::isspace(str.mString[index + 8])
+			)
 		)
 		{
 			result = INFINITY;
 		}
-		else if (
-			(strncmp(&str.mString[index], "NAN", 3) == 0
-			|| strncmp(&str.mString[index], "nan", 3) == 0)
-			&& ('0' <= str.mString[index + 3] && str.mString[index + 3] <= '9'
-			|| 'a' <= str.mString[index + 3] && str.mString[index + 3] <= 'z'
-			|| 'A' <= str.mString[index + 3] && str.mString[index + 3] <= 'Z'
-			|| str.mString[index + 3] == '_')
+		else if
+		(
+			((strncmp(&str.mString[index], "NAN", 3) == 0
+			|| strncmp(&str.mString[index], "nan", 3) == 0))
+			&& (('0' <= str.mString[index + 3] && str.mString[index + 3] <= '9')
+			|| ('a' <= str.mString[index + 3] && str.mString[index + 3] <= 'z')
+			|| ('A' <= str.mString[index + 3] && str.mString[index + 3] <= 'Z')
+			|| (str.mString[index + 3] == '_'))
 		)
 		{
 			result = NAN;
@@ -3534,9 +3550,10 @@ namespace cave
 					break;
 				}
 			}
-			if (
-				!isExponential && result == 0.0f && digit == 0
-				|| isExponential && exponential == 0 && digit == 0
+			if
+			(
+				(!isExponential && result == 0.0f && digit == 0)
+				|| (isExponential && exponential == 0 && digit == 0)
 			)
 			{
 				++index;
@@ -3641,10 +3658,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size] = { '\0', };
-		snprintf(s, size, "%d", value);
+		size_t sLength = size + 1ul;
+		char* s = reinterpret_cast<char*>(malloc(sLength * sizeof(char)));
+		memset(s, 0, sLength);
+		snprintf(s, sLength, "%d", value);
 
-		return String{s};
+		String result = String{s};
+		free(s);
+		
+		return result;
 	}
 	
 	/**
@@ -3667,10 +3689,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size] = { '\0', };
-		snprintf(s, size, "%ld", value);
+		size_t sLength = size + 1ul;
+		char* s = reinterpret_cast<char*>(malloc(sLength * sizeof(char)));
+		memset(s, 0, sLength);
+		snprintf(s, sLength, "%ld", value);
 
-		return String{s};
+		String result = String{s};
+		free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3693,10 +3720,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size] = { '\0', };
-		snprintf(s, size, "%u", value);
+		size_t sLength = size + 1ul;
+		char* s = reinterpret_cast<char*>(malloc(sLength * sizeof(char)));
+		memset(s, 0, sLength);
+		snprintf(s, sLength, "%u", value);
 
-		return String{s};
+		String result = String{s};
+		free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3719,10 +3751,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size] = { '\0', };
-		snprintf(s, size, "%lu", value);
+		size_t sLength = size + 1ul;
+		char* s = reinterpret_cast<char*>(malloc(sLength * sizeof(char)));
+		memset(s, 0, sLength);
+		snprintf(s, sLength, "%lu", value);
 
-		return String{s};
+		String result = String{s};
+		free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3745,10 +3782,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size + 1 + 6] = { '\0', };
-		snprintf(s, size + 1 + 6 + 1, "%f", value);
+		size_t sLength = size + 1ul + 6ul + 1ul;
+		char* s = reinterpret_cast<char*>(malloc(sLength * sizeof(char)));
+		memset(s, 0, sLength);
+		snprintf(s, sLength, "%f", value);
 
-		return String{s};
+		String result = String{s};
+		free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3771,10 +3813,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size + 1 + 6] = { '\0', };
-		snprintf(s, size + 1 + 6 + 1, "%f", value);
+		size_t sLength = size + 1ul + 6ul + 1ul;
+		char* s = reinterpret_cast<char*>(malloc(sLength * sizeof(char)));
+		memset(s, 0, sLength);
+		snprintf(s, sLength, "%f", value);
 
-		return String{s};
+		String result = String{s};
+		free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3797,10 +3844,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size + 1 + 6] = { '\0', };
-		snprintf(s, size + 1 + 6 + 1, "%Lf", value);
+	size_t sLength = size + 1ul + 6ul + 1ul;
+		char* s = reinterpret_cast<char*>(malloc(sLength * sizeof(char)));
+		memset(s, 0, sLength);
+		snprintf(s, sLength, "%Lf", value);
 
-		return String{s};
+		String result = String{s};
+		free(s);
+		
+		return result;
 	}
 
 	/**
@@ -4363,14 +4415,14 @@ namespace cave
 		
 			// search from beginning of string
 			n = s.GetIndexOf("is");
-			assert(n != String::NPOS);
+			assert(static_cast<size_t>(n) != String::NPOS);
 			String sub1 = s.GetSubstring(n);
 			assert(sub1.GetLength() == strlen("is is a string"));
 			assert(strncmp(sub1.GetCString(), "is is a string", sub1.GetLength()) == 0);
 		
 			// search from position 5
 			n = s.GetIndexOf("is", 5);
-			assert(n != String::NPOS);
+			assert(static_cast<size_t>(n) != String::NPOS);
 			String sub2 = s.GetSubstring(n);
 			assert(sub2.GetLength() == strlen("is a string"));
 			assert(strncmp(sub2.GetCString(), "is a string", sub2.GetLength()) == 0);
@@ -4378,14 +4430,14 @@ namespace cave
 		
 			// find a single character
 			n = s.GetIndexOf('a');
-			assert(n != String::NPOS);
+			assert(static_cast<size_t>(n) != String::NPOS);
 			String sub3 = s.GetSubstring(n);
 			assert(sub3.GetLength() == strlen("a string"));
 			assert(strncmp(sub3.GetCString(), "a string", sub3.GetLength()) == 0);
 		
 			// find a single character
 			n = s.GetIndexOf('q');
-			assert(n == String::NPOS);
+			assert(static_cast<size_t>(n) == String::NPOS);
 			LOGD(eLogChannel::CORE_STRING, std::cout, "size_t String::GetIndexOf(char ch, size_t pos) TEST SUCCESS");
 		}
 

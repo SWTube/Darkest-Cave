@@ -51,7 +51,7 @@ namespace cave
 	MemoryPool::~MemoryPool()
 	{
 #ifdef CAVE_BUILD_DEBUG
-		PrintPoolStatus(std::cerr);
+		PrintPoolStatus();
 #endif
 		for (DataBlock* const dataBlock : mDataBlocks)
 		{
@@ -155,22 +155,18 @@ namespace cave
 		return mMaxNumDataBlocks;
 	}
 
-	void MemoryPool::PrintPoolStatus(std::ostream& os) const
+	void MemoryPool::PrintPoolStatus() const
 	{
 		for (size_t i = 0ul; i < mDataBlocks.size(); ++i)
 		{
 			DataBlock* dataBlock = mDataBlocks[i];
 			if (dataBlock == nullptr)
 			{
-#ifdef __UNIX__
-				LOGIF(eLogChannel::CORE_MEMORY, os, "DataBlock[%2u] = %7u / %2u / %u (bit/free/allocated)", i, GetPowerOfTwo(i), 0u, 0u);
-#endif
+				printf("DataBlock[%2lu] = %7lu / %2u / %u (bit/free/allocated)\n", i, GetPowerOfTwo(i), 0u, 0u);
 			}
 			else
 			{
-#ifdef __UNIX__
-				LOGIF(eLogChannel::CORE_MEMORY, os, "DataBlock[%2u] = %7u / %2u / %u (bit/free/allocated)", i, dataBlock->GetSize(), dataBlock->GetFreeSize(), dataBlock->GetAllocatedSize());
-#endif
+				printf("DataBlock[%2lu] = %7lu / %2lu / %lu (bit/free/allocated)\n", i, dataBlock->GetSize(), dataBlock->GetFreeSize(), dataBlock->GetAllocatedSize());
 			}
 		}
 	}
