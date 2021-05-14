@@ -13,7 +13,7 @@ namespace cave
 		for (size_t i = 0ul; i < size; ++i)
 		{
 			// push back memory allocated according to the size of Data Block
-			void* newPointer = malloc(mSize);
+			void* newPointer = Memory::Malloc(mSize);
 			assert(newPointer != nullptr);
 			addItem(newPointer);
 		}

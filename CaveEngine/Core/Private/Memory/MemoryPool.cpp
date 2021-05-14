@@ -83,10 +83,10 @@ namespace cave
 		// LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "memorySize: %u, Datablock[%u]: %u / %u", memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
 
 		// If Data Block is empty, allocate new memory and push back
-		// If user requires larger memory than current free memory, return corresponding pointer but don't store
+		// If user requires larger memory than current Memory::Free memory, return corresponding pointer but don't store
 		if (mDataBlocks[memoryIndex]->IsEmpty() || mFreeSize < memorySize)
 		{
-			void* newPointer = malloc(memorySize);
+			void* newPointer = Memory::Malloc(memorySize);
 			assert(newPointer != nullptr);
 			if (mFreeSize >= memorySize)
 			{
@@ -116,12 +116,12 @@ namespace cave
 			return;
 		}
 
-		// if user deallocates pointer of size bigger / smaller than predefined Data Block, free it
-		// if Data Block can't store the returned pointer, free it
+		// if user deallocates pointer of size bigger / smaller than predefined Data Block, Memory::Free it
+		// if Data Block can't store the returned pointer, Memory::Free it
 		if (mDataBlocks[memoryIndex] == nullptr || (mFreeSize == mPoolSize && mFreeSize > 0))
 		{
 			//LOGE(eLogChannel::CORE_MEMORY, "datablock is nullptr");
-			free(item);
+			Memory::Free(item);
 			return;
 		}
 
@@ -162,11 +162,11 @@ namespace cave
 			DataBlock* dataBlock = mDataBlocks[i];
 			if (dataBlock == nullptr)
 			{
-				printf("DataBlock[%2lu] = %7lu / %2u / %u (bit/free/allocated)\n", i, GetPowerOfTwo(i), 0u, 0u);
+				printf("DataBlock[%2lu] = %7lu / %2u / %u (bit/Memory::Free/allocated)\n", i, GetPowerOfTwo(i), 0u, 0u);
 			}
 			else
 			{
-				printf("DataBlock[%2lu] = %7lu / %2lu / %lu (bit/free/allocated)\n", i, dataBlock->GetSize(), dataBlock->GetFreeSize(), dataBlock->GetAllocatedSize());
+				printf("DataBlock[%2lu] = %7lu / %2lu / %lu (bit/Memory::Free/allocated)\n", i, dataBlock->GetSize(), dataBlock->GetFreeSize(), dataBlock->GetAllocatedSize());
 			}
 		}
 	}

@@ -4,10 +4,16 @@
  */
 
 #include "Device/UnixDeviceResources.h"
+#include "String/String.h"
 
 #ifdef __UNIX__
 namespace cave
 {
+	UnixDeviceResources::UnixDeviceResources(MemoryPool& pool)
+		: GenericDeviceResources(pool)
+	{
+	}
+	
 	eResult UnixDeviceResources::Init(Window* window)
 	{
 		eResult result = CreateDeviceResources();
@@ -58,13 +64,13 @@ namespace cave
 		gl3wInit();
 
 		const char* vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-		size_t vendorStringSize = strlen(vendor);
+		size_t vendorStringSize = Strlen(vendor);
 		const char* renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
-		size_t rendererStringSize = strlen(renderer);
-		strncpy(mVideoCardDescription, vendor, vendorStringSize);
+		size_t rendererStringSize = Strlen(renderer);
+		Strcpy(mVideoCardDescription, 128ul, vendor, vendorStringSize);
 		mVideoCardDescription[vendorStringSize] = ' ';
-		strncpy(&mVideoCardDescription[vendorStringSize + 1], renderer, strlen(renderer));
-		memset(&mVideoCardDescription[vendorStringSize + 1 + rendererStringSize], 0, 128 - vendorStringSize - rendererStringSize - 1);
+		Strcpy(&mVideoCardDescription[vendorStringSize + 1], 128ul - vendorStringSize - 1, renderer, Strlen(renderer));
+		Memory::Memset(&mVideoCardDescription[vendorStringSize + 1 + rendererStringSize], 0, 128 - vendorStringSize - rendererStringSize - 1);
 
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "Vendor: %s", glGetString(GL_VENDOR));
 		LOGIF(eLogChannel::GRAPHICS, std::cout, "Renderer: %s", glGetString(GL_RENDERER));
@@ -162,7 +168,7 @@ namespace cave
 
 	void UnixDeviceResources::GetVideoCardInfo(char* cardName, int& memory)
 	{
-		strncpy(cardName, mVideoCardDescription, 128);
+		Strcpy(cardName, 128ul, mVideoCardDescription, 128ul);
 		memory = mVideoCardMemory;
 	}
 

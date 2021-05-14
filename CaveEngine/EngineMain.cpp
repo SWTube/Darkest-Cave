@@ -145,7 +145,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto startTimeRec2 = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < N; ++i)
 		{
-			pointersByNew.push_back(malloc(sizes[i]));
+			pointersByNew.push_back(cave::Memory::Malloc(sizes[i]));
 		}
 		auto endTimeRec2 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec2 = endTimeRec2 - startTimeRec2;
@@ -155,7 +155,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto startTimeRec3 = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < N; ++i)
 		{
-			free(pointersByNew.back());
+			cave::Memory::Free(pointersByNew.back());
 			pointersByNew.pop_back();
 		}
 		auto endTimeRec3 = std::chrono::high_resolution_clock::now();

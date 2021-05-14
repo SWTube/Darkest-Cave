@@ -255,7 +255,11 @@ namespace cave
 	void Texture::Destroy()
 	{
 #if !defined(__WIN32__)
-		glDeleteTextures(mIndex - 1u, &mIndex);
+		glDeleteTextures(1u, &mIndex);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(cave::eLogChannel::GRAPHICS, std::cerr, "glDeleteTextures error code: 0x%x", glError);
+		}
 #endif
 		if (mTexture != nullptr)
 		{

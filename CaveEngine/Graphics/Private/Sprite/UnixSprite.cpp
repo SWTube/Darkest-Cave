@@ -3,9 +3,6 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include <cstdlib>
-#include <ctime>
-
 #include "Sprite/UnixSprite.h"
 
 #include "lodepng.h"
@@ -125,8 +122,8 @@ namespace cave
 
 	void UnixSprite::Update()
 	{
-		mPosition.X += static_cast<float>(rand() % 10) - 5.0f;
-		mPosition.Y += static_cast<float>(rand() % 10) - 5.0f;
+		// mPosition.X += static_cast<float>(rand() % 10) - 5.0f;
+		// mPosition.Y += static_cast<float>(rand() % 10) - 5.0f;
 	}
 
 	void UnixSprite::Render()

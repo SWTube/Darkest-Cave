@@ -94,7 +94,7 @@ namespace cave
 					Texture->Release();
 #endif
 #ifdef __UNIX__
-					free(Texture);
+					Memory::Free(Texture);
 #endif
 					Texture = nullptr;
 				}

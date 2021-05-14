@@ -81,8 +81,16 @@ namespace cave
 	{
 		Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
 		new(newSprite) Sprite(std::move(object));
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(cave::eLogChannel::GRAPHICS, std::cerr, "glCreateBuffers error code: 0x%x", glError);
+		}
+#ifdef __WIN32__
 		newSprite->SetTextureIndex(0u);
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(),mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+#else
+		eResult result = newSprite->Init(mDeviceResources->GetProgram(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+#endif
 		if (result != eResult::CAVE_OK)
 		{
 			return result;

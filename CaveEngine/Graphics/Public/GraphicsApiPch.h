@@ -27,7 +27,6 @@
 #endif
 
 #if defined(__UNIX__)
-	#include <cstdio>
 	#define GLFW_INCLUDE_NONE
 	#include "GL/gl3w.h"
 	#include "Glfw.h"
@@ -41,8 +40,6 @@
 #elif defined(__WIN32__)
 	#define SAFE_DELETE(p) { if(p) { delete (p); (p) = nullptr;} }
 	#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p) = nullptr;} }
-
-	#include <vector>
 
 	#include <windows.h>
 	#include <d3d11_1.h>
