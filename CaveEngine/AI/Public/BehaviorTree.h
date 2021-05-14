@@ -12,3 +12,4 @@
 #include "BehaviorTree/Selector.h"
 #include "BehaviorTree/Decorator.h"
 #include "BehaviorTree/IfDecorator.h"
+#include "BehaviorTree/WhileDecorator.h"
