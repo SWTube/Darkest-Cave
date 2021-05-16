@@ -73,6 +73,12 @@
     <Filter Include="Source Files\Gameplay\Object">
       <UniqueIdentifier>{e16925c7-671b-411b-913b-36ff2013f1de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Gameplay">
+      <UniqueIdentifier>{c36930bf-d7ad-4ab4-bb19-82b980721c23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Time">
+      <UniqueIdentifier>{ee3e6f30-d5df-4750-b17e-4cb6b75caed4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -158,17 +164,20 @@
     <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\Time\FlatformTimer.ixx">
+    <ClCompile Include="Gameplay\Public\CoreType.ixx">
+      <Filter>Header Files\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Public\Time\FlatformTimer.ixx">
+      <Filter>Header Files\Gameplay\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Time\FlatformTimer.cpp">
       <Filter>Source Files\Gameplay\Time</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\Time\Timer.ixx">
+    <ClCompile Include="Gameplay\Public\Time\WindowsTimer.ixx">
+      <Filter>Header Files\Gameplay\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Time\WindowsTimer.cpp">
       <Filter>Source Files\Gameplay\Time</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Private\Component\Component.ixx">
-      <Filter>Source Files\Gameplay\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Private\Object\Actor.ixx">
-      <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
