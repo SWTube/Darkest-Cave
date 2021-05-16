@@ -18,6 +18,8 @@ namespace cave
         Node* GetChild() const;
         // set child node
         void SetChild(Node*);
+        // clear node
+        virtual void Clear() override;
     private:
         Node* mChild;
     };

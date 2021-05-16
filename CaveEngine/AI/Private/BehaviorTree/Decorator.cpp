@@ -28,4 +28,12 @@ namespace cave
     {
         mChild = child;
     }
+    void Decorator::Clear()
+    {
+        if (GetChild() != NULL)
+        {
+            GetChild()->Clear();
+        }
+        delete this;
+    }
 }

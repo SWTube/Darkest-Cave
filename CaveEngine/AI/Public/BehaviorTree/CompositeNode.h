@@ -22,6 +22,8 @@ namespace cave
         std::vector<Node*>& GetChildren();
         // return children count
         int GetChildrenCount() const;
+        // Clear node
+        virtual void Clear() override;
 
     private:
         std::vector<Node*> mChildren;

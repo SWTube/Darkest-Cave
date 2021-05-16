@@ -38,4 +38,8 @@ namespace cave
 	{
 		mTreeDepth = treeDepth;
 	}
+	void Node::Clear()
+	{
+		delete this;
+	}
 }

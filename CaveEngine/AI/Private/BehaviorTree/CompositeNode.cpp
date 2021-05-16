@@ -41,4 +41,14 @@ namespace cave
     {
         return mChildrenCount;
     }
+
+    void CompositeNode::Clear()
+    {
+        for (const auto& node : GetChildren())
+        {
+            if(node != NULL)
+                node->Clear();
+        }
+        delete this;
+    }
 }

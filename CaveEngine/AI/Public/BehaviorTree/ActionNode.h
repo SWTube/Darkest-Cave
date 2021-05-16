@@ -22,6 +22,7 @@ namespace cave
         }
 
         void SetNodeFunction(void (*)());
+        virtual void Clear() override;
     private:
         void (*mNodeFunction)();
     };

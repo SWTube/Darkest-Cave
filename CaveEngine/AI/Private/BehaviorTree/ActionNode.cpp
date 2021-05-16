@@ -24,4 +24,8 @@ namespace cave
     {
         mNodeFunction = nodeFunction;
     }
+    void ActionNode::Clear()
+    {
+        delete this;
+    }
 }

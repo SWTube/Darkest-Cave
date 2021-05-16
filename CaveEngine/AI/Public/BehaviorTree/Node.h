@@ -26,6 +26,8 @@ namespace cave
             void SetParentNode(Node*);
             // Set tree depth
             void SetTreeDepth(int);
+            // Clear tree
+            virtual void Clear();
         private:
     	    Node* mParentNode = NULL;
             const char* mNodeName = "";
