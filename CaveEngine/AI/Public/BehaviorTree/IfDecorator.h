@@ -17,7 +17,7 @@ namespace cave
 
         virtual bool Invoke() override 
         {
-            if (mCondition)
+            if (mCondition())
             {
                 return GetChild()->Invoke();
             }
