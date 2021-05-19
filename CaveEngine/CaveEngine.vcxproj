@@ -221,6 +221,8 @@
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="EngineMain.cpp" />
+    <ClCompile Include="Gameplay\Public\CoreTmp\CoreType.ixx" />
+    <ClCompile Include="Gameplay\Public\CoreTmp\Log.ixx" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />

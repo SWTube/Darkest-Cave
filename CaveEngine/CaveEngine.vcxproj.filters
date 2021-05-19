@@ -58,6 +58,12 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{adca7f36-2313-4244-84d9-1f5647390e80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Gameplay">
+      <UniqueIdentifier>{065bb91c-232c-44cc-84ce-c375f62a31ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\CoreTmp">
+      <UniqueIdentifier>{8389e2b8-9a46-4d3d-9dba-fb49c38297d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -139,6 +145,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx">
       <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Public\CoreTmp\CoreType.ixx">
+      <Filter>Header Files\Gameplay\CoreTmp</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Public\CoreTmp\Log.ixx">
+      <Filter>Header Files\Gameplay\CoreTmp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
