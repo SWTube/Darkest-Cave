@@ -216,38 +216,31 @@ void RenderTest()
 	cave::Engine main;
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
-
+	
 	cave::Texture* texture1 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
 	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGB);
+	texture1->Init(main.GetRenderer()->GetDeviceResources()->GetDevice(), main.GetRenderer()->GetDeviceResources()->GetDeviceContext(), "seafloor.dds", cave::eTextureFormat::RGB);
 	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
 	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGB);
 
+	
 	cave::Sprite* object = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
 	new(object) cave::Sprite(texture1, cave::gCoreMemoryPool);
+
 	cave::Sprite* object2 = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
 	new(object2) cave::Sprite(texture2, cave::gCoreMemoryPool);
-
-	texture1->Destroy();
-	texture2->Destroy();
-	cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
-	cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
-	texture1 = nullptr;
-	texture2 = nullptr;
+	
+	object->SetSize(100, 100);
 
 	cave::Renderer* renderer = main.GetRenderer();
 	// renderer->AddSprite(std::move(*object));
-	renderer->AddSprite(std::move(*object2));
-	// renderer->AddTexture(std::move(*texture1));
+	renderer->AddTexture(std::move(*texture1));
+	renderer->AddSprite(std::move(*object));
 	// renderer->AddTexture(std::move(*texture2));
 	// renderer->SetSpriteTexture(0u, 1u);
 	// renderer->SetSpriteTexture(1u, 2u);
 
-	object->Destroy();
-	object2->Destroy();
-	cave::gCoreMemoryPool.Deallocate(object, sizeof(cave::Sprite));
-	cave::gCoreMemoryPool.Deallocate(object2, sizeof(cave::Sprite));
-	object = nullptr;
-	object2 = nullptr;
+
 
 	if (result == cave::eResult::CAVE_OK)
 	{
@@ -262,5 +255,21 @@ void RenderTest()
 		result = main.Run();
 	}
 
+	texture1->Destroy();
+	texture2->Destroy();
+	cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
+	cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
+	texture1 = nullptr;
+	texture2 = nullptr;
+
+	object->Destroy();
+	object2->Destroy();
+	cave::gCoreMemoryPool.Deallocate(object, sizeof(cave::Sprite));
+	cave::gCoreMemoryPool.Deallocate(object2, sizeof(cave::Sprite));
+	object = nullptr;
+	object2 = nullptr;
+
+
 	main.Destroy();
+
 }

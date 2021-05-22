@@ -34,8 +34,10 @@ namespace cave
 		void Destroy();
 
 #ifdef __WIN32__
+		void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext, const std::filesystem::path& filePath, eTextureFormat textureFormat);
 		constexpr ID3D11ShaderResourceView* GetTexture();
 #else
+		void Init();
 		constexpr uint8_t* const GetTexture();
 #endif
 		const char* const GetCStringFilePath() const;
@@ -47,7 +49,7 @@ namespace cave
 	private:
 
 #ifdef __WIN32__
-		void LoadFromPngData(ID3D11Device* device ,unsigned char* pngData);
+		void LoadFromPngData(ID3D11Device* device, ID3D11DeviceContext* deviceContext,unsigned char* pngData);
 #endif
 		typedef struct TexturePointer
 		{

@@ -91,6 +91,7 @@ namespace cave
 		assert(window != nullptr);
 		HWND hWindow = window->GetWindow();
 		int32_t result = S_OK;
+		mWindow = window;
 
 		// Obtain DXGI factory from device (since we used nullptr for pAdapter above)
 		uint32_t numerator = 0u;
@@ -201,6 +202,7 @@ namespace cave
 		// Create swap chain
 		IDXGIFactory2* dxgiFactory2 = nullptr;
 		result = dxgiFactory->QueryInterface( __uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
+
 		if ( dxgiFactory2 )
 		{
 			// DirectX 11.1 or later
@@ -255,9 +257,9 @@ namespace cave
 			sd.OutputWindow = hWindow;
 			sd.SampleDesc.Count = 1;	// multisampling setting off
 			sd.SampleDesc.Quality = 0;	// vendor-specific flag
-			sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+			//sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 			// // 출력된 다음 백버퍼를 비우도록 지정합니다
-			// sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+			 sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 			if (window->IsFullScreen())
 			{
 				sd.Windowed = FALSE;
@@ -352,7 +354,6 @@ namespace cave
 		}
 
 		// 깊이 스텐실 상태를 설정합니다
-		//m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
 		mImmediateContext->OMSetDepthStencilState(mDepthStencilState, 1);
 
 		// Create the depth stencil view
@@ -600,7 +601,7 @@ namespace cave
 		// ���� layout ����, topology �ٲٴ°�, vertex buffer �ٲٴ°� rendering �Լ� �ȿ� ���� ��찡 ����
 		// vertex buffer�� pixel shader �� ���� �ʼ�
 		// Clear the back buffer 
-		mImmediateContext->ClearRenderTargetView(mRenderTargetView, DirectX::Colors::MidnightBlue);
+		mImmediateContext->ClearRenderTargetView(mRenderTargetView, DirectX::Colors::IndianRed); //DirectX::Colors::MidnightBlue
 
 		//
 		// Clear the depth buffer to 1.0 (max depth)
@@ -674,18 +675,7 @@ namespace cave
 			mRenderTargetView->Release();
 			mRenderTargetView = nullptr;
 		}
-		
-		if (mSwapChain1 != nullptr)
-		{
-			mSwapChain1->Release();
-			mSwapChain1 = nullptr;
-		}
-
-		if (mSwapChain != nullptr)
-		{
-			mSwapChain->Release();
-			mSwapChain = nullptr;
-		}
+	
 
 		if (mImmediateContext1 != nullptr)
 		{
@@ -709,6 +699,18 @@ namespace cave
 		{
 			mD3dDevice->Release();
 			mD3dDevice = nullptr;
+		}
+
+		if (mSwapChain1 != nullptr)
+		{
+			mSwapChain1->Release();
+			mSwapChain1 = nullptr;
+		}
+
+		if (mSwapChain != nullptr)
+		{
+			mSwapChain->Release();
+			mSwapChain = nullptr;
 		}
 	}
 

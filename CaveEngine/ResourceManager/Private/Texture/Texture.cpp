@@ -19,42 +19,45 @@ namespace cave
 		, mFormat(textureFormat)
 	{
 #ifdef __WIN32__
-		mFilePath /= L"CaveEngine/Graphics/Resource";
-		std::filesystem::create_directories(mFilePath / L"Textures");
-		mFilePath /= L"Textures";
-		mFilePath /= filePath;
-
 		mTexture = reinterpret_cast<TexturePointer*>(mPool->Allocate(sizeof(TexturePointer)));
 		mTexture->ReferenceCount = 1u;
 		mTexture->Texture = nullptr;
-
-		const wchar_t* extension = mFilePath.extension().c_str();
-		if (wcsncmp(extension, L".png", 4) == 0)
-		{
-			uint32_t error = 0u;
-			unsigned char* pngData = nullptr;
-			switch (mFormat)
-			{
-			case eTextureFormat::RGB:
-				error = lodepng_decode24_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
-				break;
-			case eTextureFormat::RGBA:
-				error = lodepng_decode32_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
-				break;
-			default:
-				assert(false);
-				break;
-			}
-			//LoadFromPngData(device,pngImage);
-			if (error != 0)
-			{
-				LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mFilePath.string().c_str(), error);
-			}
-		}
-		else if (wcsncmp(extension, L".dds", 4) == 0)
-		{
-
-		}
+//		mFilePath /= L"CaveEngine\\Graphics\\Resource";
+//		std::filesystem::create_directories(mFilePath / L"Textures");
+//		mFilePath /= L"Textures";
+//		mFilePath /= filePath;
+//
+//		mTexture = reinterpret_cast<TexturePointer*>(mPool->Allocate(sizeof(TexturePointer)));
+//		mTexture->ReferenceCount = 1u;
+//		mTexture->Texture = nullptr;
+//
+//		const wchar_t* extension = mFilePath.extension().c_str();
+//		if (wcsncmp(extension, L".png", 4) == 0)
+//		{
+//			uint32_t error = 0u;
+//			unsigned char* pngData = nullptr;
+//			switch (mFormat)
+//			{
+//			case eTextureFormat::RGB:
+//				error = lodepng_decode24_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
+//				break;
+//			case eTextureFormat::RGBA:
+//				error = lodepng_decode32_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
+//				break;
+//			default:
+//				assert(false);
+//				break;
+//			}
+//			//LoadFromPngData(device,pngImage);
+//			if (error != 0)
+//			{
+//				LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mFilePath.string().c_str(), error);
+//			}
+//		}
+//		else if (wcsncmp(extension, L".dds", 4) == 0)
+//		{
+//
+//		}
 #else
 		mFilePath /= "CaveEngine/Graphics/Resource";
 		std::filesystem::create_directories(mFilePath / "Textures");
@@ -273,33 +276,74 @@ namespace cave
 	}
 
 #ifdef __WIN32__
-	void Texture::LoadFromPngData(ID3D11Device* device, unsigned char* pngData)
+	void Texture::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext, const std::filesystem::path& filePath, eTextureFormat textureFormat) {
+		mFilePath /= L"CaveEngine\\Graphics\\Resource";
+		std::filesystem::create_directories(mFilePath / L"Textures");
+		mFilePath /= L"Textures";
+		mFilePath /= filePath;
+
+		//const wchar_t* extension = mFilePath.extension().c_str();
+		if (mFilePath.extension() == ".png")
+		{
+			uint32_t error = 0u;
+			unsigned char* pngData = nullptr;
+			switch (mFormat)
+			{
+			case eTextureFormat::RGB:
+				error = lodepng_decode24_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
+				LoadFromPngData(device, deviceContext,pngData);
+				break;
+			case eTextureFormat::RGBA:
+				error = lodepng_decode32_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
+				LoadFromPngData(device, deviceContext, pngData);
+				break;
+			default:
+				assert(false);
+				break;
+			}
+			
+			if (error != 0)
+			{
+				LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mFilePath.string().c_str(), error);
+			}
+		}
+		else if (mFilePath.extension() == ".dds")
+		{
+			DdsTextureLoader::CreateDDSTextureFromFile(device, mFilePath.c_str(), nullptr, &mTexture->Texture);
+		}
+	}
+	void Texture::LoadFromPngData(ID3D11Device* device, ID3D11DeviceContext* deviceContext, unsigned char* pngData)
 	{
 		D3D11_TEXTURE2D_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
 		desc.Width = mWidth;
 		desc.Height = mHeight;
-		desc.MipLevels = 1;
+		desc.MipLevels = 0;
 		desc.ArraySize = 1;
 		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		desc.SampleDesc.Count = 1;
+		desc.SampleDesc.Quality = 0;
 		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 		desc.CPUAccessFlags = 0;
+		desc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
-		D3D11_SUBRESOURCE_DATA subResource;
-		subResource.pSysMem = pngData;
-		subResource.SysMemPitch = desc.Width * 4;
-		subResource.SysMemSlicePitch = 0;
+		//D3D11_SUBRESOURCE_DATA subResource;
+		//subResource.pSysMem = pngData;
+		//subResource.SysMemPitch = desc.Width * 4;
+		//subResource.SysMemSlicePitch = 0;
 
 		ID3D11Texture2D* pTexture2D = nullptr;
-		auto result = device->CreateTexture2D(&desc, &subResource, &pTexture2D);
+		auto result = device->CreateTexture2D(&desc, NULL, &pTexture2D);
+
+		UINT rowPitch = (mWidth * 4) * sizeof(unsigned char);
+		deviceContext->UpdateSubresource(pTexture2D, 0, NULL, pngData, rowPitch, 0);
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 		ZeroMemory(&srvDesc, sizeof(srvDesc));
 		srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = desc.MipLevels;
+		srvDesc.Texture2D.MipLevels = -1;
 		srvDesc.Texture2D.MostDetailedMip = 0;
 		result = device->CreateShaderResourceView(pTexture2D, &srvDesc, &mTexture->Texture);
 	}

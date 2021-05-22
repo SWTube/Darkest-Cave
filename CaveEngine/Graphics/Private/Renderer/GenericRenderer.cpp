@@ -63,7 +63,7 @@ namespace cave
 			mDeviceResources = nullptr;
 		}
 
-		mPool->~MemoryPool();
+		mPool->~MemoryPool(); // 여기서 에러남.
 		gCoreMemoryPool.Deallocate(mPool, sizeof(MemoryPool));
 	}
 

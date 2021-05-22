@@ -115,6 +115,7 @@ namespace cave
 	constexpr uint8_t VERTEX_TEXCOORD = 0b10;
 
 
+
 	typedef struct Vertex
 	{
 	public:
