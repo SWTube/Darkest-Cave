@@ -30,9 +30,8 @@ namespace cave
 		void Update() override;
 		void Render() override;
 
-		const uint32_t* const GetBuffers() const;
+		const uint32_t* GetBuffers() const;
 		constexpr uint32_t GetVertexArrayObject() const;
-		virtual eResult InitTexture() override;
 
 		static constexpr uint32_t ARRAY_BUFFER = 0u;
 		static constexpr uint32_t ELEMENT_ARRAY_BUFFER = 1u;

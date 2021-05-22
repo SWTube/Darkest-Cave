@@ -31,22 +31,6 @@ namespace cave
 
 	void UnixEngine::Destroy()
 	{
-		if (mRenderer != nullptr)
-		{
-			mRenderer->Destroy();
-			mPool->Deallocate(mRenderer, sizeof(Renderer));
-		}
-
-		if (mDeviceResources != nullptr)
-		{
-			mDeviceResources->Destroy();
-			mPool->Deallocate(mDeviceResources, sizeof(DeviceResources));
-		}
-
-		if (mWindow != nullptr)
-		{
-			mPool->Deallocate(mWindow, sizeof(Window));
-		}
 	}
 
 

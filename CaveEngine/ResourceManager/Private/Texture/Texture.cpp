@@ -14,50 +14,17 @@
 
 namespace cave
 {
+	int32_t Texture::msTextureCount = -1;
+
 	Texture::Texture(const std::filesystem::path& filePath, eTextureFormat textureFormat, MemoryPool& pool)
 		: mPool(&pool)
 		, mFormat(textureFormat)
+		, mTarget(++msTextureCount)
 	{
 #ifdef __WIN32__
 		mTexture = reinterpret_cast<TexturePointer*>(mPool->Allocate(sizeof(TexturePointer)));
 		mTexture->ReferenceCount = 1u;
 		mTexture->Texture = nullptr;
-//		mFilePath /= L"CaveEngine\\Graphics\\Resource";
-//		std::filesystem::create_directories(mFilePath / L"Textures");
-//		mFilePath /= L"Textures";
-//		mFilePath /= filePath;
-//
-//		mTexture = reinterpret_cast<TexturePointer*>(mPool->Allocate(sizeof(TexturePointer)));
-//		mTexture->ReferenceCount = 1u;
-//		mTexture->Texture = nullptr;
-//
-//		const wchar_t* extension = mFilePath.extension().c_str();
-//		if (wcsncmp(extension, L".png", 4) == 0)
-//		{
-//			uint32_t error = 0u;
-//			unsigned char* pngData = nullptr;
-//			switch (mFormat)
-//			{
-//			case eTextureFormat::RGB:
-//				error = lodepng_decode24_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
-//				break;
-//			case eTextureFormat::RGBA:
-//				error = lodepng_decode32_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
-//				break;
-//			default:
-//				assert(false);
-//				break;
-//			}
-//			//LoadFromPngData(device,pngImage);
-//			if (error != 0)
-//			{
-//				LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mFilePath.string().c_str(), error);
-//			}
-//		}
-//		else if (wcsncmp(extension, L".dds", 4) == 0)
-//		{
-//
-//		}
 #else
 		mFilePath /= "CaveEngine/Graphics/Resource";
 		std::filesystem::create_directories(mFilePath / "Textures");
@@ -67,7 +34,129 @@ namespace cave
 		mTexture = reinterpret_cast<TexturePointer*>(mPool->Allocate(sizeof(TexturePointer)));
 		mTexture->ReferenceCount = 1u;
 		mTexture->Texture = nullptr;
+#endif
+	}
 
+	Texture::Texture(const Texture& other)
+		: mPool(other.mPool)
+		, mFilePath(other.mFilePath)
+		, mWidth(other.mWidth)
+		, mHeight(other.mHeight)
+		, mFormat(other.mFormat)
+		, mTexture(other.mTexture)
+		, mIndex(other.mIndex)
+		, mTarget(other.mTarget)
+	{
+		if (mTexture != nullptr)
+		{
+			++mTexture->ReferenceCount;
+		}
+	}
+
+	Texture::Texture(Texture&& other)
+		: mPool(other.mPool)
+		, mFilePath(other.mFilePath)
+		, mWidth(other.mWidth)
+		, mHeight(other.mHeight)
+		, mFormat(other.mFormat)
+		, mTexture(other.mTexture)
+		, mIndex(other.mIndex)
+		, mTarget(other.mTarget)
+	{
+		other.mPool = nullptr;
+		other.mFilePath.clear();
+		other.mTexture = nullptr;
+		other.mIndex = -1;
+		other.mTarget = 0u;
+	}
+
+	Texture& Texture::operator=(const Texture& other)
+	{
+		if (this != &other)
+		{
+			mPool = other.mPool;
+			mFilePath = other.mFilePath;
+			mWidth = other.mWidth;
+			mHeight = other.mHeight;
+			mFormat = other.mFormat;
+			if (mTexture != nullptr)
+			{
+				--mTexture->ReferenceCount;
+			}
+			mTexture = other.mTexture;
+			if (mTexture != nullptr)
+			{
+				++mTexture->ReferenceCount;
+			}
+			mIndex = other.mIndex;
+		}
+
+		return *this;
+	}
+
+	Texture& Texture::operator=(Texture&& other)
+	{
+		if (this != &other)
+		{
+			mPool = other.mPool;
+			mFilePath = other.mFilePath;
+			mWidth = other.mWidth;
+			mHeight = other.mHeight;
+			mFormat = other.mFormat;
+			if (mTexture != nullptr)
+			{
+				--mTexture->ReferenceCount;
+			}
+			mTexture = other.mTexture;
+			mIndex = other.mIndex;
+			mTarget = other.mTarget;
+
+			other.mPool = nullptr;
+			other.mFilePath.clear();
+			other.mTexture = nullptr;
+			other.mIndex = 0u;
+			other.mTarget = -1;
+		}
+
+		return *this;
+	}
+
+	Texture::~Texture()
+	{
+		Destroy();
+	}
+
+	void Texture::Init()
+	{
+#ifdef __WIN32__
+		const wchar_t* extension = mFilePath.extension().c_str();
+		if (wcsncmp(extension, L".png", 4) == 0)
+		{
+			uint32_t error = 0u;
+			unsigned char* pngData = nullptr;
+			switch (mFormat)
+			{
+			case eTextureFormat::RGB:
+				error = lodepng_decode24_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
+				break;
+			case eTextureFormat::RGBA:
+				error = lodepng_decode32_file(&pngData, &mWidth, &mHeight, mFilePath.string().c_str());
+				break;
+			default:
+				assert(false);
+				break;
+			}
+			//LoadFromPngData(device,pngImage);
+			if (error != 0)
+			{
+				LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mFilePath.string().c_str(), error);
+			}
+		}
+		else if (wcsncmp(extension, L".dds", 4) == 0)
+		{
+
+		}
+#else
 		// 16. Load Textures ---------------------------------------------------------------------------------------------
 
 		// LOGDF(eLogChannel::GRAPHICS, std::cout, "vector size: %lu", TextureData.size());
@@ -107,21 +196,6 @@ namespace cave
 			case eTextureFormat::RGBA:
 				{
 					error = lodepng_decode32_file(&mTexture->Texture, &mWidth, &mHeight, mFilePath.c_str());
-
-					std::vector<uint8_t> image;
-					image.resize(mWidth * mHeight * 4);
-					for (uint32_t y = 0; y < mHeight; ++y)
-					{
-						for (uint32_t x = 0; x < mWidth; ++x)
-						{
-							image[4 * mWidth * y + 4 * x + 0] = 255 * !(x & y);
-							image[4 * mWidth * y + 4 * x + 1] = x ^ y;
-							image[4 * mWidth * y + 4 * x + 2] = x | y;
-							image[4 * mWidth * y + 4 * x + 3] = 255;
-						}
-					}
-
-					lodepng::encode("what.png", image, mWidth, mHeight);
 
 					glTextureStorage2D(mIndex, 1, GL_RGBA8, mWidth, mHeight);
 					if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
@@ -168,105 +242,39 @@ namespace cave
 #endif
 	}
 
-	Texture::Texture(const Texture& other)
-		: mPool(other.mPool)
-		, mFilePath(other.mFilePath)
-		, mWidth(other.mWidth)
-		, mHeight(other.mHeight)
-		, mFormat(other.mFormat)
-		, mTexture(other.mTexture)
-		, mIndex(other.mIndex)
+	void Texture::DeleteTexture()
 	{
-		if (mTexture != nullptr)
-		{
-			++mTexture->ReferenceCount;
-		}
-	}
-
-	Texture::Texture(Texture&& other)
-		: mPool(other.mPool)
-		, mFilePath(other.mFilePath)
-		, mWidth(other.mWidth)
-		, mHeight(other.mHeight)
-		, mFormat(other.mFormat)
-		, mTexture(other.mTexture)
-		, mIndex(other.mIndex)
-	{
-		other.mPool = nullptr;
-		other.mFilePath.clear();
-		other.mTexture = nullptr;
-		other.mIndex = 0u;
-	}
-
-	Texture& Texture::operator=(const Texture& other)
-	{
-		if (this != &other)
-		{
-			mPool = other.mPool;
-			mFilePath = other.mFilePath;
-			mWidth = other.mWidth;
-			mHeight = other.mHeight;
-			mFormat = other.mFormat;
-			if (mTexture != nullptr)
-			{
-				--mTexture->ReferenceCount;
-			}
-			mTexture = other.mTexture;
-			if (mTexture != nullptr)
-			{
-				++mTexture->ReferenceCount;
-			}
-		}
-
-		return *this;
-	}
-
-	Texture& Texture::operator=(Texture&& other)
-	{
-		if (this != &other)
-		{
-			mPool = other.mPool;
-			mFilePath = other.mFilePath;
-			mWidth = other.mWidth;
-			mHeight = other.mHeight;
-			mFormat = other.mFormat;
-			if (mTexture != nullptr)
-			{
-				--mTexture->ReferenceCount;
-			}
-			mTexture = other.mTexture;
-
-			other.mPool = nullptr;
-			other.mFilePath.clear();
-			other.mTexture = nullptr;
-		}
-
-		return *this;
-	}
-
-	Texture::~Texture()
-	{
-		Destroy();
+		glDeleteTextures(1u, &mIndex);
 	}
 
 	void Texture::Destroy()
 	{
 #if !defined(__WIN32__)
-		glDeleteTextures(mIndex - 1u, &mIndex);
+		glDeleteTextures(1u, &mIndex);
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(cave::eLogChannel::GRAPHICS, std::cerr, "glDeleteTextures error code: 0x%x", glError);
+		}
 #endif
 		if (mTexture != nullptr)
 		{
-			mTexture->Destroy();
+			if (--mTexture->ReferenceCount == 0)
+			{
+				--msTextureCount;
+			}
+			mTexture->~TexturePointer();
+			
+			mPool->Deallocate(mTexture, sizeof(TexturePointer));
 			mTexture = nullptr;
 		}
 	}
 
-	MemoryPool* const Texture::GetMemoryPool()
+	MemoryPool* Texture::GetMemoryPool()
 	{
 		return mPool;
 	}
 
-	const char* const Texture::GetCStringFilePath() const
+	const char* Texture::GetCStringFilePath() const
 	{
 #ifdef __WIN32__
 		return mFilePath.string().c_str();

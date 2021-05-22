@@ -27,14 +27,14 @@ namespace cave
 		GenericShader& operator=(const GenericShader&) = delete;
 		GenericShader& operator=(GenericShader&& other);
 		virtual ~GenericShader();
-		constexpr MemoryPool* const GetMemoryPool() const;
+		constexpr MemoryPool* GetMemoryPool() const;
 		
 #ifdef __WIN32__
 		virtual eResult Compile(ID3D11Device* device) = 0;
 		virtual void Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture) = 0;
 #else
 		virtual eResult Compile() = 0;
-		virtual void Render(uint32_t indexCount, const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, uint32_t texture) = 0;
+		virtual void Render(uint32_t indexCount, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, uint32_t texture) = 0;
 #endif
 #ifdef __WIN32__
 		virtual eResult SetInputLayout() = 0;

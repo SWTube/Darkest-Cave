@@ -196,6 +196,11 @@ file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
 
 # get_native_precompiled_header(OgreMain)
 add_library(Engine SHARED ${HEADER_FILES} ${SOURCE_FILES})
+if(MSVC)
+	target_compile_options(Engine PRIVATE /W4 /WX)
+else()
+	target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
 # add_library(OgreMain ${OGRE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)

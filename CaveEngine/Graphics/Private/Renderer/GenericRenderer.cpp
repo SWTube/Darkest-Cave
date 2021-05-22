@@ -25,7 +25,7 @@ namespace cave
 		while (!mTextures.empty())
 		{
 			Texture* texture = mTextures.back();
-			texture->Destroy();
+			texture->~Texture();
 			mPool->Deallocate(texture, sizeof(Sprite));
 			texture = nullptr;
 			mTextures.pop_back();
@@ -36,7 +36,7 @@ namespace cave
 		while (!mSprites.empty())
 		{
 			Sprite* sprite = mSprites.back();
-			sprite->Destroy();
+			sprite->~Sprite();
 			mPool->Deallocate(sprite, sizeof(Sprite));
 			sprite = nullptr;
 			mSprites.pop_back();
@@ -45,29 +45,35 @@ namespace cave
 
 		if (mShader != nullptr)
 		{
-			mShader->Destroy();
-			mPool->Deallocate(&mShader, sizeof(Shader));
+			mShader->~Shader();
+			mPool->Deallocate(mShader, sizeof(Shader));
 			mShader = nullptr;
 		}
 
 		if (mCamera != nullptr)
 		{
+			mCamera->~Camera();
 			mPool->Deallocate(mCamera, sizeof(Camera));
 			mCamera = nullptr;
 		}
 
 		if (mDeviceResources != nullptr)
 		{
-			mDeviceResources->Destroy();
+			mDeviceResources->~DeviceResources();
 			mPool->Deallocate(mDeviceResources, sizeof(DeviceResources));
 			mDeviceResources = nullptr;
 		}
 
-		mPool->~MemoryPool(); // 여기서 에러남.
-		gCoreMemoryPool.Deallocate(mPool, sizeof(MemoryPool));
+		if (mPool != nullptr)
+		{
+			mPool->~MemoryPool();
+			gCoreMemoryPool.Deallocate(mPool, sizeof(MemoryPool));
+			mPool = nullptr;
+		}
+
 	}
 
-	DeviceResources* const GenericRenderer::GetDeviceResources() const
+	DeviceResources* GenericRenderer::GetDeviceResources() const
 	{
 		return mDeviceResources;
 	}
@@ -76,8 +82,16 @@ namespace cave
 	{
 		Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
 		new(newSprite) Sprite(std::move(object));
+		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
+		{
+			LOGEF(cave::eLogChannel::GRAPHICS, std::cerr, "glCreateBuffers error code: 0x%x", glError);
+		}
+#ifdef __WIN32__
 		newSprite->SetTextureIndex(0u);
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(),mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+#else
+		eResult result = newSprite->Init(mDeviceResources->GetProgram(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+#endif
 		if (result != eResult::CAVE_OK)
 		{
 			return result;
@@ -85,7 +99,6 @@ namespace cave
 
 #if !defined(__WIN32__)
 		mShader->SetInputLayout(*newSprite);
-		newSprite->InitTexture();
 #endif
 
 		mSprites.push_back(newSprite);

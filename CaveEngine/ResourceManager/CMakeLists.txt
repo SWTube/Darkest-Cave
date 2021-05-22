@@ -193,6 +193,12 @@ file(GLOB TEXTURE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/Texture/*.cp
 # get_native_precompiled_header(OgreMain)
 add_library(ResourceManager SHARED ${HEADER_FILES} ${SOURCE_FILES} ${TEXTURE_HEADER_FILES} ${TEXTURE_SOURCE_FILES})
 
+if(MSVC)
+	target_compile_options(ResourceManager PRIVATE /W4 /WX)
+else()
+	target_compile_options(ResourceManager PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
+
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
 # 	set_target_properties(OgreMain PROPERTIES VS_WINRT_COMPONENT "true")
 # endif ()

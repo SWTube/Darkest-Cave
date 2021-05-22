@@ -13,6 +13,7 @@ namespace cave
 	{
 		assert(texture != nullptr);
 		new(mTexture) Texture(*texture);
+		mTexture->Init();
 		mWidth = mTexture->GetWidth();
 		mHeight = mTexture->GetHeight();
 		mTextureIndex = mTexture->GetIndex();
@@ -113,7 +114,7 @@ namespace cave
 		Destroy();
 	}
 
-	MemoryPool* const GenericSprite::GetMemoryPool() const
+	MemoryPool* GenericSprite::GetMemoryPool() const
 	{
 		return mPool;
 	}
@@ -128,7 +129,7 @@ namespace cave
 		mScreenHeight = screenHeight;
 
 		mPreviousPosition = Float3(-1.0f, -1.0f, 1.0f);
-		mPosition = Float3(mScreenWidth / 2.0f, mScreenHeight / 2.0f, 1.0f);
+		mPosition = Float3(0.0f, 0.0f, 1.0f);
 
 #ifdef __WIN32__
 		eResult result = initializeBuffers(device, context);
@@ -143,8 +144,10 @@ namespace cave
 	{
 		if (mTexture != nullptr)
 		{
-			mTexture->Destroy();
+			mTexture->DeleteTexture();
+			mTexture->~Texture();
 			mPool->Deallocate(mTexture, sizeof(Texture));
+			mTexture = nullptr;
 		}
 	}
 
@@ -152,7 +155,8 @@ namespace cave
 	{
 		if (mTexture != nullptr)
 		{
-			mTexture->Destroy();
+			mTexture->~Texture();
+			mTexture = nullptr;
 		}
 		*mTexture = texture;
 	}

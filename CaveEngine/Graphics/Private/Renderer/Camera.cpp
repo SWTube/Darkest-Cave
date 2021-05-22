@@ -17,9 +17,9 @@ namespace cave
 		DirectX::XMVECTOR positionVector;
 		DirectX::XMVECTOR lookAtVector;
 #else
-		glm::vec3 upVector = glm::vec3(0.0f);
-		glm::vec3 positionVector = glm::vec3(0.0f);
-		glm::vec3 lookAtVector = glm::vec3(0.0f);
+		glm::vec3 upVector = glm::vec3(1.0f);
+		glm::vec3 positionVector = glm::vec3(1.0f);
+		glm::vec3 lookAtVector = glm::vec3(1.0f);
 #endif
 
 		float yaw = 0.0f;
@@ -103,7 +103,7 @@ namespace cave
 
 		lookAtVector = positionVector + lookAtVector;
 
-		mView = mView = glm::lookAtLH(positionVector, lookAtVector, upVector);
+		mView = glm::lookAtRH(positionVector, lookAtVector, upVector);
 #endif
 	}
 } // namespace cave

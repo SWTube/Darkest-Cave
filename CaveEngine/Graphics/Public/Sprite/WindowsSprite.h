@@ -30,7 +30,6 @@ namespace cave
 		void Update() override;
 		void Render() override;
 
-		virtual eResult InitTexture() override;
 	private:
 		eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context) override;
 		ID3D11Device* mDevice = nullptr;

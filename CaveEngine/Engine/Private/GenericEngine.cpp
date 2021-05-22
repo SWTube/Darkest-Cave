@@ -16,6 +16,20 @@ namespace cave
 
 	GenericEngine::~GenericEngine()
 	{
+		if (mRenderer != nullptr)
+		{
+			mRenderer->~Renderer();
+			mPool->Deallocate(mRenderer, sizeof(Renderer));
+			mRenderer = nullptr;
+		}
+
+		if (mWindow != nullptr)
+		{
+			mWindow->~Window();
+			mPool->Deallocate(mWindow, sizeof(Window));
+			mWindow = nullptr;
+		}
+
 		if (mPool != &gCoreMemoryPool)
 		{
 			delete mPool;
@@ -27,7 +41,7 @@ namespace cave
 		return mWindow;
 	}
 
-	Renderer* const GenericEngine::GetRenderer()
+	Renderer* GenericEngine::GetRenderer()
 	{
 		return mRenderer;
 	}

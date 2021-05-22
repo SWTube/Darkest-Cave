@@ -207,6 +207,13 @@ add_subdirectory(Engine)
 # endif()
 
 add_executable(CaveEngineDemo EngineMain.cpp)
+
+if(MSVC)
+	target_compile_options(CaveEngineDemo PRIVATE /W4 /WX)
+else()
+	target_compile_options(CaveEngineDemo PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
+
 # add_library(CaveEngine ${CAVE_ENGINE_LIB_TYPE} ${CaveEngine_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
 target_link_libraries(CaveEngineDemo PUBLIC Engine Gameplay Graphics Core Gl3w)

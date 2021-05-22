@@ -82,6 +82,7 @@ int main(int32_t argc, char** argv)
 				break;
 			}
 
+			cave::LogManager::SetVerbosity(verbosity);
 			commandFlag &= (~LOG_FLAG);
 		}
 	}
@@ -144,7 +145,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto startTimeRec2 = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < N; ++i)
 		{
-			pointersByNew.push_back(malloc(sizes[i]));
+			pointersByNew.push_back(cave::Memory::Malloc(sizes[i]));
 		}
 		auto endTimeRec2 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec2 = endTimeRec2 - startTimeRec2;
@@ -154,7 +155,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto startTimeRec3 = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < N; ++i)
 		{
-			free(pointersByNew.back());
+			cave::Memory::Free(pointersByNew.back());
 			pointersByNew.pop_back();
 		}
 		auto endTimeRec3 = std::chrono::high_resolution_clock::now();
@@ -177,7 +178,7 @@ void MemoryTest2(cave::MemoryPool& pool)
 		pointersByPool.reserve(N);
 		sizes.reserve(N);
 
-		pool.PrintPoolStatus(std::cerr);
+		pool.PrintPoolStatus();
 
 		for (size_t i = 0; i < N; ++i)
 		{
@@ -204,7 +205,7 @@ void MemoryTest2(cave::MemoryPool& pool)
 			}
 		}
 
-		pool.PrintPoolStatus(std::cerr);
+		pool.PrintPoolStatus();
 }
 
 void RenderTest()
@@ -221,7 +222,8 @@ void RenderTest()
 	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGB);
 	texture1->Init(main.GetRenderer()->GetDeviceResources()->GetDevice(), main.GetRenderer()->GetDeviceResources()->GetDeviceContext(), "seafloor.dds", cave::eTextureFormat::RGB);
 	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
-	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGB);
+	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGBA);
+
 
 	
 	cave::Sprite* object = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
@@ -240,6 +242,23 @@ void RenderTest()
 	// renderer->SetSpriteTexture(0u, 1u);
 	// renderer->SetSpriteTexture(1u, 2u);
 
+
+
+	//cave::Sprite object(texture1, cave::gCoreMemoryPool);
+	//object.SetSize(object.GetWidth() / 2u, object.GetHeight() / 2u);
+	//cave::Sprite object2(texture2, cave::gCoreMemoryPool);
+	//object2.SetPosition(cave::Float2(1000.0f, 500.0f));
+
+	//texture1->~Texture();
+	//texture2->~Texture();
+	//cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
+	//cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
+	//texture1 = nullptr;
+	//texture2 = nullptr;
+
+	//cave::Renderer* renderer = main.GetRenderer();
+	//renderer->AddSprite(std::move(object));
+	//renderer->AddSprite(std::move(object2));
 
 
 	if (result == cave::eResult::CAVE_OK)

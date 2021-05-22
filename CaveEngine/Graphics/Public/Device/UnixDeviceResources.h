@@ -16,7 +16,7 @@ namespace cave
 	class UnixDeviceResources final : public GenericDeviceResources
 	{
 	public:
-		constexpr UnixDeviceResources(MemoryPool& pool);
+		UnixDeviceResources(MemoryPool& pool);
 		constexpr UnixDeviceResources(const UnixDeviceResources&) = default;
 		UnixDeviceResources& operator=(const UnixDeviceResources&) = default;
 		virtual ~UnixDeviceResources() = default;
@@ -57,11 +57,6 @@ namespace cave
 		uint32_t	mWidth = 0u;
 		uint32_t	mHeight = 0u;
 	};
-
-	constexpr UnixDeviceResources::UnixDeviceResources(MemoryPool& pool)
-		: GenericDeviceResources(pool)
-	{
-	}
 
 	typedef UnixDeviceResources DeviceResources;
 }

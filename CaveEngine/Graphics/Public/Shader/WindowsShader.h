@@ -37,8 +37,6 @@
 			virtual eResult SetInputLayout() override;
 			virtual void Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture) override;
 
-			ID3DBlob* const GetVertexShaderBlob();
-
 			virtual void Destroy() override;
 		private:
 			eResult compileShaderFromFile(const wchar_t* fileName, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut);

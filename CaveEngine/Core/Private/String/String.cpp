@@ -47,7 +47,7 @@ namespace cave
 		, mCapacity(ALIGNED_BYTE)
 		, mString(static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char))))
 	{
-		memset(mString, '\0', mCapacity);
+		Memory::Memset(mString, '\0', mCapacity);
 	}
 
 	/**
@@ -65,8 +65,8 @@ namespace cave
 		, mCapacity(GetSufficientCapacity<ALIGNED_BYTE>(mLength))
 		, mString(static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char))))
 	{
-		memset(mString, ch, mLength);
-		memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::Memset(mString, ch, mLength);
+		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
 	}
 
 	/**
@@ -114,8 +114,8 @@ namespace cave
 		mLength = count;
 
 		// Copy s to mString
-		strncpy(mString, &other.mString[pos], count);
-		memset(&mString[mLength], '\0', mCapacity - mLength);
+		Strcpy(mString, mCapacity, &other.mString[pos], count);
+		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
 	}
 	
 	/**
@@ -140,21 +140,22 @@ namespace cave
 		mCapacity = GetSufficientCapacity<ALIGNED_BYTE>(mLength);
 		mString = static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char)));
 
-		if (count == NPOS || strlen(s) < count)
+		size_t sLength = Strlen(s);
+		if (count == NPOS || sLength < count)
 		{
-			count = strlen(s);
+			count = sLength;
 		}
 
 		// Copy s to mString
-		strncpy(mString, s, count);
-		memset(&mString[mLength], '\0', mCapacity - mLength);
+		Strcpy(mString, mCapacity, s, count);
+		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
 	}
 
 	/**
 	 *
   	 * @brief (5) Constructs the string with the contents initialized with a copy of the null-terminated character string pointed to by s.
 	 * @details The length of the string is determined by the first null character.
-	 * 			The behavior is undefined if [s, s + strlen(s)) is not a valid range (for example, if s is a null pointer).
+	 * 			The behavior is undefined if [s, s + Strlen(s)) is not a valid range (for example, if s is a null pointer).
 	 * 			@n@n
 	 * 			Complexity: linear in length of s
 	 * @param s	pointer to an array of characters to use as source to initialize the string with 
@@ -167,13 +168,13 @@ namespace cave
 		assert (s != nullptr);
 
 		// Allocate Memory
-		mLength = strlen(s);
+		mLength = Strlen(s);
 		mCapacity = GetSufficientCapacity<ALIGNED_BYTE>(mLength);
 		mString = static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char)));
 
 		// Copy s to mString
-		strncpy(mString, s, mLength);
-		memset(&mString[mLength], '\0', mCapacity - mLength);
+		Strcpy(mString, mCapacity, s, mLength);
+		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
 	}
 
 	/**
@@ -200,7 +201,7 @@ namespace cave
 		mString = static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char)));
 
 		memcpy(mString, first, mLength);
-		memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
 	}
 
 	/**
@@ -219,8 +220,8 @@ namespace cave
 	{
 		assert(other.mPool != nullptr && other.mString != nullptr);
 		mString = static_cast<char*>(mPool->Allocate((mCapacity) * sizeof(char)));
-		strncpy(mString, other.mString, mLength);
-		memset(&mString[mLength], '\0', mCapacity - mLength);
+		Strcpy(mString, mCapacity, other.mString, mLength);
+		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
 	}
 
 	/**
@@ -240,8 +241,8 @@ namespace cave
 	{
 		assert(other.mString != nullptr);
 		mString = static_cast<char*>(mPool->Allocate((mCapacity) * sizeof(char)));
-		strncpy(mString, other.mString, mLength);
-		memset(&mString[mLength], '\0', mCapacity - mLength);
+		Strcpy(mString, mCapacity, other.mString, mLength);
+		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
 	}
 
 	/**
@@ -342,8 +343,8 @@ namespace cave
 			}
 
 			mLength = str.mLength;
-			memset(mString, '\0', mLength);
-			strncpy(mString, str.mString, mLength);
+			Memory::Memset(mString, '\0', mLength);
+			Strcpy(mString, mCapacity, str.mString, mLength);
 		}
 
 		return *this;
@@ -403,7 +404,7 @@ namespace cave
 
 		if (s != mString)
 		{
-			size_t sLength = strlen(s);
+			size_t sLength = Strlen(s);
 
 			if (mCapacity < sLength + 1)
 			{
@@ -414,10 +415,10 @@ namespace cave
 				mString = static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char)));
 			}
 
-			memset(mString, '\0', mLength);
+			Memory::Memset(mString, '\0', mLength);
 
 			mLength = sLength;
-			strncpy(mString, s, mLength);
+			Strcpy(mString, mCapacity, s, mLength);
 		}
 
 		return *this;
@@ -438,7 +439,7 @@ namespace cave
 		assert (ch != '\0');
 		
 		mLength = 2ul;
-		memset(&mString[1], '\0', mCapacity);
+		Memory::Memset(&mString[1], '\0', mCapacity);
 		mString[0] = ch;
 
 		return *this;
@@ -650,8 +651,8 @@ namespace cave
 		if (newCapacity > mCapacity)
 		{
 			char* newString = reinterpret_cast<char*>(mPool->Allocate(newCapacity * sizeof(char)));
-			strncpy(newString, mString, mLength);
-			memset(&newString[mLength], '\0', newCapacity - mLength);
+			Strcpy(newString, newCapacity, mString, mLength);
+			Memory::Memset(&newString[mLength], '\0', newCapacity - mLength);
 			
 			mPool->Deallocate(mString, mCapacity * sizeof(char));
 			mCapacity = newCapacity;
@@ -689,8 +690,8 @@ namespace cave
 		if (mCapacity != fitCapacity)
 		{
 			char* newString = static_cast<char*>(mPool->Allocate(fitCapacity * sizeof(char)));
-			strncpy(newString, mString, mLength);
-			memset(&newString[mLength], '\0', fitCapacity - mLength);
+			Strcpy(newString, fitCapacity, mString, mLength);
+			Memory::Memset(&newString[mLength], '\0', fitCapacity - mLength);
 			mPool->Deallocate(mString, mCapacity * sizeof(char));
 			mCapacity = fitCapacity;
 			mString = newString;
@@ -709,7 +710,7 @@ namespace cave
 	 */
 	constexpr void String::Clear() noexcept
 	{
-		memset(mString, '\0', mLength);
+		Memory::Memset(mString, '\0', mLength);
 		mLength = 0ul;
 	}
 
@@ -738,8 +739,8 @@ namespace cave
 			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
 #endif
 			char* newString = static_cast<char*>(mPool->Allocate(newCapacity * sizeof(char)));
-			strncpy(newString, mString, mLength);
-			memset(&newString[mLength], '\0', newCapacity - mLength);
+			Strcpy(newString, newCapacity, mString, mLength);
+			Memory::Memset(&newString[mLength], '\0', newCapacity - mLength);
 
 			mPool->Deallocate(mString, mCapacity * sizeof(char));
 			mString = newString;
@@ -753,7 +754,7 @@ namespace cave
 
 		mLength = mLength + count;
 
-		memset(&mString[index], ch, count);
+		Memory::Memset(&mString[index], ch, count);
 
 		return true;
 	}
@@ -762,7 +763,7 @@ namespace cave
 	 *
   	 * @brief (2) Inserts characters 
 	 * @details Inserts null-terminated character string pointed to by s at the position index. 
-	 * 			The length of the string is determined by the first null character using strlen(s).
+	 * 			The length of the string is determined by the first null character using Strlen(s).
 	 * @param index position at which the content will be inserted
 	 * @param s pointer to the character string to insert
 	 * @return true if insertion succeeds, false otherwise.
@@ -775,7 +776,7 @@ namespace cave
 			return false;
 		}
 
-		return InsertAt(index, s, strlen(s));
+		return InsertAt(index, s, Strlen(s));
 	}
 
 	/**
@@ -804,8 +805,8 @@ namespace cave
 			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
 #endif
 			char* newString = static_cast<char*>(mPool->Allocate(newCapacity * sizeof(char)));
-			strncpy(newString, mString, mLength);
-			memset(&newString[mLength], '\0', newCapacity - mLength);
+			Strcpy(newString, newCapacity, mString, mLength);
+			Memory::Memset(&newString[mLength], '\0', newCapacity - mLength);
 
 			mPool->Deallocate(mString, mCapacity * sizeof(char));
 			mString = newString;
@@ -818,7 +819,7 @@ namespace cave
 		}
 		mLength = mLength + count;
 
-		strncpy(&mString[index], s, count);
+		Strcpy(&mString[index], mCapacity - index, s, count);
 
 		return true;
 	}
@@ -847,8 +848,8 @@ namespace cave
 			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
 #endif
 			char* newString = static_cast<char*>(mPool->Allocate(newCapacity * sizeof(char)));
-			strncpy(newString, mString, mLength);
-			memset(&newString[mLength], '\0', mCapacity - mLength);
+			Strcpy(newString, newCapacity, mString, mLength);
+			Memory::Memset(&newString[mLength], '\0', mCapacity - mLength);
 
 			mPool->Deallocate(mString, mCapacity * sizeof(char));
 			mString = newString;
@@ -862,7 +863,7 @@ namespace cave
 
 		mLength = mLength + str.mLength;
 
-		strncpy(&mString[index], str.mString, str.mLength);
+		Strcpy(&mString[index], mCapacity - index, str.mString, str.mLength);
 
 		return true;
 	}
@@ -893,8 +894,8 @@ namespace cave
 			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
 #endif
 			char* newString = static_cast<char*>(mPool->Allocate(newCapacity * sizeof(char)));
-			strncpy(newString, mString, mLength);
-			memset(&newString[mLength], '\0', mCapacity - mLength);
+			Strcpy(newString, newCapacity, mString, mLength);
+			Memory::Memset(&newString[mLength], '\0', mCapacity - mLength);
 
 			mPool->Deallocate(mString, mCapacity * sizeof(char));
 			mString = newString;
@@ -908,7 +909,7 @@ namespace cave
 
 		mLength = mLength + count;
 
-		strncpy(&mString[index], &str.mString[indexStr], count);
+		Strcpy(&mString[index], mCapacity - index, &str.mString[indexStr], count);
 
 		return true;
 	}
@@ -965,8 +966,8 @@ namespace cave
 			char* newString = static_cast<char*>(mPool->Allocate(newCapacity * sizeof(char)));
 
 			// Copy s to mString
-			strncpy(newString, mString, mLength);
-			memset(&newString[mLength], '\0', newCapacity - newLength);
+			Strcpy(newString, newCapacity, mString, mLength);
+			Memory::Memset(&newString[mLength], '\0', newCapacity - newLength);
 			mPool->Deallocate(mString, mCapacity * sizeof(char));
 			mString = newString;
 			mLength = newLength;
@@ -1060,7 +1061,7 @@ namespace cave
 	 *
   	 * @brief (5) Appends characters to the end
 	 * @details Appends the null-terminated character string pointed to by s. 
-	 * 			The length of the string is determined by the first null character using <code>strlen(s)</code>. 
+	 * 			The length of the string is determined by the first null character using <code>Strlen(s)</code>. 
 	 * 			@n@n
 	 * 			Complexity: constant
 	 * @param s pointer to the character string to append
@@ -1202,7 +1203,7 @@ namespace cave
 	 */
 	constexpr bool String::StartsWith(const char* s) const
 	{
-		size_t sLength = strlen(s);
+		size_t sLength = Strlen(s);
 		if (mLength < sLength)
 		{
 			return false;
@@ -1299,7 +1300,7 @@ namespace cave
 	 */
 	constexpr bool String::EndsWith(const char* s) const
 	{
-		size_t sLength = strlen(s);
+		size_t sLength = Strlen(s);
 		if (mLength < sLength)
 		{
 			return false;
@@ -1438,7 +1439,7 @@ namespace cave
 	 */
 	constexpr bool String::Contains(const char* s) const
 	{
-		size_t sLength = strlen(s);
+		size_t sLength = Strlen(s);
 		if (mLength < sLength)
 		{
 			return false;
@@ -1526,7 +1527,7 @@ namespace cave
 			}
 		}
 
-		strncpy(&mString[pos], &str.mString[pos2], count2);
+		Strcpy(&mString[pos], mCapacity - pos, &str.mString[pos2], count2);
 		if (pos + count >= mLength)
 		{
 			count = mLength - pos;
@@ -1559,7 +1560,7 @@ namespace cave
 	{
 		assert(cStr != nullptr && pos <= mLength);
 
-		size_t sLength = strlen(cStr);
+		size_t sLength = Strlen(cStr);
 
 		if (count2 > sLength)
 		{
@@ -1581,7 +1582,7 @@ namespace cave
 			}
 		}
 
-		strncpy(&mString[pos], cStr, count2);
+		Strcpy(&mString[pos], mCapacity - pos, cStr, count2);
 		if (pos + count >= mLength)
 		{
 			count = mLength - pos;
@@ -1597,7 +1598,7 @@ namespace cave
 	 *
   	 * @brief (4) Replaces specified portion of a string
 	 * @details Replaces the part of the string indicated by [pos, pos + count) with a new string, 
-	 * 			characters in the range [cStr, cStr + strlen(cStr));.
+	 * 			characters in the range [cStr, cStr + Strlen(cStr));.
 	 * @param pos start of the substring that is going to be replaced
 	 * @param count length of the substring that is going to be replaced
 	 * @param cStr pointer to the character string to use for replacement
@@ -1608,7 +1609,7 @@ namespace cave
 	{
 		assert(cStr != nullptr);
 
-		return Replace(pos, count, cStr, strlen(cStr));
+		return Replace(pos, count, cStr, Strlen(cStr));
 	}
 
 	/**
@@ -1642,7 +1643,7 @@ namespace cave
 			}
 		}
 
-		memset(&mString[pos], ch, count2);
+		Memory::Memset(&mString[pos], ch, count2);
 		if (pos + count >= mLength)
 		{
 			count = mLength - pos;
@@ -1709,7 +1710,7 @@ namespace cave
 		size_t newLength = count;
 		if (newLength < mLength)
 		{
-			memset(&mString[newLength], ch, mLength - newLength);
+			Memory::Memset(&mString[newLength], ch, mLength - newLength);
 		}
 		else
 		{
@@ -1717,14 +1718,14 @@ namespace cave
 			{
 				size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
 				char* newString = reinterpret_cast<char*>(mPool->Allocate(newCapacity * sizeof(char)));
-				strncpy(newString, mString, mLength);
-				memset(&newString[mLength], '\0', newCapacity - mLength);
+				Strcpy(newString, newCapacity, mString, mLength);
+				Memory::Memset(&newString[mLength], '\0', newCapacity - mLength);
 				mPool->Deallocate(mString, mCapacity * sizeof(char));
 				mString = newString;
 				mCapacity = newCapacity;
 			}
 
-			memset(&mString[mLength], ch, newLength - mLength);
+			Memory::Memset(&mString[mLength], ch, newLength - mLength);
 		}
 
 		mLength = newLength;
@@ -1766,13 +1767,13 @@ namespace cave
 
 		char* temp = &mString[pos];
 		size_t index = pos;
-		const char* checkS = nullptr;
 
-		while (true)
+		while (index - pos < count)
 		{
-			checkS = s;
+			size_t counter = index - pos;
+			const char* checkS = s;
 			// Find first index of mString that either is NULL or is same to first character of s
-			for (; *temp != '\0' && *temp != *checkS; ++temp, ++index)
+			for (; counter < count && *temp != '\0' && *temp != *checkS; ++temp, ++index, ++counter)
 			{
 			}
 
@@ -1783,7 +1784,7 @@ namespace cave
 			}
 
 			// Check whether s and rest of characters of mString resembles
-			for (; *temp != '\0' && *temp == *checkS; ++temp, ++checkS)
+			for (; counter < count && *temp != '\0' && *temp == *checkS; ++temp, ++checkS, ++counter)
 			{
 			}
 
@@ -1795,6 +1796,8 @@ namespace cave
 
 			++index;
 		}
+
+		return NPOS;
 	}
 
 	/**
@@ -1811,7 +1814,7 @@ namespace cave
 	{
 		assert(s != nullptr);
 
-		return GetIndexOf(s, pos, strlen(s));
+		return GetIndexOf(s, pos, Strlen(s));
 	}
 
 	/**
@@ -1826,7 +1829,7 @@ namespace cave
 	 */
 	constexpr size_t String::GetIndexOf(char ch, size_t pos) const
 	{
-		for (size_t i = 0ul; i < mLength; ++i)
+		for (size_t i = pos; i < mLength; ++i)
 		{
 			if (mString[i] == ch)
 			{
@@ -1848,7 +1851,7 @@ namespace cave
 	 * @param pos position at which to begin searching
 	 * @return Position of the first character of the found substring or npos if no such substring is found. 
 	 * 			Note that this is an offset from the start of the string, not the end.@n
-	 * 			If searching for an empty string (str.size(), count, or strlen(s) is zero) returns pos (the empty string is found immediately) 
+	 * 			If searching for an empty string (str.size(), count, or Strlen(s) is zero) returns pos (the empty string is found immediately) 
 	 * 			unless pos > GetLength() (including the case where pos == NPOS), in which case returns GetLength().@n
 	 * 			Otherwise, if GetLength() is zero, NPOS is always returned. 
 	 *
@@ -1870,7 +1873,7 @@ namespace cave
 	 * @param s pointer to a character string to search for
 	 * @return Position of the first character of the found substring or npos if no such substring is found. 
 	 * 			Note that this is an offset from the start of the string, not the end.@n
-	 * 			If searching for an empty string (str.size(), count, or strlen(s) is zero) returns pos (the empty string is found immediately) 
+	 * 			If searching for an empty string (str.size(), count, or Strlen(s) is zero) returns pos (the empty string is found immediately) 
 	 * 			unless pos > GetLength() (including the case where pos == NPOS), in which case returns GetLength().@n
 	 * 			Otherwise, if GetLength() is zero, NPOS is always returned. 
 	 *
@@ -1904,14 +1907,13 @@ namespace cave
 
 		char* temp = mString + pos;
 		size_t index = pos;
-		const char* checkS = s;
-		char* firstCharacter = nullptr;
 
-		while (true)
+		while (index - pos < count)
 		{
-			checkS = s;
+			const char* checkS = s;
+			size_t counter = index - pos;
 			// Find last index of mString that either is first character or is same to first character of s
-			for (; temp != (mString - 1) && *temp != *checkS; --temp, --index)
+			for (; counter < count && temp != (mString - 1) && *temp != *checkS; --temp, --index, ++counter)
 			{
 			}
 
@@ -1921,9 +1923,9 @@ namespace cave
 				return NPOS;
 			}
 
-			firstCharacter = temp;
+			char* firstCharacter = temp;
 			// Check whether s and rest of characters of mString resembles
-			for (; *firstCharacter != '\0' && *firstCharacter == *checkS; ++firstCharacter, ++checkS)
+			for (; counter < count && *firstCharacter != '\0' && *firstCharacter == *checkS; ++firstCharacter, ++checkS, ++counter)
 			{
 			}
 
@@ -1936,6 +1938,8 @@ namespace cave
 			--temp;
 			--index;
 		}
+
+		return NPOS;
 	}
 
 	/**
@@ -1945,12 +1949,12 @@ namespace cave
 	 * 			Search begins at pos, i.e. the found substring must not begin in a position following pos. 
 	 * 			If NPOS or any value not smaller than GetLength() - 1 is passed as pos, whole string will be searched.@n 
 	 * 			Finds the last substring equal to the character string pointed to by s. 
-	 * 			The length of the string is determined by the first null character using strlen(s).
+	 * 			The length of the string is determined by the first null character using Strlen(s).
 	 * @param pos position at which to begin searching
 	 * @param s pointer to a character string to search for
 	 * @return Position of the first character of the found substring or npos if no such substring is found. 
 	 * 			Note that this is an offset from the start of the string, not the end.@n
-	 * 			If searching for an empty string (str.size(), count, or strlen(s) is zero) returns pos (the empty string is found immediately) 
+	 * 			If searching for an empty string (str.size(), count, or Strlen(s) is zero) returns pos (the empty string is found immediately) 
 	 * 			unless pos > GetLength() (including the case where pos == NPOS), in which case returns GetLength().@n
 	 * 			Otherwise, if GetLength() is zero, NPOS is always returned. 
 	 *
@@ -1959,7 +1963,7 @@ namespace cave
 	{
 		assert(s != nullptr);
 
-		return GetLastIndexOf(s, pos, strlen(s));
+		return GetLastIndexOf(s, pos, Strlen(s));
 	}
 
 	/**
@@ -1973,14 +1977,14 @@ namespace cave
 	 * @param ch character to search for
 	 * @return Position of the first character of the found substring or npos if no such substring is found. 
 	 * 			Note that this is an offset from the start of the string, not the end.@n
-	 * 			If searching for an empty string (str.size(), count, or strlen(s) is zero) returns pos (the empty string is found immediately) 
+	 * 			If searching for an empty string (str.size(), count, or Strlen(s) is zero) returns pos (the empty string is found immediately) 
 	 * 			unless pos > GetLength() (including the case where pos == NPOS), in which case returns GetLength().@n
 	 * 			Otherwise, if GetLength() is zero, NPOS is always returned. 
 	 *
 	 */
 	constexpr size_t String::GetLastIndexOf(char ch, size_t pos) const
 	{
-		for (size_t i = mLength; i > 0; --i)
+		for (size_t i = mLength; i > pos; --i)
 		{
 			if (mString[i - 1] == ch)
 			{
@@ -1989,58 +1993,6 @@ namespace cave
 		}
 
 		return NPOS;
-	}
-
-	void String::Interleave(const char* s)
-	{
-		if (s == nullptr || *s == '\0')
-		{
-			return;
-		}
-
-		// Reallocate memory
-		size_t sLength = strlen(s);
-		char* newString = static_cast<char*>(mPool->Allocate((mLength + sLength + 1) * sizeof(char)));
-		strncpy(newString, mString, mLength + sLength);
-
-		char* newTemp = newString;
-		char* temp = mString;
-		constexpr bool MSTRING = true;
-		constexpr bool S = false;
-		bool turn = MSTRING;
-
-		for (; *temp != '\0' || *s != '\0'; ++newTemp)
-		{
-			if (*temp == '\0' && *s != '\0')
-			{
-				turn = S;
-			}
-			else if (*s == '\0' && *temp != '\0')
-			{
-				turn = MSTRING;
-			}
-
-			if (turn == MSTRING)
-			{
-				*newTemp = *temp;
-				++temp;
-				turn = S;
-			}
-			else if (turn == S)
-			{
-				*newTemp = *s;
-				++s;
-				turn = MSTRING;
-			}
-		}
-		++*newTemp = '\0';
-
-		// Reassign mString
-		mPool->Deallocate(mString, (mLength + 1) * sizeof(char));
-		mLength += sLength;
-		mString = static_cast<char*>(mPool->Allocate((mLength + 1) * sizeof(char)));
-		strncpy(mString, newString, mLength);
-		mPool->Deallocate(newString, (mLength + 1) * sizeof(char));
 	}
 
 	/**
@@ -2328,7 +2280,7 @@ namespace cave
 	 */
 	constexpr bool operator==(const String& lhs, const char* rhs) noexcept
 	{
-		size_t rhsLength = strlen(rhs);
+		size_t rhsLength = Strlen(rhs);
 
 		if (lhs.mLength != rhsLength)
 		{
@@ -2389,11 +2341,11 @@ namespace cave
 	 */
 	std::ostream& operator<<(std::ostream& os, const String& str)
 	{
-		if (str.GetLength() >= os.width())
+		if (str.GetLength() >= static_cast<size_t>(os.width()))
 		{
 			os.rdbuf()->sputn(str.mString, str.GetLength());
 		}
-		else if (os.flags() & std::ios_base::adjustfield == std::ios_base::left)
+		else if (os.flags() & (std::ios_base::adjustfield == std::ios_base::left))
 		{
 			os.rdbuf()->sputn(str.mString, str.GetLength());
 			for (size_t i = 0ul; i < os.width() - str.GetLength(); ++i)
@@ -2436,15 +2388,17 @@ namespace cave
 		str.Clear();
 
 		size_t readCharacterCount = 0ul;
-		bool isEof = false;
+		// bool isEof = false;
 		size_t width = (is.width() > 0) ? is.width() : str.GetMaxSize();
-		for (
-			char c = static_cast<char>(is.get()), isEof = is.eof(); 
-			readCharacterCount < width && !isEof && !std::isspace(c, is.getloc()); 
-			++readCharacterCount, c = static_cast<char>(is.get()), isEof = is.eof()
+		for
+		(
+			char c = static_cast<char>(is.get()); 
+			readCharacterCount < width && !is.eof() && !std::isspace(c, is.getloc()); 
+			++readCharacterCount, c = static_cast<char>(is.get())
 		)
 		{
 			str.Append(1, c);
+			// isEof = is.eof();
 		}
 
 		if (str.GetLength() <= 0)
@@ -2489,14 +2443,16 @@ namespace cave
 		size_t readCharacterCount = 0ul;
 		size_t maxSize = str.GetMaxSize();
 		bool isEof = false;
-		size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
-		for (
-			char c = static_cast<char>(input.get()), isEof = input.eof(); 
-			!isEof && c != delim && readCharacterCount < maxSize; 
-			++readCharacterCount, c = static_cast<char>(input.get()), isEof = input.eof()
+		// size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
+		for
+		(
+			char c = static_cast<char>(input.get()); 
+			!input.eof() && c != delim && readCharacterCount < maxSize; 
+			++readCharacterCount, c = static_cast<char>(input.get())
 		)
 		{
 			str.Append(1, c);
+			isEof = input.eof();
 		}
 
 		if (isEof)
@@ -2552,14 +2508,15 @@ namespace cave
 		size_t readCharacterCount = 0ul;
 		size_t maxSize = str.GetMaxSize();
 		bool isEof = false;
-		size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
+		// size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
 		for (
-			char c = static_cast<char>(input.get()), isEof = input.eof(); 
-			!isEof && c != delim && readCharacterCount < maxSize; 
-			++readCharacterCount, c = static_cast<char>(input.get()), isEof = input.eof()
+			char c = static_cast<char>(input.get()); 
+			!input.eof() && c != delim && readCharacterCount < maxSize; 
+			++readCharacterCount, c = static_cast<char>(input.get())
 		)
 		{
 			str.Append(1, c);
+			isEof = input.eof();
 		}
 
 		if (isEof)
@@ -2697,7 +2654,7 @@ namespace cave
 				}
 			}
 
-			if (base == 16 && str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X')
+			if (base == 16 && (str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X'))
 			{
 				index += 2;
 				if (pos != nullptr)
@@ -2896,7 +2853,7 @@ namespace cave
 				}
 			}
 
-			if (base == 16 && str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X')
+			if (base == 16 && (str.mString[index + 1] == 'x' || str.mString[index + 1] == 'X'))
 			{
 				index += 2;
 				if (pos != nullptr)
@@ -3449,22 +3406,30 @@ namespace cave
 				}
 			}
 		}
-		else if (
-			((strncmp(&str.mString[index], "INF", 3) == 0
-			|| strncmp(&str.mString[index], "inf", 3) == 0) && std::isspace(str.mString[index + 3]))
-			|| ((strncmp(&str.mString[index], "INFINITY", 8) == 0
-			|| strncmp(&str.mString[index], "infinity", 8) == 0) && std::isspace(str.mString[index + 8]))
+		else if
+		(
+			(
+				(strncmp(&str.mString[index], "INF", 3) == 0
+				|| strncmp(&str.mString[index], "inf", 3) == 0) && std::isspace(str.mString[index + 3])
+			)
+			||
+			(
+				(strncmp(&str.mString[index], "INFINITY", 8) == 0
+				|| strncmp(&str.mString[index], "infinity", 8) == 0) 
+				&& std::isspace(str.mString[index + 8])
+			)
 		)
 		{
 			result = INFINITY;
 		}
-		else if (
-			(strncmp(&str.mString[index], "NAN", 3) == 0
-			|| strncmp(&str.mString[index], "nan", 3) == 0)
-			&& ('0' <= str.mString[index + 3] && str.mString[index + 3] <= '9'
-			|| 'a' <= str.mString[index + 3] && str.mString[index + 3] <= 'z'
-			|| 'A' <= str.mString[index + 3] && str.mString[index + 3] <= 'Z'
-			|| str.mString[index + 3] == '_')
+		else if
+		(
+			((strncmp(&str.mString[index], "NAN", 3) == 0
+			|| strncmp(&str.mString[index], "nan", 3) == 0))
+			&& (('0' <= str.mString[index + 3] && str.mString[index + 3] <= '9')
+			|| ('a' <= str.mString[index + 3] && str.mString[index + 3] <= 'z')
+			|| ('A' <= str.mString[index + 3] && str.mString[index + 3] <= 'Z')
+			|| (str.mString[index + 3] == '_'))
 		)
 		{
 			result = NAN;
@@ -3534,9 +3499,10 @@ namespace cave
 					break;
 				}
 			}
-			if (
-				!isExponential && result == 0.0f && digit == 0
-				|| isExponential && exponential == 0 && digit == 0
+			if
+			(
+				(!isExponential && result == 0.0f && digit == 0)
+				|| (isExponential && exponential == 0 && digit == 0)
 			)
 			{
 				++index;
@@ -3641,10 +3607,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size] = { '\0', };
-		snprintf(s, size, "%d", value);
+		size_t sLength = size + 1ul;
+		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
+		Memory::Memset(s, 0, sLength);
+		snprintf(s, sLength, "%d", value);
 
-		return String{s};
+		String result = String{s};
+		Memory::Free(s);
+		
+		return result;
 	}
 	
 	/**
@@ -3667,10 +3638,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size] = { '\0', };
-		snprintf(s, size, "%ld", value);
+		size_t sLength = size + 1ul;
+		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
+		Memory::Memset(s, 0, sLength);
+		snprintf(s, sLength, "%ld", value);
 
-		return String{s};
+		String result = String{s};
+		Memory::Free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3693,10 +3669,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size] = { '\0', };
-		snprintf(s, size, "%u", value);
+		size_t sLength = size + 1ul;
+		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
+		Memory::Memset(s, 0, sLength);
+		snprintf(s, sLength, "%u", value);
 
-		return String{s};
+		String result = String{s};
+		Memory::Free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3719,10 +3700,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size] = { '\0', };
-		snprintf(s, size, "%lu", value);
+		size_t sLength = size + 1ul;
+		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
+		Memory::Memset(s, 0, sLength);
+		snprintf(s, sLength, "%lu", value);
 
-		return String{s};
+		String result = String{s};
+		Memory::Free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3745,10 +3731,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size + 1 + 6] = { '\0', };
-		snprintf(s, size + 1 + 6 + 1, "%f", value);
+		size_t sLength = size + 1ul + 6ul + 1ul;
+		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
+		Memory::Memset(s, 0, sLength);
+		snprintf(s, sLength, "%f", value);
 
-		return String{s};
+		String result = String{s};
+		Memory::Free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3771,10 +3762,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size + 1 + 6] = { '\0', };
-		snprintf(s, size + 1 + 6 + 1, "%f", value);
+		size_t sLength = size + 1ul + 6ul + 1ul;
+		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
+		Memory::Memset(s, 0, sLength);
+		snprintf(s, sLength, "%f", value);
 
-		return String{s};
+		String result = String{s};
+		Memory::Free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3797,10 +3793,15 @@ namespace cave
 			++size;
 		}
 
-		char s[size + 1 + 6] = { '\0', };
-		snprintf(s, size + 1 + 6 + 1, "%Lf", value);
+		size_t sLength = size + 1ul + 6ul + 1ul;
+		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
+		Memory::Memset(s, 0, sLength);
+		snprintf(s, sLength, "%Lf", value);
 
-		return String{s};
+		String result = String{s};
+		Memory::Free(s);
+		
+		return result;
 	}
 
 	/**
@@ -3899,7 +3900,7 @@ namespace cave
 
 			{
 				char mutable_c_str[] = "another C-style string";
-				String s(mutable_c_str + 8, mutable_c_str + strlen(mutable_c_str) - 1);
+				String s(mutable_c_str + 8, mutable_c_str + Strlen(mutable_c_str) - 1);
 				assert(strncmp(s.GetCString(), "C-style string", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String::String(const char* first, const char* last) TEST SUCCESS");
 			}
@@ -3913,7 +3914,7 @@ namespace cave
 
 			{
 				String s(String("C++ by ") + String("example"));
-				assert(s.GetLength() == strlen("C++ by example"));
+				assert(s.GetLength() == Strlen("C++ by example"));
 				assert(strncmp(s.GetCString(), "C++ by example", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String::String(String&& str) TEST SUCCESS");
 			}
@@ -3982,7 +3983,7 @@ namespace cave
 			{
 				String const c("Exemplary");
 				char const& f = c.GetFront();
-				assert(strncmp(&f, "Exemplary", strlen(&f)) == 0);
+				assert(strncmp(&f, "Exemplary", Strlen(&f)) == 0);
 			}
 
 			LOGD(eLogChannel::CORE_STRING, std::cout, "char& String::GetFront() TEST SUCCESS");
@@ -4009,7 +4010,7 @@ namespace cave
 		void GetCString()
 		{
 			String const s("Emplary");
-			assert(s.GetLength() == strlen(s.GetCString()));
+			assert(s.GetLength() == Strlen(s.GetCString()));
 			assert(0 == *(s.GetCString() + s.GetLength()));
 
 			LOGD(eLogChannel::CORE_STRING, std::cout, "const char* String::GetCString() TEST SUCCESS");
@@ -4233,15 +4234,15 @@ namespace cave
 				String str = "hello world";
 
 				str.Replace(0, 1, String("bey"));
-				assert(str.GetLength() == strlen("beyello world"));
+				assert(str.GetLength() == Strlen("beyello world"));
 				assert(strncmp(str.GetCString(), "beyello world", str.GetLength()) == 0);
 
 				str.Replace(str.GetLength(), 1, String("boy"));
-				assert(str.GetLength() == strlen("beyello worldboy"));
+				assert(str.GetLength() == Strlen("beyello worldboy"));
 				assert(strncmp(str.GetCString(), "beyello worldboy", str.GetLength()) == 0);
 
 				str.Replace(2, 2, String(""));
-				assert(str.GetLength() == strlen("bello worldboy"));
+				assert(str.GetLength() == Strlen("bello worldboy"));
 				assert(strncmp(str.GetCString(), "bello worldboy", str.GetLength()) == 0);	
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String& String::Replace(size_t pos, size_t count, const String& str) TEST SUCCESS");
 			}
@@ -4250,15 +4251,15 @@ namespace cave
 				String str = "hello world";
 
 				str.Replace(0, 1, String("bey"), 1, 1);
-				assert(str.GetLength() == strlen("eello world"));
+				assert(str.GetLength() == Strlen("eello world"));
 				assert(strncmp(str.GetCString(), "eello world", str.GetLength()) == 0);
 
 				str.Replace(str.GetLength(), 1, String("boy"), 3, 1);
-				assert(str.GetLength() == strlen("eello world"));
+				assert(str.GetLength() == Strlen("eello world"));
 				assert(strncmp(str.GetCString(), "eello world", str.GetLength()) == 0);
 
 				str.Replace(0, 5, String("good morning, hello"), 14, 5);
-				assert(str.GetLength() == strlen("hello world"));
+				assert(str.GetLength() == Strlen("hello world"));
 				assert(strncmp(str.GetCString(), "hello world", str.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String& String::Replace(size_t pos, size_t count, const String& str, size_t pos2, size_t count2 = NPOS) TEST SUCCESS");
 			}
@@ -4267,15 +4268,15 @@ namespace cave
 				String str = "hello world";
 
 				str.Replace(0, 1, "bey", 2);
-				assert(str.GetLength() == strlen("beello world"));
+				assert(str.GetLength() == Strlen("beello world"));
 				assert(strncmp(str.GetCString(), "beello world", str.GetLength()) == 0);
 
 				str.Replace(str.GetLength(), 1, "boy", 1);
-				assert(str.GetLength() == strlen("beello worldb"));
+				assert(str.GetLength() == Strlen("beello worldb"));
 				assert(strncmp(str.GetCString(), "beello worldb", str.GetLength()) == 0);
 
 				str.Replace(2, 2, "blyat", 0);
-				assert(str.GetLength() == strlen("belo worldb"));
+				assert(str.GetLength() == Strlen("belo worldb"));
 				assert(strncmp(str.GetCString(), "belo worldb", str.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String& String::Replace(size_t pos, size_t count, const char* cStr, size_t count2) TEST SUCCESS");
 			}
@@ -4284,15 +4285,15 @@ namespace cave
 				String str = "hello world";
 
 				str.Replace(0, 1, "bey");
-				assert(str.GetLength() == strlen("beyello world"));
+				assert(str.GetLength() == Strlen("beyello world"));
 				assert(strncmp(str.GetCString(), "beyello world", str.GetLength()) == 0);
 
 				str.Replace(str.GetLength(), 1, "boy");
-				assert(str.GetLength() == strlen("beyello worldboy"));
+				assert(str.GetLength() == Strlen("beyello worldboy"));
 				assert(strncmp(str.GetCString(), "beyello worldboy", str.GetLength()) == 0);
 
 				str.Replace(2, 2, "");
-				assert(str.GetLength() == strlen("bello worldboy"));
+				assert(str.GetLength() == Strlen("bello worldboy"));
 				assert(strncmp(str.GetCString(), "bello worldboy", str.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String& String::Replace(size_t pos, size_t count, const char* cStr) TEST SUCCESS");
 			}
@@ -4301,11 +4302,11 @@ namespace cave
 				String str = "hello world";
 
 				str.Replace(0, 1, 3, 'h');
-				assert(str.GetLength() == strlen("hhhello world"));
+				assert(str.GetLength() == Strlen("hhhello world"));
 				assert(strncmp(str.GetCString(), "hhhello world", str.GetLength()) == 0);
 
 				str.Replace(str.GetLength(), 2, 4, 'd');
-				assert(str.GetLength() == strlen("hhhello worlddddd"));
+				assert(str.GetLength() == Strlen("hhhello worlddddd"));
 				assert(strncmp(str.GetCString(), "hhhello worlddddd", str.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String& String::Replace(size_t pos, size_t count, size_t count2, char ch) TEST SUCCESS");
 			}
@@ -4317,12 +4318,12 @@ namespace cave
  
 			// count is npos, returns [pos, GetLength())
 			String sub1 = a.GetSubstring(10);
-			assert(sub1.GetLength() == strlen("abcdefghij"));
+			assert(sub1.GetLength() == Strlen("abcdefghij"));
 			assert(strncmp(sub1.GetCString(), "abcdefghij", sub1.GetLength()) == 0);
 		
 			// both pos and pos+count are within bounds, returns [pos, pos+count)
 			String sub2 = a.GetSubstring(5, 3);
-			assert(sub2.GetLength() == strlen("567"));
+			assert(sub2.GetLength() == Strlen("567"));
 			assert(strncmp(sub2.GetCString(), "567", sub2.GetLength()) == 0);
 		
 			// pos is within bounds, pos+count is not, returns [pos, GetLength()) 
@@ -4331,7 +4332,7 @@ namespace cave
 			// String sub4 = a.GetSubstring(17, 3);
 			// since a.GetLength() == 20, pos == a.GetLength()-3 == 17, and a.GetLength()-pos == 3
 		
-			assert(sub4.GetLength() == strlen("hij"));
+			assert(sub4.GetLength() == Strlen("hij"));
 			assert(strncmp(sub4.GetCString(), "hij", sub4.GetLength()) == 0);
 		
 			LOGD(eLogChannel::CORE_STRING, std::cout, "String String::GetSubstring(size_t pos, size_t count) TEST SUCCESS");
@@ -4345,12 +4346,12 @@ namespace cave
 
 			// Shorten
 			longString.Resize(desired_length);
-			assert(longString.GetLength() == strlen("Where is"));
+			assert(longString.GetLength() == Strlen("Where is"));
 			assert(strncmp(longString.GetCString(), "Where is", longString.GetLength()) == 0);
 			
 			// Lengthen
 			shortString.Resize(desired_length, 'a');
-			assert(shortString.GetLength() == strlen("Haaaaaaa"));
+			assert(shortString.GetLength() == Strlen("Haaaaaaa"));
 			assert(strncmp(shortString.GetCString(), "Haaaaaaa", shortString.GetLength()) == 0);
 
 			LOGD(eLogChannel::CORE_STRING, std::cout, "void String::Resize(size_t count, char ch) TEST SUCCESS");
@@ -4363,29 +4364,29 @@ namespace cave
 		
 			// search from beginning of string
 			n = s.GetIndexOf("is");
-			assert(n != String::NPOS);
+			assert(static_cast<size_t>(n) != String::NPOS);
 			String sub1 = s.GetSubstring(n);
-			assert(sub1.GetLength() == strlen("is is a string"));
+			assert(sub1.GetLength() == Strlen("is is a string"));
 			assert(strncmp(sub1.GetCString(), "is is a string", sub1.GetLength()) == 0);
 		
 			// search from position 5
 			n = s.GetIndexOf("is", 5);
-			assert(n != String::NPOS);
+			assert(static_cast<size_t>(n) != String::NPOS);
 			String sub2 = s.GetSubstring(n);
-			assert(sub2.GetLength() == strlen("is a string"));
+			assert(sub2.GetLength() == Strlen("is a string"));
 			assert(strncmp(sub2.GetCString(), "is a string", sub2.GetLength()) == 0);
 			LOGD(eLogChannel::CORE_STRING, std::cout, "size_t String::GetIndexOf(const char* s, size_t pos) TEST SUCCESS");
 		
 			// find a single character
 			n = s.GetIndexOf('a');
-			assert(n != String::NPOS);
+			assert(static_cast<size_t>(n) != String::NPOS);
 			String sub3 = s.GetSubstring(n);
-			assert(sub3.GetLength() == strlen("a string"));
+			assert(sub3.GetLength() == Strlen("a string"));
 			assert(strncmp(sub3.GetCString(), "a string", sub3.GetLength()) == 0);
 		
 			// find a single character
 			n = s.GetIndexOf('q');
-			assert(n == String::NPOS);
+			assert(static_cast<size_t>(n) == String::NPOS);
 			LOGD(eLogChannel::CORE_STRING, std::cout, "size_t String::GetIndexOf(char ch, size_t pos) TEST SUCCESS");
 		}
 
@@ -4398,14 +4399,14 @@ namespace cave
 			n = s.GetLastIndexOf("is");
 			assert(n != String::NPOS && n == 5);
 			String sub1 = s.GetSubstring(n);
-			assert(sub1.GetLength() == strlen("is a string"));
+			assert(sub1.GetLength() == Strlen("is a string"));
 			assert(strncmp(sub1.GetCString(), "is a string", sub1.GetLength()) == 0);
 
 			// search backwards from position 4
 			n = s.GetLastIndexOf("is", 4);
 			assert(n != String::NPOS && n == 2);
 			String sub2 = s.GetSubstring(n);
-			assert(sub2.GetLength() == strlen("is is a string"));
+			assert(sub2.GetLength() == Strlen("is is a string"));
 			assert(strncmp(sub2.GetCString(), "is is a string", sub2.GetLength()) == 0);
 			LOGD(eLogChannel::CORE_STRING, std::cout, "size_t String::GetIndexOf(const char* s, size_t pos) TEST SUCCESS");
 			
@@ -4413,7 +4414,7 @@ namespace cave
 			n = s.GetLastIndexOf('s');
 			assert(n != String::NPOS && n == 10);
 			String sub3 = s.GetSubstring(n);
-			assert(sub3.GetLength() == strlen("string"));
+			assert(sub3.GetLength() == Strlen("string"));
 			assert(strncmp(sub3.GetCString(), "string", sub3.GetLength()) == 0);
 
 			// find a single character
@@ -4429,7 +4430,7 @@ namespace cave
 				String lhs = "hello ";
 				String rhs = "world!";
 				String result = lhs + rhs;
-				assert(result.GetLength() == strlen("hello world!"));
+				assert(result.GetLength() == Strlen("hello world!"));
 				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const String& lhs, const String& rhs) TEST SUCCESS");
 			}
@@ -4438,7 +4439,7 @@ namespace cave
 				String lhs = "hello ";
 				const char* rhs = "world!";
 				String result = lhs + rhs;
-				assert(result.GetLength() == strlen("hello world!"));
+				assert(result.GetLength() == Strlen("hello world!"));
 				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const String& lhs, const char* rhs) TEST SUCCESS");
 			}
@@ -4447,7 +4448,7 @@ namespace cave
 				String lhs = "hello";
 				char rhs = '!';
 				String result = lhs + rhs;
-				assert(result.GetLength() == strlen("hello!"));
+				assert(result.GetLength() == Strlen("hello!"));
 				assert(strncmp(result.GetCString(), "hello!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const String& lhs, char rhs) TEST SUCCESS");
 			}
@@ -4456,7 +4457,7 @@ namespace cave
 				const char* lhs = "hello ";
 				String rhs = "world!";
 				String result = lhs + rhs;
-				assert(result.GetLength() == strlen("hello world!"));
+				assert(result.GetLength() == Strlen("hello world!"));
 				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const char* lhs, const String& rhs) TEST SUCCESS");
 			}
@@ -4465,7 +4466,7 @@ namespace cave
 				char lhs = 'h';
 				String rhs = "ello!";
 				String result = lhs + rhs;
-				assert(result.GetLength() == strlen("hello!"));
+				assert(result.GetLength() == Strlen("hello!"));
 				assert(strncmp(result.GetCString(), "hello!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(char lhs, const String& rhs) TEST SUCCESS");
 			}
@@ -4474,7 +4475,7 @@ namespace cave
 				String lhs = "hello ";
 				String rhs = "world!";
 				String result = std::move(lhs) + std::move(rhs);
-				assert(result.GetLength() == strlen("hello world!"));
+				assert(result.GetLength() == Strlen("hello world!"));
 				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(String&& lhs, String&& rhs) TEST SUCCESS");
 			}
@@ -4483,7 +4484,7 @@ namespace cave
 				String lhs = "hello ";
 				String rhs = "world!";
 				String result = std::move(lhs) + rhs;
-				assert(result.GetLength() == strlen("hello world!"));
+				assert(result.GetLength() == Strlen("hello world!"));
 				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(String&& lhs, const String& rhs) TEST SUCCESS");
 			}
@@ -4492,7 +4493,7 @@ namespace cave
 				String lhs = "hello ";
 				const char* rhs = "world!";
 				String result = std::move(lhs) + rhs;
-				assert(result.GetLength() == strlen("hello world!"));
+				assert(result.GetLength() == Strlen("hello world!"));
 				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(String&& lhs, const char* rhs) TEST SUCCESS");
 			}
@@ -4501,7 +4502,7 @@ namespace cave
 				String lhs = "hello";
 				char rhs = '!';
 				String result = std::move(lhs) + rhs;
-				assert(result.GetLength() == strlen("hello!"));
+				assert(result.GetLength() == Strlen("hello!"));
 				assert(strncmp(result.GetCString(), "hello!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(String&& lhs, char rhs) TEST SUCCESS");
 			}
@@ -4510,7 +4511,7 @@ namespace cave
 				String lhs = "hello ";
 				String rhs = "world!";
 				String result = lhs + std::move(rhs);
-				assert(result.GetLength() == strlen("hello world!"));
+				assert(result.GetLength() == Strlen("hello world!"));
 				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const String& lhs, String&& rhs) TEST SUCCESS");
 			}
@@ -4519,7 +4520,7 @@ namespace cave
 				const char* lhs = "hello ";
 				String rhs = "world!";
 				String result = lhs + std::move(rhs);
-				assert(result.GetLength() == strlen("hello world!"));
+				assert(result.GetLength() == Strlen("hello world!"));
 				assert(strncmp(result.GetCString(), "hello world!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(const char* lhs, String&& rhs) TEST SUCCESS");
 			}
@@ -4528,7 +4529,7 @@ namespace cave
 				char lhs = 'h';
 				String rhs = "ello!";
 				String result = lhs + std::move(rhs);
-				assert(result.GetLength() == strlen("hello!"));
+				assert(result.GetLength() == Strlen("hello!"));
 				assert(strncmp(result.GetCString(), "hello!", result.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, std::cout, "String operator+(char lhs, String&& rhs) TEST SUCCESS");
 			}

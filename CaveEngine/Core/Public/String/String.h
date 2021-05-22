@@ -168,12 +168,11 @@ namespace cave
 		constexpr size_t GetLastIndexOf(const char* s, size_t pos, size_t count) const;
 		constexpr size_t GetLastIndexOf(const char* s, size_t pos = NPOS) const;
 		constexpr size_t GetLastIndexOf(char ch, size_t pos = NPOS) const;
-		void Interleave(const char* s);
 
 		// Constants
 		static constexpr size_t NPOS = -1;
 		static constexpr size_t ALIGNED_BYTE = 16ul;
-
+		static constexpr size_t MAX_SIZE = 1024ul;
 	private:
 		MemoryPool* mPool = &gCoreMemoryPool;
 		size_t mLength = 0ul;
@@ -190,6 +189,95 @@ namespace cave
 	String ToString(long double value);
 
 	String operator""_s(const char* str, size_t len);
+
+	constexpr eResult Strcpy(char* dest, size_t destSize, const char* src, size_t count);
+	constexpr eResult Strcat(char* dest, size_t destSize, const char* src, size_t count);
+	constexpr size_t Strlen(const char* str, size_t strSize = String::MAX_SIZE);
+	constexpr int32_t Strcmp(const char* lhs, const char* rhs, size_t count);
+
+	constexpr eResult Strcpy(char* dest, size_t destSize, const char* src, size_t count)
+	{
+		if (dest == nullptr || src == nullptr)
+		{
+			return eResult::CAVE_INVALID_ARG;
+		}
+#ifdef __WIN32__
+		if (strncpy_s(dest, destSize, src, count) != 0)
+		{
+			return eResult::CAVE_FAIL;
+		}
+#else
+
+#ifdef CAVE_BUILD_DEBUG
+		assert(Strlen(dest) <= destSize);
+#endif
+		if (destSize < count)
+		{
+			count = destSize;
+		}
+		
+		if (strncpy(dest, src, count) != 0)
+		{
+			return eResult::CAVE_FAIL;
+		}
+#endif
+
+		return eResult::CAVE_OK;
+	}
+
+	constexpr eResult Strcat(char* dest, size_t destSize, const char* src, size_t count)
+	{
+		if (dest == nullptr || src == nullptr)
+		{
+			return eResult::CAVE_INVALID_ARG;
+		}
+#ifdef __WIN32__
+		if (strncat_s(dest, destSize, src, count) != 0)
+		{
+			return eResult::CAVE_FAIL;
+		}
+#else
+
+#ifdef CAVE_BUILD_DEBUG
+		assert(Strlen(dest) <= destSize);
+#endif
+		if (destSize < count)
+		{
+			count = destSize;
+		}
+		
+		if (strncat(dest, src, count) != 0)
+		{
+			return eResult::CAVE_FAIL;
+		}
+#endif
+
+		return eResult::CAVE_OK;
+	}
+
+	constexpr size_t Strlen(const char* str, size_t strSize)
+	{
+#ifdef __WIN32__
+		return strlen_s(str, strSize);
+#else
+		if (str == nullptr)
+		{
+			return 0;
+		}
+
+		size_t size = 0ul;
+		while (str[size++] != '\0' && size < strSize)
+		{
+		}
+
+		return size;
+#endif
+	}
+
+	constexpr int32_t Strcmp(const char* lhs, const char* rhs, size_t count)
+	{
+		return strncmp(lhs, rhs, count);
+	}
 
 #ifdef CAVE_BUILD_DEBUG
 	namespace StringTest

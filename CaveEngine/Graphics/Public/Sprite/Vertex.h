@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <iostream>
-
 #include "CoreTypes.h"
 
 namespace cave
@@ -111,8 +109,8 @@ namespace cave
 	{
 	}
 
-	constexpr uint8_t VERTEX_POSITION = 0b01;
-	constexpr uint8_t VERTEX_TEXCOORD = 0b10;
+	constexpr uint32_t VERTEX_POSITION = 0b01;
+	constexpr uint32_t VERTEX_TEXCOORD = 0b10;
 
 
 
@@ -120,7 +118,7 @@ namespace cave
 	{
 	public:
 		Float3 Position = Float3(0.0f, 0.0f, 0.0f);
-		uint8_t VertexFlag = VERTEX_POSITION;
+		uint32_t VertexFlag = VERTEX_POSITION;
 
 		Vertex() = default;
 		Vertex(const Vertex& other) = default;

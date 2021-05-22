@@ -21,7 +21,7 @@ namespace cave
 		Destroy();
 	}
 
-	eResult WindowsRenderer::Init(uint32_t screenWidth, uint32_t screenHeight, Window* window)
+	eResult WindowsRenderer::Init(Window* window)
 	{
 		CreateDeviceDependentResources();
 		CreateWindowSizeDependentResources(window);

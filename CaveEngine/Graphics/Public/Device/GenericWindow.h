@@ -46,10 +46,12 @@ namespace cave
 		uint32_t mHeight = 0u;
 #ifdef __WIN32__
 		float mNear = 0.1f;
+		float mFar = 1000.0f;
 #else
 		float mNear = -1.0f;
+		float mFar = 1.0f;
 #endif
-		float mFar = 100.0f;
+
 #ifdef __WIN32__
 		const wchar_t* mTitle = nullptr;
 #else

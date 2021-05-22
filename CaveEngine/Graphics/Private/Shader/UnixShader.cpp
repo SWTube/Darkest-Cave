@@ -33,30 +33,20 @@ namespace cave
 		return *this;
 	}
 
-	void UnixShader::Render(uint32_t indexCount, const glm::mat4& worldMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, uint32_t texture)
+	void UnixShader::Render(uint32_t indexCount, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, uint32_t texture)
 	{
-		int32_t worldLocation = glGetUniformLocation(mProgram, "World");
-		if (worldLocation < 0)
+		glUseProgram(mProgram);
+		int32_t viewLocation = glGetUniformLocation(mProgram, "View");
+		if (viewLocation < 0)
 		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, location: %d, error code: 0x%x", "World", worldLocation, glGetError());
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, location: %d, error code: 0x%x", "View", viewLocation, glGetError());
+			assert(false);
 		}
-		glUniformMatrix4fv(worldLocation, 1, false, glm::value_ptr(worldMatrix));
+		glUniformMatrix4fv(viewLocation, 1, false, glm::value_ptr(viewMatrix));
 		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
 		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniformMatrix4fv location: %u, error code: 0x%x", worldLocation, glError);
+			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniformMatrix4fv location: %u, error code: 0x%x", viewLocation, glError);
 		}
-
-		// int32_t viewLocation = glGetUniformLocation(mProgram, "View");
-		// if (viewLocation < 0)
-		// {
-		// 	LOGEF(eLogChannel::GRAPHICS, std::cerr, "Failed to get uniform location: %s, location: %d, error code: 0x%x", "View", worldLocation, glGetError());
-		// 	assert(false);
-		// }
-		// glUniformMatrix4fv(viewLocation, 1, false, glm::value_ptr(viewMatrix));
-		// if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
-		// {
-		// 	LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniformMatrix4fv location: %u, error code: 0x%x", viewLocation, glError);
-		// }
 
 		int32_t projectionLocation = glGetUniformLocation(mProgram, "Projection");
 		if (projectionLocation < 0)
@@ -65,22 +55,16 @@ namespace cave
 			assert(false);
 		}
 		glUniformMatrix4fv(projectionLocation, 1, false, glm::value_ptr(projectionMatrix));
+		// glUniformMatrix4fv(projectionLocation, 1, false, glm::value_ptr(glm::mat4(1.0f)));
 		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniformMatrix4fv location: %u, error code: 0x%x", projectionMatrix, glError);
 		}
 
-		glBindTextureUnit(texture - 1u, texture);
+		glBindTextureUnit(0u, texture);
 		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
 		{
 			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glBindTextureUnit error code: 0x%x, %u", glError, texture);
-		}
-
-		int32_t textureIndexLocation = glGetUniformLocation(mProgram, "textureIndex");
-		glUniform1i(textureIndexLocation, texture - 1u);
-		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
-		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glUniform1i location: %u, error code: 0x%x", textureIndexLocation, glError);
 		}
 
 		// glUseProgram(mProgram);
@@ -101,12 +85,13 @@ namespace cave
 	eResult UnixShader::Compile()
 	{
 		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
-		ShaderInfo shaders[] = {
-			{ GL_VERTEX_SHADER, mVertexShaderFilePath.c_str()},
-			{ GL_FRAGMENT_SHADER, mFragmentShaderFilePath.c_str() },
-			{ GL_NONE, nullptr }
+		ShaderInfo shaders[] =
+		{
+			{ .type=GL_VERTEX_SHADER, .filename=mVertexShaderFilePath.c_str(), .shader=0u },
+			{ .type=GL_FRAGMENT_SHADER, .filename=mFragmentShaderFilePath.c_str(), .shader=0u },
+			{ .type=GL_NONE, .filename=nullptr, .shader=0u }
 		};
-
+		
 		eResult error = compileShaderFromFile(shaders);
 		if (error != eResult::CAVE_OK)
 		{
