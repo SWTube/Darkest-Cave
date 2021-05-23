@@ -93,7 +93,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
@@ -210,6 +210,10 @@
     <ClInclude Include="Core\Public\Memory\Allocator.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
+    <ClInclude Include="Gameplay\Public\Game.h" />
+    <ClInclude Include="Gameplay\Public\Object\Actor.h" />
+    <ClInclude Include="Gameplay\Public\Object\Component.h" />
+    <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h" />
@@ -222,11 +226,10 @@
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="EngineMain.cpp" />
-    <ClCompile Include="Gameplay\Private\Time\FlatformTimer.cpp" />
-    <ClCompile Include="Gameplay\Private\Time\WindowsTimer.cpp" />
-    <ClCompile Include="Gameplay\Public\CoreType.ixx" />
-    <ClCompile Include="Gameplay\Public\Time\FlatformTimer.ixx" />
-    <ClCompile Include="Gameplay\Public\Time\WindowsTimer.ixx" />
+    <ClCompile Include="Gameplay\Private\Game.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Actor.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Component.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Object.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
