@@ -74,7 +74,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     sequencer->AddChild(d);
     sequencer->AddChild(e);
     
-    root->Invoke();
+    root->Run();
 
     root->Clear();
 

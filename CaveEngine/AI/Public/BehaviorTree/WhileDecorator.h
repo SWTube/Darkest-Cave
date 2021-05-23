@@ -15,11 +15,11 @@ namespace cave
         WhileDecorator();
         WhileDecorator(const char*, bool (*)());
 
-        virtual bool Invoke() override 
+        virtual bool Run() override
         {
             while (mCondition)
             {
-                GetChild()->Invoke();
+                GetChild()->Run();
             }
             return false;
         }

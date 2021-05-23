@@ -15,11 +15,11 @@ namespace cave
         IfDecorator();
         IfDecorator(const char*, bool (*)());
 
-        virtual bool Invoke() override 
+        virtual bool Run() override
         {
             if (mCondition())
             {
-                return GetChild()->Invoke();
+                return GetChild()->Run();
             }
         }
 

@@ -15,7 +15,7 @@ namespace cave
         ActionNode();
         ActionNode(const char*, void (*)());
 
-        virtual bool Invoke() override 
+        virtual bool Run() override
         {
             mNodeFunction();
             return true;

@@ -14,7 +14,7 @@ namespace cave
             Node();
             Node(const char*);
 
-            virtual bool Invoke() = 0;
+            virtual bool Run() = 0;
 
             // Get node name
             const char* GetNodeName() const;

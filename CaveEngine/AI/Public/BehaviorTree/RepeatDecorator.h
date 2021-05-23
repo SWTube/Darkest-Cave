@@ -15,11 +15,11 @@ namespace cave
         RepeatDecorator();
         RepeatDecorator(const char*, int);
 
-        virtual bool Invoke() override 
+        virtual bool Run() override
         {
             for(int i = 0; i < mRepeatCount; i++)
             {
-                GetChild()->Invoke();
+                GetChild()->Run();
             }
             return true;
         }

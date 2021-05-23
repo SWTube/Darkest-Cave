@@ -15,9 +15,9 @@ namespace cave
         Sequencer();
         Sequencer(const char*);
 
-        virtual bool Invoke() override {
+        virtual bool Run() override {
             for (const auto& child : GetChildren()) {
-                if (!child->Invoke()) {
+                if (!child->Run()) {
                     return false;
                 }
             }
