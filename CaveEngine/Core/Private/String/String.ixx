@@ -20,6 +20,8 @@ export namespace cave
 		return (length + 1ul + N - 1ul) - ((length + 1ul + N - 1ul) % N);
 	}
 
+	constexpr size_t Strlen(const char* str);
+
 	/**
 	 *
 	 * @brief String stores and manipulates sequences of <code>char</code> objects,
