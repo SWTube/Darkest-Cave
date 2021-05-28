@@ -1,10 +1,16 @@
 #pragma once
 
+#include <string>
+#include <coroutine>
+
+#include "Math/Vector2.h"
 #include "Object/Obejct.h"
 
 namespace cave
 {
 	class Component;
+	class Coroutine;
+	class IEnumerator;
 
 	class Actor : public Object
 	{
@@ -16,14 +22,23 @@ namespace cave
 		static void Print();
 
 		void CancelInvoke();
-		void Invoke();
-		void InvokeRepeating();
-		void IsInvoking();
+		void Invoke(std::string& methodName, float time);
+		void InvokeRepeating(std::string& methodName, float time, float repeatRate);
+		bool IsInvoking(std::string& methodName);
 		void StartCoroutine();
 		void StopAllCoroutines();
-		void StopCoroutine();
+		void StopCoroutine(std::string& methodName);
+		void StopCoroutine(IEnumerator routine);
+		void StopCoroutine(Coroutine& routine);
 
-		virtual void Awake();
+		Component& GetComponent(Type& type);
+		Component& GetComponentInChildren(Type& type);
+		Component& GetComponentInParent(Type& type);
+		Component* GetComponents(Type& type);
+		Component* GetComponentsInChildren(Type& type);
+		Component* GetComponentsInParent(Type& type);
+
+		/*virtual void Awake();
 		virtual void FixedUpdate();
 		virtual void LateUpdate();
 		virtual void OnAnimatorIK();
@@ -71,11 +86,12 @@ namespace cave
 
 		virtual void Reset();
 		virtual void Start();
-		virtual void Update();
+		virtual void Update();*/
 
-		Component& GetComponent(const char* name);
 	private:
-		bool mRunInEditMode;
-		bool mGUILayoout;
+		bool mbEnable;
+		bool mbActive;
+		bool mbRunInEditMode;
+		bool mbGUILayoout;
 	};
 }

@@ -2,5 +2,13 @@
 
 namespace cave
 {
+	Actor::Actor()
+	{
 
+	}
+
+	Actor::~Actor()
+	{
+
+	}
 }

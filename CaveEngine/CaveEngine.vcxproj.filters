@@ -82,6 +82,12 @@
     <Filter Include="Header Files\Gameplay\Object">
       <UniqueIdentifier>{23b9f94a-9557-48e2-9815-e2065b3f9ecf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Gameplay\Tmp">
+      <UniqueIdentifier>{a50049df-759e-4ca7-8f38-316d83e98626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Tmp">
+      <UniqueIdentifier>{6881057e-a26c-4853-b503-b31763bf5d03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -150,6 +156,12 @@
     <ClInclude Include="Gameplay\Public\Game.h">
       <Filter>Header Files\Gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="Gameplay\Public\Tmp\ObjectManager.h">
+      <Filter>Header Files\Gameplay\Tmp</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Tmp\Log.h">
+      <Filter>Header Files\Gameplay\Tmp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -190,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Game.cpp">
       <Filter>Source Files\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Tmp\ObjectManager.cpp">
+      <Filter>Source Files\Gameplay\Tmp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
