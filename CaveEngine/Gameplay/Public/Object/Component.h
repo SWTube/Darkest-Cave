@@ -1,33 +1,28 @@
 #pragma once
 
-#include "Math/Vector2.h"
 #include "Object/Obejct.h"
 
 namespace cave
 {
+	class Actor;
+
 	class Component : public Object
 	{
 	public:
 		Component();
+		/** only use for test.*/
+		Component(const Component& other);
+		Component(Component&& other) noexcept;
 
 		virtual ~Component();
+		Component& operator=(const Component& other);
+		Component& operator=(Component&& other) noexcept;
 
-		void BroadcastMessage();
-		void CompareTag();
-		void GetComponent();
-		void GetComponentInChildren();
-		void GetComponentInParent();
-		void GetComponents();
-		void GetComponentsInChildren();
-		void GetComponentsInParent();
-		void SendMessage();
-		void SendMessageUpwards();
-
+		void SetTarget(Actor& target);
+		Actor& GetTarget() const;
 
 	private:
-		Object* mOwner;
-		std::string tag;
-		Vector2 mTransform;
+		Actor* mTarget;
 	};
 
 }
