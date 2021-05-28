@@ -3967,7 +3967,7 @@ export namespace cave
 		return size;
 	}
 
-	constexpr int32_t Strcmp(const char* lhs, const char* rhs, size_t count)
+	int32_t Strcmp(const char* lhs, const char* rhs, size_t count)
 	{
 		return strncmp(lhs, rhs, count);
 	}
