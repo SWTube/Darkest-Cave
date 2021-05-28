@@ -18,7 +18,9 @@ namespace cave
 	{
 	public:
 		static void* Malloc(size_t size);
+#if !defined(__WIN32__)
 		static void* AlignedAlloc(size_t alignment, size_t size);
+#endif
 		static void* Calloc(size_t num, size_t size);
 		static void* Realloc(void* ptr, size_t newSize);
 		static void Free(void* ptr);
