@@ -36,7 +36,7 @@ namespace cave
 		void DeleteTexture();
 
 #ifdef __WIN32__
-		void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext, const std::filesystem::path& filePath, eTextureFormat textureFormat);
+		void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		constexpr ID3D11ShaderResourceView* GetTexture();
 #else
 		void Init();

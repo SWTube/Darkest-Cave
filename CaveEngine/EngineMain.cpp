@@ -220,7 +220,7 @@ void RenderTest()
 	
 	cave::Texture* texture1 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
 	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGB);
-	texture1->Init(main.GetRenderer()->GetDeviceResources()->GetDevice(), main.GetRenderer()->GetDeviceResources()->GetDeviceContext(), "seafloor.dds", cave::eTextureFormat::RGB);
+	texture1->Init(main.GetRenderer()->GetDeviceResources()->GetDevice(), main.GetRenderer()->GetDeviceResources()->GetDeviceContext());
 	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
 	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGBA);
 

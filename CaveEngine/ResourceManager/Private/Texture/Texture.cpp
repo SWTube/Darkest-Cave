@@ -25,6 +25,12 @@ namespace cave
 		mTexture = reinterpret_cast<TexturePointer*>(mPool->Allocate(sizeof(TexturePointer)));
 		mTexture->ReferenceCount = 1u;
 		mTexture->Texture = nullptr;
+
+		mFilePath /= L"CaveEngine\\Graphics\\Resource";
+		std::filesystem::create_directories(mFilePath / L"Textures");
+		mFilePath /= L"Textures";
+		mFilePath /= filePath;
+		mFormat = textureFormat;
 #else
 		mFilePath /= "CaveEngine/Graphics/Resource";
 		std::filesystem::create_directories(mFilePath / "Textures");
@@ -286,12 +292,7 @@ namespace cave
 	}
 
 #ifdef __WIN32__
-	void Texture::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext, const std::filesystem::path& filePath, eTextureFormat textureFormat) {
-		mFilePath /= L"CaveEngine\\Graphics\\Resource";
-		std::filesystem::create_directories(mFilePath / L"Textures");
-		mFilePath /= L"Textures";
-		mFilePath /= filePath;
-
+	void Texture::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext) {
 		//const wchar_t* extension = mFilePath.extension().c_str();
 		if (mFilePath.extension() == ".png")
 		{
