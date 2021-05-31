@@ -4,6 +4,7 @@
 
 #include "CoreTypes.h"
 #include "CoreGlobals.h"
+#include "Memory/Memory.h"
 #include "Memory/MemoryPool.h"
 #include "Utils/Crt.h"
 
@@ -18,6 +19,8 @@ export namespace cave
 
 		return (length + 1ul + N - 1ul) - ((length + 1ul + N - 1ul) % N);
 	}
+
+	constexpr size_t Strlen(const char* str);
 
 	/**
 	 *
@@ -3952,26 +3955,22 @@ export namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	constexpr size_t Strlen(const char* str, size_t strSize)
+	constexpr size_t Strlen(const char* str)
 	{
-#ifdef __WIN32__
-		return strlen_s(str, strSize);
-#else
 		if (str == nullptr)
 		{
 			return 0;
 		}
 
 		size_t size = 0ul;
-		while (str[size++] != '\0' && size < strSize)
+		while (str[size++] != '\0')
 		{
 		}
 
 		return size;
-#endif
 	}
 
-	constexpr int32_t Strcmp(const char* lhs, const char* rhs, size_t count)
+	int32_t Strcmp(const char* lhs, const char* rhs, size_t count)
 	{
 		return strncmp(lhs, rhs, count);
 	}
