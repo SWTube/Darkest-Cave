@@ -22,8 +22,9 @@ TextureClass::~TextureClass()
 bool TextureClass::Initialize(ID3D11Device* device, WCHAR* filename)
 {
 	//텍스처를 파일로부터 읽어온다
+
 	if (FAILED(CreateWICTextureFromFile(device, filename, nullptr, &m_texture))) {
-		return false;
+		if(CreateDDSTextureFromFile(device, filename, nullptr, &m_texture)) return false;
 	}
 
 	//if(FAILED(CreateDDSTextureFromFile(device, filename, nullptr, &m_texture)))

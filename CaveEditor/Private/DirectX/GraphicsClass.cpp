@@ -307,6 +307,8 @@ bool GraphicsClass::Render(float rotation)
 	//	return false;
 	//}
 
+	m_Direct3D->TurnOnAlphaBlending();
+
 	for (BitmapClass* bitmap : m_Bitmaps) {
 		bitmap->Render(m_Direct3D->GetDeviceContext());
 	
@@ -325,6 +327,8 @@ bool GraphicsClass::Render(float rotation)
 		return false;
 	}
 	*/
+
+	m_Direct3D->TurnOffAlphaBlending();
 
 	m_Direct3D->TurnZBufferOn();
 

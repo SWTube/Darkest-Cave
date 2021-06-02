@@ -54,7 +54,7 @@ END_MESSAGE_MAP()
 void ListBoxFormView::AddTextureFileButton()
 {
 	// 파일 열기 창
-	static TCHAR BASED_CODE szFilter[] = _T("이미지 파일(*.BMP, *.GIF, *.JPG) | *.BMP;*.GIF;*.JPG;*.bmp;*.jpg;*.gif |모든파일(*.*)|*.*||");
+	static TCHAR BASED_CODE szFilter[] = _T("이미지 파일(*.BMP, *.GIF, *.JPG , *.PNG) | *.BMP;*.GIF;*.JPG; *.PNG;*.bmp;*.jpg;*.gif;*.png |모든파일(*.*)|*.*||");
 	CFileDialog dlg(TRUE, _T(".jpg"), _T("image"), OFN_HIDEREADONLY, szFilter);
 	if (IDOK == dlg.DoModal()) {
 		CString pathName = dlg.GetPathName();
