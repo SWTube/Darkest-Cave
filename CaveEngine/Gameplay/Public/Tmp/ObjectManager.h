@@ -4,26 +4,44 @@
 
 #include "Object/Obejct.h"
 
+constexpr size_t DEFAULT_SIZE = 1;
+
 namespace cave
 {
-	class ObjectManager
+	class ObjectManager final
 	{
 	public:
+		friend class Game;
+
 		~ObjectManager();
 
-		static ObjectManager& Instance();
+		static void Print();
 
-		static Object& Allocate();
+		static ObjectManager& Instance();
+		static void Destroy();
+
+		static void Allocate(const Object& object);
 		static void Deallocate(unsigned int internalIndex);
 
-		static std::vector<Object>& GetObjectArray();
+		static Object* GetObjectArray();
+		static void Explosion();
 
 	private:
 		ObjectManager();
+		ObjectManager(const ObjectManager& other) = delete;
+		ObjectManager(ObjectManager&& other) = delete;
+
+		Object& operator=(const ObjectManager& other) = delete;
+		Object& operator=(ObjectManager&& other) = delete;
+
+		static void Initialize();
+		static void Free(void* target);
 	
 	private:
 		static ObjectManager* mObjectManager;
-		static std::vector<Object> mObjectArray;
-		static size_t mSize;
+		static Object* mObjectArray;
+		static Object* mFreeObjectArray;
+		static size_t mMaxSize;
+		static size_t mObjectID;
 	};
 }

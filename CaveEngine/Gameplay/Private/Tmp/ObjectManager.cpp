@@ -1,56 +1,106 @@
+#include <cassert>
+#include <iostream>
+
 #include "Tmp/ObjectManager.h"
+#include "Tmp/Log.h"
 
 namespace cave
 {
+	Object** ObjectManager::mObjectArray = nullptr;
+	size_t ObjectManager::mMaxSize = 0;
 	ObjectManager* ObjectManager::mObjectManager = nullptr;
-	std::vector<Object> ObjectManager::mObjectArray(100);
-	size_t ObjectManager::mSize = 1;
+	size_t ObjectManager::mObjectID = 100000;
 
 	ObjectManager::ObjectManager()
 	{
-		
+		Log("ObjectManager::ObjectManager()");
+		//Initialize();
 	}
 
 	ObjectManager::~ObjectManager()
 	{
-		
+		Log("ObjectManager::~ObjectManager()");
+
+		//free(mObjectArray);
+	}
+
+	void ObjectManager::Print()
+	{
+		Log("ObjectManager::Print()");
+
+#ifdef _DEBUG
+		std::cout << "mObjectManager: " << &mObjectManager << std::endl;
+		std::cout << "mObjectArray: " << mObjectArray << std::endl;
+		std::cout << "mMaxSize: " << mMaxSize << std::endl;
+#endif // _DEBUG
+
 	}
 
 	ObjectManager& ObjectManager::Instance()
 	{
+		Log("ObjectManager::Instance()");
+
 		if (mObjectManager == nullptr)
 		{
-			mObjectManager = new ObjectManager();
+			mObjectManager = (ObjectManager*)malloc(sizeof(ObjectManager));
 		}
 
 		return *mObjectManager;
 	}
 
-	Object& ObjectManager::Allocate()
+	void ObjectManager::Destroy()
 	{
-		size_t index = mSize;
-		mObjectArray[index].SetInternalIndex(index);
-		++mSize;
+		Free(mObjectArray);
+		Free(mObjectManager);
+	}
 
-		return *(mObjectArray[index].mOwner);
+	void ObjectManager::Allocate(const Object& object)
+	{
+		
 	}
 
 	void ObjectManager::Deallocate(unsigned int internalIndex)
 	{
-		if (mSize > 0)
-		{
-			--mSize;
-		}
-		unsigned int tmp = mObjectArray[internalIndex].mInternalIndex;
-		mObjectArray[internalIndex].mInternalIndex = mObjectArray[mSize].mInternalIndex;
-		mObjectArray[mSize].mInternalIndex = tmp;
-		Swap(mObjectArray[internalIndex], mObjectArray[mSize]);
-		mObjectArray[mSize].Initialize();
+
 	}
 
-	std::vector<Object>& ObjectManager::GetObjectArray()
+	void ObjectManager::Free(void* target)
 	{
+		if (target != nullptr)
+		{
+			free(target);
+		}
+	}
+
+	Object* ObjectManager::GetObjectArray()
+	{
+		assert(mObjectArray != nullptr);
+
 		return mObjectArray;
 	}
 
+	void ObjectManager::Explosion()
+	{
+		Log("ObjectManager::Explosion()");
+
+		if (mObjectArray != nullptr)
+		{
+			free(mObjectArray);
+		}
+	}
+
+	void ObjectManager::Initialize()
+	{
+		Log("ObjectManager::Initialize()");
+
+		mMaxSize = 100;
+		mObjectArray = (Object**)malloc(sizeof(Object*) * mMaxSize);
+		
+		assert(mObjectArray != nullptr);
+
+		for (size_t i = 0; i < mMaxSize; ++i)
+		{
+			mObjectArray[i] = nullptr;
+		}
+	}
 }
