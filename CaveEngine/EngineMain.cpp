@@ -41,6 +41,9 @@
 //    return static_cast<int>(msg.wParam);
 //}
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <crtdbg.h>
 #include <cstdlib>
 #if _DEBUG
@@ -48,26 +51,15 @@
 #define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
 #endif // _DEBUG
 
-#include "Debug/LogManager.h"
-#include "Gameplay/Public/Tmp/ObjectManager.h"
+#include "Gameplay/Public/Game.h"
 
 using namespace cave;
 
-void Test()
-{
-	Object& a = ObjectManager::Allocate();
-	Object& b = ObjectManager::Allocate();
-	Object& c = ObjectManager::Allocate();
-
-	ObjectManager::Deallocate(c.GetInternalIndex());
-
-	std::cout << c.GetInternalIndex() << std::endl;
-
-}
-
 int main()
 {
-	Test();
+	Game::Init();
+	Game::Loop();
+	Game::ShutDown();
 
 	_CrtDumpMemoryLeaks();
 

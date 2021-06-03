@@ -28,7 +28,7 @@ namespace cave
 		void StartCoroutine();
 		void StopAllCoroutines();
 		void StopCoroutine(std::string& methodName);
-		void StopCoroutine(IEnumerator routine);
+		void StopCoroutine(IEnumerator& routine);
 		void StopCoroutine(Coroutine& routine);
 
 		Component& GetComponent(Type& type);
@@ -38,7 +38,7 @@ namespace cave
 		Component* GetComponentsInChildren(Type& type);
 		Component* GetComponentsInParent(Type& type);
 
-		/*virtual void Awake();
+		virtual void Awake();
 		virtual void FixedUpdate();
 		virtual void LateUpdate();
 		virtual void OnAnimatorIK();
@@ -86,7 +86,7 @@ namespace cave
 
 		virtual void Reset();
 		virtual void Start();
-		virtual void Update();*/
+		virtual void Update();
 
 	private:
 		bool mbEnable;

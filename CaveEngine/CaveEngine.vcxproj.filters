@@ -206,6 +206,9 @@
     <ClCompile Include="Gameplay\Private\Tmp\ObjectManager.cpp">
       <Filter>Source Files\Gameplay\Tmp</Filter>
     </ClCompile>
+    <ClCompile Include="Gameplay\Private\Tmp\Log.cpp">
+      <Filter>Source Files\Gameplay\Tmp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
