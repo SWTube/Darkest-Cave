@@ -1,13 +1,23 @@
 #include <cassert>
+#include <conio.h>
+#include <iostream>
+
+#include "Tmp/Log.h"
+#include "Tmp/ObjectManager.h"
 #include "Game.h"
 
 namespace cave
 {
-	Game* Game::mGame = nullptr;
+	Actor** Game::mActorUpdateArray = nullptr;
+	size_t Game::mMaxSize = 0;
 
 	Game::Game()
 	{
+		Log("Game::Game()");
 
+		Init();
+		Loop();
+		ShutDown();
 	}
 
 	Game::~Game()
@@ -15,29 +25,43 @@ namespace cave
 
 	}
 
-	Game& Game::Instance()
-	{
-		if (mGame == nullptr)
-		{
-			mGame = new Game();
-		}
-		assert(mGame != nullptr);
-		return *mGame;
-	}
-
 	void Game::Init()
 	{
+		Log("Game::Init()");
 
+		mMaxSize = 1024;
+		mActorUpdateArray = (Actor**)malloc(sizeof(Actor*) * mMaxSize);
+
+		ObjectManager::Initialize();
 	}
 
 	void Game::Loop()
 	{
+		Log("Game::Loop()");
 
+		for (size_t i = 0; i < ObjectManager::mMaxSize; ++i)
+		{
+			ObjectManager::mObjectArray[i]->Print();
+		}
+
+		while (true)
+		{
+			if (_kbhit())
+			{
+				char c = _getch();
+				if (c == 113 || c == 81)
+				{
+					break;
+				}
+			}
+		}
 	}
 
 	void Game::ShutDown()
 	{
-		delete mGame;
+		Log("Game::Shutdown()");
+
+		ObjectManager::Destroy();
 	}
 
 }

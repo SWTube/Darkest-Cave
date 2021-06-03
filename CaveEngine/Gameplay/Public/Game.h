@@ -2,12 +2,12 @@
 
 namespace cave
 {
-	class Game
+	class Actor;
+
+	class Game final
 	{
 	public:
-		virtual ~Game();
-
-		static Game& Instance();
+		~Game();
 
 		static void Init();
 		static void Loop();
@@ -17,6 +17,7 @@ namespace cave
 		Game();
 
 	private:
-		static Game* mGame;
+		static Actor** mActorUpdateArray;
+		static size_t mMaxSize;
 	};
 }
