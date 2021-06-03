@@ -30,37 +30,45 @@ namespace cave
 		static void DontDestroyOnLoad(Object& target);
 
 		static Object& FindObjectOfType(Type& type);
-		static std::vector<Object>& FindObjectsOfType(Type& type, bool includeInactive = false);
+		static Object& FindObjectsOfType(Type& type, bool includeInactive = false);
 
 		static Object& Instantiate(Object& original);
 		static Object& Instantiate(Object& original, Transform& parent);
 		static Object& Instantiate(Object& original, Vector3& position, Quaternion& rotation);
 		static Object& Instantiate(Object& original, Vector3& position, Quaternion& rotation, Transform& parent);
 
-		int GetInstanceID();
+		unsigned int GetInstanceID();
 		const char* ToString();
 
 		unsigned int GetInternalIndex() const;
 
-		bool CompareTag(std::string& tag);
+		bool CompareTag(const char* tag);
 
-	protected:
-		void Initialize();
+		__forceinline bool IsNull() const;
+
+		void Print();
 
 	private:
-		void SetInternalIndex(int internalIndex);
+		void Initialize();
+
+		void SetInternalIndex(unsigned int internalIndex);
+		
+		void SetInstanceID(unsigned int id);
 
 	private:
 		Object* mOwner;
 
-		std::string mName;
-		std::string mTag;
+		const char* mName;
+		const char* mTag;
 
 		Vector2 mTransform;
 
 		unsigned char mHideFlags;
 		unsigned int mInternalIndex;
 		unsigned int mInstanceID;
+
+		bool mbNull;
+		bool mbIsUsed;
 	};
 
 	void Swap(Object& left, Object& right);

@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 
 #include "Object/Obejct.h"
 #include "Tmp/ObjectManager.h"
@@ -9,8 +10,6 @@ namespace cave
 	Object::Object()
 	{
 		Log("Object::Object()");
-
-		Initialize();
 	}
 
 	Object::Object(const Object& other)
@@ -68,6 +67,23 @@ namespace cave
 		return *this;
 	}
 
+	void Object::Print()
+	{
+#ifdef _DEBUG
+		assert(mOwner != nullptr);
+		assert(mName != nullptr);
+		assert(mTag != nullptr);
+		std::cout << "===========================================================\n";
+		std::cout << "Object[" << mInternalIndex << "]'s member\n\n";
+		std::cout << "mOwner: " << mOwner << "\n";
+		std::cout << "mName: " << mName << "\n";
+		std::cout << "mTag: " << mTag << "\n";
+		std::cout << "mHideFlags: " << mHideFlags << "\n";
+		std::cout << "mInternalIndex: " << mInternalIndex << "\n";
+		std::cout << "mInstanceID: " << mInstanceID << std::endl;
+#endif // _DEBUG
+
+	}
 
 	void Object::Destroy(Object& target, float timeDelay)
 	{
@@ -75,7 +91,7 @@ namespace cave
 
 		if (timeDelay == 0.f)
 		{
-			ObjectManager::Deallocate(target.GetInternalIndex());
+			target.Initialize();
 		}
 	}
 
@@ -83,7 +99,7 @@ namespace cave
 	{
 		Log("Object::DestroyImmediate(Object&)");
 
-		ObjectManager::Deallocate(target.GetInternalIndex());
+		target.Initialize();
 	}
 
 	void Object::DontDestroyOnLoad(Object& target)
@@ -95,25 +111,17 @@ namespace cave
 	{
 		Log("Object::FindObjectOfType(Type&)");
 
-		std::vector<Object>& vec = ObjectManager::GetObjectArray();
-		auto iter = vec.begin();
-		for (auto end = vec.end(); iter != end; ++iter)
-		{
-			
-		}
-		return *iter;
+		Object vec;
+
+		return vec;
 	}
 
-	std::vector<Object>& Object::FindObjectsOfType(Type& type, bool includeInactive)
+	Object& Object::FindObjectsOfType(Type& type, bool includeInactive)
 	{
 		Log("Object::FindObjectsOfType(Type&, bool)");
 
-		std::vector<Object>& vec = ObjectManager::GetObjectArray();
-		std::vector<Object> result;
-		for (auto& e : vec)
-		{
-			result.push_back(Instantiate(e));
-		}
+		Object result;
+
 		return result;
 	}
 
@@ -121,7 +129,7 @@ namespace cave
 	{
 		Log("Object::Instantiate(Object&)");
 
-		Object& tmp = ObjectManager::Allocate();
+		Object tmp;/* = ObjectManager::Allocate();*/
 		tmp.mName = original.mName;
 		tmp.mHideFlags = original.mHideFlags;
 
@@ -132,7 +140,7 @@ namespace cave
 	{
 		Log("Object::Instantiate(Object&, Transform&)");
 
-		Object& tmp = ObjectManager::Allocate();
+		Object tmp/* = ObjectManager::Allocate()*/;
 		tmp.mName = original.mName;
 		tmp.mHideFlags = original.mHideFlags;
 
@@ -143,7 +151,7 @@ namespace cave
 	{
 		Log("Object::Instantiate(Object&, Vector3&, Quaternion&)");
 
-		Object& tmp = ObjectManager::Allocate();
+		Object tmp/* = ObjectManager::Allocate()*/;
 		tmp.mName = original.mName;
 		tmp.mHideFlags = original.mHideFlags;
 
@@ -154,7 +162,7 @@ namespace cave
 	{
 		Log("Object::Instantiate(Object&, Vector3&, Quaternion&, Transform&)");
 
-		Object& tmp = ObjectManager::Allocate();
+		Object tmp/* = ObjectManager::Allocate()*/;
 		tmp.mName = original.mName;
 		tmp.mHideFlags = original.mHideFlags;
 
@@ -167,16 +175,17 @@ namespace cave
 
 		mOwner = this;
 		mHideFlags = 0x00000000;
-		mInternalIndex = -1;
+		mInternalIndex = 0;
 		mName = "";
 		mTag = "";
 
 		mTransform = { .x = 0.f, .y = 0.f};
-
-		mInstanceID = 0;
+		
+		mbNull = false;
+		mbIsUsed = false;
 	}
 
-	void Object::SetInternalIndex(int internalIndex)
+	void Object::SetInternalIndex(unsigned int internalIndex)
 	{
 		Log("Object::SetInternalIndex(int)");
 
@@ -190,23 +199,35 @@ namespace cave
 		return mInternalIndex;
 	}
 
-	int Object::GetInstanceID()
+	unsigned int Object::GetInstanceID()
 	{
 		Log("Object::GetInstanceID()");
 
 		return mInstanceID;
 	}
 
+	void Object::SetInstanceID(unsigned int id)
+	{
+		Log("Object::SetInstanceID(unsigned int)");
+
+		mInstanceID = id;
+	}
+
 	const char* Object::ToString()
 	{
 		Log("Object::ToString()");
 
-		return mName.c_str();
+		return mName;
 	}
 
-	bool Object::CompareTag(std::string& tag)
+	bool Object::CompareTag(const char* tag)
 	{
-		return mTag.compare(tag.c_str());
+		return strcmp(mTag, tag);
+	}
+
+	bool Object::IsNull() const
+	{
+		return mbNull;
 	}
 
 	void Swap(Object& left, Object& right)
