@@ -8,9 +8,6 @@
 
 namespace cave
 {
-	Actor** Game::mActorUpdateArray = nullptr;
-	size_t Game::mMaxSize = 0;
-
 	Game::Game()
 	{
 		Log("Game::Game()");
@@ -29,9 +26,6 @@ namespace cave
 	{
 		Log("Game::Init()");
 
-		mMaxSize = 1024;
-		mActorUpdateArray = (Actor**)malloc(sizeof(Actor*) * mMaxSize);
-
 		ObjectManager::Initialize();
 	}
 
@@ -39,10 +33,18 @@ namespace cave
 	{
 		Log("Game::Loop()");
 
+		Object* a = new Object();
+		Object* b = new Object();
+		Object* c = new Object();
+		
 		for (size_t i = 0; i < ObjectManager::mMaxSize; ++i)
 		{
-			ObjectManager::mObjectArray[i]->Print();
+			ObjectManager::mObjectArray[i].Print();
 		}
+
+		delete a;
+		delete b;
+		delete c;
 
 		while (true)
 		{

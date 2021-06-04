@@ -17,7 +17,6 @@ namespace cave
 		Game();
 
 	private:
-		static Actor** mActorUpdateArray;
-		static size_t mMaxSize;
+		
 	};
 }
