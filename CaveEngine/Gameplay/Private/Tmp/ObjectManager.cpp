@@ -6,7 +6,7 @@
 
 namespace cave
 {
-	Object** ObjectManager::mObjectArray = nullptr;
+	Object* ObjectManager::mObjectArray = nullptr;
 	size_t ObjectManager::mMaxSize = 0;
 	ObjectManager* ObjectManager::mObjectManager = nullptr;
 	size_t ObjectManager::mObjectID = 100000;
@@ -14,14 +14,11 @@ namespace cave
 	ObjectManager::ObjectManager()
 	{
 		Log("ObjectManager::ObjectManager()");
-		//Initialize();
 	}
 
 	ObjectManager::~ObjectManager()
 	{
 		Log("ObjectManager::~ObjectManager()");
-
-		//free(mObjectArray);
 	}
 
 	void ObjectManager::Print()
@@ -54,14 +51,37 @@ namespace cave
 		Free(mObjectManager);
 	}
 
-	void ObjectManager::Allocate(const Object& object)
+	Object* ObjectManager::Allocate()
 	{
-		
+		Log("ObjectManager::Allocate()");
+
+		Object* ptr = &mObjectArray[0];
+		for (size_t i = 1; i < mMaxSize; ++i)
+		{
+			if (!(mObjectArray[i].IsUsed()))
+			{
+				mObjectArray[i].SetInstanceID(mObjectID);
+				mObjectArray[i].SetUsed(true);
+				++mObjectID;
+				std::cout << mObjectID << std::endl;
+				ptr = &mObjectArray[i];
+
+				return ptr;
+			}
+		}
+		return ptr;
 	}
 
 	void ObjectManager::Deallocate(unsigned int internalIndex)
 	{
+		Log("ObjectManager::Deallocate(unsigned int)");
 
+		if (internalIndex == 0)
+		{
+			return;
+		}
+
+		mObjectArray[internalIndex].Initialize();
 	}
 
 	void ObjectManager::Free(void* target)
@@ -72,35 +92,20 @@ namespace cave
 		}
 	}
 
-	Object* ObjectManager::GetObjectArray()
-	{
-		assert(mObjectArray != nullptr);
-
-		return mObjectArray;
-	}
-
-	void ObjectManager::Explosion()
-	{
-		Log("ObjectManager::Explosion()");
-
-		if (mObjectArray != nullptr)
-		{
-			free(mObjectArray);
-		}
-	}
-
 	void ObjectManager::Initialize()
 	{
 		Log("ObjectManager::Initialize()");
 
 		mMaxSize = 100;
-		mObjectArray = (Object**)malloc(sizeof(Object*) * mMaxSize);
+		mObjectArray = (Object*)malloc(sizeof(Object) * mMaxSize);
 		
 		assert(mObjectArray != nullptr);
 
 		for (size_t i = 0; i < mMaxSize; ++i)
 		{
-			mObjectArray[i] = nullptr;
+			mObjectArray[i].Initialize();
+			mObjectArray[i].SetInternalIndex(i);
 		}
+		mObjectArray[0].SetNull(true);
 	}
 }

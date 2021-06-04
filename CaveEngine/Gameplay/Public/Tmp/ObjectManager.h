@@ -20,14 +20,11 @@ namespace cave
 		static ObjectManager& Instance();
 		static void Destroy();
 
-		static void Allocate(const Object& object);
+		static Object* Allocate();
 		static void Deallocate(unsigned int internalIndex);
 
-		static Object* GetObjectArray();
-		static void Explosion();
-
 	private:
-		ObjectManager();
+		ObjectManager() = delete;
 		ObjectManager(const ObjectManager& other) = delete;
 		ObjectManager(ObjectManager&& other) = delete;
 
@@ -40,7 +37,6 @@ namespace cave
 	private:
 		static ObjectManager* mObjectManager;
 		static Object* mObjectArray;
-		static Object* mFreeObjectArray;
 		static size_t mMaxSize;
 		static size_t mObjectID;
 	};
