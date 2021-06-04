@@ -69,6 +69,8 @@ namespace cave
 
 	void Object::Print()
 	{
+		Log("Object::Print()");
+
 #ifdef _DEBUG
 		assert(mOwner != nullptr);
 		assert(mName != nullptr);
@@ -80,7 +82,9 @@ namespace cave
 		std::cout << "mTag: " << mTag << "\n";
 		std::cout << "mHideFlags: " << mHideFlags << "\n";
 		std::cout << "mInternalIndex: " << mInternalIndex << "\n";
-		std::cout << "mInstanceID: " << mInstanceID << std::endl;
+		std::cout << "mInstanceID: " << mInstanceID << '\n';
+		std::cout << "mbNull: " << mbNull << '\n';
+		std::cout << "mbUsed: " << mbUsed << std::endl;
 #endif // _DEBUG
 
 	}
@@ -176,13 +180,14 @@ namespace cave
 		mOwner = this;
 		mHideFlags = 0x00000000;
 		mInternalIndex = 0;
+		mInstanceID = 0;
 		mName = "";
 		mTag = "";
 
 		mTransform = { .x = 0.f, .y = 0.f};
 		
 		mbNull = false;
-		mbIsUsed = false;
+		mbUsed = false;
 	}
 
 	void Object::SetInternalIndex(unsigned int internalIndex)
@@ -227,7 +232,26 @@ namespace cave
 
 	bool Object::IsNull() const
 	{
+		Log("Object::IsNull()");
+
 		return mbNull;
+	}
+
+	void Object::SetNull(bool isNull)
+	{
+		mbNull = isNull;
+	}
+
+	bool Object::IsUsed() const
+	{
+		Log("Object::IsUsed()");
+
+		return mbUsed;
+	}
+
+	void Object::SetUsed(bool isUsed)
+	{
+		mbUsed = isUsed;
 	}
 
 	void Swap(Object& left, Object& right)

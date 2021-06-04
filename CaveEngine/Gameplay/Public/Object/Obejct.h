@@ -44,7 +44,8 @@ namespace cave
 
 		bool CompareTag(const char* tag);
 
-		__forceinline bool IsNull() const;
+		bool IsNull() const;
+		bool IsUsed() const;
 
 		void Print();
 
@@ -52,8 +53,10 @@ namespace cave
 		void Initialize();
 
 		void SetInternalIndex(unsigned int internalIndex);
-		
 		void SetInstanceID(unsigned int id);
+
+		void SetNull(bool isNull);
+		void SetUsed(bool isUsed);
 
 	private:
 		Object* mOwner;
@@ -68,7 +71,7 @@ namespace cave
 		unsigned int mInstanceID;
 
 		bool mbNull;
-		bool mbIsUsed;
+		bool mbUsed;
 	};
 
 	void Swap(Object& left, Object& right);
