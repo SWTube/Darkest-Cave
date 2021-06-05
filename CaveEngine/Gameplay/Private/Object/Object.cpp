@@ -1,8 +1,12 @@
+/*!
+ * Copyright (c) 2021 SWTube. All rights reserved.
+ * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
+ */
 #include <cassert>
 #include <iostream>
 
 #include "Object/Obejct.h"
-#include "Tmp/ObjectManager.h"
+#include "Object/ObjectPool.h"
 #include "Tmp/Log.h"
 
 namespace cave
@@ -83,8 +87,6 @@ namespace cave
 		std::cout << "mHideFlags: " << mHideFlags << "\n";
 		std::cout << "mInternalIndex: " << mInternalIndex << "\n";
 		std::cout << "mInstanceID: " << mInstanceID << '\n';
-		std::cout << "mbNull: " << mbNull << '\n';
-		std::cout << "mbUsed: " << mbUsed << std::endl;
 #endif // _DEBUG
 
 	}
@@ -176,8 +178,6 @@ namespace cave
 	void Object::Initialize()
 	{
 		Log("Object::Initialize()");
-
-		mOwner = this;
 		mHideFlags = 0x00000000;
 		mInternalIndex = 0;
 		mInstanceID = 0;
@@ -185,9 +185,11 @@ namespace cave
 		mTag = "";
 
 		mTransform = { .x = 0.f, .y = 0.f};
-		
-		mbNull = false;
-		mbUsed = false;
+	}
+
+	void Object::SetOwner(Object& owner)
+	{
+		mOwner = &owner;
 	}
 
 	void Object::SetInternalIndex(unsigned int internalIndex)
@@ -228,30 +230,6 @@ namespace cave
 	bool Object::CompareTag(const char* tag)
 	{
 		return strcmp(mTag, tag);
-	}
-
-	bool Object::IsNull() const
-	{
-		Log("Object::IsNull()");
-
-		return mbNull;
-	}
-
-	void Object::SetNull(bool isNull)
-	{
-		mbNull = isNull;
-	}
-
-	bool Object::IsUsed() const
-	{
-		Log("Object::IsUsed()");
-
-		return mbUsed;
-	}
-
-	void Object::SetUsed(bool isUsed)
-	{
-		mbUsed = isUsed;
 	}
 
 	void Swap(Object& left, Object& right)

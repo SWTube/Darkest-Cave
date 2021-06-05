@@ -1,3 +1,7 @@
+/*!
+ * Copyright (c) 2021 SWTube. All rights reserved.
+ * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
+ */
 #pragma once
 
 #include <string>
@@ -15,7 +19,7 @@ namespace cave
 	class Object
 	{
 	public:
-		friend class ObjectManager;
+		friend class ObjectPool;
 
 		Object();
 		Object(const Object& other);
@@ -44,22 +48,17 @@ namespace cave
 
 		bool CompareTag(const char* tag);
 
-		bool IsNull() const;
-		bool IsUsed() const;
-
 		void Print();
 
 	private:
 		void Initialize();
 
+		void SetOwner(Object& owner);
 		void SetInternalIndex(unsigned int internalIndex);
 		void SetInstanceID(unsigned int id);
 
-		void SetNull(bool isNull);
-		void SetUsed(bool isUsed);
-
 	private:
-		Object* mOwner;
+		Object* mOwner = nullptr;
 
 		const char* mName;
 		const char* mTag;
@@ -69,9 +68,6 @@ namespace cave
 		unsigned char mHideFlags;
 		unsigned int mInternalIndex;
 		unsigned int mInstanceID;
-
-		bool mbNull;
-		bool mbUsed;
 	};
 
 	void Swap(Object& left, Object& right);
