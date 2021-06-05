@@ -2,49 +2,53 @@
 #include <conio.h>
 #include <iostream>
 
+#include "Object/ObjectPool.h"
+#include "Object/Obejct.h"
 #include "Tmp/Log.h"
-#include "Tmp/ObjectManager.h"
 #include "Game.h"
 
 namespace cave
 {
+	Game* Game::mGame = nullptr;
+
 	Game::Game()
 	{
 		Log("Game::Game()");
 
-		Init();
-		Loop();
-		ShutDown();
+		mObjectPool = new ObjectPool();
+
+		Object* a = mObjectPool->Allocate();
+		Object* b = mObjectPool->Allocate();
+		Object* c = mObjectPool->Allocate();
+
+		std::cout << a->GetInternalIndex() << " " << a->GetInstanceID() << std::endl;
+		std::cout << b->GetInternalIndex() << " " << b->GetInstanceID() << std::endl;
+		std::cout << c->GetInternalIndex() << " " << c->GetInstanceID() << std::endl;
 	}
 
 	Game::~Game()
 	{
+		Log("Game::~Game()");
 
+		delete mObjectPool;
+		free(mGame);
 	}
 
-	void Game::Init()
+	Game* Game::Instance()
 	{
-		Log("Game::Init()");
+		if (mGame == nullptr)
+		{
+			mGame = new Game();
+		}
+		
+		assert(mGame != nullptr);
 
-		ObjectManager::Initialize();
+		return mGame;
 	}
 
 	void Game::Loop()
 	{
 		Log("Game::Loop()");
-
-		Object* a = new Object();
-		Object* b = new Object();
-		Object* c = new Object();
-		
-		for (size_t i = 0; i < ObjectManager::mMaxSize; ++i)
-		{
-			ObjectManager::mObjectArray[i].Print();
-		}
-
-		delete a;
-		delete b;
-		delete c;
 
 		while (true)
 		{
@@ -57,13 +61,7 @@ namespace cave
 				}
 			}
 		}
+
+		this->~Game();
 	}
-
-	void Game::ShutDown()
-	{
-		Log("Game::Shutdown()");
-
-		ObjectManager::Destroy();
-	}
-
 }

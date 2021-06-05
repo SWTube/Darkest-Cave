@@ -57,9 +57,8 @@ using namespace cave;
 
 int main()
 {
-	Game::Init();
-	Game::Loop();
-	Game::ShutDown();
+	Game* game = Game::Instance();
+	game->Loop();
 
 	_CrtDumpMemoryLeaks();
 

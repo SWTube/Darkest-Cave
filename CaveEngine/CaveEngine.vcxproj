@@ -214,8 +214,8 @@
     <ClInclude Include="Gameplay\Public\Object\Actor.h" />
     <ClInclude Include="Gameplay\Public\Object\Component.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
+    <ClInclude Include="Gameplay\Public\Object\ObjectPool.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Log.h" />
-    <ClInclude Include="Gameplay\Public\Tmp\ObjectManager.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h" />
@@ -232,8 +232,8 @@
     <ClCompile Include="Gameplay\Private\Object\Actor.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Component.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Object.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\ObjectPool.cpp" />
     <ClCompile Include="Gameplay\Private\Tmp\Log.cpp" />
-    <ClCompile Include="Gameplay\Private\Tmp\ObjectManager.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
