@@ -162,6 +162,9 @@
     <ClInclude Include="Gameplay\Public\Object\ObjectPool.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\ActorPool.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">

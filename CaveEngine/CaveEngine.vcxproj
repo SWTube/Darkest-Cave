@@ -212,6 +212,7 @@
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Gameplay\Public\Game.h" />
     <ClInclude Include="Gameplay\Public\Object\Actor.h" />
+    <ClInclude Include="Gameplay\Public\Object\ActorPool.h" />
     <ClInclude Include="Gameplay\Public\Object\Component.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
     <ClInclude Include="Gameplay\Public\Object\ObjectPool.h" />

@@ -19,8 +19,6 @@ namespace cave
 	class Object
 	{
 	public:
-		friend class ObjectPool;
-
 		Object();
 		Object(const Object& other);
 		Object(Object&& other) noexcept;
@@ -46,7 +44,7 @@ namespace cave
 
 		unsigned int GetInternalIndex() const;
 
-		bool CompareTag(const char* tag);
+		bool CompareTag(unsigned int Tag);
 
 		void Print();
 
@@ -54,7 +52,6 @@ namespace cave
 		void Initialize();
 
 		void SetOwner(Object& owner);
-		void SetInternalIndex(unsigned int internalIndex);
 		void SetInstanceID(unsigned int id);
 
 	private:
