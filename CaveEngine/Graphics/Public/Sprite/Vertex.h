@@ -79,6 +79,7 @@ namespace cave
 		Float2& operator=(const Float2& other) = default;
 		constexpr Float2(const Float2&& other);
 		constexpr Float2& operator=(const Float2&& other);
+		constexpr Float2 operator+(const Float2& other);
 		constexpr Float2(float x, float y);
 		constexpr Float2(float* array);
 	};
@@ -87,6 +88,11 @@ namespace cave
 		: X(other.X)
 		, Y(other.Y)
 	{
+	}
+
+
+	constexpr Float2 Float2::operator+(const Float2& other) {
+		return Float2(X + other.X, Y + other.Y);
 	}
 
 	constexpr Float2& Float2::operator=(const Float2&& other)

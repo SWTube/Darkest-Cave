@@ -52,6 +52,8 @@ namespace cave
 		, mTexture(other.mTexture)
 		, mIndex(other.mIndex)
 		, mTarget(other.mTarget)
+		, mStartUV(other.mStartUV)
+		, mEndUV(other.mEndUV)
 	{
 		if (mTexture != nullptr)
 		{
@@ -68,12 +70,16 @@ namespace cave
 		, mTexture(other.mTexture)
 		, mIndex(other.mIndex)
 		, mTarget(other.mTarget)
+		, mStartUV(other.mStartUV)
+		, mEndUV(other.mEndUV)
 	{
 		other.mPool = nullptr;
 		other.mFilePath.clear();
 		other.mTexture = nullptr;
 		other.mIndex = -1;
 		other.mTarget = 0u;
+		//other.mStartUV = Float2(0.0f, 0.0f);
+		//other.mEndUV = Float2(1.0f, 1.0f);
 	}
 
 	Texture& Texture::operator=(const Texture& other)
@@ -85,6 +91,8 @@ namespace cave
 			mWidth = other.mWidth;
 			mHeight = other.mHeight;
 			mFormat = other.mFormat;
+			mStartUV = other.mStartUV;
+			mEndUV = other.mEndUV;
 			if (mTexture != nullptr)
 			{
 				--mTexture->ReferenceCount;
@@ -116,12 +124,16 @@ namespace cave
 			mTexture = other.mTexture;
 			mIndex = other.mIndex;
 			mTarget = other.mTarget;
+			mStartUV = other.mStartUV;
+			mEndUV = other.mEndUV;
 
 			other.mPool = nullptr;
 			other.mFilePath.clear();
 			other.mTexture = nullptr;
 			other.mIndex = 0u;
 			other.mTarget = -1;
+			//other.mStartUV = Float2(0.0f, 0.0f);
+			//other.mEndUV = Float2(1.0f, 1.0f);
 		}
 
 		return *this;
@@ -248,11 +260,21 @@ namespace cave
 #endif
 	}
 
+	void Texture::Update()
+	{
+		return;
+	}
+
 	void Texture::DeleteTexture()
 	{
 #if !defined(__WIN32__)
 		glDeleteTextures(1u, &mIndex);
 #endif
+	}
+
+	bool Texture::IsAnimation() const
+	{
+		return false;
 	}
 
 	void Texture::Destroy()
@@ -322,6 +344,21 @@ namespace cave
 		{
 			DdsTextureLoader::CreateDDSTextureFromFile(device, mFilePath.c_str(), nullptr, &mTexture->Texture);
 		}
+		//get width, height
+		ID3D11Resource* resource;
+		mTexture->Texture->GetResource(&resource);
+
+		ID3D11Texture2D* texture2D;
+		texture2D = (ID3D11Texture2D*)resource;
+		if (texture2D) {
+			//D3D11_Texture2d_DESC 정보 얻기
+			D3D11_TEXTURE2D_DESC desc;
+			texture2D->GetDesc(&desc);
+
+			mWidth = (int)desc.Width;
+			mHeight = (int)desc.Height;
+		}
+
 	}
 	void Texture::LoadFromPngData(ID3D11Device* device, ID3D11DeviceContext* deviceContext, unsigned char* pngData)
 	{

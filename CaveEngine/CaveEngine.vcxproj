@@ -246,7 +246,6 @@
     <ClInclude Include="Graphics\Public\Device\Window.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsWindow.h" />
-    <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\Camera.h" />
@@ -264,6 +263,7 @@
     <ClInclude Include="Graphics\Public\Sprite\Vertex.h" />
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
+    <ClInclude Include="ResourceManager\Public\Texture\AnimationTexture.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
   </ItemGroup>
@@ -308,6 +308,7 @@
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\UnixShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
+    <ClCompile Include="ResourceManager\Private\Texture\AnimationTexture.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />

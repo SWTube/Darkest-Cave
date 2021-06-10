@@ -10,6 +10,7 @@
 #include "CoreTypes.h"
 #include "Sprite/Vertex.h"
 #include "Texture/Texture.h"
+#include "Texture/AnimationTexture.h"
 
 namespace cave
 {

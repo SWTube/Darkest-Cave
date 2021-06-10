@@ -48,6 +48,9 @@ namespace cave
 		virtual void TurnZBufferOn() override;
 		virtual void TurnZBufferOff() override;
 
+		void TurnOnAlphaBlending();
+		void TurnOffAlphaBlending();
+
 		virtual void RenderStart() override;
 		virtual void RenderEnd() override;
 	private:
@@ -80,6 +83,11 @@ namespace cave
 		ID3D11DepthStencilView*  	mDepthStencilView = nullptr;
 		ID3D11RasterizerState*		mRasterizerState = nullptr;
 
+		//-----------------------------------------------------------------------------
+		// alpha blend
+		//-----------------------------------------------------------------------------
+		ID3D11BlendState* mAlphaEnableBlendingState = nullptr;
+		ID3D11BlendState* mAlphaDisableBlendingState = nullptr;
 
 		//-----------------------------------------------------------------------------
 		// Direct3D device metadata and device resource metadata

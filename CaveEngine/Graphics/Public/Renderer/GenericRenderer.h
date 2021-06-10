@@ -33,6 +33,7 @@ namespace cave
 		virtual void Destroy();
 
 		virtual eResult AddSprite(Sprite&& object);
+		virtual eResult AddSprite(const std::filesystem::path& filePath);
 		virtual eResult AddTexture(Texture&& texture);
 		virtual eResult RemoveSprite(uint32_t index);
 		virtual eResult RemoveTexture(uint32_t index);

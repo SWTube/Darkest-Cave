@@ -93,7 +93,7 @@ int main(int32_t argc, char** argv)
 	// Cleanup is handled in destructors.
     return 0;
 }
-
+/*
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool)
 {
@@ -126,7 +126,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto endTimeRec0 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec0 = endTimeRec0 - startTimeRec0;
 		memoryPoolAllocSum += elapsedTimeRec0.count() * 1000;
-		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
+		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
 
 		auto startTimeRec1 = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < N; ++i)
@@ -137,7 +137,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto endTimeRec1 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec1 = endTimeRec1 - startTimeRec1;
 		memoryPoolDeallocSum += elapsedTimeRec1.count() * 1000;
-		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
+		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
 
 		std::vector<void*> pointersByNew;
 		pointersByNew.reserve(N);
@@ -149,7 +149,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		}
 		auto endTimeRec2 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec2 = endTimeRec2 - startTimeRec2;
-		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
+		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
 		mallocAllocSum += elapsedTimeRec2.count() * 1000;
 
 		auto startTimeRec3 = std::chrono::high_resolution_clock::now();
@@ -160,7 +160,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		}
 		auto endTimeRec3 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec3 = endTimeRec3 - startTimeRec3;
-		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
+		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
 		freeDeallocSum += elapsedTimeRec3.count() * 1000;
 	}
 #ifdef __WIN32__
@@ -207,6 +207,8 @@ void MemoryTest2(cave::MemoryPool& pool)
 
 		pool.PrintPoolStatus();
 }
+*/
+
 
 void RenderTest()
 {
@@ -218,9 +220,10 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 	
-	cave::Texture* texture1 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
-	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGB);
+	cave::AnimationTexture* texture1 = reinterpret_cast<cave::AnimationTexture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::AnimationTexture)));
+	new(texture1) cave::AnimationTexture("meteo_effect.dds",21,1,true,cave::eTextureFormat::RGB);
 	texture1->Init(main.GetRenderer()->GetDeviceResources()->GetDevice(), main.GetRenderer()->GetDeviceResources()->GetDeviceContext());
+
 	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
 	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGBA);
 
@@ -231,13 +234,18 @@ void RenderTest()
 
 	cave::Sprite* object2 = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
 	new(object2) cave::Sprite(texture2, cave::gCoreMemoryPool);
+
 	
-	object->SetSize(100, 100);
+	//object->SetSize(200, 200);
+	object->SetPosition(200, 200);
+
 
 	cave::Renderer* renderer = main.GetRenderer();
 	// renderer->AddSprite(std::move(*object));
 	renderer->AddTexture(std::move(*texture1));
+	renderer->AddSprite("seafloor.dds");
 	renderer->AddSprite(std::move(*object));
+
 	// renderer->AddTexture(std::move(*texture2));
 	// renderer->SetSpriteTexture(0u, 1u);
 	// renderer->SetSpriteTexture(1u, 2u);

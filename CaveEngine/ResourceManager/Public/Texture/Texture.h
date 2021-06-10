@@ -11,6 +11,7 @@
 
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
+#include "Sprite/Vertex.h"
 
 namespace cave
 {
@@ -19,8 +20,8 @@ namespace cave
 		RGB,
 		RGBA,
 	};
-
-	struct Texture final
+	
+	class Texture 
 	{
 	public:
 		Texture(const std::filesystem::path& filePath, eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
@@ -28,15 +29,17 @@ namespace cave
 		Texture(Texture&& other);
 		Texture& operator=(const Texture& other);
 		Texture& operator=(Texture&& other);
-		~Texture();
+		virtual ~Texture();
 		MemoryPool* GetMemoryPool();
 
 		void Init();
+		virtual void Update();
 		void Destroy();
 		void DeleteTexture();
 
+		virtual bool IsAnimation() const;
 #ifdef __WIN32__
-		void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+		virtual void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		constexpr ID3D11ShaderResourceView* GetTexture();
 #else
 		void Init();
@@ -49,10 +52,12 @@ namespace cave
 		constexpr eTextureFormat GetFormat() const;
 		constexpr uint32_t GetIndex() const;
 		constexpr int32_t GetTarget() const;
-	private:
+		constexpr Float2 GetStartUV() const;
+		constexpr Float2 GetEndUV() const;
+	protected:
 
 #ifdef __WIN32__
-		void LoadFromPngData(ID3D11Device* device, ID3D11DeviceContext* deviceContext,unsigned char* pngData);
+		void LoadFromPngData(ID3D11Device* device, ID3D11DeviceContext* deviceContext, unsigned char* pngData);
 #endif
 		typedef struct TexturePointer
 		{
@@ -113,6 +118,8 @@ namespace cave
 		TexturePointer* mTexture = nullptr;
 		uint32_t mIndex = 0u;
 		int32_t mTarget = -1;
+		Float2 mStartUV = Float2(0.0f, 0.0f);
+		Float2 mEndUV = Float2(1.0f, 1.0f);
 	};
 
 #ifdef __WIN32__
@@ -158,4 +165,15 @@ namespace cave
 	{
 		return mTarget;
 	}
+
+	constexpr Float2 Texture::GetStartUV() const 
+	{
+		return mStartUV;
+	}
+
+	constexpr Float2 Texture::GetEndUV() const
+	{
+		return mEndUV;
+	}
+
 } // namespace cave

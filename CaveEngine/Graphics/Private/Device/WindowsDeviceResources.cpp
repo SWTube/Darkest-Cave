@@ -440,6 +440,40 @@ namespace cave
 			return false;
 		}
 
+
+		////
+
+			// 블렌드 상태 구조체를 초기화 합니다.
+		D3D11_BLEND_DESC blendStateDescription;
+		ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+		blendStateDescription.AlphaToCoverageEnable = true;
+		// 알파블렌드 값을 설정합니다.
+		blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+		blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+		// 블렌드 상태를 생성합니다.
+		if (FAILED(mD3dDevice->CreateBlendState(&blendStateDescription, &mAlphaEnableBlendingState)))
+		{
+			return false;
+		}
+
+		// 알파 블렌드를 비활성화 설정합니다.
+		blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
+
+		// 블렌드 상태를 생성합니다.
+		if (FAILED(mD3dDevice->CreateBlendState(&blendStateDescription, &mAlphaDisableBlendingState)))
+		{
+			return false;
+		}
+
+
+
 		return result;
 	}
 
@@ -452,6 +486,16 @@ namespace cave
 		{
 			mRenderTargetView->Release();
 			mRenderTargetView = nullptr;
+		}
+
+		if (mAlphaEnableBlendingState != nullptr) {
+			mAlphaEnableBlendingState->Release();
+			mAlphaDisableBlendingState = nullptr;
+		}
+
+		if (mAlphaDisableBlendingState != nullptr) {
+			mAlphaDisableBlendingState->Release();
+			mAlphaDisableBlendingState = nullptr;
 		}
 
 		// Release the back buffer itself:
@@ -730,6 +774,20 @@ namespace cave
 	void WindowsDeviceResources::TurnZBufferOff()
 	{
 		mImmediateContext->OMSetDepthStencilState(mDepthDisabledStencilState, 1);
+	}
+	void WindowsDeviceResources::TurnOnAlphaBlending()
+	{
+		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+		// 알파 블렌딩을 켭니다.
+		mImmediateContext->OMSetBlendState(mAlphaEnableBlendingState, blendFactor, 0xffffffff);
+	}
+	void WindowsDeviceResources::TurnOffAlphaBlending()
+	{
+		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+		// 알파 블렌딩을 켭니다.
+		mImmediateContext->OMSetBlendState(mAlphaDisableBlendingState, blendFactor, 0xffffffff);
 	}
 } // namespace cave
 #endif
