@@ -27,6 +27,16 @@ namespace cave
 		Object& operator=(const Object& other);
 		Object& operator=(Object&& other) noexcept;
 
+		__forceinline bool operator==(const Object& other) const
+		{
+			return mInstanceID == other.mInstanceID;
+		}
+
+		__forceinline bool operator!=(const Object& other) const
+		{
+			return mInstanceID != other.mInstanceID;
+		}
+
 		static void Destroy(Object& target, float timeDelay = 0.f);
 		static void DestroyImmediate(Object& target);
 		static void DontDestroyOnLoad(Object& target);
