@@ -56,11 +56,6 @@ namespace cave
 
 	}
 
-	void Actor::StopCoroutine(IEnumerator& routine)
-	{
-
-	}
-
 	void Actor::StopCoroutine(Coroutine& routine)
 	{
 

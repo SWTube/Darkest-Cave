@@ -14,7 +14,7 @@ namespace cave
 {
 	class Component;
 	class Coroutine;
-	class IEnumerator;
+	
 
 	class Actor : public Object
 	{
@@ -32,7 +32,6 @@ namespace cave
 		void StartCoroutine();
 		void StopAllCoroutines();
 		void StopCoroutine(std::string& methodName);
-		void StopCoroutine(IEnumerator& routine);
 		void StopCoroutine(Coroutine& routine);
 
 		Component& GetComponent(Type& type);
@@ -97,5 +96,7 @@ namespace cave
 		bool mbActive;
 		bool mbRunInEditMode;
 		bool mbGUILayoout;
+
+
 	};
 }
