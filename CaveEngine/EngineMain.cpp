@@ -169,12 +169,8 @@ void MemoryTest1(cave::MemoryPool& pool)
 		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
 		freeDeallocSum += elapsedTimeRec3.count() * 1000;
 	}
-#ifdef __WIN32__
 	LOGDF(cave::eLogChannel::CORE_MEMORY, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
-#else
-	LOGDF(cave::eLogChannel::CORE_MEMORY, std::cout, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
-#endif
-}
+
 
 template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool)

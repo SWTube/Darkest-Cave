@@ -55,7 +55,7 @@ namespace cave
 
 	namespace Log
 	{
-		constexpr uint32_t MAX_BUFFER = 81u;
+		constexpr uint32_t MAX_BUFFER = 255u;
 		eLogVerbosity gCurrentVerbosity = eLogVerbosity::All;
 		char gBuffer[MAX_BUFFER] = { '\0', };
 
