@@ -121,7 +121,7 @@ namespace cave
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 		newSprite->SetTextureIndex(mTextures.size() - 1);
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
-
+		newSprite->SetPosition(200, 200); // temp
 		mSprites.push_back(newSprite);
 
 		return eResult::CAVE_OK;

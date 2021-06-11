@@ -115,6 +115,9 @@
     <ClCompile Include="ResourceManager\Private\Texture\AnimationTexture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
@@ -144,9 +147,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\CoreTypes.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\GraphicsCommon.h">
-      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>

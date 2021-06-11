@@ -33,9 +33,11 @@ import Log;
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
+
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-
+	
+	CoInitialize(0);//WicTextureLoader 사용을 위해서 필요.
 	// Enable run-time memory check for debug builds.
 #if defined(CAVE_BUILD_DEBUG)
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -243,7 +245,7 @@ void RenderTest()
 	cave::Renderer* renderer = main.GetRenderer();
 	// renderer->AddSprite(std::move(*object));
 	renderer->AddTexture(std::move(*texture1));
-	renderer->AddSprite("seafloor.dds");
+	renderer->AddSprite("orange_mushroom.png");
 	renderer->AddSprite(std::move(*object));
 
 	// renderer->AddTexture(std::move(*texture2));

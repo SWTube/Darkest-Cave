@@ -247,7 +247,6 @@
     <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsWindow.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
-    <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\Camera.h" />
     <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h" />
     <ClInclude Include="Graphics\Public\Renderer\Renderer.h" />
@@ -311,6 +310,7 @@
     <ClCompile Include="ResourceManager\Private\Texture\AnimationTexture.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
+    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
   </ItemGroup>
   <ItemGroup>
