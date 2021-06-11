@@ -2,7 +2,6 @@
 #include <conio.h>
 #include <iostream>
 
-#include "Object/ObjectPool.h"
 #include "Object/Obejct.h"
 #include "Tmp/Log.h"
 #include "Game.h"
@@ -14,24 +13,11 @@ namespace cave
 	Game::Game()
 	{
 		Log("Game::Game()");
-
-		mObjectPool = new ObjectPool();
-
-		Object* a = mObjectPool->Allocate();
-		Object* b = mObjectPool->Allocate();
-		Object* c = mObjectPool->Allocate();
-
-		std::cout << a->GetInternalIndex() << " " << a->GetInstanceID() << std::endl;
-		std::cout << b->GetInternalIndex() << " " << b->GetInstanceID() << std::endl;
-		std::cout << c->GetInternalIndex() << " " << c->GetInstanceID() << std::endl;
 	}
 
 	Game::~Game()
 	{
 		Log("Game::~Game()");
-
-		delete mObjectPool;
-		free(mGame);
 	}
 
 	Game* Game::Instance()
