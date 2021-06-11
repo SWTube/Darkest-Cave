@@ -92,7 +92,8 @@ int main(int32_t argc, char** argv)
 
 	// RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	cave::StackTest::Test<int>();
+	
+	// cave::StackTest::Test<int>();
 #endif
 
 	// Cleanup is handled in destructors.
