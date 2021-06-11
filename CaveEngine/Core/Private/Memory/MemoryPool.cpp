@@ -69,9 +69,7 @@ namespace cave
 		// Terminate if user requests memory larger than what pool can provide
 		if (memoryIndex >= mDataBlocks.size())
 		{
-#ifdef __UNIX__
-			LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
-#endif
+			LOGEF(eLogChannel::CORE_MEMORY, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
 			assert(memoryIndex < mDataBlocks.size());
 			// return nullptr;
 		}
@@ -82,7 +80,7 @@ namespace cave
 			mDataBlocks[memoryIndex] = new DataBlock(memorySize, 1ul);
 		}
 
-		// LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "memorySize: %u, Datablock[%u]: %u / %u", memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
+		// LOGEF(eLogChannel::CORE_MEMORY, "memorySize: %u, Datablock[%u]: %u / %u", memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
 
 		// If Data Block is empty, allocate new memory and push back
 		// If user requires larger memory than current Memory::Free memory, return corresponding pointer but don't store
@@ -110,7 +108,7 @@ namespace cave
 		// If user tries to deallocate pointer already returned to Data Block, neglect.
 		size_t memorySize = GetUpperPowerOfTwo(size);
 		size_t memoryIndex = GetExponent(memorySize);
-		// LOGEF(eLogChannel::CORE_MEMORY, std::cerr, "%u memorySize: %u, Datablock[%u]: %u / %u", counter, memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
+		// LOGEF(eLogChannel::CORE_MEMORY, "%u memorySize: %u, Datablock[%u]: %u / %u", counter, memorySize, memoryIndex, mDataBlocks[memoryIndex]->GetFreeSize(), mDataBlocks[memoryIndex]->GetAllocatedSize());
 
 		if (item == nullptr || mDataBlocks[memoryIndex]->HasItem(item))
 		{
@@ -187,13 +185,13 @@ namespace cave
 	{
 		void Test()
 		{
-			LOGD(eLogChannel::CORE_MEMORY, std::cout, "======Memory Pool Test======");
+			LOGD(eLogChannel::CORE_MEMORY, "======Memory Pool Test======");
 			Constructor();
 		}
 
 		void Constructor()
 		{
-			LOGD(eLogChannel::CORE_MEMORY, std::cout, "====Constructor Test====");
+			LOGD(eLogChannel::CORE_MEMORY, "====Constructor Test====");
 
 			MemoryPool memoryPool(1024ul);
 
