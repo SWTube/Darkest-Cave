@@ -249,7 +249,9 @@ namespace cave
 
 	void Texture::DeleteTexture()
 	{
+#if !defined(__WIN32__)
 		glDeleteTextures(1u, &mIndex);
+#endif
 	}
 
 	void Texture::Destroy()
