@@ -8,7 +8,9 @@
 namespace cave
 {
 	MemoryPool::MemoryPool(size_t maxPoolSize)
-		: mPoolSize(maxPoolSize), mFreeSize(maxPoolSize), mMaxNumDataBlocks(0)
+		: mPoolSize(maxPoolSize)
+		, mFreeSize(maxPoolSize)
+		, mMaxNumDataBlocks(0)
 	{
 		// Set size of blocks to preallocate half the size of requested size for the pool
 		size_t poolSize = GetUpperPowerOfTwo(maxPoolSize);
@@ -179,4 +181,24 @@ namespace cave
 		// mDataBlocks[memoryIndex]->PrintFreedNodes();
 		mDataBlocks[memoryIndex]->PrintAllocatedNodes();
 	}
+
+#if CAVE_BUILD_DEBUG
+	namespace MemoryPoolTest
+	{
+		void Test()
+		{
+			LOGD(eLogChannel::CORE_MEMORY, std::cout, "======Memory Pool Test======");
+			Constructor();
+		}
+
+		void Constructor()
+		{
+			LOGD(eLogChannel::CORE_MEMORY, std::cout, "====Constructor Test====");
+
+			MemoryPool memoryPool(1024ul);
+
+			assert(memoryPool.GetFreeMemorySize() == 1024ul);
+		}
+	}
+#endif
 } // namespace neople
