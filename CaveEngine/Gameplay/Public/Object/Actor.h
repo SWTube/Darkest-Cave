@@ -4,18 +4,18 @@
  */
 #pragma once
 
-#include <string>
 #include <coroutine>
+#include <vector>
 
-#include "Math/Vector2.h"
 #include "Object/Obejct.h"
 
 namespace cave
 {
 	class Component;
-	class Coroutine;
+	class StateMachine;
+	class Quaternion;
+	class Vector3;
 	
-
 	class Actor : public Object
 	{
 	public:
@@ -29,10 +29,6 @@ namespace cave
 		void Invoke(std::string& methodName, float time);
 		void InvokeRepeating(std::string& methodName, float time, float repeatRate);
 		bool IsInvoking(std::string& methodName);
-		void StartCoroutine();
-		void StopAllCoroutines();
-		void StopCoroutine(std::string& methodName);
-		void StopCoroutine(Coroutine& routine);
 
 		Component& GetComponent(Type& type);
 		Component& GetComponentInChildren(Type& type);
@@ -94,9 +90,16 @@ namespace cave
 	private:
 		bool mbEnable;
 		bool mbActive;
+
 		bool mbRunInEditMode;
 		bool mbGUILayoout;
 
+		StateMachine* mStateMachine;
 
+		Vector3* mPosition;
+		Vector3* mScale;
+		Quaternion* mRotation;
+
+		std::vector<Component*> mComponents;
 	};
 }

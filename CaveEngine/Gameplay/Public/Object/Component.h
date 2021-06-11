@@ -14,7 +14,6 @@ namespace cave
 	{
 	public:
 		Component();
-		/** only use for test.*/
 		Component(const Component& other);
 		Component(Component&& other) noexcept;
 
@@ -22,11 +21,8 @@ namespace cave
 		Component& operator=(const Component& other);
 		Component& operator=(Component&& other) noexcept;
 
-		void SetTarget(Actor& target);
-		Actor& GetTarget() const;
-
 	private:
-		Actor* mTarget;
+		
 	};
 
 }
