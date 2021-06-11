@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#if 0
 // temporary wrapper
 #include "CoreTypes.h"
 // include assertion macros
@@ -712,3 +713,4 @@ namespace cave
         AllocatorType mAllocator;
     };
 } // namespace cave
+#endif
