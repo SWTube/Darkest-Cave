@@ -92,7 +92,7 @@ int main(int32_t argc, char** argv)
 
 	// RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	
+	cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 #endif
 
@@ -170,7 +170,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		freeDeallocSum += elapsedTimeRec3.count() * 1000;
 	}
 	LOGDF(cave::eLogChannel::CORE_MEMORY, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
-
+}
 
 template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool)
