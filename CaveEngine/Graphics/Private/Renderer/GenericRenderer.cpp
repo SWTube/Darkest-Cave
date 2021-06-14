@@ -87,7 +87,7 @@ namespace cave
 #else
 		if (uint32_t glError = glGetError(); glError != GL_NO_ERROR)
 		{
-			LOGEF(cave::eLogChannel::GRAPHICS, std::cerr, "glCreateBuffers error code: 0x%x", glError);
+			LOGEF(cave::eLogChannel::GRAPHICS, "glCreateBuffers error code: 0x%x", glError);
 		}
 		eResult result = newSprite->Init(mDeviceResources->GetProgram(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 #endif

@@ -193,9 +193,33 @@ namespace cave
 		{
 			LOGD(eLogChannel::CORE_MEMORY, "====Constructor Test====");
 
-			MemoryPool memoryPool(1024ul);
+			// 1 kb
+			for (size_t poolSize = 513ul; poolSize <= 1024ul; ++poolSize) {
+				MemoryPool memoryPool(poolSize);
+				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				assert(memoryPool.GetPoolSize() == 1024ul);
+			}
 
-			assert(memoryPool.GetFreeMemorySize() == 1024ul);
+			// 2 kb
+			for (size_t poolSize = 1025ul; poolSize <= 2048ul; ++poolSize) {
+				MemoryPool memoryPool(poolSize);
+				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				assert(memoryPool.GetPoolSize() == 2048ul);
+			}
+
+			// 4 kb
+			for (size_t poolSize = 2049ul; poolSize <= 4096ul; ++poolSize) {
+				MemoryPool memoryPool(poolSize);
+				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				assert(memoryPool.GetPoolSize() == 4096ul);
+			}
+
+			// 8 kb
+			for (size_t poolSize = 4097ul; poolSize <= 8192ul; ++poolSize) {
+				MemoryPool memoryPool(poolSize);
+				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				assert(memoryPool.GetPoolSize() == 8192ul);
+			}
 		}
 	}
 #endif
