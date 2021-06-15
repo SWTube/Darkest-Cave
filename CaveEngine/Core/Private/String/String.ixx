@@ -12,14 +12,6 @@ export module String;
 
 export namespace cave
 {
-	template <size_t N>
-	FORCEINLINE constexpr size_t GetSufficientCapacity(size_t length)
-	{
-		assert(length <= SIZE_MAX - 1ul - N);
-
-		return (length + 1ul + N - 1ul) - ((length + 1ul + N - 1ul) % N);
-	}
-
 	constexpr size_t Strlen(const char* str);
 
 	/**

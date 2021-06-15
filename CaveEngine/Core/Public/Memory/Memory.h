@@ -14,6 +14,15 @@
 
 namespace cave
 {
+
+	template <size_t N>
+	FORCEINLINE constexpr size_t GetSufficientCapacity(size_t length)
+	{
+		assert(length <= SIZE_MAX - 1ul - N);
+
+		return (length + 1ul + N - 1ul) - ((length + 1ul + N - 1ul) % N);
+	}
+	
 	class Memory final
 	{
 	public:
@@ -29,6 +38,7 @@ namespace cave
 		static void* Memcpy(void* dest, const void* src, size_t count);
 		static void* Memmove(void* dest, const void* src, size_t count);
 	};
+
 	inline uintptr_t AlignAddress(uintptr_t address, size_t align)
 	{
 		const size_t mask = align - 1;
@@ -44,7 +54,6 @@ namespace cave
 		return reinterpret_cast<T*>(alignedAddress);
 	}
 
-	
 	constexpr void* Memory::Memset(void* dest, int32_t fill, size_t count)
 	{
 		return memset(dest, fill, count);

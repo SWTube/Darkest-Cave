@@ -10,6 +10,8 @@
 
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
+
+#include "Containers/TStack.h"
 #include "Engine.h"
 #include "Sprite/Sprite.h"
 #include "Sprite/Vertex.h"
@@ -90,7 +92,10 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	RenderTest();
+	// RenderTest();
+#ifdef CAVE_BUILD_DEBUG
+	cave::StackTest::Test<int>();
+#endif
 
 	// Cleanup is handled in destructors.
     return 0;
