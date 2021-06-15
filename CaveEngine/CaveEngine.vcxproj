@@ -212,10 +212,8 @@
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Gameplay\Public\Game.h" />
     <ClInclude Include="Gameplay\Public\Object\Actor.h" />
-    <ClInclude Include="Gameplay\Public\Object\ActorPool.h" />
     <ClInclude Include="Gameplay\Public\Object\Component.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
-    <ClInclude Include="Gameplay\Public\Object\ObjectPool.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Log.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
@@ -233,8 +231,8 @@
     <ClCompile Include="Gameplay\Private\Object\Actor.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Component.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Object.cpp" />
-    <ClCompile Include="Gameplay\Private\Object\ObjectPool.cpp" />
     <ClCompile Include="Gameplay\Private\Tmp\Log.cpp" />
+    <ClCompile Include="Gameplay\Public\Time\FlatformTimer.ixx" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />

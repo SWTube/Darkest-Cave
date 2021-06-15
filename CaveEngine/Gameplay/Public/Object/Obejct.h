@@ -4,16 +4,10 @@
  */
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "Math/Vector2.h"
+#include "Debug/LogManager.h"
 
 namespace cave
 {
-	class Type;
-	class Quaternion;
-
 	class Object
 	{
 	public:
@@ -31,12 +25,15 @@ namespace cave
 			return mInstanceID != other.mInstanceID;
 		}
 
-		unsigned int GetInstanceID();
-		const char* ToString();
+		__forceinline unsigned int GetInstanceID() const
+		{
+			return mInstanceID;
+		}
 
-		unsigned int GetInternalIndex() const;
-
-		bool CompareTag(unsigned int Tag);
+		__forceinline unsigned int GetInternalIndex() const
+		{
+			return mInternalIndex;
+		}
 
 		void Print();
 
@@ -45,18 +42,25 @@ namespace cave
 		Object(const Object& other);
 		Object(Object&& other) noexcept;
 
-		void Initialize();
+		__forceinline void SetOwner(Object& owner)
+		{
+			mOwner = &owner;
+		}
 
-		void SetOwner(Object& owner);
-		void SetInstanceID(unsigned int id);
+		__forceinline void SetInstanceID(unsigned int id)
+		{
+			mInstanceID = id;
+		}
+
+		__forceinline void SetInternalIndex(unsigned int index)
+		{
+			mInternalIndex = index;
+		}
 
 	private:
 		Object* mOwner;
 
-		std::string mName;
-		unsigned int mTag;
-
-		unsigned char mHideFlags;
+		unsigned char mFlags;
 		unsigned int mInternalIndex;
 		unsigned int mInstanceID;
 	};
