@@ -443,7 +443,7 @@ namespace cave
 		return Memory::Memcmp(lhs.mArray, rhs.mArray, lhs.mSize) != 0;
 	}
 
-#if 1
+#ifdef CAVE_BUILD_DEBUG
 	namespace StackTest
 	{
 		// DECLARATIONS
@@ -482,7 +482,7 @@ namespace cave
 		template <typename T>
 		void Test()
 		{
-			LOGD(eLogChannel::CORE_CONTAINER, std::cout, "======Stack Test======");
+			LOGD(eLogChannel::CORE_CONTAINER, "======Stack Test======");
 			Constructor<T>();
 			// AssignmentOperator<T>();
 			// GetTop<T>();
@@ -497,11 +497,12 @@ namespace cave
 		template <typename T>
 		void Constructor()
 		{
-			LOGD(eLogChannel::CORE_CONTAINER, std::cout, "====Constructor Test====");
+			LOGD(eLogChannel::CORE_CONTAINER, "====Constructor Test====");
 
 			{
 				TStack<T> stack;
-				LOGD(eLogChannel::CORE_CONTAINER, std::cout, "Constructor #1 Success");
+				
+				LOGD(eLogChannel::CORE_CONTAINER, "Constructor #1 Success");
 			}
 		}
 
