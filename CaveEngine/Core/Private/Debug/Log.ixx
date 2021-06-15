@@ -3,12 +3,13 @@ module;
 #include <cstdarg>
 #include <cstdio>
 #include <iostream>
+#include <string>
 
 #include <windows.h>
 
 #include "CoreTypes.h"
+
 #include "Assertion/Assert.h"
-#include "String/String.h"
 #include "Utils/Crt.h"
 
 export module Log;
@@ -156,7 +157,7 @@ namespace cave
 		{
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
 			{
-				String buffer;
+				std::string buffer;
 
 				switch (channel)
 				{
