@@ -112,11 +112,14 @@
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\AnimationTexture.cpp">
+    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx">
       <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,8 +265,11 @@
     <ClInclude Include="Graphics\Public\Renderer\Camera.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager\Public\Texture\AnimationTexture.h">
+    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
       <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -256,13 +256,14 @@
     <ClInclude Include="Graphics\Public\Shader\Shader.h" />
     <ClInclude Include="Graphics\Public\Shader\UnixShader.h" />
     <ClInclude Include="Graphics\Public\Shader\WindowsShader.h" />
+    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\GenericSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\UnixSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\Vertex.h" />
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
-    <ClInclude Include="ResourceManager\Public\Texture\AnimationTexture.h" />
+    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
   </ItemGroup>
@@ -297,6 +298,7 @@
     <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp" />
+    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\UnixSprite.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\Vertex.cpp" />
@@ -307,7 +309,7 @@
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\UnixShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
-    <ClCompile Include="ResourceManager\Private\Texture\AnimationTexture.cpp" />
+    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx" />

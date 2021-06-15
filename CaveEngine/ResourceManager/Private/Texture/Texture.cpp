@@ -261,10 +261,6 @@ namespace cave
 #endif
 	}
 
-	void Texture::Update()
-	{
-		return;
-	}
 
 	void Texture::DeleteTexture()
 	{
@@ -273,10 +269,6 @@ namespace cave
 #endif
 	}
 
-	bool Texture::IsAnimation() const
-	{
-		return false;
-	}
 
 	void Texture::Destroy()
 	{
@@ -343,8 +335,8 @@ namespace cave
 			D3D11_TEXTURE2D_DESC desc;
 			texture2D->GetDesc(&desc);
 
-			mWidth = (int)desc.Width;
-			mHeight = (int)desc.Height;
+			mWidth = (uint32_t)desc.Width;
+			mHeight = (uint32_t)desc.Height;
 		}
 
 	}

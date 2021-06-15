@@ -13,7 +13,7 @@
 #ifdef __WIN32__
 namespace cave
 {
-	class WindowsSprite final : public GenericSprite
+	class WindowsSprite : public GenericSprite
 	{
 	public:
 		WindowsSprite() = delete;

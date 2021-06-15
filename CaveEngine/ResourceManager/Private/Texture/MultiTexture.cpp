@@ -1,9 +1,9 @@
-#include "Texture/AnimationTexture.h"
+#include "Texture/MultiTexture.h"
 
 namespace cave {
 
 	//가로로 쭉 이어진 스프라이트 시트라고 가정.
-	AnimationTexture::AnimationTexture(const std::filesystem::path& filePath, uint32_t frameCount, uint32_t framesPerSecond, bool isLoof,
+	MultiTexture::MultiTexture(const std::filesystem::path& filePath, uint32_t frameCount, uint32_t framesPerSecond,
 		eTextureFormat textureFormat, MemoryPool& pool)
 		:Texture(filePath, textureFormat, pool)
 	{
@@ -11,40 +11,32 @@ namespace cave {
 		mFrameCount = frameCount;
 		mColumn = frameCount;
 		mRow = 1;
-		mTimePerFrame = 1.0f / float(framesPerSecond);
-		mTotalElapsed = 0;
 		mUVPerFrame = Float2(1.0f / float(frameCount), 1.0f);
 		mEndUV = mUVPerFrame;
 	}
 
-	AnimationTexture::AnimationTexture(const AnimationTexture& other)
+	MultiTexture::MultiTexture(const MultiTexture& other)
 		:Texture(other)
 		,mFrame(other.mFrame)
 		,mFrameCount(other.mFrameCount)
 		,mColumn(other.mColumn)
 		,mRow(other.mRow)
-		,mTimePerFrame(other.mTimePerFrame)
 		,mUVPerFrame(other.mUVPerFrame)
-		,mbIsLoof(other.mbIsLoof)
-		,mbIsPlay(other.mbIsPlay)
 	{
 	}
 
-	AnimationTexture::AnimationTexture(AnimationTexture&& other)
+	MultiTexture::MultiTexture(MultiTexture&& other)
 		: Texture(std::move(other))
 		, mFrame(other.mFrame)
 		, mFrameCount(other.mFrameCount)
 		, mColumn(other.mColumn)
 		, mRow(other.mRow)
-		, mTimePerFrame(other.mTimePerFrame)
 		, mUVPerFrame(other.mUVPerFrame)
-		, mbIsLoof(other.mbIsLoof)
-		, mbIsPlay(other.mbIsPlay)
 	{
 		other.Destroy();
 	}
 
-	AnimationTexture& AnimationTexture::operator=(const AnimationTexture& other)
+	MultiTexture& MultiTexture::operator=(const MultiTexture& other)
 	{
 		if (this != &other) 
 		{
@@ -53,15 +45,12 @@ namespace cave {
 			mFrameCount = other.mFrameCount;
 			mColumn = other.mColumn;
 			mRow = other.mRow;
-			mTimePerFrame = other.mTimePerFrame;
 			mUVPerFrame = other.mUVPerFrame;
-			mbIsLoof = other.mbIsLoof;
-			mbIsPlay = other.mbIsPlay;
 		}
 		return *this;
 	}
 
-	AnimationTexture& AnimationTexture::operator=(AnimationTexture&& other)
+	MultiTexture& MultiTexture::operator=(MultiTexture&& other)
 	{
 		if (this != &other)
 		{
@@ -70,10 +59,7 @@ namespace cave {
 			mFrameCount = other.mFrameCount;
 			mColumn = other.mColumn;
 			mRow = other.mRow;
-			mTimePerFrame = other.mTimePerFrame;
 			mUVPerFrame = other.mUVPerFrame;
-			mbIsLoof = other.mbIsLoof;
-			mbIsPlay = other.mbIsPlay;
 
 			other.Destroy();
 			
@@ -81,51 +67,29 @@ namespace cave {
 		return *this;
 	}
 
-	AnimationTexture::~AnimationTexture()
+	MultiTexture::~MultiTexture()
 	{
 		Destroy();
 	}
 
-	void AnimationTexture::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
+	void MultiTexture::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	{
 		Texture::Init(device, deviceContext);
 		mWidth *= mUVPerFrame.X;
 		mHeight *= mUVPerFrame.Y;
 	}
 
-	bool AnimationTexture::IsAnimation() const
+	void MultiTexture::SetFrame(int frame)
 	{
-		return true;
-	}
-
-	void AnimationTexture::Update() 
-	{
-		if (!mbIsPlay) return;
-
-		mTotalElapsed += tempElapsed;
-		if (mTotalElapsed > mTimePerFrame) {
-			Next();
-		}
-
-	}
-
-	void AnimationTexture::Next()
-	{
-		++mFrame;
-		if (mFrame > mFrameCount) {
-			if (mbIsLoof) mFrame = 0;
-			else {
-				mbIsPlay = false;
-				return;
-			}
-		}
-
-		mTotalElapsed -= mTimePerFrame;
+		if (frame > mFrameCount) frame = mFrameCount;
+		mFrame = frame;
 
 		float u = int(mFrame % (mColumn)) * mUVPerFrame.X;
 		float v = int(mFrame / (mColumn)) % mRow * mUVPerFrame.Y;
 		mStartUV = Float2(u, v);
 		mEndUV = mStartUV + mUVPerFrame;
 	}
+
+
 
 }

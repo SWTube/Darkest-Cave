@@ -222,8 +222,8 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 	
-	cave::AnimationTexture* texture1 = reinterpret_cast<cave::AnimationTexture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::AnimationTexture)));
-	new(texture1) cave::AnimationTexture("meteo_effect.dds",21,1,true,cave::eTextureFormat::RGB);
+	cave::MultiTexture* texture1 = reinterpret_cast<cave::MultiTexture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::MultiTexture)));
+	new(texture1) cave::MultiTexture("meteo_effect.dds",21,1,cave::eTextureFormat::RGB);
 	texture1->Init(main.GetRenderer()->GetDeviceResources()->GetDevice(), main.GetRenderer()->GetDeviceResources()->GetDeviceContext());
 
 	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));

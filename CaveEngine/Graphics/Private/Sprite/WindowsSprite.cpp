@@ -184,7 +184,7 @@ namespace cave
 
 	void WindowsSprite::Update()
 	{
-		mTexture->Update();
+
 	}
 
 	void WindowsSprite::Render()
@@ -200,7 +200,7 @@ namespace cave
 		VertexType* verticesPtr = nullptr;
 		eResult result = eResult::CAVE_OK;
 
-		if (!mTexture->IsAnimation() && !mbNeedsUpdate && (mPosition == mPreviousPosition))
+		if (!mbNeedsUpdate && (mPosition == mPreviousPosition))
 		{
 			return;
 		}
