@@ -8,7 +8,13 @@
 
 namespace cave
 {
-	class Actor;
+	enum class eComponentType : unsigned char
+	{
+		Graphics = 0,
+		Physics = 1,
+		AI = 2,
+		Audio = 3,
+	};
 
 	class Component : public Object
 	{
@@ -21,8 +27,19 @@ namespace cave
 		Component& operator=(const Component& other);
 		Component& operator=(Component&& other) noexcept;
 
+		__forceinline eComponentType GetComponentType()
+		{
+			return mComponentType;
+		}
+
+	protected:
+		__forceinline void SetComponentType(eComponentType componentType)
+		{
+			mComponentType = componentType;
+		}
+
 	private:
-		
+		eComponentType mComponentType;
 	};
 
 }

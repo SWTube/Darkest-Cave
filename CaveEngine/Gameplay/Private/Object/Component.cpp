@@ -18,10 +18,9 @@ namespace cave
 
 	}
 
-	Component::Component(Component&& other) noexcept :
-		mTarget(other.mTarget)
+	Component::Component(Component&& other) noexcept
 	{
-		other.mTarget = nullptr;
+		
 	}
 
 	Component::~Component()
@@ -36,19 +35,7 @@ namespace cave
 
 	Component& Component::operator=(Component&& other) noexcept
 	{
-		mTarget = other.mTarget;
-		other.mTarget = nullptr;
 
 		return *this;
-	}
-
-	void Component::SetTarget(Actor& target)
-	{
-		mTarget = &target;
-	}
-
-	Actor& Component::GetTarget() const
-	{
-		return *mTarget;
 	}
 }
