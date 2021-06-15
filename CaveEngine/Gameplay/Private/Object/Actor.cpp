@@ -6,7 +6,18 @@
 
 namespace cave
 {
-	Actor::Actor()
+	Actor::Actor() :
+		mComponents(4, nullptr)
+	{
+
+	}
+
+	Actor::Actor(const Actor& other)
+	{
+
+	}
+
+	Actor::Actor(Actor&& other)
 	{
 
 	}
@@ -17,46 +28,6 @@ namespace cave
 	}
 
 	void Actor::Print()
-	{
-
-	}
-
-	void Actor::CancelInvoke()
-	{
-
-	}
-
-	void Actor::Invoke(std::string& methodName, float time)
-	{
-
-	}
-
-	void Actor::InvokeRepeating(std::string& methodName, float time, float repeatRate)
-	{
-
-	}
-
-	bool Actor::IsInvoking(std::string& methodName)
-	{
-		return true;
-	}
-
-	void Actor::StartCoroutine()
-	{
-
-	}
-
-	void Actor::StopAllCoroutines()
-	{
-
-	}
-
-	void Actor::StopCoroutine(std::string& methodName)
-	{
-
-	}
-
-	void Actor::StopCoroutine(Coroutine& routine)
 	{
 
 	}
