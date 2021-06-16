@@ -3,9 +3,9 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include <string>
-
+#include "CoreGlobals.h"
 #include "Debug/Log.h"
+#include "String/String.h"
 
 #ifdef __UNIX__
 namespace cave
@@ -106,7 +106,7 @@ namespace cave
 	{
 		if (msCurrentVerbosity == eLogVerbosity::All || verbosity == msCurrentVerbosity)
 		{
-			std::string buffer;
+			String buffer;
 
 			switch (channel)
 			{

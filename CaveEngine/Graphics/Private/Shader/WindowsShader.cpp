@@ -119,8 +119,7 @@ namespace cave
 				.SemanticIndex = 0,
 				.Format = DXGI_FORMAT_R32G32_FLOAT,
 				.InputSlot = 0,
-				.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
-				//.AlignedByteOffset = sizeof(Float3),
+				.AlignedByteOffset = sizeof(Float3),
 				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
 				// .InputSlotClass=D3D11_APPEND_ALIGNED_ELEMENT, 
 				.InstanceDataStepRate = 0
@@ -144,15 +143,14 @@ namespace cave
 
 		// Create the constant buffers
 		D3D11_BUFFER_DESC bufferDesc = {};
-		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		bufferDesc.ByteWidth = sizeof(MatrixBufferType);
+		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		bufferDesc.ByteWidth = sizeof(Buffer);
 		bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		//bufferDesc.CPUAccessFlags = 0;
-		bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		bufferDesc.CPUAccessFlags = 0;
+		// bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		bufferDesc.MiscFlags = 0;
 		bufferDesc.StructureByteStride = 0;
 		result = device->CreateBuffer(&bufferDesc, nullptr, &mBuffer);
-
 		if (FAILED(result))
 		{
 			return static_cast<eResult>(result);
@@ -164,6 +162,7 @@ namespace cave
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		samplerDesc.MipLODBias = 0.0f;
 		samplerDesc.MaxAnisotropy = 1;
 		samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
@@ -178,7 +177,6 @@ namespace cave
 		{
 			return static_cast<eResult>(result);
 		}
-
 		//SetInputLayout(); SetInputLayout에서도 device, vsBlob, psBlob 필요해서 함수 분리 안하고 그냥 여기서 다 처리해야할듯요?
 		//보시고 주석처리한거 지우세여.
 
@@ -290,7 +288,6 @@ namespace cave
 		// 마지막으로 정점 셰이더의 상수 버퍼를 바뀐 값으로 바꿉니다.
 		context->VSSetConstantBuffers(bufferNumber, 1, &mBuffer);
 		context->PSSetShaderResources(0, 1, &texture);
-
 
 		context->IASetInputLayout(mInputLayout);
 

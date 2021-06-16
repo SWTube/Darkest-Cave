@@ -1,2 +1,0 @@
-#include "Sprite\AnimatedSprite.h"
-

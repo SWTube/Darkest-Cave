@@ -13,6 +13,7 @@
 
 #include "Containers/TStack.h"
 #include "Engine.h"
+#include "NeuralNetwork/NeuralNetwork.h"
 #include "Sprite/Sprite.h"
 #include "Sprite/Vertex.h"
 #include "String/String.h"
@@ -35,11 +36,9 @@ import Log;
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-	
-	CoInitialize(0);//WicTextureLoader 사용을 위해서 필요.
+
 	// Enable run-time memory check for debug builds.
 #if defined(CAVE_BUILD_DEBUG)
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -93,15 +92,16 @@ int main(int32_t argc, char** argv)
 #endif
 
 	// RenderTest();
-#ifdef CAVE_BUILD_DEBUG
-	cave::MemoryPoolTest::Test();
+#if CAVE_BUILD_DEBUG
+	cave::NeuralNetworkTest::Test();
+	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 #endif
 
 	// Cleanup is handled in destructors.
     return 0;
 }
-/*
+
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool)
 {
@@ -134,7 +134,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto endTimeRec0 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec0 = endTimeRec0 - startTimeRec0;
 		memoryPoolAllocSum += elapsedTimeRec0.count() * 1000;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
 
 		auto startTimeRec1 = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < N; ++i)
@@ -145,7 +145,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		auto endTimeRec1 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec1 = endTimeRec1 - startTimeRec1;
 		memoryPoolDeallocSum += elapsedTimeRec1.count() * 1000;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
 
 		std::vector<void*> pointersByNew;
 		pointersByNew.reserve(N);
@@ -157,7 +157,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		}
 		auto endTimeRec2 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec2 = endTimeRec2 - startTimeRec2;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
 		mallocAllocSum += elapsedTimeRec2.count() * 1000;
 
 		auto startTimeRec3 = std::chrono::high_resolution_clock::now();
@@ -168,7 +168,7 @@ void MemoryTest1(cave::MemoryPool& pool)
 		}
 		auto endTimeRec3 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsedTimeRec3 = endTimeRec3 - startTimeRec3;
-		LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
 		freeDeallocSum += elapsedTimeRec3.count() * 1000;
 	}
 	LOGDF(cave::eLogChannel::CORE_MEMORY, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
@@ -211,8 +211,6 @@ void MemoryTest2(cave::MemoryPool& pool)
 
 		pool.PrintPoolStatus();
 }
-*/
-
 
 void RenderTest()
 {
@@ -223,55 +221,27 @@ void RenderTest()
 	cave::Engine main;
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
-	
-	cave::MultiTexture* texture1 = reinterpret_cast<cave::MultiTexture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::MultiTexture)));
-	new(texture1) cave::MultiTexture("meteo_effect.dds",21,1,cave::eTextureFormat::RGB);
-	texture1->Init(main.GetRenderer()->GetDeviceResources()->GetDevice(), main.GetRenderer()->GetDeviceResources()->GetDeviceContext());
 
+	cave::Texture* texture1 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
+	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGBA);
 	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
 	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGBA);
 
+	cave::Sprite object(texture1, cave::gCoreMemoryPool);
+	object.SetSize(object.GetWidth() / 2u, object.GetHeight() / 2u);
+	cave::Sprite object2(texture2, cave::gCoreMemoryPool);
+	object2.SetPosition(cave::Float2(1000.0f, 500.0f));
 
-	
-	cave::Sprite* object = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
-	new(object) cave::Sprite(texture1, cave::gCoreMemoryPool);
-
-	cave::Sprite* object2 = reinterpret_cast<cave::Sprite*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Sprite)));
-	new(object2) cave::Sprite(texture2, cave::gCoreMemoryPool);
-
-	
-	//object->SetSize(200, 200);
-	object->SetPosition(200, 200);
-
+	texture1->~Texture();
+	texture2->~Texture();
+	cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
+	cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
+	texture1 = nullptr;
+	texture2 = nullptr;
 
 	cave::Renderer* renderer = main.GetRenderer();
-	// renderer->AddSprite(std::move(*object));
-	renderer->AddTexture(std::move(*texture1));
-	renderer->AddSprite("orange_mushroom.png");
-	renderer->AddSprite(std::move(*object));
-
-	// renderer->AddTexture(std::move(*texture2));
-	// renderer->SetSpriteTexture(0u, 1u);
-	// renderer->SetSpriteTexture(1u, 2u);
-
-
-
-	//cave::Sprite object(texture1, cave::gCoreMemoryPool);
-	//object.SetSize(object.GetWidth() / 2u, object.GetHeight() / 2u);
-	//cave::Sprite object2(texture2, cave::gCoreMemoryPool);
-	//object2.SetPosition(cave::Float2(1000.0f, 500.0f));
-
-	//texture1->~Texture();
-	//texture2->~Texture();
-	//cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
-	//cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
-	//texture1 = nullptr;
-	//texture2 = nullptr;
-
-	//cave::Renderer* renderer = main.GetRenderer();
-	//renderer->AddSprite(std::move(object));
-	//renderer->AddSprite(std::move(object2));
-
+	renderer->AddSprite(std::move(object));
+	renderer->AddSprite(std::move(object2));
 
 	if (result == cave::eResult::CAVE_OK)
 	{
@@ -286,21 +256,5 @@ void RenderTest()
 		result = main.Run();
 	}
 
-	texture1->Destroy();
-	texture2->Destroy();
-	cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
-	cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
-	texture1 = nullptr;
-	texture2 = nullptr;
-
-	object->Destroy();
-	object2->Destroy();
-	cave::gCoreMemoryPool.Deallocate(object, sizeof(cave::Sprite));
-	cave::gCoreMemoryPool.Deallocate(object2, sizeof(cave::Sprite));
-	object = nullptr;
-	object2 = nullptr;
-
-
 	main.Destroy();
-
 }

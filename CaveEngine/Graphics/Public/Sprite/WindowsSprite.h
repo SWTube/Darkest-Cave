@@ -13,7 +13,7 @@
 #ifdef __WIN32__
 namespace cave
 {
-	class WindowsSprite : public GenericSprite
+	class WindowsSprite final : public GenericSprite
 	{
 	public:
 		WindowsSprite() = delete;
@@ -30,8 +30,6 @@ namespace cave
 		void Update() override;
 		void Render() override;
 
-		void SetMultiSprite(int frameCount, int framesPerSecond);
-
 	private:
 		eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context) override;
 		ID3D11Device* mDevice = nullptr;
@@ -40,18 +38,6 @@ namespace cave
 		ID3D11Buffer* mIndexBuffer = nullptr;
 		ID3D11InputLayout* mVertexLayout = nullptr;
 		ID3D11ShaderResourceView* mTextureRv = nullptr;
-		
-
-		////스프라이트 시트, 애니메이션 재생 관련 변수.
-		//bool mbIsMultiSprite = false;
-		//int mFrame = 0;
-		//int mFrameCount = 0;
-		//float mTimePerFrame = 0;
-		//float mTotalElapsed = 0;
-		//float mDividedTexture = 1;
-
-		//float tempElapsed = 0; // (임시)업데이트 간 간격
-
 	};
 
 	typedef WindowsSprite Sprite;

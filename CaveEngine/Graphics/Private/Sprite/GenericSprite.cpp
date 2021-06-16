@@ -9,11 +9,10 @@ namespace cave
 {
 	GenericSprite::GenericSprite(Texture* texture, MemoryPool& pool)
 		: mPool(&pool)
-		,mTexture(texture)
-	//	, mTexture(reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture))))
+		, mTexture(reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture))))
 	{
-		//assert(texture != nullptr);
-		//new(mTexture) Texture(*texture);
+		assert(texture != nullptr);
+		new(mTexture) Texture(*texture);
 		mTexture->Init();
 		mWidth = mTexture->GetWidth();
 		mHeight = mTexture->GetHeight();
@@ -44,7 +43,6 @@ namespace cave
 		: mPool(other.mPool)
 		, mWorld(other.mWorld)
 		, mTextureIndex(other.mTextureIndex)
-		, mPosition(other.mPosition)
 		, mWidth(other.mWidth)
 		, mHeight(other.mHeight)
 	{
@@ -60,7 +58,6 @@ namespace cave
 		, mWorld(other.mWorld)
 		, mTextureIndex(other.mTextureIndex)
 		, mTexture(other.mTexture)
-		, mPosition(other.mPosition)
 		, mWidth(other.mWidth)
 		, mHeight(other.mHeight)
 	{
@@ -86,7 +83,6 @@ namespace cave
 				mTexture = nullptr;
 			}
 
-			mPosition = other.mPosition;
 			mWidth = other.mWidth;
 			mHeight = other.mHeight;
 		}
@@ -102,8 +98,6 @@ namespace cave
 			mTextureIndex = other.mTextureIndex;
 
 			mTexture = other.mTexture;
-
-			mPosition = other.mPosition;
 
 			mWidth = other.mWidth;
 			mHeight = other.mHeight;
@@ -135,7 +129,7 @@ namespace cave
 		mScreenHeight = screenHeight;
 
 		mPreviousPosition = Float3(-1.0f, -1.0f, 1.0f);
-		//mPosition = Float3(0.0f, 0.0f, 1.0f);
+		mPosition = Float3(0.0f, 0.0f, 1.0f);
 
 #ifdef __WIN32__
 		eResult result = initializeBuffers(device, context);

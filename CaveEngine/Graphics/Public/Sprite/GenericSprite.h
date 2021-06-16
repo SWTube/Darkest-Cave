@@ -10,7 +10,6 @@
 #include "CoreTypes.h"
 #include "Sprite/Vertex.h"
 #include "Texture/Texture.h"
-#include "Texture/MultiTexture.h"
 
 namespace cave
 {
@@ -55,11 +54,6 @@ namespace cave
 		virtual void SetTexture(const Texture& texture);
 
 	protected:
-		struct VertexType
-		{
-			DirectX::XMFLOAT3 position;
-			DirectX::XMFLOAT2 texture;
-		};
 #ifdef __WIN32__
 		virtual eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context) = 0;
 #else
@@ -67,21 +61,17 @@ namespace cave
 #endif
 		static constexpr uint32_t VERTICES_COUNT = 4u;
 		static constexpr uint32_t INDICES_COUNT = 6u;
-	
-		//VertexT mVertices[VERTICES_COUNT] = {
-		//	VertexT(-1.0f,  1.0f, 0.0f,	1.0f, 0.0f),	// top left
-		//	VertexT( 1.0f,  1.0f, 0.0f,	0.0f, 0.0f),	// top right
-		//	VertexT( 1.0f, -1.0f, 0.0f,	1.0f, 1.0f),	// bottom right
-		//	VertexT(-1.0f, -1.0f, 0.0f,	0.0f, 1.0f),	// bottom left
-		//};
 
-		VertexType mVertices[VERTICES_COUNT];
-		
-		// 왜인지 모르겠는데, uint32_t 로 했을 때 
-		//D3D11 WARNING: ID3D11DeviceContext::DrawIndexed: Index buffer has not enough space! [ EXECUTION WARNING #359: DEVICE_DRAW_INDEX_BUFFER_TOO_SMALL]
-		static constexpr WORD INDICES[INDICES_COUNT] = {
-			0, 1, 2,
-			2, 3, 0,
+		VertexT mVertices[VERTICES_COUNT] = {
+			VertexT(-1.0f,  1.0f, 0.0f,	1.0f, 1.0f),	// top left
+			VertexT( 1.0f,  1.0f, 0.0f,	0.0f, 1.0f),	// top right
+			VertexT( 1.0f, -1.0f, 0.0f,	0.0f, 0.0f),	// bottom right
+			VertexT(-1.0f, -1.0f, 0.0f,	1.0f, 0.0f),	// bottom left
+		};
+
+		static constexpr uint8_t INDICES[INDICES_COUNT] = {
+			0u, 1u, 2u,
+			2u, 3u, 0u,
 		};
 
 		MemoryPool* mPool = nullptr;

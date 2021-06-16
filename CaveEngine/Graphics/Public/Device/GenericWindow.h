@@ -51,7 +51,7 @@ namespace cave
 		float mNear = -1.0f;
 		float mFar = 1.0f;
 #endif
-
+		
 #ifdef __WIN32__
 		const wchar_t* mTitle = nullptr;
 #else

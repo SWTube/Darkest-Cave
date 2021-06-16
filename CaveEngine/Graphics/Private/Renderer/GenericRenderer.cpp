@@ -70,7 +70,6 @@ namespace cave
 			gCoreMemoryPool.Deallocate(mPool, sizeof(MemoryPool));
 			mPool = nullptr;
 		}
-
 	}
 
 	DeviceResources* GenericRenderer::GetDeviceResources() const
@@ -106,32 +105,10 @@ namespace cave
 		return result;
 	}
 
-	eResult GenericRenderer::AddSprite(const std::filesystem::path& filePath)
-	{
-		//새 텍스쳐 생성
-		Texture* newTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
-		new(newTexture) cave::Texture(filePath);
-		newTexture->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
-		mTextures.push_back(newTexture);
-
-		//새 스프라이트 생성
-		cave::Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
-		new(newSprite) cave::Sprite(newTexture, *mPool);
-
-		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
-		newSprite->SetTextureIndex(mTextures.size() - 1);
-		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
-		newSprite->SetPosition(200, 200); // temp
-		mSprites.push_back(newSprite);
-
-		return eResult::CAVE_OK;
-	}
-
 	eResult GenericRenderer::AddTexture(Texture&& texture)
 	{
 		Texture* newTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
 		new(newTexture) Texture(std::move(texture));
-
 		mTextures.push_back(newTexture);
 
 		return eResult::CAVE_OK;

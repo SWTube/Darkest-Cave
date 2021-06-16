@@ -34,7 +34,7 @@ namespace cave
 		// Register the windows class
 		WNDCLASSEX wndClass;
 		wndClass.cbSize = sizeof(WNDCLASSEX);
-		wndClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+		wndClass.style = CS_HREDRAW | CS_VREDRAW;
 		wndClass.lpfnWndProc = windowProc;
 		wndClass.cbClsExtra = 0;
 		wndClass.cbWndExtra = 0;

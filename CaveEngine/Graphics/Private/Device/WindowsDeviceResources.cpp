@@ -91,7 +91,6 @@ namespace cave
 		assert(window != nullptr);
 		HWND hWindow = window->GetWindow();
 		int32_t result = S_OK;
-		mWindow = window;
 
 		// Obtain DXGI factory from device (since we used nullptr for pAdapter above)
 		uint32_t numerator = 0u;
@@ -202,7 +201,6 @@ namespace cave
 		// Create swap chain
 		IDXGIFactory2* dxgiFactory2 = nullptr;
 		result = dxgiFactory->QueryInterface( __uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
-
 		if ( dxgiFactory2 )
 		{
 			// DirectX 11.1 or later
@@ -257,9 +255,9 @@ namespace cave
 			sd.OutputWindow = hWindow;
 			sd.SampleDesc.Count = 1;	// multisampling setting off
 			sd.SampleDesc.Quality = 0;	// vendor-specific flag
-			//sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+			sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 			// // 출력된 다음 백버퍼를 비우도록 지정합니다
-			 sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+			// sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 			if (window->IsFullScreen())
 			{
 				sd.Windowed = FALSE;
@@ -354,6 +352,7 @@ namespace cave
 		}
 
 		// 깊이 스텐실 상태를 설정합니다
+		//m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
 		mImmediateContext->OMSetDepthStencilState(mDepthStencilState, 1);
 
 		// Create the depth stencil view
@@ -440,40 +439,6 @@ namespace cave
 			return false;
 		}
 
-
-		////
-
-			// 블렌드 상태 구조체를 초기화 합니다.
-		D3D11_BLEND_DESC blendStateDescription;
-		ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
-		blendStateDescription.AlphaToCoverageEnable = true;
-		// 알파블렌드 값을 설정합니다.
-		blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
-		blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-		blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-		blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-		blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-		blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-		blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
-
-		// 블렌드 상태를 생성합니다.
-		if (FAILED(mD3dDevice->CreateBlendState(&blendStateDescription, &mAlphaEnableBlendingState)))
-		{
-			return false;
-		}
-
-		// 알파 블렌드를 비활성화 설정합니다.
-		blendStateDescription.RenderTarget[0].BlendEnable = FALSE;
-
-		// 블렌드 상태를 생성합니다.
-		if (FAILED(mD3dDevice->CreateBlendState(&blendStateDescription, &mAlphaDisableBlendingState)))
-		{
-			return false;
-		}
-
-
-
 		return result;
 	}
 
@@ -486,16 +451,6 @@ namespace cave
 		{
 			mRenderTargetView->Release();
 			mRenderTargetView = nullptr;
-		}
-
-		if (mAlphaEnableBlendingState != nullptr) {
-			mAlphaEnableBlendingState->Release();
-			mAlphaDisableBlendingState = nullptr;
-		}
-
-		if (mAlphaDisableBlendingState != nullptr) {
-			mAlphaDisableBlendingState->Release();
-			mAlphaDisableBlendingState = nullptr;
 		}
 
 		// Release the back buffer itself:
@@ -645,7 +600,7 @@ namespace cave
 		// ���� layout ����, topology �ٲٴ°�, vertex buffer �ٲٴ°� rendering �Լ� �ȿ� ���� ��찡 ����
 		// vertex buffer�� pixel shader �� ���� �ʼ�
 		// Clear the back buffer 
-		mImmediateContext->ClearRenderTargetView(mRenderTargetView, DirectX::Colors::IndianRed); //DirectX::Colors::MidnightBlue
+		mImmediateContext->ClearRenderTargetView(mRenderTargetView, DirectX::Colors::MidnightBlue);
 
 		//
 		// Clear the depth buffer to 1.0 (max depth)
@@ -719,7 +674,18 @@ namespace cave
 			mRenderTargetView->Release();
 			mRenderTargetView = nullptr;
 		}
-	
+		
+		if (mSwapChain1 != nullptr)
+		{
+			mSwapChain1->Release();
+			mSwapChain1 = nullptr;
+		}
+
+		if (mSwapChain != nullptr)
+		{
+			mSwapChain->Release();
+			mSwapChain = nullptr;
+		}
 
 		if (mImmediateContext1 != nullptr)
 		{
@@ -744,18 +710,6 @@ namespace cave
 			mD3dDevice->Release();
 			mD3dDevice = nullptr;
 		}
-
-		if (mSwapChain1 != nullptr)
-		{
-			mSwapChain1->Release();
-			mSwapChain1 = nullptr;
-		}
-
-		if (mSwapChain != nullptr)
-		{
-			mSwapChain->Release();
-			mSwapChain = nullptr;
-		}
 	}
 
 	void WindowsDeviceResources::GetVideoCardInfo(char* cardName, int& memory)
@@ -774,20 +728,6 @@ namespace cave
 	void WindowsDeviceResources::TurnZBufferOff()
 	{
 		mImmediateContext->OMSetDepthStencilState(mDepthDisabledStencilState, 1);
-	}
-	void WindowsDeviceResources::TurnOnAlphaBlending()
-	{
-		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-
-		// 알파 블렌딩을 켭니다.
-		mImmediateContext->OMSetBlendState(mAlphaEnableBlendingState, blendFactor, 0xffffffff);
-	}
-	void WindowsDeviceResources::TurnOffAlphaBlending()
-	{
-		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-
-		// 알파 블렌딩을 켭니다.
-		mImmediateContext->OMSetBlendState(mAlphaDisableBlendingState, blendFactor, 0xffffffff);
 	}
 } // namespace cave
 #endif

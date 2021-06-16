@@ -216,7 +216,7 @@ endif()
 
 # add_library(CaveEngine ${CAVE_ENGINE_LIB_TYPE} ${CaveEngine_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
 
-target_link_libraries(CaveEngineDemo PUBLIC Engine Gameplay Graphics Core Gl3w)
+target_link_libraries(CaveEngineDemo PUBLIC Engine Ai Gameplay Graphics Core Gl3w)
 target_include_directories(CaveEngineDemo PUBLIC ${PROJECT_BINARY_DIR})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
