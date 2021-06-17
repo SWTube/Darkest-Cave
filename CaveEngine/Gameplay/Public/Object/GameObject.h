@@ -83,7 +83,7 @@ namespace cave
 			return mScene;
 		}
 
-		__forceinline std::vector<const char*>* GetTags()
+		__forceinline std::unordered_set<const char*>* GetTags()
 		{
 			return &mTags;
 		}
