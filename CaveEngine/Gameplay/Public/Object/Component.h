@@ -8,8 +8,9 @@
 
 namespace cave
 {
-	enum class eComponentType : unsigned char
+	enum eComponentType : char
 	{
+		NONE = -1,
 		Graphics = 0,
 		Physics = 1,
 		AI = 2,
