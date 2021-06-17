@@ -8,17 +8,26 @@
 
 namespace cave
 {
-	Component::Component()
+	Component::Component() :
+		mComponentType(eComponentType::NONE)
 	{
 
 	}
 
-	Component::Component(const Component& other)
+	Component::Component(eComponentType type) :
+		mComponentType(type)
 	{
 
 	}
 
-	Component::Component(Component&& other) noexcept
+	Component::Component(const Component& other) :
+		mComponentType(other.mComponentType)
+	{
+
+	}
+
+	Component::Component(Component&& other) noexcept :
+		mComponentType(other.mComponentType)
 	{
 		
 	}
@@ -30,12 +39,18 @@ namespace cave
 
 	Component& Component::operator=(const Component& other)
 	{
+		mComponentType = other.mComponentType;
 		return *this;
 	}
 
 	Component& Component::operator=(Component&& other) noexcept
 	{
-
+		mComponentType = other.mComponentType;
 		return *this;
+	}
+
+	bool Component::IsValid() const
+	{
+		return mComponentType == eComponentType::NONE ? false : true;
 	}
 }

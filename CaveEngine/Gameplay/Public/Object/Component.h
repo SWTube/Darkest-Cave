@@ -11,16 +11,18 @@ namespace cave
 	enum eComponentType : char
 	{
 		NONE = -1,
-		Graphics = 0,
-		Physics = 1,
-		AI = 2,
-		Audio = 3,
+		RENDERER = 0,
+		RIGIDBODY = 1,
+		COLLIDER = 2,
+		AUDIO = 3,
+		AI = 4,
 	};
 
 	class Component : public Object
 	{
 	public:
 		Component();
+		Component(eComponentType type);
 		Component(const Component& other);
 		Component(Component&& other) noexcept;
 
@@ -28,7 +30,9 @@ namespace cave
 		Component& operator=(const Component& other);
 		Component& operator=(Component&& other) noexcept;
 
-		__forceinline eComponentType GetComponentType()
+		bool IsValid() const;
+
+		__forceinline eComponentType GetComponentType() const
 		{
 			return mComponentType;
 		}
