@@ -3,6 +3,7 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <cassert>
 
 #include "Object/GameObject.h"
 
@@ -71,8 +72,52 @@ namespace cave
 		return *this;
 	}
 
-	void GameObject::AddComponent(Component& component)
+	GameObject* GameObject::FindWithName(const char* name)
+	{
+		
+	}
+
+	GameObject* GameObject::FindWithTag(const char* tag)
 	{
 
+	}
+
+	GameObject* GameObject::FindGameObjectsWithTag(const char* tag)
+	{
+
+	}
+
+	void GameObject::AddComponent(Component& component)
+	{
+		assert(component.IsValid());
+		eComponentType type = component.GetComponentType();
+		if (mComponents[type] == nullptr)
+		{
+			mComponents[type] = &component;
+		}
+	}
+
+	void GameObject::AddTag(const char* tag)
+	{
+		mTags.insert(tag);
+	}
+
+	void GameObject::RemoveComponent(eComponentType type)
+	{
+		if (mComponents[type] != nullptr)
+		{
+			delete mComponents[type];
+			mComponents[type] = nullptr;
+		}
+	}
+
+	bool GameObject::CompareTag(const char* tag)
+	{
+		return mTags.contains(tag);
+	}
+
+	Component* GameObject::GetComponent(eComponentType type)
+	{
+		return mComponents[type];
 	}
 }

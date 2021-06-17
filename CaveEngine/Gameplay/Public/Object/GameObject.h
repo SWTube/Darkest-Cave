@@ -5,14 +5,14 @@
 #pragma once
 
 #include <vector>
-#include <map>
+#include <unordered_set>
 
+#include "Object/Component.h"
 #include "Object/Obejct.h"
 #include "Tmp/Transform.h"
 
 namespace cave
 {
-	class Component;
 	class Scene;
 	class Transform;
 
@@ -27,20 +27,21 @@ namespace cave
 		GameObject& operator=(const GameObject& other);
 		GameObject& operator=(GameObject&& other) noexcept;
 
-		static void	CreatePrimitive();
-		static void Find();
-		static void FindGameObjectWithTag();
-		static void FindWithTag();
+		static GameObject* FindWithName(const char* name);
+		static GameObject* FindGameObjectsWithTag(const char* tag);
+		static GameObject* FindWithTag(const char* tag);
 
 		void AddComponent(Component& component);
-		void BroadcastMessage();
-		void CompareTag();
-		void GetComponent();
-		void GetComponentInChildren();
-		void GetComponentInParent();
-		void GetComponents();
-		void GetComponentsInChildren();
-		void GetComponentsInParent();
+		void AddTag(const char* tag);
+
+		void RemoveComponent(eComponentType type);
+
+		bool CompareTag(const char* tag) const;
+
+		__forceinline Component* GetComponent(eComponentType type) const
+		{
+			return mComponents[type];
+		}
 
 		__forceinline void SetActive(bool state)
 		{
@@ -82,9 +83,6 @@ namespace cave
 			return mScene;
 		}
 
-		void AddTag(const char* tag);
-		void FindTag(const char* tag);
-
 		__forceinline std::vector<const char*>* GetTags()
 		{
 			return &mTags;
@@ -101,9 +99,9 @@ namespace cave
 
 		int mLayer;
 
-		std::map<unsigned char, std::vector<Component*>> mComponents;
+		std::vector<Component*> mComponents;
 
-		std::vector<const char*> mTags;
+		std::unordered_set<const char*> mTags;
 		Transform mTransform;
 		Scene* mScene;
 	};
