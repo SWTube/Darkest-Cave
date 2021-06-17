@@ -17,7 +17,7 @@ namespace cave
 
 	}
 
-	Actor::Actor(Actor&& other)
+	Actor::Actor(Actor&& other) noexcept
 	{
 
 	}
