@@ -4,8 +4,6 @@
  */
 #pragma once
 
-#include "Debug/LogManager.h"
-
 namespace cave
 {
 	class Object

@@ -213,8 +213,10 @@
     <ClInclude Include="Gameplay\Public\Game.h" />
     <ClInclude Include="Gameplay\Public\Object\Actor.h" />
     <ClInclude Include="Gameplay\Public\Object\Component.h" />
+    <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Log.h" />
+    <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h" />
@@ -230,6 +232,7 @@
     <ClCompile Include="Gameplay\Private\Game.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Actor.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Component.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\GameObject.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Object.cpp" />
     <ClCompile Include="Gameplay\Private\Tmp\Log.cpp" />
     <ClCompile Include="Gameplay\Public\Time\FlatformTimer.ixx" />

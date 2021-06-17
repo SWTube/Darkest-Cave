@@ -159,6 +159,12 @@
     <ClInclude Include="Gameplay\Public\Tmp\Log.h">
       <Filter>Header Files\Gameplay\Tmp</Filter>
     </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\GameObject.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Tmp\Transform.h">
+      <Filter>Header Files\Gameplay\Tmp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -205,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Public\Time\FlatformTimer.ixx">
       <Filter>Header Files\Gameplay\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
