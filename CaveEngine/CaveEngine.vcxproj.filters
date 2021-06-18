@@ -13,9 +13,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineMain.cpp" />
-    <ClCompile Include="Core\Private\Memory\Allocator.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
@@ -115,12 +112,15 @@
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Template\EnableIf.ixx">
+      <Filter>Header Files\Core\Template</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Template\IsIterator.ixx">
+      <Filter>Header Files\Core\Template</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
-    <ClInclude Include="Core\Public\Memory\Allocator.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Memory\Memory.h">
       <Filter>Header Files\Core\Memory</Filter>
     </ClInclude>
@@ -385,6 +385,9 @@
     </Filter>
     <Filter Include="Source Files\ThirdParty\Lodepng">
       <UniqueIdentifier>{2331adf6-6487-4115-b9ef-6f230b6dde99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Template">
+      <UniqueIdentifier>{d7983ff8-ec4b-4a69-8cff-42e5875cc20f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
