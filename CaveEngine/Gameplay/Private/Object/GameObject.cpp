@@ -111,13 +111,8 @@ namespace cave
 		}
 	}
 
-	bool GameObject::CompareTag(const char* tag)
+	bool GameObject::CompareTag(const char* tag) const
 	{
 		return mTags.contains(tag);
-	}
-
-	Component* GameObject::GetComponent(eComponentType type)
-	{
-		return mComponents[type];
 	}
 }
