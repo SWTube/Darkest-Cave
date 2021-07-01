@@ -67,9 +67,6 @@
     <Filter Include="Header Files\Core\Math">
       <UniqueIdentifier>{50c5228a-3fc4-4a1f-99d6-7fb27969a140}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Gameplay\Component">
-      <UniqueIdentifier>{ccbefcd7-82e0-405d-9e8e-d056e85dbf9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Gameplay\Object">
       <UniqueIdentifier>{e16925c7-671b-411b-913b-36ff2013f1de}</UniqueIdentifier>
     </Filter>
@@ -87,6 +84,12 @@
     </Filter>
     <Filter Include="Source Files\Gameplay\Tmp">
       <UniqueIdentifier>{6881057e-a26c-4853-b503-b31763bf5d03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Scene">
+      <UniqueIdentifier>{1943428d-f731-49df-a909-ea473f385d8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Scene">
+      <UniqueIdentifier>{401f0232-b329-4b33-a38b-4031c5b93c27}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +168,12 @@
     <ClInclude Include="Gameplay\Public\Tmp\Transform.h">
       <Filter>Header Files\Gameplay\Tmp</Filter>
     </ClInclude>
+    <ClInclude Include="Gameplay\Public\Scene\Grid.h">
+      <Filter>Header Files\Gameplay\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Scene\Scene.h">
+      <Filter>Header Files\Gameplay\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -214,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Scene\Scene.cpp">
+      <Filter>Source Files\Gameplay\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Scene\Grid.cpp">
+      <Filter>Source Files\Gameplay\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
