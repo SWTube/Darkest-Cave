@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <string>
 #include <vector>
 #include <unordered_set>
 
@@ -53,12 +54,12 @@ namespace cave
 			mbStatic = state;
 		}
 
-		__forceinline bool IsActive()
+		__forceinline bool IsActive() const
 		{
 			return mbActive;
 		}
 
-		__forceinline bool IsStatic()
+		__forceinline bool IsStatic() const
 		{
 			return mbStatic;
 		}
@@ -68,7 +69,7 @@ namespace cave
 			mLayer = layer;
 		}
 
-		__forceinline int GetLayer()
+		__forceinline int GetLayer() const
 		{
 			return mLayer;
 		}
@@ -78,7 +79,7 @@ namespace cave
 			mScene = &scene;
 		}
 
-		__forceinline Scene* GetScene()
+		__forceinline Scene* GetScene() const
 		{
 			return mScene;
 		}
@@ -93,6 +94,11 @@ namespace cave
 			return &mTransform;
 		}
 
+		__forceinline std::string& GetName()
+		{
+			return mName;
+		}
+
 	private:
 		bool mbActive;
 		bool mbStatic;
@@ -100,6 +106,8 @@ namespace cave
 		int mLayer;
 
 		std::vector<Component*> mComponents;
+
+		std::string mName;
 
 		std::unordered_set<const char*> mTags;
 		Transform mTransform;
