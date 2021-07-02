@@ -120,7 +120,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 void GraphicsClass::Shutdown()
 {
 	if (!m_Textures.empty()) {
-		for (int i = 0; i < m_Textures.size();i++) {
+		for (unsigned int i = 0; i < m_Textures.size();i++) {
 			m_Textures[i]->Shutdown();
 			delete m_Textures[i];
 		}
@@ -129,7 +129,7 @@ void GraphicsClass::Shutdown()
 	std::vector<TextureClass*>().swap(m_Textures);
 	
 	if (!m_Bitmaps.empty()) {
-		for (int i = 0; i < m_Bitmaps.size(); i++) {
+		for (unsigned int i = 0; i < m_Bitmaps.size(); i++) {
 			m_Bitmaps[i]->Shutdown();
 			delete m_Bitmaps[i];
 		}
@@ -186,7 +186,7 @@ bool GraphicsClass::Frame()
 	return Render(rotation);
 }
 
-void GraphicsClass::MoveObject(int index, float posX, float posY)
+void GraphicsClass::SetObjectPosition(int index, float posX, float posY)
 {
 	if (index < m_Bitmaps.size()) {
 		m_Bitmaps[index]->SetPos(posX, posY);
@@ -264,6 +264,18 @@ void GraphicsClass::ZoomOutScreen()
 	m_Camera->ZoomOut();
 }
 
+void GraphicsClass::SetCameraPosition(float x,float y, float z)
+{
+	float _z = m_Camera->GetPosition().z;
+	m_Camera->SetPosition(x, y, _z);
+}
+
+void GraphicsClass::MoveCamera(float x, float y)
+{
+	XMFLOAT3 pos = m_Camera->GetPosition();
+	m_Camera->SetPosition(pos.x+x,pos.y+y,pos.z);
+}
+
 void GraphicsClass::GetObjectPosition(int index, float& x, float& y)
 {
 	if (m_Bitmaps.size() > index) {
@@ -306,16 +318,18 @@ bool GraphicsClass::Render(float rotation)
 	//{
 	//	return false;
 	//}
-
+	//m_Direct3D->TurnZBufferOff();
 	m_Direct3D->TurnOnAlphaBlending();
-
+	int i = 0;
 	for (BitmapClass* bitmap : m_Bitmaps) {
+		bitmap->SetZ(1-i * 0.1f);
 		bitmap->Render(m_Direct3D->GetDeviceContext());
 	
 			if (!m_TextureShader->Render(m_Direct3D->GetDeviceContext(), bitmap->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, m_Textures[bitmap->GetTextureIndex()]->GetTexture() ))
 			{
 				return false;
 			}
+			i++;
 		
 	}
 

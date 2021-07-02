@@ -139,7 +139,7 @@ void ListBoxFormView::ApplyObjectInfo()
 	}
 	float x, y;
 	m_infoDlg->GetPos(x, y);
-	GraphicsClass::GetInstance()->MoveObject(curIndex, x, y);
+	GraphicsClass::GetInstance()->SetObjectPosition(curIndex, x, y);
 	int w, h;
 	m_infoDlg->GetSize(w, h);
 	GraphicsClass::GetInstance()->SetBitmapSize(curIndex,w, h);

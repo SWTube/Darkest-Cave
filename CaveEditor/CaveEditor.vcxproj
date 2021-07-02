@@ -245,6 +245,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\CaveEditor.rc2" />
+    <None Include="texture.ps" />
+    <None Include="texture.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

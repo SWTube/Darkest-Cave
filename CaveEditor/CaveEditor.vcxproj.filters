@@ -182,5 +182,11 @@
     <None Include="Resource\CaveEditor.rc2">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="texture.ps">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="texture.vs">
+      <Filter>소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

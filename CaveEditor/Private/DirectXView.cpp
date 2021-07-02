@@ -30,6 +30,7 @@ BEGIN_MESSAGE_MAP(DirectXView, CView)
 //	ON_WM_MOUSEHWHEEL()
 ON_WM_MOUSEWHEEL()
 ON_WM_CLOSE()
+ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 void DirectXView::OnClose()
@@ -151,7 +152,7 @@ void DirectXView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	if (m_dragFlag) {
-		m_Graphics->MoveObject(curSeletedObjectIndex, point.x, point.y);
+		m_Graphics->SetObjectPosition(curSeletedObjectIndex, point.x, point.y);
 	}
 
 }
@@ -174,4 +175,23 @@ BOOL DirectXView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	else if(zDelta > 0) GraphicsClass::GetInstance()->ZoomInScreen();
 
 	return CView::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+
+void DirectXView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	switch (nChar)
+	{
+	case VK_LEFT:
+		GraphicsClass::GetInstance()->MoveCamera(-1.0f, 0.0f);
+		break;
+	case VK_RIGHT:
+		GraphicsClass::GetInstance()->MoveCamera(1.0f, 0.0f);
+		break;
+	default:
+		break;
+	}
+
+	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }

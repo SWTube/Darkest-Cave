@@ -23,6 +23,7 @@ public:
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
 	void SetPos(float x, float y);
+	void SetZ(float z);
 	void Move(float x, float y);
 	float GetPosX() const { return m_posX; }
 	float GetPosY() const { return m_posY; }
@@ -36,7 +37,7 @@ public:
 private:
 	bool InitializeBuffers(ID3D11Device*);
 	void ShutdownBuffers();
-	bool UpdateBuffers(ID3D11DeviceContext*, float, float);
+	bool UpdateBuffers(ID3D11DeviceContext*, float, float, float = 0);
 	void RenderBuffers(ID3D11DeviceContext*);
 
 	bool LoadTexture(ID3D11Device*, WCHAR*);
@@ -55,6 +56,7 @@ private:
 
 	float m_posX = 0;
 	float m_posY = 0;
+	float m_posZ = 0;
 
 	float m_previousPosX = 0;
 	float m_previousPosY = 0;
