@@ -318,11 +318,10 @@ bool GraphicsClass::Render(float rotation)
 	//{
 	//	return false;
 	//}
-	//m_Direct3D->TurnZBufferOff();
+	m_Direct3D->TurnZBufferOff();
 	m_Direct3D->TurnOnAlphaBlending();
 	int i = 0;
 	for (BitmapClass* bitmap : m_Bitmaps) {
-		bitmap->SetZ(1-i * 0.1f);
 		bitmap->Render(m_Direct3D->GetDeviceContext());
 	
 			if (!m_TextureShader->Render(m_Direct3D->GetDeviceContext(), bitmap->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, m_Textures[bitmap->GetTextureIndex()]->GetTexture() ))
