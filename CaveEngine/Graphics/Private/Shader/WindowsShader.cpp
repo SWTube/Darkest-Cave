@@ -62,7 +62,7 @@ namespace cave
 		eResult error = compileShaderFromFile(shaderPath.c_str(), "VS", "vs_4_0", &vsBlob);
 		if (error != eResult::CAVE_OK)
 		{
-			LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
+			//LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
 			vsBlob->Release();
 			vsBlob = nullptr;
 			return error;
@@ -82,7 +82,7 @@ namespace cave
 		error = compileShaderFromFile(shaderPath.c_str(), "PS", "ps_4_0", &psBlob);
 		if (error != eResult::CAVE_OK)
 		{
-			LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
+			//LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
 			vsBlob->Release();
 			psBlob->Release();
 

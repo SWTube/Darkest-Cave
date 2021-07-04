@@ -168,7 +168,7 @@ namespace cave
 			//LoadFromPngData(device,pngImage);
 			if (error != 0)
 			{
-				LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mFilePath.string().c_str(), error);
+				//LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded. Error Code: %u", mFilePath.string().c_str(), error);
 			}
 		}
 		else if (wcsncmp(extension, L".dds", 4) == 0)
@@ -314,19 +314,19 @@ namespace cave
 		if (mFilePath.extension() == ".dds")
 		{
 			if (FAILED(DdsTextureLoader::CreateDDSTextureFromFile(device, mFilePath.c_str(), &resource, &mTexture->Texture))) {
-				LOGEF(eLogChannel::GRAPHICS, "The dss file %s cannot be loaded", mFilePath.string().c_str());
+				//LOGEF(eLogChannel::GRAPHICS, "The dss file %s cannot be loaded", mFilePath.string().c_str());
 				return;
 			}
 		}
 		else
 		{
 			if (FAILED(WicTextureLoader::CreateWICTextureFromFile(device, mFilePath.c_str(), &resource, &mTexture->Texture))) {
-				LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded", mFilePath.string().c_str());
+				//LOGEF(eLogChannel::GRAPHICS, "The png file %s cannot be loaded", mFilePath.string().c_str());
 				return;
 			}
 
 		}
-		LOGIF(eLogChannel::GRAPHICS, "Texture file %s be successfully loaded.",mFilePath.string().c_str());
+		//LOGIF(eLogChannel::GRAPHICS, "Texture file %s be successfully loaded.",mFilePath.string().c_str());
 		//get width, height
 		ID3D11Texture2D* texture2D;
 		texture2D = (ID3D11Texture2D*)resource;
