@@ -215,6 +215,7 @@
     <ClInclude Include="Gameplay\Public\Object\Component.h" />
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
+    <ClInclude Include="Gameplay\Public\Object\Tag.h" />
     <ClInclude Include="Gameplay\Public\Scene\Grid.h" />
     <ClInclude Include="Gameplay\Public\Scene\Scene.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Log.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="Gameplay\Private\Object\Component.cpp" />
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Object.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Tag.cpp" />
     <ClCompile Include="Gameplay\Private\Scene\Grid.cpp" />
     <ClCompile Include="Gameplay\Private\Scene\Scene.cpp" />
     <ClCompile Include="Gameplay\Private\Tmp\Log.cpp" />
