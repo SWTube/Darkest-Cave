@@ -6,7 +6,7 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 namespace cave
 {
@@ -15,6 +15,8 @@ namespace cave
 	class Grid final
 	{
 	public:
+		friend class Scene;
+
 		using Length = unsigned short;
 
 		Grid();
@@ -29,11 +31,44 @@ namespace cave
 		void RemoveObject(GameObject& object);
 		void MoveObject(std::string& name);
 
+		__forceinline unsigned short GetRow() const
+		{
+			return mRow;
+		}
+
+		__forceinline unsigned short GetCol() const
+		{
+			return mCol;
+		}
+
+		std::unordered_map<std::string, GameObject*>& GetObjects(bool isActivate = true);
+
 		GameObject* FindObjectByName(std::string& name);
 		std::vector<GameObject*>& FindObjectsByTag(std::string& tag);
 
 	private:
-		std::map<std::string, GameObject*> mActivateObject;
-		std::map<std::string, GameObject*> mDeactivateObject;
+		__forceinline void SetRow(unsigned short row)
+		{
+			mRow = row;
+		}
+
+		__forceinline void SetCol(unsigned short col)
+		{
+			mCol = col;
+		}
+
+		__forceinline void SetScene(Scene& scene)
+		{
+			mScene = &scene;
+		}
+
+	private:
+		unsigned short mRow;
+		unsigned short mCol;
+
+		Scene* mScene;
+
+		std::unordered_map<std::string, std::unordered_multimap<std::string, GameObject*>> mActivateObject;
+		std::unordered_map<std::string, GameObject*> mDeactivateObject;
 	};
 }

@@ -8,7 +8,8 @@
 
 namespace cave
 {
-	Grid::Grid()
+	Grid::Grid() :
+		mScene(nullptr)
 	{
 
 	}
