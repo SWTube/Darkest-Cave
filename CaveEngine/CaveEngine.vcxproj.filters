@@ -19,9 +19,6 @@
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Debug\Log.ixx">
-      <Filter>Source Files\Core\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Memory\Memory.cpp">
       <Filter>Source Files\Core\Memory</Filter>
     </ClCompile>
@@ -111,6 +108,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Debug\Log.ixx">
+      <Filter>Header Files\Core\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\String\String.ixx">
       <Filter>Header Files\Core\String</Filter>
