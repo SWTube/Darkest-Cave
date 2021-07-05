@@ -78,6 +78,9 @@
     <ClCompile Include="ObjectInfoDlg.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Private\DirectX\MultiTexture.cpp">
+      <Filter>소스 파일\DirectX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\targetver.h">
@@ -134,9 +137,6 @@
     <ClInclude Include="Public\DirectX\ModelClass.h">
       <Filter>헤더 파일\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Public\DirectX\Squere.h">
-      <Filter>헤더 파일\DirectX</Filter>
-    </ClInclude>
     <ClInclude Include="Public\DirectX\TextureClass.h">
       <Filter>헤더 파일\DirectX</Filter>
     </ClInclude>
@@ -151,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="ObjectInfoDlg.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\DirectX\MultiTexture.h">
+      <Filter>헤더 파일\DirectX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

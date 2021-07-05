@@ -6,9 +6,9 @@
 #include "colorshaderclass.h"
 #include "textureshaderclass.h"
 #include "graphicsclass.h"
-#include "Squere.h"
 #include "BitmapClass.h"
 #include "TextureClass.h"
+#include "MultiTexture.h"
 
 GraphicsClass* GraphicsClass::instance = nullptr;
 
@@ -56,36 +56,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// 카메라 포지션 설정
 	m_Camera->SetPosition(0.0f, 0.0f, -100.0f);
 
-	//m_Model 객체 생성
-	//m_Model = new ModelClass;
-	//if (!m_Model)
-	//{
-	//	return false;
-	//}
-	//m_Model->SetMoveX(-3);
-	//m_Model->SetColor(XMFLOAT4(1, 0.5f, 0.0f, 1));
-
-	// m_Model 객체 초기화
-	//if (!m_Model->Initialize(m_Direct3D->GetDevice()))
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-	//	return false;
-	//}
-
-	//m_Squere = new Squere;
-
-	//if (!m_Squere->Initialize(m_Direct3D->GetDevice(),screenWidth,screenHeight, L"seafloor.dds",100,100)) {
-	//	MessageBox(hwnd, L"Could not initialize the squere object", L"Error", MB_OK);
-	//	return false;
-	//}
-
-	//m_Bitmap = new BitmapClass;
-	//
-	//if (!m_Bitmap->Initialize(m_Direct3D->GetDevice(), screenWidth, screenHeight, L"test.bmp", 200, 200)) {
-	//	MessageBox(hwnd, L"Could not initialize the bitmap object", L"Error", MB_OK);
-	//	return false;
-	//}
-	
 	// m_ColorShader 객체 생성
 	m_ColorShader = new ColorShaderClass;
 	if (!m_ColorShader)

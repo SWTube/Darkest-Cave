@@ -199,6 +199,7 @@
     <ClCompile Include="Private\DirectX\GraphicsClass.cpp" />
     <ClCompile Include="Private\DirectX\InputClass.cpp" />
     <ClCompile Include="Private\DirectX\ModelClass.cpp" />
+    <ClCompile Include="Private\DirectX\MultiTexture.cpp" />
     <ClCompile Include="Private\DirectX\TextureClass.cpp" />
     <ClCompile Include="Private\DirectX\TextureShaderClass.cpp" />
     <ClCompile Include="Private\DirectX\WICTextureLoader11.cpp" />
@@ -221,7 +222,7 @@
     <ClInclude Include="Public\DirectX\GraphicsClass.h" />
     <ClInclude Include="Public\DirectX\InputClass.h" />
     <ClInclude Include="Public\DirectX\ModelClass.h" />
-    <ClInclude Include="Public\DirectX\Squere.h" />
+    <ClInclude Include="Public\DirectX\MultiTexture.h" />
     <ClInclude Include="Public\DirectX\TextureClass.h" />
     <ClInclude Include="Public\DirectX\TextureShaderClass.h" />
     <ClInclude Include="Public\DirectX\WICTextureLoader11.h" />
