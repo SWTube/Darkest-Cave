@@ -16,6 +16,7 @@ namespace cave
 {
 	class Scene;
 	class Transform;
+	class Grid;
 
 	class GameObject : public Object
 	{
@@ -28,16 +29,13 @@ namespace cave
 		GameObject& operator=(const GameObject& other);
 		GameObject& operator=(GameObject&& other) noexcept;
 
-		static GameObject* FindWithName(const char* name);
-		static GameObject* FindGameObjectsWithTag(const char* tag);
-		static GameObject* FindWithTag(const char* tag);
-
 		void AddComponent(Component& component);
-		void AddTag(const char* tag);
+		void AddTag(std::string& tag);
 
 		void RemoveComponent(eComponentType type);
+		void RemoveTag(std::string& tag);
 
-		bool CompareTag(const char* tag) const;
+		bool CompareTag(std::string& tag) const;
 
 		__forceinline Component* GetComponent(eComponentType type) const
 		{
@@ -84,9 +82,9 @@ namespace cave
 			return mScene;
 		}
 
-		__forceinline std::unordered_set<const char*>* GetTags()
+		__forceinline std::unordered_set<std::string>& GetTags()
 		{
-			return &mTags;
+			return mTags;
 		}
 
 		__forceinline Transform* GetTransform()
@@ -109,8 +107,12 @@ namespace cave
 
 		std::string mName;
 
-		std::unordered_set<const char*> mTags;
+		std::unordered_set<std::string> mTags;
+
 		Transform mTransform;
 		Scene* mScene;
+		Grid* mGrid;
 	};
+
+	GameObject* FindObjectByName(Scene& targetScene, std::string& name);
 }

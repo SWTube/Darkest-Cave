@@ -6,6 +6,7 @@
 #include <cassert>
 
 #include "Object/GameObject.h"
+#include "Scene/Scene.h"
 
 namespace cave
 {
@@ -72,21 +73,6 @@ namespace cave
 		return *this;
 	}
 
-	GameObject* GameObject::FindWithName(const char* name)
-	{
-		
-	}
-
-	GameObject* GameObject::FindWithTag(const char* tag)
-	{
-
-	}
-
-	GameObject* GameObject::FindGameObjectsWithTag(const char* tag)
-	{
-
-	}
-
 	void GameObject::AddComponent(Component& component)
 	{
 		assert(component.IsValid());
@@ -97,7 +83,7 @@ namespace cave
 		}
 	}
 
-	void GameObject::AddTag(const char* tag)
+	void GameObject::AddTag(std::string& tag)
 	{
 		mTags.insert(tag);
 	}
@@ -111,8 +97,18 @@ namespace cave
 		}
 	}
 
-	bool GameObject::CompareTag(const char* tag) const
+	void GameObject::RemoveTag(std::string& tag)
+	{
+		mTags.erase(tag);
+	}
+
+	bool GameObject::CompareTag(std::string& tag) const
 	{
 		return mTags.contains(tag);
+	}
+
+	GameObject* FindObjectByName(Scene& target, std::string& name)
+	{
+		return target.FindObjectByName(name);
 	}
 }
