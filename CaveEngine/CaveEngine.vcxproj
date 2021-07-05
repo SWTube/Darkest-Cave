@@ -270,23 +270,14 @@
   <ItemGroup>
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
-    <ClCompile Include="Core\Private\Debug\Log.ixx">
-      <ModuleDependenciesFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)</ModuleDependenciesFile>
-      <ModuleDependenciesFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)</ModuleDependenciesFile>
-      <ModuleDependenciesFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)</ModuleDependenciesFile>
-      <ModuleDependenciesFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)</ModuleDependenciesFile>
-      <ModuleOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)</ModuleOutputFile>
-      <ModuleOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)</ModuleOutputFile>
-      <ModuleOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)</ModuleOutputFile>
-      <ModuleOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)</ModuleOutputFile>
-    </ClCompile>
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
-    <ClCompile Include="Core\Private\String\String.ixx" />
+    <ClCompile Include="Core\Public\String\String.ixx" />
+    <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\UnixEngine.cpp" />
