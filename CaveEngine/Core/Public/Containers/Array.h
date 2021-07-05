@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#if 0
 // temporary wrapper
 #include "CoreTypes.h"
 // include assertion macros
@@ -675,4 +676,6 @@ namespace cave
     {
         return ConstIterator(*this, 0 + mSize);
     }
+
 } // namespace cave
+#endif
