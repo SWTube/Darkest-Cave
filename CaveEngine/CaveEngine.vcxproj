@@ -286,7 +286,7 @@
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
-    <ClCompile Include="Core\Private\String\String.ixx" />
+    <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\UnixEngine.cpp" />
