@@ -3,54 +3,47 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <cassert>
+
 #include "Scene/Grid.h"
 #include "Scene/Scene.h"
 
 namespace cave
 {
-	Scene::Scene(Length width, Length height, std::string& name) :
-		mWidth(width),
-		mHeight(height),
-		mGridWidth(64),
-		mGridHeight(64),
-		mName(std::move(name))
-	{
-		Length y = mHeight / mGridHeight + 1;
-		Length x = mWidth / mGridWidth + 1;
+	std::unordered_set<std::string> Scene::mNames;
 
-		mGrid = new Grid*[y];
-		for (size_t index = 0; index < y; ++index)
-		{
-			mGrid[index] = new Grid[x];
-		}
-	}
-
-	Scene::Scene(Length width, Length height, Length gridWidth, Length gridHeight, std::string& name) :
+	Scene::Scene(std::string& name, Length width, Length height, Length gridWidth, Length gridHeight) :
 		mWidth(width),
 		mHeight(height),
 		mGridWidth(gridWidth),
 		mGridHeight(gridHeight),
-		mName(std::move(name))
+		mbValid(true),
+		mbLoaded(false)
 	{
-		Length y = mHeight / mGridHeight + 1;
-		Length x = mWidth / mGridWidth + 1;
+		assert(mGridHeight != 0);
+		assert(mGridWidth != 0);
+		assert(mNames.find(name) == mNames.end());
 
-		mGrid = new Grid * [y];
-		for (size_t index = 0; index < y; ++index)
+		mGridHeight = mHeight / mGridHeight + 1;
+		mGridCol = mWidth / gridWidth + 1;
+
+		mName = std::move(name);
+
+		mGrid = new Grid[mGridRow * mGridCol];
+		for (size_t row = 0; row < mGridRow; ++row)
 		{
-			mGrid[index] = new Grid[x];
+			for (size_t col = 0; col < mGridCol; ++col)
+			{
+				unsigned int index = mGridRow * row + col;
+				mGrid[index].SetScene(this);
+				mGrid[index].SetRow(row);
+				mGrid[index].SetScene(col);
+			}
 		}
 	}
 
 	Scene::~Scene()
 	{
-		Length y = mHeight / mGridHeight + 1;
-		Length x = mWidth / mGridWidth + 1;
-
-		for (size_t index = 0; index < y; ++index)
-		{
-			delete[] mGrid[index];
-		}
 		delete[] mGrid;
 	}
 }
