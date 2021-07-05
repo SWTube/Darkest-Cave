@@ -170,7 +170,7 @@ namespace cave
 
         friend bool operator!=(const TArrayIterator& lhs, const TArrayIterator& rhs)
         {
-            return &lhs.mContainer != &rhs.mContainer && lhs.mIndex == rhs.mIndex;
+            return &lhs.mContainer != &rhs.mContainer || lhs.mIndex != rhs.mIndex;
         }
 
     private:
