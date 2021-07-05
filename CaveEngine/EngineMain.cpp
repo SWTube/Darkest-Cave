@@ -86,7 +86,7 @@ int main(int32_t argc, char** argv)
 				break;
 			}
 
-			cave::LogManager::SetVerbosity(verbosity);
+			cave::Log::SetVerbosity(verbosity);
 			commandFlag &= (~LOG_FLAG);
 		}
 	}
