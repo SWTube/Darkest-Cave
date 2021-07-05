@@ -1,9 +1,10 @@
 #pragma once
 
+#include <unordered_map>
+
 namespace cave
 {
-	class Actor;
-	class ObjectPool;
+	class Scene;
 
 	class Game final
 	{
@@ -25,6 +26,6 @@ namespace cave
 	private:
 		static Game* mGame;
 
-		ObjectPool* mObjectPool;
+		std::unordered_map<std::string, Scene*> mScenes;
 	};
 }

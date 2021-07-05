@@ -2,7 +2,7 @@
 #include <conio.h>
 #include <iostream>
 
-#include "Object/Obejct.h"
+#include "Scene/Scene.h"
 #include "Tmp/Log.h"
 #include "Game.h"
 
@@ -12,12 +12,12 @@ namespace cave
 
 	Game::Game()
 	{
-		Log("Game::Game()");
+		
 	}
 
 	Game::~Game()
 	{
-		Log("Game::~Game()");
+
 	}
 
 	Game* Game::Instance()
