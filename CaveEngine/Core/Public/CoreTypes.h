@@ -5,11 +5,4 @@
 
 #pragma once
 
-#include <stddef.h>
-#include <stdint.h>
-
-#include "CoreDefs.h"
-
-namespace cave
-{
-}
+#include "Utils/Defines.h"

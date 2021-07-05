@@ -9,12 +9,17 @@
 	 Low level includes.
  ----------------------------------------------------------------------------*/
 
-
 #include "CoreMinimal.h"
+
+
 //#include "Containers/ContainersFwd.h"
 //#include "Misc/Timespan.h"
 //#include "Misc/DateTime.h"
+#include "Utils/Crt.h"
 //#include "HAL/PlatformCrt.h"
+#include "Memory/Memory.h"
+#include "Memory/MemoryPool.h"
+// #include "Memory/Allocator.h"
 //#include "GenericPlatform/GenericPlatformMemory.h"
 //#include "HAL/PlatformMemory.h"
 //#include "Misc/Char.h"
@@ -59,6 +64,7 @@
 //#include "HAL/PlatformAffinity.h"
 //#include "HAL/PlatformIncludes.h"
 //#include "HAL/PlatformFilemanager.h"
+#include "Assertion/Assert.h"
 //#include "Misc/AssertionMacros.h"
 //#include "HAL/UnrealMemory.h"
 //#include "Templates/PointerIsConvertibleFromTo.h"
@@ -100,8 +106,6 @@
 //
 //#include "UObject/UObjectHierarchyFwd.h"
 
-//#include "CoreGlobals.h"
-
 /*----------------------------------------------------------------------------
 	Includes.
 ----------------------------------------------------------------------------*/
@@ -124,7 +128,7 @@
 //#include "Serialization/ArchiveProxy.h"
 //#include "Serialization/NameAsStringProxyArchive.h"
 //#include "Templates/Sorting.h"
-#include "Containers/Array.h"
+// #include "Containers/Array.h"
 //#include "Containers/ScriptArray.h"
 //#include "Containers/MRUArray.h"
 //#include "Containers/TransArray.h"
@@ -245,6 +249,7 @@
 //#include "Math/RandomStream.h"
 //#include "Logging/LogSuppressionInterface.h"
 //#include "Logging/LogScopedCategoryAndVerbosityOverride.h"
+#include "Debug/Log.h"
 //#include "HAL/OutputDevices.h"
 //#include "Misc/OutputDeviceRedirector.h"
 //#include "Misc/OutputDeviceNull.h"
