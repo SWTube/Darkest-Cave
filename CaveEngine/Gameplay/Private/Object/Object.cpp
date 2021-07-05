@@ -14,9 +14,10 @@ namespace cave
 		mOwner(this),
 		mFlags(0x00000000),
 		mInstanceID(0),
-		mInternalIndex(0)
+		mInternalIndex(0),
+		mbVaild(true)
 	{
-		Log("Object::Object()");
+		
 	}
 
 	Object::Object(const Object& other) :
@@ -61,21 +62,5 @@ namespace cave
 		mInstanceID = other.mInstanceID;
 
 		return *this;
-	}
-
-	void Object::Print()
-	{
-		Log("Object::Print()");
-
-		assert(mOwner != nullptr);
-
-#ifdef _DEBUG
-		std::cout << "===========================================================\n";
-		std::cout << "Object[" << mInternalIndex << "]'s member\n\n";
-		std::cout << "mOwner: " << mOwner << "\n";
-		std::cout << "mFlags: " << mFlags << "\n";
-		std::cout << "mInternalIndex: " << mInternalIndex << "\n";
-		std::cout << "mInstanceID: " << mInstanceID << '\n';
-#endif // _DEBUG
 	}
 }

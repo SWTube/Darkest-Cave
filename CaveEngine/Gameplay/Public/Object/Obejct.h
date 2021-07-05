@@ -33,7 +33,10 @@ namespace cave
 			return mInternalIndex;
 		}
 
-		void Print();
+		__forceinline bool IsValid() const
+		{
+			return mbVaild;
+		}
 
 	protected:
 		Object();
@@ -61,5 +64,7 @@ namespace cave
 		unsigned char mFlags;
 		unsigned int mInternalIndex;
 		unsigned int mInstanceID;
+
+		bool mbVaild;
 	};
 }
