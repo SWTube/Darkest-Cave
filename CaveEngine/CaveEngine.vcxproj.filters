@@ -13,13 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineMain.cpp" />
-    <ClCompile Include="Core\Private\Memory\Allocator.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Debug\Log.cpp">
-      <Filter>Source Files\Core\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Debug\Log.ixx">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Memory\Memory.cpp">
@@ -115,12 +109,12 @@
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Debug\Log.ixx">
+      <Filter>Header Files\Core\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
-    <ClInclude Include="Core\Public\Memory\Allocator.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Memory\Memory.h">
       <Filter>Header Files\Core\Memory</Filter>
     </ClInclude>

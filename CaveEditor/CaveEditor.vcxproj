@@ -169,7 +169,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\CaveEngine\Core\Public\Debug\LogManager.h" />
+    <ClInclude Include="..\CaveEngine\Core\Public\Debug\Log.h" />
     <ClInclude Include="..\CaveEngine\Graphics\Public\Graphics.h" />
     <ClInclude Include="..\CaveEngine\Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="..\CaveEngine\Graphics\Public\OpenGlTest.h" />
@@ -195,11 +195,7 @@
     <ResourceCompile Include="Resource\Editor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\CaveEngine\Core\Private\Debug\LogManager.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Renderer\CaveApplication.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Renderer\CaveNode.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Renderer\CaveRenderer.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Test\DirectXTest.cpp" />
+    <ClCompile Include="..\CaveEngine\Core\Private\Debug\Log.cpp" />
     <ClCompile Include="Private\Editor.cpp" />
   </ItemGroup>
   <ItemGroup>
