@@ -3,10 +3,11 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#ifdef __UNIX__
 #include "Device/UnixDeviceResources.h"
+
 #include "String/String.h"
 
-#ifdef __UNIX__
 namespace cave
 {
 	UnixDeviceResources::UnixDeviceResources(MemoryPool& pool)
@@ -59,7 +60,7 @@ namespace cave
 		glfwMakeContextCurrent(glfwWindow);
 		if (result = glfwGetError(nullptr); result != GLFW_NO_ERROR)
 		{
-			LOGEF(eLogChannel::GRAPHICS, std::cerr, "glfwMakeContextCurrent error code: 0x%x", result);
+			LOGEF(eLogChannel::GRAPHICS, "glfwMakeContextCurrent error code: 0x%x", result);
 		}
 		gl3wInit();
 
@@ -72,15 +73,15 @@ namespace cave
 		Strcpy(&mVideoCardDescription[vendorStringSize + 1], 128ul - vendorStringSize - 1, renderer, Strlen(renderer));
 		Memory::Memset(&mVideoCardDescription[vendorStringSize + 1 + rendererStringSize], 0, 128 - vendorStringSize - rendererStringSize - 1);
 
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "Vendor: %s", glGetString(GL_VENDOR));
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "Renderer: %s", glGetString(GL_RENDERER));
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %s", glGetString(GL_VERSION));
+		LOGIF(eLogChannel::GRAPHICS, "Vendor: %s", glGetString(GL_VENDOR));
+		LOGIF(eLogChannel::GRAPHICS, "Renderer: %s", glGetString(GL_RENDERER));
+		LOGIF(eLogChannel::GRAPHICS, "OpenGL version supported: %s", glGetString(GL_VERSION));
 		int32_t major = 0;
 		int32_t minor = 0;
 		glGetIntegerv(GL_MAJOR_VERSION, &major);
 		glGetIntegerv(GL_MINOR_VERSION, &minor);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", major);
-		LOGIF(eLogChannel::GRAPHICS, std::cout, "OpenGL version supported: %d", minor);
+		LOGIF(eLogChannel::GRAPHICS, "OpenGL version supported: %d", major);
+		LOGIF(eLogChannel::GRAPHICS, "OpenGL version supported: %d", minor);
 
 		glViewport(0, 0, mWidth, mHeight);
 		glEnable(GL_BLEND);
@@ -183,7 +184,7 @@ namespace cave
 
 	void UnixDeviceResources::errorCallback(int32_t errorCode, const char* description)
 	{
-		LOGEF(eLogChannel::GRAPHICS, std::cerr, "%s, errorCode: %d", description, errorCode);
+		LOGEF(eLogChannel::GRAPHICS, "%s, errorCode: %d", description, errorCode);
 	}
 
 	void UnixDeviceResources::Destroy()

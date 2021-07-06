@@ -3,9 +3,9 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#ifdef __UNIX__
 #include "UnixEngine.h"
 
-#ifdef __UNIX__
 namespace cave
 {
 	eResult UnixEngine::Init(uint32_t screenWidth, uint32_t screenHeight)
@@ -51,7 +51,7 @@ namespace cave
 			{
 				startTic = tic;
 				bHasSecondPassed = false;
-				LOGIF(cave::eLogChannel::GRAPHICS, std::cout, "FPS: %u", static_cast<uint32_t>(1.0l / ((tick / static_cast<long double>(tickCount)) * 0.001l)));
+				LOGIF(cave::eLogChannel::GRAPHICS, "FPS: %u", static_cast<uint32_t>(1.0l / ((tick / static_cast<long double>(tickCount)) * 0.001l)));
 				tick = 0.0l;
 				tickCount = 0u;
 			}
