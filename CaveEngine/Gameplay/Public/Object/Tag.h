@@ -5,24 +5,37 @@
 #pragma once
 
 #include <string>
-#include <xhash>
 
 namespace cave
 {
 	class Tag final
 	{
 	public:
-		Tag();
-		Tag(const char* typeName);
-		Tag(const Tag& other);
-		Tag(Tag&& other);
+		Tag(const char& typeName);
+		Tag(std::string& typeName);
 
 		~Tag();
-		Tag& operator=(const Tag& other);
-		Tag& operator=(const Tag && other);
+
+		__forceinline friend bool operator==(const Tag& lhs, const Tag& rhs)
+		{
+			return lhs.mType == rhs.mType;
+		}
+
+		__forceinline friend bool operator!=(const Tag& lhs, const Tag& rhs)
+		{
+			return lhs.mType == rhs.mType;
+		}
 
 	private:
-		const char* mTypeName;
+		Tag();
+		Tag(const Tag& other) = delete;
+		Tag(Tag&& other) = delete;
+
+		Tag& operator=(const Tag& other) = delete;
+		Tag& operator=(const Tag&& other) = delete;
+
+	private:
+		std::string mTypeName;
 		size_t mType;
 	};
 }
