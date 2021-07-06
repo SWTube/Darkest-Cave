@@ -270,6 +270,7 @@
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Private\Containers\Array.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.ixx">
@@ -289,6 +290,7 @@
     <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\String\String.ixx" />
     <ClCompile Include="Core\Public\Containers\Iterator.ixx" />
+    <ClCompile Include="Core\Public\Containers\Module.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
