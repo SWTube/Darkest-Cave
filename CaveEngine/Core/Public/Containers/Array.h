@@ -4,7 +4,6 @@
  */
 #pragma once
 
-#if 0
 // temporary wrapper
 #include "CoreTypes.h"
 // include assertion macros
@@ -13,8 +12,7 @@
 #include "CoreGlobals.h"
 #include "Memory/Memory.h"
 // include template
-import EnableIf;
-import IsIterator;
+import IteratorType;
 
 #define GET_ARRAY_LENGTH(ARR) (sizeof(ARR) / sizeof(ARR[0]))
 
@@ -188,7 +186,7 @@ namespace cave
         constexpr explicit TArray(MemoryPool& pool = gCoreMemoryPool) noexcept;
         constexpr TArray(size_t count, const ElementType& value, MemoryPool& pool = gCoreMemoryPool);
         constexpr TArray(size_t count, MemoryPool& pool = gCoreMemoryPool);
-        template<class InputIt, typename TEnableIf<TIsIterator<InputIt>::Value>::Type>
+        template<IterType InputIt>
         constexpr TArray(InputIt first, InputIt last, MemoryPool& pool = gCoreMemoryPool);
         constexpr TArray(const TArray& other, MemoryPool& pool = gCoreMemoryPool);
         constexpr TArray(TArray&& other, MemoryPool& pool = gCoreMemoryPool) noexcept;
@@ -206,12 +204,12 @@ namespace cave
 
 
         constexpr void Assign(size_t count, const ElementType& initializeElement);
-        template<IsIter Iter>
+        template<IterType Iter>
         constexpr void Assign(Iter first, Iter last);
 
         constexpr Iterator Insert(Iterator position, const ElementType& element);
         constexpr Iterator Insert(Iterator position, size_t count, const ElementType& element);
-        template<IsIter Iter>
+        template<IterType Iter>
         constexpr Iterator Insert(Iterator position, Iter first, Iter last);
 
         constexpr Iterator Erase(Iterator position);
@@ -287,7 +285,7 @@ namespace cave
     { }
 
     template<class ElementType>
-    template<class InputIt, typename TEnableIf<TIsIterator<InputIt>::Value>::Type>
+    template<IterType InputIt>
     constexpr TArray<ElementType>::TArray(InputIt first, InputIt last, MemoryPool& pool)
         : mPool(&pool)
     {
@@ -426,7 +424,7 @@ namespace cave
     }
 
     template<class ElementType>
-    template<IsIter Iter>
+    template<IterType Iter>
     constexpr void TArray<ElementType>::Assign(Iter first, Iter last)
     {
         size_t count = 0;
@@ -503,7 +501,7 @@ namespace cave
     }
 
     template<class ElementType>
-    template<IsIter Iter>
+    template<IterType Iter>
     constexpr typename TArray<ElementType>::Iterator TArray<ElementType>::Insert(Iterator position, Iter first, Iter last)
     {
         size_t count = 0;
@@ -678,4 +676,3 @@ namespace cave
     }
 
 } // namespace cave
-#endif
