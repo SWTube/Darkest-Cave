@@ -14,9 +14,9 @@ namespace cave
 		mbActive(true),
 		mbStatic(false),
 		mLayer(0),
-		mTags(),
+		mTag(nullptr),
 		mTransform(),
-		mScene(nullptr)
+		mGrid(nullptr)
 	{
 
 	}
@@ -25,9 +25,7 @@ namespace cave
 		mbActive(other.mbActive),
 		mbStatic(other.mbStatic),
 		mLayer(other.mLayer),
-		mTags(other.mTags),
-		mTransform(),
-		mScene(other.mScene)
+		mTransform()
 	{
 
 	}
@@ -36,9 +34,7 @@ namespace cave
 		mbActive(other.mbActive),
 		mbStatic(other.mbStatic),
 		mLayer(other.mLayer),
-		mTags(std::move(other.mTags)),
-		mTransform(std::move(other.mTransform)),
-		mScene(other.mScene)
+		mTransform(std::move(other.mTransform))
 	{
 
 	}
@@ -54,9 +50,7 @@ namespace cave
 		mbActive = other.mbActive;
 		mbStatic = other.mbStatic;
 		mLayer = other.mLayer;
-		mTags = other.mTags;
 		mTransform = other.mTransform;
-		mScene = other.mScene;
 
 		return *this;
 	}
@@ -66,9 +60,7 @@ namespace cave
 		mbActive = other.mbActive;
 		mbStatic = other.mbStatic;
 		mLayer = other.mLayer;
-		mTags = std::move(other.mTags);
 		mTransform = std::move(other.mTransform);
-		mScene = other.mScene;
 
 		return *this;
 	}
@@ -83,11 +75,6 @@ namespace cave
 		}
 	}
 
-	void GameObject::AddTag(std::string& tag)
-	{
-		mTags.insert(tag);
-	}
-
 	void GameObject::RemoveComponent(eComponentType type)
 	{
 		if (mComponents[type] != nullptr)
@@ -95,16 +82,6 @@ namespace cave
 			delete mComponents[type];
 			mComponents[type] = nullptr;
 		}
-	}
-
-	void GameObject::RemoveTag(std::string& tag)
-	{
-		mTags.erase(tag);
-	}
-
-	bool GameObject::CompareTag(std::string& tag) const
-	{
-		return mTags.contains(tag);
 	}
 
 	GameObject* FindObjectByName(Scene& target, std::string& name)

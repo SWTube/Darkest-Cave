@@ -24,29 +24,29 @@ namespace cave
 		mOwner(this),
 		mFlags(other.mFlags),
 		mInstanceID(0),
-		mInternalIndex(0)
+		mInternalIndex(0),
+		mbVaild(true)
 	{
-		Log("Object::Object(const Object&)");
+
 	}
 
 	Object::Object(Object&& other) noexcept :
 		mOwner(this),
 		mFlags(other.mFlags),
 		mInstanceID(other.mInstanceID),
-		mInternalIndex(other.mInternalIndex)
+		mInternalIndex(other.mInternalIndex),
+		mbVaild(true)
 	{
-		Log("Object::Object(Object&&)");
+
 	}
 
 	Object::~Object()
 	{
-		Log("Object::~Object()");
+	
 	}
 
 	Object& Object::operator=(const Object& other)
 	{
-		Log("Object::operator=(const Object&)");
-
 		mFlags = other.mFlags;
 		mInstanceID = other.mInstanceID;
 		mInternalIndex = other.mInternalIndex;
@@ -56,8 +56,6 @@ namespace cave
 
 	Object& Object::operator=(Object&& other) noexcept
 	{
-		Log("Object::operator=(Object&&)");
-
 		mFlags = other.mFlags;
 		mInstanceID = other.mInstanceID;
 

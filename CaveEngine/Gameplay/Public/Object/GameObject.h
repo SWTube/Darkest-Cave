@@ -5,8 +5,7 @@
 #pragma once
 
 #include <string>
-#include <vector>
-#include <unordered_set>
+#include <unordered_map>
 
 #include "Object/Component.h"
 #include "Object/Obejct.h"
@@ -15,6 +14,7 @@
 namespace cave
 {
 	class Scene;
+	class Tag;
 	class Transform;
 	class Grid;
 
@@ -30,16 +30,21 @@ namespace cave
 		GameObject& operator=(GameObject&& other) noexcept;
 
 		void AddComponent(Component& component);
-		void AddTag(std::string& tag);
-
 		void RemoveComponent(eComponentType type);
-		void RemoveTag(std::string& tag);
+		
+		__forceinline void SetTag(Tag& tag)
+		{
+			mTag = &tag;
+		}
 
-		bool CompareTag(std::string& tag) const;
+		__forceinline Tag* GetTag() const
+		{
+			return mTag;
+		}
 
 		__forceinline Component* GetComponent(eComponentType type) const
 		{
-			return mComponents[type];
+			return mComponents.find(type)->second;
 		}
 
 		__forceinline void SetActive(bool state)
@@ -62,7 +67,7 @@ namespace cave
 			return mbStatic;
 		}
 
-		__forceinline void SetLayer(int layer)
+		__forceinline void SetLayer(unsigned char layer)
 		{
 			mLayer = layer;
 		}
@@ -72,24 +77,10 @@ namespace cave
 			return mLayer;
 		}
 
-		__forceinline void SetScene(Scene& scene)
+		
+		__forceinline void SetName(std::string& name)
 		{
-			mScene = &scene;
-		}
-
-		__forceinline Scene* GetScene() const
-		{
-			return mScene;
-		}
-
-		__forceinline std::unordered_set<std::string>& GetTags()
-		{
-			return mTags;
-		}
-
-		__forceinline Transform* GetTransform()
-		{
-			return &mTransform;
+			mName = std::move(name);
 		}
 
 		__forceinline std::string& GetName()
@@ -97,20 +88,33 @@ namespace cave
 			return mName;
 		}
 
+		__forceinline void SetGrid(Grid& grid)
+		{
+			mGrid = &grid;
+		}
+
+		__forceinline Grid* GetGrid() const
+		{
+			return mGrid;
+		}
+
+		__forceinline Transform* GetTransform()
+		{
+			return &mTransform;
+		}
+
 	private:
 		bool mbActive;
 		bool mbStatic;
 
-		int mLayer;
+		unsigned char mLayer;
 
-		std::vector<Component*> mComponents;
+		std::unordered_map<size_t, Component*> mComponents;
 
 		std::string mName;
-
-		std::unordered_set<std::string> mTags;
+		Tag* mTag;
 
 		Transform mTransform;
-		Scene* mScene;
 		Grid* mGrid;
 	};
 
