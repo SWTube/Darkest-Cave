@@ -22,10 +22,16 @@
     <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\UnixDeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\UnixRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
@@ -46,10 +52,16 @@
     <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\UnixWindow.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Sprite\UnixSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\Vertex.cpp">
@@ -59,6 +71,9 @@
       <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
+      <Filter>Source Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Shader\UnixShader.cpp">
       <Filter>Source Files\Graphics\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
@@ -91,15 +106,6 @@
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
-      <Filter>Source Files\Graphics\Sprite</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Public\Debug\Log.ixx">
       <Filter>Header Files\Core\Debug</Filter>
     </ClCompile>
@@ -109,9 +115,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
-    <ClInclude Include="Core\Public\Memory\Allocator.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Memory\Memory.h">
       <Filter>Header Files\Core\Memory</Filter>
     </ClInclude>
@@ -135,6 +138,12 @@
     </ClInclude>
     <ClInclude Include="Core\Public\CoreTypes.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Graphics.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\GraphicsCommon.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
@@ -249,12 +258,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\Camera.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
-      <Filter>Header Files\ResourceManager\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
