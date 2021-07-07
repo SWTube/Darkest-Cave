@@ -18,10 +18,10 @@
 #include "String/String.h"
 #include "Time/TimeManager.h"
 
-template <size_t N>
-void MemoryTest1(cave::MemoryPool& pool);
-template <size_t N>
-void MemoryTest2(cave::MemoryPool& pool);
+//template <size_t N>
+//void MemoryTest1(cave::MemoryPool& pool);
+//template <size_t N>
+//void MemoryTest2(cave::MemoryPool& pool);
 void RenderTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
@@ -92,9 +92,9 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	// RenderTest();
+     RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	cave::MemoryPoolTest::Test();
+	//cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 #endif
 
