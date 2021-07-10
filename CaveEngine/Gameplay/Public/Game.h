@@ -1,6 +1,8 @@
 #pragma once
 
+#include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace cave
 {
@@ -23,9 +25,11 @@ namespace cave
 		Game& operator=(const Game&) = delete;
 		Game& operator=(Game&&) = delete;
 
+		void Init();
+
 	private:
 		static Game* mGame;
 
-		std::unordered_map<std::string, Scene*> mScenes;
+		
 	};
 }

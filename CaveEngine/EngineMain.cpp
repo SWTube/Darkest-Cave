@@ -41,24 +41,57 @@
 //    return static_cast<int>(msg.wParam);
 //}
 
+#include <cassert>
+#include <random>
+
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <iostream>
+
 #include <crtdbg.h>
 #include <cstdlib>
-#if _DEBUG
-#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
-#endif // _DEBUG
+//#if _DEBUG
+//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
+//#endif // _DEBUG
 
-#include "Gameplay/Public/Game.h"
+#include "Game.h"
+#include "Object/Obejct.h"
 
 using namespace cave;
 
+void Test(Object* target, unsigned int id, unsigned int index, unsigned char flags)
+{
+	assert(target != nullptr);
+	assert(target->GetInstanceID() == id);
+	assert(target->GetInternalIndex() == index);
+	assert(target->GetFlags() == flags);
+	assert(target->IsValid() == true);
+}
+
 int main()
 {
-	Game* game = Game::Instance();
-	game->Loop();
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	std::uniform_int_distribution<int> dis_int(0, 1000000);
+	std::uniform_int_distribution<int> dis_char(0, 255);
+
+	Object* memory = (Object*)malloc(sizeof(Object) * 1000);
+
+	for (size_t index = 0; index < 1000; ++index)
+	{
+		Object* tmp = new(&memory[index]) Object();
+		auto id = dis_int(gen);
+		auto flags = dis_char(gen);
+		tmp->SetFlags(flags);
+		tmp->SetInstanceID(id);
+		tmp->SetInternalIndex(index);
+		Test(tmp, id, index, flags);
+	}
+
+	free(memory);
 
 	_CrtDumpMemoryLeaks();
 
