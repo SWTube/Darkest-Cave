@@ -117,6 +117,4 @@ namespace cave
 		Transform mTransform;
 		Grid* mGrid;
 	};
-
-	GameObject* FindObjectByName(Scene& targetScene, std::string& name);
 }
