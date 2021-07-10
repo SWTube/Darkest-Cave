@@ -35,9 +35,9 @@ namespace cave
 			for (size_t col = 0; col < mGridCol; ++col)
 			{
 				unsigned int index = mGridRow * row + col;
-				mGrid[index].SetScene(this);
+				mGrid[index].SetScene(*this);
 				mGrid[index].SetRow(row);
-				mGrid[index].SetScene(col);
+				mGrid[index].SetCol(col);
 			}
 		}
 	}

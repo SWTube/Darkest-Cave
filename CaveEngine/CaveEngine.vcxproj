@@ -219,6 +219,8 @@
     <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
     <ClInclude Include="Gameplay\Public\Scene\Grid.h" />
     <ClInclude Include="Gameplay\Public\Scene\Scene.h" />
+    <ClInclude Include="Gameplay\Public\Time\FlatformTimer.h" />
+    <ClInclude Include="Gameplay\Public\Time\WindowsTimer.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Log.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
@@ -241,8 +243,9 @@
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp" />
     <ClCompile Include="Gameplay\Private\Scene\Grid.cpp" />
     <ClCompile Include="Gameplay\Private\Scene\Scene.cpp" />
+    <ClCompile Include="Gameplay\Private\Time\FlatformTimer.cpp" />
+    <ClCompile Include="Gameplay\Private\Time\WindowsTimer.cpp" />
     <ClCompile Include="Gameplay\Private\Tmp\Log.cpp" />
-    <ClCompile Include="Gameplay\Public\Time\FlatformTimer.ixx" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />

@@ -180,6 +180,12 @@
     <ClInclude Include="Gameplay\Public\Object\TagPool.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Gameplay\Public\Time\FlatformTimer.h">
+      <Filter>Header Files\Gameplay\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Time\WindowsTimer.h">
+      <Filter>Header Files\Gameplay\Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -224,9 +230,6 @@
     <ClCompile Include="Gameplay\Private\Tmp\Log.cpp">
       <Filter>Source Files\Gameplay\Tmp</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Public\Time\FlatformTimer.ixx">
-      <Filter>Header Files\Gameplay\Time</Filter>
-    </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
@@ -238,6 +241,12 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Time\FlatformTimer.cpp">
+      <Filter>Source Files\Gameplay\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Time\WindowsTimer.cpp">
+      <Filter>Source Files\Gameplay\Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
