@@ -21,7 +21,6 @@ namespace cave
 	class Component : public Object
 	{
 	public:
-		Component();
 		Component(eComponentType type);
 		Component(const Component& other);
 		Component(Component&& other) noexcept;
@@ -30,14 +29,14 @@ namespace cave
 		Component& operator=(const Component& other);
 		Component& operator=(Component&& other) noexcept;
 
-		bool IsValid() const;
-
 		__forceinline eComponentType GetComponentType() const
 		{
 			return mComponentType;
 		}
 
 	protected:
+		Component();
+
 		__forceinline void SetComponentType(eComponentType componentType)
 		{
 			mComponentType = componentType;

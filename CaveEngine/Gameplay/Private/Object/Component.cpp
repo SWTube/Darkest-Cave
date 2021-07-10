@@ -48,9 +48,4 @@ namespace cave
 		mComponentType = other.mComponentType;
 		return *this;
 	}
-
-	bool Component::IsValid() const
-	{
-		return mComponentType == eComponentType::NONE ? false : true;
-	}
 }
