@@ -83,9 +83,4 @@ namespace cave
 			mComponents[type] = nullptr;
 		}
 	}
-
-	GameObject* FindObjectByName(Scene& target, std::string& name)
-	{
-		return target.FindObjectByName(name);
-	}
 }

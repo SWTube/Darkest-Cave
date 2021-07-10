@@ -33,6 +33,16 @@ namespace cave
 			return mInternalIndex;
 		}
 
+		__forceinline void SetFlags(unsigned char flag)
+		{
+			mFlags = flag;
+		}
+
+		__forceinline unsigned char GetFlags() const
+		{
+			return mFlags;
+		}
+
 		__forceinline bool IsValid() const
 		{
 			return mbVaild;
@@ -42,11 +52,6 @@ namespace cave
 		Object();
 		Object(const Object& other);
 		Object(Object&& other) noexcept;
-
-		__forceinline void SetOwner(Object& owner)
-		{
-			mOwner = &owner;
-		}
 
 		__forceinline void SetInstanceID(unsigned int id)
 		{
@@ -59,8 +64,6 @@ namespace cave
 		}
 
 	private:
-		Object* mOwner;
-
 		unsigned char mFlags;
 		unsigned int mInternalIndex;
 		unsigned int mInstanceID;
