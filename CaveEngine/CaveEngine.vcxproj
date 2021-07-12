@@ -266,6 +266,7 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
+    <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
@@ -303,6 +304,7 @@
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
+    <ClCompile Include="ThirdParty\tictoc\src\tictoc.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />

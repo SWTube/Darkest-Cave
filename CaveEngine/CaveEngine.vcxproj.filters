@@ -115,6 +115,9 @@
     <ClCompile Include="Core\Public\String\String.ixx">
       <Filter>Header Files\Core\String</Filter>
     </ClCompile>
+    <ClCompile Include="ThirdParty\tictoc\src\tictoc.c">
+      <Filter>Source Files\ThirdParty\Tictoc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
@@ -265,6 +268,9 @@
     <ClInclude Include="Graphics\Public\Renderer\Camera.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdParty\tictoc\src\tictoc.h">
+      <Filter>Header Files\ThirdParty\Tictoc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -385,6 +391,12 @@
     </Filter>
     <Filter Include="Source Files\ThirdParty\Lodepng">
       <UniqueIdentifier>{2331adf6-6487-4115-b9ef-6f230b6dde99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ThirdParty\Tictoc">
+      <UniqueIdentifier>{8cc3e2fb-9c20-47a7-aadd-5aae563c547d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ThirdParty\Tictoc">
+      <UniqueIdentifier>{8fbd3835-8552-4d7b-bac2-9e2cc63bb095}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
