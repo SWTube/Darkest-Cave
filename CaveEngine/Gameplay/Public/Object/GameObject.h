@@ -104,6 +104,5 @@ namespace cave
 		Tag* mTag;
 
 		Transform* mTransform;
-		Renderer* mRenderer
 	};
 }
