@@ -229,9 +229,7 @@
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
     <ClInclude Include="Core\Public\Memory\DataBlock.h" />
-    <ClInclude Include="Core\Public\Debug\LogManager.h" />
     <ClInclude Include="Core\Public\Math\Vector2.h" />
-    <ClInclude Include="Core\Public\Memory\Allocator.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\String\String.h" />
@@ -241,6 +239,7 @@
     <ClInclude Include="Engine\Public\GenericEngine.h" />
     <ClInclude Include="Engine\Public\UnixEngine.h" />
     <ClInclude Include="Engine\Public\WindowsEngine.h" />
+    <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
     <ClInclude Include="Graphics\Public\Device\DeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\GenericWindow.h" />
@@ -255,12 +254,8 @@
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
     <ClInclude Include="Gameplay\Public\Object\Tag.h" />
-    <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
     <ClInclude Include="Gameplay\Public\Scene\Grid.h" />
     <ClInclude Include="Gameplay\Public\Scene\Scene.h" />
-    <ClInclude Include="Gameplay\Public\Time\FlatformTimer.h" />
-    <ClInclude Include="Gameplay\Public\Time\WindowsTimer.h" />
-    <ClInclude Include="Gameplay\Public\Tmp\Log.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
@@ -297,6 +292,7 @@
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\UnixEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
     <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\GenericDeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp" />
@@ -326,14 +322,6 @@
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp" />
     <ClCompile Include="Gameplay\Private\Scene\Grid.cpp" />
     <ClCompile Include="Gameplay\Private\Scene\Scene.cpp" />
-    <ClCompile Include="Gameplay\Private\Time\FlatformTimer.cpp" />
-    <ClCompile Include="Gameplay\Private\Time\WindowsTimer.cpp" />
-    <ClCompile Include="Gameplay\Private\Tmp\Log.cpp" />
-    <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
-    <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
-    <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
-    <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx" />
-    <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />

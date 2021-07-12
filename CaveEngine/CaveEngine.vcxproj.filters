@@ -202,6 +202,9 @@
     <Filter Include="Source Files\Gameplay\Scene">
       <UniqueIdentifier>{401f0232-b329-4b33-a38b-4031c5b93c27}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="Gameplay\Private\Object\TagPool.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
@@ -367,9 +370,6 @@
     <ClInclude Include="Gameplay\Public\Game.h">
       <Filter>Header Files\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Tmp\Log.h">
-      <Filter>Header Files\Gameplay\Tmp</Filter>
-    </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\GameObject.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
@@ -388,40 +388,13 @@
     <ClInclude Include="Gameplay\Public\Object\TagPool.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Time\FlatformTimer.h">
-      <Filter>Header Files\Gameplay\Time</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameplay\Public\Time\WindowsTimer.h">
-      <Filter>Header Files\Gameplay\Time</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Private\Debug\LogManager.cpp">
-      <Filter>Source Files\Core\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Memory\Allocator.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Memory\Memory.cpp">
       <Filter>Source Files\Core\Memory</Filter>
     </ClCompile>
     <ClCompile Include="EngineMain.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp">
-      <Filter>Source Files\Graphics\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx">
-      <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Object.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
@@ -435,9 +408,6 @@
     <ClCompile Include="Gameplay\Private\Game.cpp">
       <Filter>Source Files\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\Tmp\Log.cpp">
-      <Filter>Source Files\Gameplay\Tmp</Filter>
-    </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
@@ -449,12 +419,6 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Private\Time\FlatformTimer.cpp">
-      <Filter>Source Files\Gameplay\Time</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Private\Time\WindowsTimer.cpp">
-      <Filter>Source Files\Gameplay\Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
