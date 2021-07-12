@@ -438,6 +438,7 @@ namespace cave
         {
             mData[i] = *iterator;
         }
+        mSize = count;
     }
 
     template<class ElementType>
