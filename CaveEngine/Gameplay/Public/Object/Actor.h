@@ -2,6 +2,7 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
+
 #pragma once
 
 #include <vector>
@@ -17,9 +18,10 @@ namespace cave
 	class Vector3;
 	
 	class Actor : public Object
-	{
-	public:
-		Actor();
+    {
+    public:
+        /** Default constructor for Actor. Called Private Initialize(). */
+        Actor();
 		Actor(const Actor& other);
 		Actor(Actor&& other) noexcept;
 
@@ -33,40 +35,40 @@ namespace cave
 		void RemoveComponent(Component& component);
 
 		virtual void Awake();
-		
+
 		virtual void FixedUpdate();
 		virtual void LateUpdate();
-		
+
 		virtual void OnAnimatorIK();
 		virtual void OnAnimatorMove();
-		
+
 		virtual void OnApplicationFocus();
 		virtual void OnApplicationPause();
 		virtual void OnApplicationQuit();
-		
+
 		virtual void OnAudioFilterRead();
-		
+
 		virtual void OnBecameInvisible();
 		virtual void OnBecameVisible();
-		
+
 		virtual void OnCollisionEnter();
 		virtual void OnCollisionExit();
 		virtual void OnCollisionStay();
 		virtual void OnControllerColliderHit();
-		
+
 		virtual void OnDestroy();
-		
+
 		virtual void OnDisable();
-		
+
 		virtual void OnDrawGizmos();
 		virtual void OnDrawGizmosSelected();
-		
+
 		virtual void OnEnable();
-		
+
 		virtual void OnGUI();
-		
+
 		virtual void OnJointBreak();
-		
+
 		virtual void OnMouseDown();
 		virtual void OnMouseDrag();
 		virtual void OnMouseEnter();
@@ -74,18 +76,18 @@ namespace cave
 		virtual void OnMouseOver();
 		virtual void OnMouseUp();
 		virtual void OnMouseUpAsButton();
-		
+
 		virtual void OnParticleCollision();
 		virtual void OnParticleSystemStopped();
 		virtual void OnParticleTrigger();
 		virtual void OnParticleUpdateJobSheduled();
-		
+
 		virtual void OnPostRender();
 		virtual void OnPreCull();
 		virtual void OnPreRender();
 		virtual void OnRenderImage();
 		virtual void OnRenderObject();
-		
+
 		virtual void OnTransformChildrenChanged();
 		virtual void OnTransformParentChanged();
 
@@ -100,7 +102,7 @@ namespace cave
 		virtual void Start();
 		virtual void Update();
 
-	private:
+    private:
 		bool mbEnable;
 		bool mbActive;
 
@@ -117,5 +119,5 @@ namespace cave
 		unsigned int mTag;
 
 		std::vector<Component*> mComponents;
-	};
+    };
 }
