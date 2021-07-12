@@ -544,9 +544,10 @@ namespace cave
         size_t index = position.mIndex;
 
         assert(index >= 0);
-        assert(index <= mSize);
+        assert(index < mSize);
 
         Memory::Memmove(mData + index, mData + index + 1, sizeof(ElementType) * (mSize - index - 1));
+        
 
         mSize -= 1;
 
