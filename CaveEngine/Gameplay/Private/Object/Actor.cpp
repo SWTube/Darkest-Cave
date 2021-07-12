@@ -271,6 +271,6 @@ namespace cave
 	void Actor::Update()
 	{
 
-		mbInitailized = true;
+		//mbInitailized = true;
 	}
 }

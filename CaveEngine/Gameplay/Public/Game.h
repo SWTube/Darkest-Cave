@@ -29,7 +29,5 @@ namespace cave
 
 	private:
 		static Game* mGame;
-
-		
 	};
 }

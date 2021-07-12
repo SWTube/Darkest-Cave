@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "Scene/Scene.h"
-#include "Tmp/Log.h"
 #include "Game.h"
 
 namespace cave
@@ -34,8 +33,6 @@ namespace cave
 
 	void Game::Loop()
 	{
-		Log("Game::Loop()");
-
 		while (true)
 		{
 			if (_kbhit())
