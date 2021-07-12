@@ -37,14 +37,16 @@ namespace cave
 
 		static bool IsValid();
 
+#ifdef CAVE_BUILD_DEBUG
+		static void PrintElement();
+#endif // CAVE_BULID_DEBUG
+
 	private:
-		static Tag* availableTag(std::string& name);
+		static Tag* createTag(std::string& name);
 
 	private:
 		static MemoryPool* mMemoryPool;
-		static Tag* mTags;
-		static size_t mMaxTagCount;
-		static std::unordered_map<std::string, size_t> mTagIndex;
+		static std::unordered_map<std::string, Tag*> mTags;
 	};
 
 #ifdef CAVE_BUILD_DEBUG

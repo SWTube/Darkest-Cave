@@ -16,9 +16,7 @@
 namespace cave
 {
 	MemoryPool* TagPool::mMemoryPool = nullptr;
-	Tag* TagPool::mTags = nullptr;
-	size_t TagPool::mMaxTagCount = 0;
-	std::unordered_map<std::string, size_t> TagPool::mTagIndex;
+	std::unordered_map<std::string, Tag*> TagPool::mTags;
 
 	TagPool::~TagPool()
 	{
@@ -28,22 +26,13 @@ namespace cave
 	void TagPool::Init(MemoryPool& memoryPool)
 	{
 		mMemoryPool = &memoryPool;
-		mMaxTagCount = 100;
-		mTags = reinterpret_cast<Tag*>(mMemoryPool->Allocate(sizeof(Tag) * mMaxTagCount));
-
-		for (size_t index = 0; index < mMaxTagCount; ++index)
-		{
-			mTags[index].setValid(false);
-		}
 	}
 
 	void TagPool::ShutDown()
 	{
 		assert(IsValid());
 
-		mMemoryPool->Deallocate(mTags, sizeof(Tag) * mMaxTagCount);
-		mMaxTagCount = 0;
-		mTags = nullptr;
+		
 		mMemoryPool = nullptr;
 	}
 
@@ -51,8 +40,8 @@ namespace cave
 	{
 		assert(IsValid());
 
-		Tag* tag = availableTag(name);
-		new(tag) Tag(name);
+		Tag* tag = createTag(name);
+		mTags[name] = tag;
 	}
 
 	void TagPool::AddTag(const char* name)
@@ -60,21 +49,18 @@ namespace cave
 		assert(IsValid());
 		
 		std::string convertedName(name);
-
-		Tag* tag = availableTag(convertedName);
-		new(tag) Tag(convertedName);
 	}
 
 	void TagPool::RemoveTag(std::string& name)
 	{
 		assert(IsValid());
 
-		auto iter = mTagIndex.find(name);
+		auto iter = mTags.find(name);
 
-		if (iter != mTagIndex.end())
+		if (iter != mTags.end())
 		{
-			mTags[iter->second].~Tag();
-			mTagIndex.erase(name);
+			iter->second = nullptr;
+			mMemoryPool->Deallocate(iter->second, sizeof(Tag));
 		}
 	}
 
@@ -83,23 +69,15 @@ namespace cave
 		assert(IsValid());
 
 		std::string convertedName(name);
-
-		auto iter = mTagIndex.find(convertedName);
-		
-		if (iter != mTagIndex.end())
-		{
-			mTags[iter->second].~Tag();
-			mTagIndex.erase(convertedName);
-		}
 	}
 
 	Tag* TagPool::FindTagByName(std::string& name)
 	{
 		assert(IsValid());
 
-		auto iter = mTagIndex.find(name);
+		auto iter = mTags.find(name);
 
-		return iter != mTagIndex.end() ? &mTags[iter->second] : nullptr;
+		return iter != mTags.end() ? iter->second : nullptr;
 	}
 
 	Tag* TagPool::FindTagByName(const char* name)
@@ -107,30 +85,35 @@ namespace cave
 		assert(IsValid());
 
 		std::string convertedName(name);
+		auto iter = mTags.find(convertedName);
 
-		auto iter = mTagIndex.find(name);
-
-		return iter != mTagIndex.end() ? &mTags[iter->second] : nullptr;
+		return iter != mTags.end() ? iter->second : nullptr;
 	}
 
-	Tag* TagPool::availableTag(std::string& name)
+	Tag* TagPool::createTag(std::string& name)
 	{
-		for (size_t index = 0; index < mMaxTagCount; ++index)
-		{
-			if (!mTags[index].IsValid())
-			{
-				mTagIndex[name] = index;
-				return &mTags[index];
-			}
-		}
+		assert(IsValid());
 
-		return nullptr;
+		Tag* tag = new(reinterpret_cast<Tag*>(mMemoryPool->Allocate(sizeof(Tag)))) Tag(name);
+		assert(tag != nullptr);
+
+		return tag;
 	}
 	
 	bool TagPool::IsValid()
 	{
-		return mMemoryPool != nullptr && mTags != nullptr ? true : false;
+		return mMemoryPool != nullptr ? true : false;
 	}
+
+#ifdef CAVE_BUILD_DEBUG
+	void TagPool::PrintElement()
+	{
+		for (auto begin = mTags.begin(); begin != mTags.end(); ++begin)
+		{
+			std::cout << (begin->second) << std::endl;
+		}
+	}
+#endif //CAVE_BUILD_DEBUG
 
 #ifdef CAVE_BUILD_DEBUG
 
@@ -142,10 +125,14 @@ namespace cave
 
 			TagPool::Init(memoryPool);
 
+			const char* testString = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+			std::vector<std::string> vec;
+
 			std::random_device rd;
 			std::mt19937 gen(rd());
 			std::uniform_int_distribution<int> disIndex(1, 20);
-			std::uniform_int_distribution<int> disStr(32, 122);
+			std::uniform_int_distribution<int> disStr(0, 61);
 
 			for (size_t i = 0; i < 100; ++i)
 			{
@@ -153,19 +140,26 @@ namespace cave
 				char* str = new char[index + 1];
 				for (size_t j = 0; j < index; ++j)
 				{
-					str[j] = disStr(gen);
+					str[j] = testString[disStr(gen)];
 				}
 				str[index] = '\0';
 				std::cout << "word: " << str << std::endl;
 
 				std::string tmp(str);
+				vec.push_back(tmp);
 
 				TagPool::AddTag(tmp);
 				assert(TagPool::FindTagByName(tmp) != nullptr);
-				TagPool::RemoveTag(tmp);
-				assert(TagPool::FindTagByName(tmp) == nullptr);
 
 				delete str;
+			}
+
+			TagPool::PrintElement();
+
+			for (size_t i = 0; i < 100; ++i)
+			{
+				TagPool::RemoveTag(vec[i]);
+				assert(TagPool::FindTagByName(vec[i]) == nullptr);
 			}
 		}
 	}
