@@ -72,11 +72,10 @@ namespace cave
 			mLayer = layer;
 		}
 
-		__forceinline int GetLayer() const
+		__forceinline unsigned char GetLayer() const
 		{
 			return mLayer;
 		}
-
 		
 		__forceinline void SetName(std::string& name)
 		{
@@ -88,19 +87,9 @@ namespace cave
 			return mName;
 		}
 
-		__forceinline void SetGrid(Grid& grid)
-		{
-			mGrid = &grid;
-		}
-
-		__forceinline Grid* GetGrid() const
-		{
-			return mGrid;
-		}
-
 		__forceinline Transform* GetTransform()
 		{
-			return &mTransform;
+			return mTransform;
 		}
 
 	private:
@@ -114,7 +103,7 @@ namespace cave
 		std::string mName;
 		Tag* mTag;
 
-		Transform mTransform;
-		Grid* mGrid;
+		Transform* mTransform;
+		Renderer* mRenderer
 	};
 }

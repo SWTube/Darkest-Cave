@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include "Object/Obejct.h"
-#include "Tmp/Log.h"
 
 namespace cave
 {

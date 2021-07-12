@@ -45,5 +45,4 @@ namespace cave
 	private:
 		eComponentType mComponentType;
 	};
-
 }
