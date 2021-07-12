@@ -9,16 +9,9 @@
 
 namespace cave
 {
-	Tag::Tag(const char& typeName)  :
-		mTypeName(&typeName),
-		mType(std::hash<std::string>{}(mTypeName))
-	{
-		
-	}
-
-	Tag::Tag(std::string& typeName) :
-		mTypeName(std::move(typeName)),
-		mType(std::hash<std::string>{}(mTypeName))
+	Tag::Tag(std::string& name) :
+		mName(std::move(name)),
+		mCompareSeed(std::hash<std::string>{}(mName))
 	{
 
 	}
@@ -26,5 +19,10 @@ namespace cave
 	Tag::~Tag()
 	{
 
+	}
+
+	std::string& Tag::GetName()
+	{
+		return mName;
 	}
 }
