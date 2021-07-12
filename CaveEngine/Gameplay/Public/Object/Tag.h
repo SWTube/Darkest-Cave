@@ -30,11 +30,6 @@ namespace cave
 			return lhs.mCompareSeed < rhs.mCompareSeed;
 		}
 
-		__forceinline bool IsValid() const
-		{
-			return mbValid;
-		}
-
 		std::string& GetName();
 
 	private:
@@ -46,16 +41,9 @@ namespace cave
 		Tag& operator=(const Tag& other) = delete;
 		Tag& operator=(const Tag&& other) = delete;
 
-		__forceinline void setValid(bool state)
-		{
-			mbValid = state;
-		}
-
 	private:
 		std::string mName;
 		/*Used only compare tag.*/
 		size_t mCompareSeed;
-
-		bool mbValid;
 	};
 }

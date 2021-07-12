@@ -10,7 +10,7 @@
 namespace cave
 {
 	Tag::Tag(std::string& name) :
-		mName(std::move(name)),
+		mName(name),
 		mCompareSeed(std::hash<std::string>{}(mName))
 	{
 
