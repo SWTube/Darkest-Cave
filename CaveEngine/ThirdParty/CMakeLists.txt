@@ -41,6 +41,7 @@ add_subdirectory(gl3w)
 add_subdirectory(glfw)
 add_subdirectory(glm)
 add_subdirectory(lodepng)
+add_subdirectory(tictoc)
 
 # # Add platform specific files
 # if (EMSCRIPTEN)
