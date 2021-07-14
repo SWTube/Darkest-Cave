@@ -1,50 +1,31 @@
-#include <cassert>
-#include <conio.h>
 #include <iostream>
 
-#include "Scene/Scene.h"
 #include "Game.h"
+#include "Assertion/Assert.h"
+#include "Object/TagPool.h"
+#include "Memory/MemoryPool.h"
+
 
 namespace cave
 {
-	Game* Game::mGame = nullptr;
-
-	Game::Game()
+	Game::Game() :
+		mObjectMemoryPool(new MemoryPool(10192ul))
 	{
-		
+		TagPool::Init(*mObjectMemoryPool);
 	}
 
 	Game::~Game()
 	{
-
+		delete mObjectMemoryPool;
 	}
 
 	Game* Game::Instance()
 	{
-		if (mGame == nullptr)
-		{
-			mGame = new Game();
-		}
-		
-		assert(mGame != nullptr);
+		static Game* game = new Game();
+		assert(game != nullptr);
 
-		return mGame;
+		return game;
 	}
 
-	void Game::Loop()
-	{
-		while (true)
-		{
-			if (_kbhit())
-			{
-				char c = _getch();
-				if (c == 113 || c == 81)
-				{
-					break;
-				}
-			}
-		}
-
-		this->~Game();
-	}
+	
 }

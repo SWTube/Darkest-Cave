@@ -6,28 +6,26 @@
 
 namespace cave
 {
-	class Scene;
+	class World;
+	class MemoryPool;
+	class TagPool;
 
 	class Game final
 	{
 	public:
-		~Game();
-
-		static Game* Instance();
-
-		void Loop();
-
-	private:
-		Game();
 		Game(const Game&) = delete;
 		Game(Game&&) = delete;
 
+		~Game();
 		Game& operator=(const Game&) = delete;
 		Game& operator=(Game&&) = delete;
 
-		void Init();
+		static Game* Instance();
 
 	private:
-		static Game* mGame;
+		Game();
+
+	private:
+		MemoryPool* mObjectMemoryPool;
 	};
 }
