@@ -7,16 +7,17 @@
 #include <string>
 #include <unordered_map>
 
-#include "Object/Component.h"
 #include "Object/Obejct.h"
-#include "Tmp/Transform.h"
 
 namespace cave
 {
-	class Scene;
+	class Script;
 	class Tag;
 	class Transform;
-	class Grid;
+	class Renderer;
+	class Physics;
+
+	class World;
 
 	class GameObject : public Object
 	{
@@ -28,9 +29,6 @@ namespace cave
 		virtual ~GameObject();
 		GameObject& operator=(const GameObject& other);
 		GameObject& operator=(GameObject&& other) noexcept;
-
-		void AddComponent(Component& component);
-		void RemoveComponent(eComponentType type);
 		
 		__forceinline void SetTag(Tag& tag)
 		{
@@ -40,11 +38,6 @@ namespace cave
 		__forceinline Tag* GetTag() const
 		{
 			return mTag;
-		}
-
-		__forceinline Component* GetComponent(eComponentType type) const
-		{
-			return mComponents.find(type)->second;
 		}
 
 		__forceinline void SetActive(bool state)
@@ -98,11 +91,15 @@ namespace cave
 
 		unsigned char mLayer;
 
-		std::unordered_map<size_t, Component*> mComponents;
+		std::unordered_map<std::string, Script* > mScripts;;
 
 		std::string mName;
-		Tag* mTag;
+		
 
 		Transform* mTransform;
+		Renderer* mRenderer;
+		Physics* mPhysics;
+
+		World* mOwner;
 	};
 }

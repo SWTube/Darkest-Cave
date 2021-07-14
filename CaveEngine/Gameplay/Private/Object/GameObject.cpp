@@ -6,7 +6,6 @@
 #include <cassert>
 
 #include "Object/GameObject.h"
-#include "Scene/Scene.h"
 
 namespace cave
 {
@@ -15,8 +14,7 @@ namespace cave
 		mbStatic(false),
 		mLayer(0),
 		mTag(nullptr),
-		mTransform(),
-		mGrid(nullptr)
+		mTransform()
 	{
 
 	}
@@ -63,24 +61,5 @@ namespace cave
 		mTransform = std::move(other.mTransform);
 
 		return *this;
-	}
-
-	void GameObject::AddComponent(Component& component)
-	{
-		assert(component.IsValid());
-		eComponentType type = component.GetComponentType();
-		if (mComponents[type] == nullptr)
-		{
-			mComponents[type] = &component;
-		}
-	}
-
-	void GameObject::RemoveComponent(eComponentType type)
-	{
-		if (mComponents[type] != nullptr)
-		{
-			delete mComponents[type];
-			mComponents[type] = nullptr;
-		}
 	}
 }
