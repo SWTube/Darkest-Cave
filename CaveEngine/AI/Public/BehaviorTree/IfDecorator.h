@@ -14,6 +14,7 @@ namespace cave
     public:
         IfDecorator();
         IfDecorator(const char*, bool (*)());
+        ~IfDecorator();
 
         virtual bool Run() override
         {

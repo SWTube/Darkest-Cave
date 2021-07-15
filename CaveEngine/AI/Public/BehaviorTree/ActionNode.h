@@ -14,6 +14,7 @@ namespace cave
     public:
         ActionNode();
         ActionNode(const char*, void (*)());
+        ~ActionNode();
 
         virtual bool Run() override
         {

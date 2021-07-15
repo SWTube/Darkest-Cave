@@ -4,7 +4,7 @@
  */
 
 #include "Graphics.h"
-#include "AI/Public/BehaviorTree.h"
+#include "BehaviorTree.h"
 
 import Renderer;
 

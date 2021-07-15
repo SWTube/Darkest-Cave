@@ -14,6 +14,7 @@ namespace cave
     public:
         RepeatDecorator();
         RepeatDecorator(const char*, int);
+        ~RepeatDecorator();
 
         virtual bool Run() override
         {

@@ -13,6 +13,7 @@ namespace cave
     public:
         Decorator();
         Decorator(const char*);
+        virtual ~Decorator();
 
         // return child node at given index
         Node* GetChild() const;

@@ -14,6 +14,7 @@ namespace cave
     public:
         Selector();
         Selector(const char*);
+        ~Selector();
 
         virtual bool Run() override {
             for (const auto& child : GetChildren()) {

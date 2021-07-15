@@ -18,6 +18,10 @@ namespace cave
         SetParentNode(NULL);
         SetTreeDepth(0);
     }
+    CompositeNode::~CompositeNode()
+    {
+        // delete[] mChildren;
+    }
     void CompositeNode::AddChild(Node* node)
     {
         mChildren.push_back(node);

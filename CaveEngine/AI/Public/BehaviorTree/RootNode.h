@@ -14,6 +14,7 @@ namespace cave
     public:
         RootNode();
         RootNode(const char*);
+        ~RootNode();
     private:
     };
 }

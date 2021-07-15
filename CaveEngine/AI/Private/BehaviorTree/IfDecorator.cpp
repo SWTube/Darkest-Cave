@@ -22,6 +22,11 @@ namespace cave
         SetChild(NULL);
         SetCondition(condition);
     }
+    IfDecorator::~IfDecorator()
+    {
+
+    }
+
     void IfDecorator::SetCondition(bool (*condition)())
     {
         mCondition = condition;

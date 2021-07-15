@@ -20,6 +20,10 @@ namespace cave
         SetTreeDepth(0);
         SetNodeFunction(nodeFunction);
     }
+    ActionNode::~ActionNode()
+    {
+
+    }
     void ActionNode::SetNodeFunction(void (*nodeFunction)())
     {
         mNodeFunction = nodeFunction;

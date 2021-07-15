@@ -22,6 +22,10 @@ namespace cave
         SetChild(NULL);
         SetCount(repeatCount);
     }
+    RepeatDecorator::~RepeatDecorator()
+    {
+
+    }
     void RepeatDecorator::SetCount(int repeatCount)
     {
         mRepeatCount = repeatCount;

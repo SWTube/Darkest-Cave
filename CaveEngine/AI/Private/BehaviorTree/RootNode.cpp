@@ -18,4 +18,8 @@ namespace cave
         SetParentNode(NULL);
         SetTreeDepth(0);
     }
+    RootNode::~RootNode() 
+    {
+        
+    }
 }

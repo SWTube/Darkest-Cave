@@ -14,6 +14,7 @@ namespace cave
     public:
         Sequencer();
         Sequencer(const char*);
+        virtual ~Sequencer();
 
         virtual bool Run() override {
             for (const auto& child : GetChildren()) {

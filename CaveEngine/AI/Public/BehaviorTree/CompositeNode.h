@@ -14,6 +14,8 @@ namespace cave
     public:
         CompositeNode();
         CompositeNode(const char*);
+        ~CompositeNode();
+
         // Add child back or at position
         void AddChild(Node*);
         // return child node at given index

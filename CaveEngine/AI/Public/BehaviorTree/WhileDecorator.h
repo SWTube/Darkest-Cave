@@ -14,6 +14,7 @@ namespace cave
     public:
         WhileDecorator();
         WhileDecorator(const char*, bool (*)());
+        ~WhileDecorator();
 
         virtual bool Run() override
         {

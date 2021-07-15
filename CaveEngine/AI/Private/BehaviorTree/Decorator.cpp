@@ -20,6 +20,10 @@ namespace cave
         SetTreeDepth(0);
         SetChild(NULL);
     }
+    Decorator::~Decorator()
+    {
+
+    }
     Node* Decorator::GetChild() const
     {
         return mChild;

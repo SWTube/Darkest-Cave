@@ -13,6 +13,7 @@ namespace cave
         public:
             Node();
             Node(const char*);
+            virtual ~Node();
 
             virtual bool Run() = 0;
 

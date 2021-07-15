@@ -22,8 +22,13 @@ namespace cave
         SetChild(NULL);
         SetCondition(condition);
     }
+    WhileDecorator::~WhileDecorator()
+    {
+
+    }
     void WhileDecorator::SetCondition(bool (*condition)())
     {
         mCondition = condition;
     }
+
 }

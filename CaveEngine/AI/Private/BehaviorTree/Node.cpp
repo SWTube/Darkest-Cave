@@ -18,6 +18,10 @@ namespace cave
 		mParentNode = NULL;
 		mTreeDepth = 0;
 	}
+	Node::~Node()
+	{
+		// delete mNodeName;
+	}
 	const char* Node::GetNodeName() const
 	{
 		return mNodeName;
