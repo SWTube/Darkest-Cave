@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <vector>
 #include <unordered_map>
 
 namespace cave
@@ -15,7 +16,9 @@ namespace cave
 	class Level final
 	{
 	public:
-		Level();
+		Level() = delete;
+		Level(std::string& name);
+		Level(const char* name);
 		Level(const Level&) = delete;
 		Level(Level&&) = delete;
 
@@ -23,9 +26,16 @@ namespace cave
 		Level& operator=(const Level&) = delete;
 		Level& operator=(Level&&) = delete;
 
+		void SetName(std::string& name);
+		void SetName(const char* name);
+
 		void AddGameObject(GameObject& gameObject);
+		void AddGameObjects(std::vector<GameObject*> gameObjects);
+
 		void RemoveGameObject(std::string& name);
 		void RemoveGameObject(const char* name);
+		void RemoveGameObjects(std::string& name);
+		void RemoveGameObjects(std::string& name);
 
 		GameObject* FindGameObjectByName(std::string& name);
 		GameObject* FindGameObjectByName(const char* name);
@@ -44,8 +54,9 @@ namespace cave
 		std::unordered_multimap<std::string, GameObject*> mActiveGameObjects;
 		std::unordered_multimap<std::string, GameObject*> mDeactiveGameObjects;
 		/*Read only.*/
-		std::unordered_multimap<Tag*, GameObject*> mGameObjectsSortByTag;
+		std::unordered_multimap<Tag*, GameObject*> mGameObjectsSortedByTag;
 
+		std::string mName;
 		Map* mMap;
 	};
 }
