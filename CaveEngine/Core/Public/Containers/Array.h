@@ -12,7 +12,11 @@
 #include "CoreGlobals.h"
 #include "Memory/Memory.h"
 // include template
+#ifdef __WIN32__
 import IteratorType;
+#else
+#include "Template/IteratorType.h"
+#endif
 
 #define GET_ARRAY_LENGTH(ARR) (sizeof(ARR) / sizeof(ARR[0]))
 
@@ -75,8 +79,8 @@ namespace cave
         constexpr float* operator+(size_t index);
 
     private:
+		size_t mSize;
         float* mData;
-        size_t mSize;
     };
 
     template<typename ContainerType, typename ElementType, typename SizeType>

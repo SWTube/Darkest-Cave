@@ -6,6 +6,7 @@
 #include <exception>
 #include <fstream>
 #include <iomanip>
+#include <vector>
 
 #include "tictoc.h"
 
@@ -91,7 +92,7 @@ int main(int32_t argc, char** argv)
 	// RenderTest();
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
-	cave::MemoryPoolTest::Test();
+	// cave::MemoryPoolTest::Test();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// cave::StackTest::Test<int>();
 #endif
