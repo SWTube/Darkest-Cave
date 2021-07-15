@@ -45,6 +45,9 @@ namespace cave
 		std::vector<GameObject*>& FindGameObjectsByTag(std::string& tag);
 		std::vector<GameObject*>& FindGameObjectsByTag(const char* tag);
 
+		void UpdateGameObjectInWorld();
+		void UpdateAllGameObjectInWorld();
+
 	private:
 		std::unordered_map<std::string, Level*> mLevels;
 		/*Read only.*/
