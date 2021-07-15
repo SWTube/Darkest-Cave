@@ -6,6 +6,7 @@
 #include <cassert>
 
 #include "Object/GameObject.h"
+#include "Object/Script.h"
 
 namespace cave
 {
@@ -61,5 +62,13 @@ namespace cave
 		mTransform = std::move(other.mTransform);
 
 		return *this;
+	}
+
+	void GameObject::UpdateScripts()
+	{
+		for (Script* const elemet : mScripts)
+		{
+			elemet->Update(*this);
+		}
 	}
 }

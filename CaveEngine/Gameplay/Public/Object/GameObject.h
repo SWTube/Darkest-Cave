@@ -5,7 +5,7 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 #include "Object/Obejct.h"
 
@@ -19,7 +19,7 @@ namespace cave
 
 	class World;
 
-	class GameObject : public Object
+	class GameObject final : public Object
 	{
 	public:
 		GameObject();
@@ -30,6 +30,8 @@ namespace cave
 		GameObject& operator=(const GameObject& other);
 		GameObject& operator=(GameObject&& other) noexcept;
 		
+		void UpdateScripts();
+
 		__forceinline void SetTag(Tag& tag)
 		{
 			mTag = &tag;
@@ -91,10 +93,10 @@ namespace cave
 
 		unsigned char mLayer;
 
-		std::unordered_map<std::string, Script* > mScripts;;
+		std::vector<Script*> mScripts;
 
 		std::string mName;
-		
+		Tag* mTag;
 
 		Transform* mTransform;
 		Renderer* mRenderer;
