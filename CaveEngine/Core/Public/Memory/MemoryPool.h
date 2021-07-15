@@ -8,6 +8,8 @@
 #include <vector>
 
 #include "CoreTypes.h"
+
+#include "Debug/Log.h"
 #include "Memory/DataBlock.h"
 #include "Memory/Memory.h"
 

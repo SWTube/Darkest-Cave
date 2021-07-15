@@ -6,7 +6,8 @@
 #include <exception>
 #include <fstream>
 #include <iomanip>
-#include <time.h>
+
+#include "tictoc.h"
 
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
@@ -16,7 +17,6 @@
 #include "Sprite/Sprite.h"
 #include "Sprite/Vertex.h"
 #include "String/String.h"
-#include "Time/TimeManager.h"
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
@@ -46,8 +46,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #else
 int main(int32_t argc, char** argv)
 {
-	cave::TimeManager timeManager;
-
 	uint32_t commandFlag = 0u;
 	constexpr uint32_t LOG_FLAG = 0x01;
 	for (int32_t currentArgIndex = 0; currentArgIndex < argc; ++currentArgIndex)
@@ -84,7 +82,7 @@ int main(int32_t argc, char** argv)
 				break;
 			}
 
-			cave::LogManager::SetVerbosity(verbosity);
+			cave::Log::SetVerbosity(verbosity);
 			commandFlag &= (~LOG_FLAG);
 		}
 	}
@@ -92,7 +90,9 @@ int main(int32_t argc, char** argv)
 
 	// RenderTest();
 #ifdef CAVE_BUILD_DEBUG
+	TicTocTimer clock = tic();
 	cave::MemoryPoolTest::Test();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// cave::StackTest::Test<int>();
 #endif
 

@@ -248,6 +248,10 @@ endif()
 
 target_precompile_headers(Core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Public/CorePch.h)
 
+link_libraries(${tictor-BINARY_DIR})
+target_include_directories(Core PUBLIC ${PROJECT_SOURCE_DIR}/CaveEngine/ThirdParty/tictoc)
+target_link_libraries(Core PUBLIC tictoc)
+
 # target_include_directories(Core PUBLIC 
 #   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
 #   "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
