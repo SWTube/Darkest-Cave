@@ -34,29 +34,6 @@ namespace cave
 	private:
 		void cleanupDevice();
 
-		struct ConstantBufferNeverChanges
-		{
-			DirectX::XMMATRIX mView;
-		};
-
-		// Assert that the constant buffer remains 16-byte aligned.
-		static_assert((sizeof(ConstantBufferNeverChanges) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
-
-		struct ConstantBufferChangeOnResize
-		{
-			DirectX::XMMATRIX mProjection;
-		};
-
-		// Assert that the constant buffer remains 16-byte aligned.
-		static_assert((sizeof(ConstantBufferChangeOnResize) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
-
-		//--------------------------------------------------------------------------------------
-		// Global Variables
-		//--------------------------------------------------------------------------------------
-		
-		ID3D11Buffer*		mConstantBufferNeverChanges = nullptr;
-		ID3D11Buffer*		mConstantBufferChangeOnResize = nullptr;
-		
 		DirectX::XMMATRIX	mView = DirectX::XMMatrixIdentity();
 		DirectX::XMMATRIX	mProjection = DirectX::XMMatrixIdentity();
 		// �ؽ�ó ������� �����Ƿ� shader resource view�� ������� ����

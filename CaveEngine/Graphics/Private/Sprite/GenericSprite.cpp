@@ -7,64 +7,57 @@
 
 namespace cave
 {
-	GenericSprite::GenericSprite(Texture* texture, MemoryPool& pool)
-		: mPool(&pool)
-		,mTexture(texture)
+	GenericSprite::GenericSprite(Texture* texture)
+		: mTexture(texture)
+	{
+		mWidth = mTexture->GetWidth();
+		mHeight = mTexture->GetHeight();
+		mTextureIndex = mTexture->GetIndex();
+	}
+
+	//GenericSprite::GenericSprite(const Texture& texture)
+	//	: mTexture(reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture))))
+	//{
+	//	new(mTexture) Texture(texture);
+	//	mWidth = mTexture->GetWidth();
+	//	mHeight = mTexture->GetHeight();
+	//	mTextureIndex = mTexture->GetIndex();
+	//}
+
+	//GenericSprite::GenericSprite(Texture&& texture, MemoryPool& pool)
+	//	: mPool(&pool)
 	//	, mTexture(reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture))))
-	{
-		//assert(texture != nullptr);
-		//new(mTexture) Texture(*texture);
-		mTexture->Init();
-		mWidth = mTexture->GetWidth();
-		mHeight = mTexture->GetHeight();
-		mTextureIndex = mTexture->GetIndex();
-	}
+	//{
+	//	new(mTexture) Texture(std::move(texture));
+	//	mWidth = mTexture->GetWidth();
+	//	mHeight = mTexture->GetHeight();
+	//	mTextureIndex = mTexture->GetIndex();
+	//}
 
-	GenericSprite::GenericSprite(const Texture& texture, MemoryPool& pool)
-		: mPool(&pool)
-		, mTexture(reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture))))
-	{
-		new(mTexture) Texture(texture);
-		mWidth = mTexture->GetWidth();
-		mHeight = mTexture->GetHeight();
-		mTextureIndex = mTexture->GetIndex();
-	}
-
-	GenericSprite::GenericSprite(Texture&& texture, MemoryPool& pool)
-		: mPool(&pool)
-		, mTexture(reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture))))
-	{
-		new(mTexture) Texture(std::move(texture));
-		mWidth = mTexture->GetWidth();
-		mHeight = mTexture->GetHeight();
-		mTextureIndex = mTexture->GetIndex();
-	}
 
 	GenericSprite::GenericSprite(const GenericSprite& other)
-		: mPool(other.mPool)
-		, mWorld(other.mWorld)
+		: mWorld(other.mWorld)
 		, mTextureIndex(other.mTextureIndex)
 		, mPosition(other.mPosition)
 		, mWidth(other.mWidth)
 		, mHeight(other.mHeight)
 	{
-		if (other.mTexture != nullptr)
+		mTexture = other.mTexture;
+		/*if (other.mTexture != nullptr)
 		{
 			mTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
 			new(mTexture) Texture(*other.mTexture);
-		}
+		}*/
 	}
 
 	GenericSprite::GenericSprite(GenericSprite&& other)
-		: mPool(other.mPool)
-		, mWorld(other.mWorld)
+		: mWorld(other.mWorld)
 		, mTextureIndex(other.mTextureIndex)
 		, mTexture(other.mTexture)
 		, mPosition(other.mPosition)
 		, mWidth(other.mWidth)
 		, mHeight(other.mHeight)
 	{
-		other.mPool = nullptr;
 		other.mTexture = nullptr;
 	}
 
@@ -75,16 +68,17 @@ namespace cave
 			mWorld = other.mWorld;
 			mTextureIndex = other.mTextureIndex;
 
-			mTexture->~Texture();
-			if (other.mTexture != nullptr)
-			{
-				new(mTexture) Texture(*other.mTexture);
-			}
-			else
-			{
-				mPool->Deallocate(mTexture, sizeof(Texture));
-				mTexture = nullptr;
-			}
+			//mTexture->~Texture();
+			//if (other.mTexture != nullptr)
+			//{
+			//	new(mTexture) Texture(*other.mTexture);
+			//}
+			//else
+			//{
+			//	mPool->Deallocate(mTexture, sizeof(Texture));
+			//	mTexture = nullptr;
+			//}
+			mTexture = other.mTexture;
 
 			mPosition = other.mPosition;
 			mWidth = other.mWidth;
@@ -107,8 +101,6 @@ namespace cave
 
 			mWidth = other.mWidth;
 			mHeight = other.mHeight;
-
-			other.mPool = nullptr;
 			other.mTexture = nullptr;
 		}
 
@@ -120,16 +112,7 @@ namespace cave
 		Destroy();
 	}
 
-	MemoryPool* GenericSprite::GetMemoryPool() const
-	{
-		return mPool;
-	}
-
-#ifdef __WIN32__
 	eResult GenericSprite::Init(ID3D11Device* device, ID3D11DeviceContext* context, uint32_t screenWidth, uint32_t screenHeight)
-#else
-	eResult GenericSprite::Init(uint32_t program, uint32_t screenWidth, uint32_t screenHeight)
-#endif
 	{
 		mScreenWidth = screenWidth;
 		mScreenHeight = screenHeight;
@@ -137,11 +120,7 @@ namespace cave
 		mPreviousPosition = Float3(-1.0f, -1.0f, 1.0f);
 		//mPosition = Float3(0.0f, 0.0f, 1.0f);
 
-#ifdef __WIN32__
 		eResult result = initializeBuffers(device, context);
-#else
-		eResult result = initializeBuffers(program);
-#endif
 
 		return result;
 	}
@@ -150,9 +129,7 @@ namespace cave
 	{
 		if (mTexture != nullptr)
 		{
-			mTexture->DeleteTexture();
-			mTexture->~Texture();
-			mPool->Deallocate(mTexture, sizeof(Texture));
+			//mTexture->~Texture();
 			mTexture = nullptr;
 		}
 	}
@@ -165,5 +142,12 @@ namespace cave
 			mTexture = nullptr;
 		}
 		*mTexture = texture;
+	}
+	void GenericSprite::SetTextureIndex(Texture* texture, uint32_t index)
+	{
+		mWidth = texture->GetWidth();
+		mHeight = texture->GetHeight();
+		mTexture = texture;
+		mTextureIndex = index;
 	}
 } // namespace cave

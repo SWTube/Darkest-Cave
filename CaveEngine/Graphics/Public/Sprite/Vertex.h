@@ -123,9 +123,8 @@ namespace cave
 	typedef struct Vertex
 	{
 	public:
-		Float3 Position = Float3(0.0f, 0.0f, 0.0f);
 		uint32_t VertexFlag = VERTEX_POSITION;
-
+		Float3 Position = Float3(0.0f, 0.0f, 0.0f);
 		Vertex() = default;
 		Vertex(const Vertex& other) = default;
 		Vertex& operator=(const Vertex& other) = default;

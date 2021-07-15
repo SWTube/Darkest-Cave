@@ -34,12 +34,16 @@ namespace cave
 
 		virtual eResult AddSprite(Sprite&& object);
 		virtual eResult AddSprite(const std::filesystem::path& filePath);
+		virtual eResult AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t frame, float duration, bool isLoof);
 		virtual eResult AddTexture(Texture&& texture);
+		virtual eResult AddTexture(const std::filesystem::path& filePath);
 		virtual eResult RemoveSprite(uint32_t index);
 		virtual eResult RemoveTexture(uint32_t index);
 		virtual void SetSpriteTexture(uint32_t index, uint32_t textureIndex);
 		virtual uint32_t GetSpriteTextureIndex(uint32_t index) const;
 		virtual void SetSpriteSize(uint32_t index, uint32_t width, uint32_t height);
+		virtual void SetSpritePosition(uint32_t index, Float2 position);
+		virtual void SetSpriteZIndex(uint32_t index, uint32_t z);
 		virtual void GetSpriteSize(uint32_t index, uint32_t& outWidth, uint32_t& outHeight) const;
 		virtual void GetSpritePosition(uint32_t index, float& outX, float& outY);
 		virtual Float2 GetSpritePosition(uint32_t index) const;

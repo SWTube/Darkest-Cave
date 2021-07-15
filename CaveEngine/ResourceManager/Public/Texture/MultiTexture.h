@@ -5,15 +5,13 @@ namespace cave
 	class MultiTexture : public Texture {
 	public:
 		MultiTexture() = delete;
-		MultiTexture(const std::filesystem::path& filePath, uint32_t frameCount, uint32_t framesPerSecond, 
-			eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
+		MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t frameCount, eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
 		MultiTexture(const MultiTexture& other);
 		MultiTexture(MultiTexture&& other);
 		MultiTexture& operator=(const MultiTexture& other);
 		MultiTexture& operator=(MultiTexture&& other);
 		virtual ~MultiTexture();
 
-		virtual void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		void SetFrame(int frame = 0);
 	
 	private:
