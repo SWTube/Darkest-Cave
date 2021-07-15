@@ -6,5 +6,25 @@
 
 namespace cave
 {
-	
+	std::unordered_set<std::string> Script::mGUName;
+
+	Script::Script()
+	{
+
+	}
+
+	Script::~Script()
+	{
+
+	}
+
+	void Script::FixedUpdate(GameObject& gameObject)
+	{
+
+	}
+
+	void Script::Update(GameObject& gameObject)
+	{
+
+	}
 }
