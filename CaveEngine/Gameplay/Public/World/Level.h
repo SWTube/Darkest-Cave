@@ -37,6 +37,9 @@ namespace cave
 		std::vector<GameObject*>& FindGameObjectsByTag(std::string& tag);
 		std::vector<GameObject*>& FindGameObjectsByTag(const char* tag);
 
+		void UpdateGameObjectInLevel();
+		void UpdateAllGameObjectInLevel();
+
 	private:
 		std::unordered_multimap<std::string, GameObject*> mActiveGameObjects;
 		std::unordered_multimap<std::string, GameObject*> mDeactiveGameObjects;
