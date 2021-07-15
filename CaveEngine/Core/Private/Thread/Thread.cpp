@@ -3,7 +3,7 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Thread.h"
+#include "Thread/Thread.h"
 
 namespace cave 
 {
@@ -20,7 +20,6 @@ namespace cave
 				}
 			);
 		}
-
 	}
 
 	void Thread::ThreadWorker()

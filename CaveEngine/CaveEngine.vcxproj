@@ -232,6 +232,7 @@
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\String\String.h" />
+    <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
     <ClInclude Include="Core\Public\Utils\Defines.h" />
     <ClInclude Include="Engine\Public\Engine.h" />
@@ -287,6 +288,7 @@
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\String\String.ixx" />
+    <ClCompile Include="Core\Private\Thread\Thread.cpp" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\UnixEngine.cpp" />

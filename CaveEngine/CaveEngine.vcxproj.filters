@@ -115,6 +115,9 @@
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Private\Thread\Thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
@@ -264,6 +267,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\Camera.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Thread\Thread.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
