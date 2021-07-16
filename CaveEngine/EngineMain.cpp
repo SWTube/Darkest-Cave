@@ -3,9 +3,14 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <chrono>
+#include <crtdbg.h>
+#include <cstdlib>
 #include <exception>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
+#include <random>
 #include <vector>
 
 #include "tictoc.h"
@@ -15,9 +20,15 @@
 
 #include "Containers/TStack.h"
 #include "Engine.h"
+#include "Object/TagPool.h"
 #include "Sprite/Sprite.h"
 #include "Sprite/Vertex.h"
 #include "String/String.h"
+
+#if _DEBUG
+//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
+#endif // _DEBUG
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
@@ -89,11 +100,14 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	 RenderTest();
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
+	//  RenderTest();
+	cave::TagPoolTest::Test();
+
+	_CrtDumpMemoryLeaks();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 #endif
 
@@ -239,9 +253,8 @@ void RenderTest()
 		//// Whoops! We resized the "window" when we went full-screen. Better
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
-
-		// Run the program.
-		result = main.Run();
+	// 	// Run the program.
+	// 	result = main.Run();
 	}
 
 	main.Destroy();

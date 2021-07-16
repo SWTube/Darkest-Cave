@@ -114,6 +114,98 @@
     </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{1574bd97-bb90-457c-a02d-0c323e5174ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Containers">
+      <UniqueIdentifier>{eaaab97b-69d2-4253-af58-87c2ed5857ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Debug">
+      <UniqueIdentifier>{b39b8a72-de13-49b5-af01-05e92a0f960a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Memory">
+      <UniqueIdentifier>{e74c87e9-e7a8-4ea5-bf34-0bb67079e8c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{598e2617-0f3d-494b-8df8-c1f29cc95968}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{253d7982-db18-46a0-ba47-bbc06a025463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Containers">
+      <UniqueIdentifier>{7cf09ef5-2cfc-4c96-b9b5-9ae2d6fa0256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Memory">
+      <UniqueIdentifier>{c56f1321-69bd-4e88-b487-f116792a5f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Debug">
+      <UniqueIdentifier>{d738b192-16d7-4120-bfa4-017f8a40dba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{357a963d-3c2f-4bfc-9064-c74c1d123ecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Renderer">
+      <UniqueIdentifier>{dd057c74-8c4c-4573-9d0e-ea9c8daae624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Renderer">
+      <UniqueIdentifier>{799c705f-1638-4d91-9e46-7f4494c96585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Test">
+      <UniqueIdentifier>{f3eb281e-3b3b-478a-b5ec-802180f63120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Test">
+      <UniqueIdentifier>{cc742b2b-c8a5-4d54-a9c8-1671ae2b0b27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{adca7f36-2313-4244-84d9-1f5647390e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay">
+      <UniqueIdentifier>{9b27ea53-ca8e-4c0d-a523-f2e1f502c625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Time">
+      <UniqueIdentifier>{384c0ef1-c681-451e-9b8d-85a443461d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Math">
+      <UniqueIdentifier>{50c5228a-3fc4-4a1f-99d6-7fb27969a140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Object">
+      <UniqueIdentifier>{e16925c7-671b-411b-913b-36ff2013f1de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay">
+      <UniqueIdentifier>{c36930bf-d7ad-4ab4-bb19-82b980721c23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Time">
+      <UniqueIdentifier>{ee3e6f30-d5df-4750-b17e-4cb6b75caed4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Object">
+      <UniqueIdentifier>{23b9f94a-9557-48e2-9815-e2065b3f9ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Tmp">
+      <UniqueIdentifier>{a50049df-759e-4ca7-8f38-316d83e98626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Tmp">
+      <UniqueIdentifier>{6881057e-a26c-4853-b503-b31763bf5d03}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="Gameplay\Private\Object\TagPool.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\World\World.cpp">
+      <Filter>Source Files\Gameplay\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\World\Level.cpp">
+      <Filter>Source Files\Gameplay\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +345,68 @@
     <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
       <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Public\Test\Resource.h">
+      <Filter>Header Files\Graphics\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Math\Vector2.h">
+      <Filter>Header Files\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Obejct.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Script.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Game.h">
+      <Filter>Header Files\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\GameObject.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Tmp\Transform.h">
+      <Filter>Header Files\Gameplay\Tmp</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Tag.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\TagPool.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\World\World.h">
+      <Filter>Header Files\Gameplay\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\World\Level.h">
+      <Filter>Header Files\Gameplay\World</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Core\Private\Memory\Memory.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Object.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Script.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Game.cpp">
+      <Filter>Source Files\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Public\CoreTmp\CoreType.ixx">
+      <Filter>Header Files\Gameplay\CoreTmp</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Public\CoreTmp\Log.ixx">
+      <Filter>Header Files\Gameplay\CoreTmp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -381,6 +535,11 @@
       <UniqueIdentifier>{8fbd3835-8552-4d7b-bac2-9e2cc63bb095}</UniqueIdentifier>
     <Filter Include="Header Files\Core\Template">
       <UniqueIdentifier>{377a7821-e104-4395-abb3-6dadcb02f4e5}</UniqueIdentifier>
+    <Filter Include="Header Files\Gameplay\World">
+      <UniqueIdentifier>{77713b56-0d16-4326-9587-110d2a0bdf10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\World">
+      <UniqueIdentifier>{ea3a80c0-0244-48ad-8f00-24af5d3cd0da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

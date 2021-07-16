@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{2d717754-a428-482f-bc99-1cf9f487610e}</ProjectGuid>
     <RootNamespace>CaveEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -98,7 +98,7 @@
       <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
@@ -131,7 +131,7 @@
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -230,6 +230,7 @@
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
     <ClInclude Include="Core\Public\Memory\DataBlock.h" />
+    <ClInclude Include="Core\Public\Math\Vector2.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\String\String.h" />
@@ -239,12 +240,22 @@
     <ClInclude Include="Engine\Public\GenericEngine.h" />
     <ClInclude Include="Engine\Public\UnixEngine.h" />
     <ClInclude Include="Engine\Public\WindowsEngine.h" />
+    <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
+    <ClInclude Include="Gameplay\Public\World\Level.h" />
+    <ClInclude Include="Gameplay\Public\World\World.h" />
     <ClInclude Include="Graphics\Public\Device\DeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\GenericWindow.h" />
     <ClInclude Include="Graphics\Public\Device\Window.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsWindow.h" />
+    <ClInclude Include="Gameplay\Public\Game.h" />
+    <ClInclude Include="Gameplay\Public\Object\Script.h" />
+    <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
+    <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
+    <ClInclude Include="Gameplay\Public\Object\Tag.h" />
+    <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
+    <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
     <ClInclude Include="Graphics\Public\Renderer\Camera.h" />
     <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h" />
@@ -281,6 +292,9 @@
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
+    <ClCompile Include="Gameplay\Private\World\Level.cpp" />
+    <ClCompile Include="Gameplay\Private\World\World.cpp" />
     <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\GenericDeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp" />
@@ -301,6 +315,11 @@
     <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
     <ClCompile Include="ThirdParty\tictoc\src\tictoc.c" />
+    <ClCompile Include="Gameplay\Private\Game.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Script.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\GameObject.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Object.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Tag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />
