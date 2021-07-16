@@ -7,5 +7,6 @@
 
 #include "CoreTypes.h"
 #include "Sprite/GenericSprite.h"
+#include "Sprite/AnimatedSprite.h"
 
 #include GET_PLATFORM_HEADER(Sprite.h)

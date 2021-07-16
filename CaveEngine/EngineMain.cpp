@@ -38,7 +38,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-
+	CoInitialize(0);
 	// Enable run-time memory check for debug builds.
 #if defined(CAVE_BUILD_DEBUG)
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -89,12 +89,12 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	// RenderTest();
+	 RenderTest();
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// cave::StackTest::Test<int>();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 #endif
 
 	// Cleanup is handled in destructors.
@@ -221,27 +221,16 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 
-	cave::Texture* texture1 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
-	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGBA);
-	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
-	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGBA);
-
-	cave::Sprite object(texture1, cave::gCoreMemoryPool);
-	object.SetSize(object.GetWidth() / 2u, object.GetHeight() / 2u);
-	cave::Sprite object2(texture2, cave::gCoreMemoryPool);
-	object2.SetPosition(cave::Float2(1000.0f, 500.0f));
-
-	texture1->~Texture();
-	texture2->~Texture();
-	cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
-	cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
-	texture1 = nullptr;
-	texture2 = nullptr;
 
 	cave::Renderer* renderer = main.GetRenderer();
-	renderer->AddSprite(std::move(object));
-	renderer->AddSprite(std::move(object2));
 
+	renderer->AddSprite("orange_mushroom.png");
+
+	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
+	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
+	renderer->SetSpritePosition(2, cave::Float2(500, 200));
+	//renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
+	
 	if (result == cave::eResult::CAVE_OK)
 	{
 		//// Go full-screen.

@@ -20,7 +20,18 @@ namespace cave
 		// Instantiate the renderer.
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
 		new(mRenderer) Renderer();
+
 		mRenderer->Init(mWindow);
+		//mRenderer->CreateDeviceDependentResources();
+
+		//// We have a window, so initialize window size-dependent resources.
+		//mDeviceResources->CreateWindowResources(mWindow);
+		//if (result != eResult::CAVE_OK)
+		//{
+		//	return result;
+		//}
+
+		//mRenderer->CreateWindowSizeDependentResources();
 		
 		return result;
 	}
