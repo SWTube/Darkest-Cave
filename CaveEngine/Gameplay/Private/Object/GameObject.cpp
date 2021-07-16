@@ -10,30 +10,31 @@
 
 namespace cave
 {
-	GameObject::GameObject() :
-		mbActive(true),
-		mbStatic(false),
-		mLayer(0),
-		mTag(nullptr),
-		mTransform()
+	GameObject::GameObject()
+		: Object()
+		, mbActive(true)
+		, mbStatic(false)
+		, mLayer(0)
+		, mTag(nullptr)
+		, mTransform()
 	{
-
 	}
 
-	GameObject::GameObject(const GameObject& other) :
-		mbActive(other.mbActive),
-		mbStatic(other.mbStatic),
-		mLayer(other.mLayer),
-		mTransform()
+	GameObject::GameObject(const GameObject& other)
+		: Object(other)
+		, mbActive(other.mbActive)
+		, mbStatic(other.mbStatic)
+		, mLayer(other.mLayer)
+		, mTransform()
 	{
-
 	}
 
-	GameObject::GameObject(GameObject&& other) noexcept :
-		mbActive(other.mbActive),
-		mbStatic(other.mbStatic),
-		mLayer(other.mLayer),
-		mTransform(std::move(other.mTransform))
+	GameObject::GameObject(GameObject&& other) noexcept
+		: Object(std::move(other))
+		, mbActive(other.mbActive)
+		, mbStatic(other.mbStatic)
+		, mLayer(other.mLayer)
+		, mTransform(std::move(other.mTransform))
 	{
 
 	}

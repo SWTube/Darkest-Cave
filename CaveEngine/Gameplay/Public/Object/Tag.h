@@ -15,17 +15,17 @@ namespace cave
 
 		~Tag();
 
-		__forceinline friend bool operator==(const Tag& lhs, const Tag& rhs)
+		FORCEINLINE friend bool operator==(const Tag& lhs, const Tag& rhs)
 		{
 			return lhs.mCompareSeed == rhs.mCompareSeed;
 		}
 
-		__forceinline friend bool operator!=(const Tag& lhs, const Tag& rhs)
+		FORCEINLINE friend bool operator!=(const Tag& lhs, const Tag& rhs)
 		{
 			return lhs.mCompareSeed != rhs.mCompareSeed;
 		}
 
-		__forceinline friend bool operator<(const Tag& lhs, const Tag& rhs)
+		FORCEINLINE friend bool operator<(const Tag& lhs, const Tag& rhs)
 		{
 			return lhs.mCompareSeed < rhs.mCompareSeed;
 		}

@@ -32,57 +32,57 @@ namespace cave
 		
 		void UpdateScripts();
 
-		__forceinline void SetTag(Tag& tag)
+		FORCEINLINE void SetTag(Tag& tag)
 		{
 			mTag = &tag;
 		}
 
-		__forceinline Tag* GetTag() const
+		FORCEINLINE Tag* GetTag() const
 		{
 			return mTag;
 		}
 
-		__forceinline void SetActive(bool state)
+		FORCEINLINE void SetActive(bool state)
 		{
 			mbActive = state;
 		}
 
-		__forceinline void SetStatic(bool state)
+		FORCEINLINE void SetStatic(bool state)
 		{
 			mbStatic = state;
 		}
 
-		__forceinline bool IsActive() const
+		FORCEINLINE bool IsActive() const
 		{
 			return mbActive;
 		}
 
-		__forceinline bool IsStatic() const
+		FORCEINLINE bool IsStatic() const
 		{
 			return mbStatic;
 		}
 
-		__forceinline void SetLayer(unsigned char layer)
+		FORCEINLINE void SetLayer(unsigned char layer)
 		{
 			mLayer = layer;
 		}
 
-		__forceinline unsigned char GetLayer() const
+		FORCEINLINE unsigned char GetLayer() const
 		{
 			return mLayer;
 		}
 		
-		__forceinline void SetName(std::string& name)
+		FORCEINLINE void SetName(std::string& name)
 		{
 			mName = std::move(name);
 		}
 
-		__forceinline std::string& GetName()
+		FORCEINLINE std::string& GetName()
 		{
 			return mName;
 		}
 
-		__forceinline Transform* GetTransform()
+		FORCEINLINE Transform* GetTransform()
 		{
 			return mTransform;
 		}

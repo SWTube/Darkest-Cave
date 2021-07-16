@@ -13,37 +13,37 @@ namespace cave
 		Object& operator=(const Object& other);
 		Object& operator=(Object&& other) noexcept;
 
-		__forceinline bool operator==(const Object& other) const
+		FORCEINLINE bool operator==(const Object& other) const
 		{
 			return mInstanceID == other.mInstanceID;
 		}
 
-		__forceinline bool operator!=(const Object& other) const
+		FORCEINLINE bool operator!=(const Object& other) const
 		{
 			return mInstanceID != other.mInstanceID;
 		}
 
-		__forceinline unsigned int GetInstanceID() const
+		FORCEINLINE unsigned int GetInstanceID() const
 		{
 			return mInstanceID;
 		}
 
-		__forceinline unsigned int GetInternalIndex() const
+		FORCEINLINE unsigned int GetInternalIndex() const
 		{
 			return mInternalIndex;
 		}
 
-		__forceinline void SetFlags(unsigned char flag)
+		FORCEINLINE void SetFlags(unsigned char flag)
 		{
 			mFlags = flag;
 		}
 
-		__forceinline unsigned char GetFlags() const
+		FORCEINLINE unsigned char GetFlags() const
 		{
 			return mFlags;
 		}
 
-		__forceinline bool IsValid() const
+		FORCEINLINE bool IsValid() const
 		{
 			return mbVaild;
 		}
@@ -53,12 +53,12 @@ namespace cave
 		Object(const Object& other);
 		Object(Object&& other) noexcept;
 
-		__forceinline void SetInstanceID(unsigned int id)
+		FORCEINLINE void SetInstanceID(unsigned int id)
 		{
 			mInstanceID = id;
 		}
 
-		__forceinline void SetInternalIndex(unsigned int index)
+		FORCEINLINE void SetInternalIndex(unsigned int index)
 		{
 			mInternalIndex = index;
 		}

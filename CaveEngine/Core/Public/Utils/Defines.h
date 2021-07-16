@@ -23,7 +23,7 @@
 
 	#define PLATFORM_NAME Windows
 
-	#define __FORCEINLINE__ __forceinline
+	#define FORCEINLINE __forceinline
 #endif
 
 #define GET_PLATFORM_HEADER(x) STRINGIZE_TOKEN(CONCATENATE_TOKENS(PLATFORM_NAME, x))

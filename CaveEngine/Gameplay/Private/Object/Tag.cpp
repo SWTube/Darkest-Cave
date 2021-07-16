@@ -3,7 +3,7 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 #include <cassert>
-#include <xhash>
+#include "xhash.h"
 
 #include "Object/Tag.h"
 

@@ -22,7 +22,7 @@
 #include "Engine.h"
 #include "Object/TagPool.h"
 #include "Sprite/Sprite.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 #include "String/String.h"
 
 #if _DEBUG

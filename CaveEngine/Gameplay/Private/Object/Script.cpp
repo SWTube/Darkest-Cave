@@ -10,21 +10,17 @@ namespace cave
 
 	Script::Script()
 	{
-
 	}
 
 	Script::~Script()
 	{
-
 	}
 
 	void Script::FixedUpdate(GameObject& gameObject)
 	{
-
 	}
 
 	void Script::Update(GameObject& gameObject)
 	{
-
 	}
 }

@@ -25,7 +25,7 @@ namespace cave
 		Script& operator=(const Script& other) = delete;
 		Script& operator=(Script&& other) = delete;
 
-		__forceinline const std::string& GetName() const
+		FORCEINLINE const std::string& GetName() const
 		{
 			return mName;
 		}
