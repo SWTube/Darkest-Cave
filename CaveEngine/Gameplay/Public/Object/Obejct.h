@@ -4,8 +4,12 @@
  */
 #pragma once
 
+#include "CoreTypes.h"
+
 namespace cave
 {
+	class MemoryPool;
+
 	class Object
 	{
 	public:
@@ -13,61 +17,41 @@ namespace cave
 		Object& operator=(const Object& other);
 		Object& operator=(Object&& other) noexcept;
 
-		__forceinline bool operator==(const Object& other) const
-		{
-			return mInstanceID == other.mInstanceID;
-		}
+		FORCEINLINE friend bool operator==(const Object& lhs, const Object& rhs);
+		FORCEINLINE friend bool operator!=(const Object& lhs, const Object& rhs);
+		FORCEINLINE friend bool operator<(const Object& lhs, const Object& rhs);
 
-		__forceinline bool operator!=(const Object& other) const
-		{
-			return mInstanceID != other.mInstanceID;
-		}
+		int GetGUID() const;
 
-		__forceinline unsigned int GetInstanceID() const
-		{
-			return mInstanceID;
-		}
+		void SetFlags(unsigned char flag);
+		unsigned char GetFlags() const;
 
-		__forceinline unsigned int GetInternalIndex() const
-		{
-			return mInternalIndex;
-		}
-
-		__forceinline void SetFlags(unsigned char flag)
-		{
-			mFlags = flag;
-		}
-
-		__forceinline unsigned char GetFlags() const
-		{
-			return mFlags;
-		}
-
-		__forceinline bool IsValid() const
-		{
-			return mbVaild;
-		}
+		bool IsValid() const;
 
 	protected:
 		Object();
 		Object(const Object& other);
 		Object(Object&& other) noexcept;
 
-		__forceinline void SetInstanceID(unsigned int id)
-		{
-			mInstanceID = id;
-		}
-
-		__forceinline void SetInternalIndex(unsigned int index)
-		{
-			mInternalIndex = index;
-		}
-
 	private:
-		unsigned char mFlags;
-		unsigned int mInternalIndex;
-		unsigned int mInstanceID;
-
-		bool mbVaild;
+		static int mNextGUID;
+		unsigned char mFlags = 0;
+		/*Object's unique ID.*/
+		int mGUID = -1;
 	};
+
+	FORCEINLINE bool operator==(const Object& lhs, const Object& rhs)
+	{
+		return lhs.GetGUID() == rhs.GetGUID();
+	}
+
+	FORCEINLINE bool operator!=(const Object& lhs, const Object& rhs)
+	{
+		return lhs.GetGUID() != rhs.GetGUID();
+	}
+
+	FORCEINLINE bool operator<(const Object& lhs, const Object& rhs)
+	{
+		return lhs.GetGUID() < rhs.GetGUID();
+	}
 }
