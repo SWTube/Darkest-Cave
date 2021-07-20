@@ -6,23 +6,27 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "Object/Obejct.h"
+#include "Assertion/Assert.h"
 
 namespace cave
 {
+	class Controller;
 	class Script;
 	class Tag;
 	class Transform;
 	class Renderer;
 	class Physics;
+	class Level;
 
-	class World;
-
-	class GameObject final : public Object
+	class GameObject : public Object
 	{
 	public:
-		GameObject();
+		GameObject() = delete;
+		GameObject(std::string& name, bool isControlled = false);
+		GameObject(const char* name = "GameObject", bool isControlled = false);
 		GameObject(const GameObject& gameObject);
 		GameObject(GameObject&& gameObject) noexcept;
 
@@ -31,77 +35,148 @@ namespace cave
 		GameObject& operator=(GameObject&& other) noexcept;
 		
 		void UpdateScripts();
+		void FixedUpdateScripts();
 
-		__forceinline void SetTag(Tag& tag)
-		{
-			mTag = &tag;
-		}
+		void AddScript(Script& script);
+		void AddScripts(std::vector<Script*>& scripts);
 
-		__forceinline Tag* GetTag() const
-		{
-			return mTag;
-		}
+		void RemoveScript(std::string& name);
+		void RemoveScript(const char* name);
+		void RemoveScripts(std::vector<std::string>& names);
+		void RemoveScripts(std::vector<const char*>& names);
 
-		__forceinline void SetActive(bool state)
-		{
-			mbActive = state;
-		}
+		Script* FindScriptByName(std::string& name);
+		Script* FindScriptByName(const char* name);
 
-		__forceinline void SetStatic(bool state)
-		{
-			mbStatic = state;
-		}
+		void SetTag(std::string& name);
+		void SetTag(const char* name);
+		FORCEINLINE Tag* GetTag() const;
 
-		__forceinline bool IsActive() const
-		{
-			return mbActive;
-		}
+		void SetActive(bool state);
+		FORCEINLINE bool IsActive() const;
 
-		__forceinline bool IsStatic() const
-		{
-			return mbStatic;
-		}
+		FORCEINLINE void SetStatic(bool state);
+		FORCEINLINE bool IsStatic() const;
 
-		__forceinline void SetLayer(unsigned char layer)
-		{
-			mLayer = layer;
-		}
+		FORCEINLINE void SetLayer(unsigned char layer);
+		FORCEINLINE unsigned char GetLayer() const;
 
-		__forceinline unsigned char GetLayer() const
-		{
-			return mLayer;
-		}
+		void SetTransform(Transform& transform);
+		FORCEINLINE Transform* GetTransform() const;
+
+		void SetRenderer(Renderer& renderer);
+		FORCEINLINE Renderer* GetRenderer() const;
+
+		void SetPhysics(Physics& physics);
+		FORCEINLINE Physics* GetPhysics() const;
+
+		void SetController(Controller& controller);
+		FORCEINLINE Controller* GetController() const;
+		FORCEINLINE bool IsControlled() const;
 		
-		__forceinline void SetName(std::string& name)
-		{
-			mName = std::move(name);
-		}
-
-		__forceinline std::string& GetName()
-		{
-			return mName;
-		}
-
-		__forceinline Transform* GetTransform()
-		{
-			return mTransform;
-		}
+		FORCEINLINE void SetLevel(Level& level);
+		FORCEINLINE Level* GetLevel() const;
+		void RemoveGameObjectInLevel();
 
 	private:
-		bool mbActive;
+		/*Active indicates the game object was active or deactive.
+		  Gameloop updates active game object for defalut option.*/
+		bool mbActive = false;
 		bool mbStatic;
+		bool mbControlled;
 
+		/*Layer indicates draw order.
+		  Default value is 0. If value > 0, game object draw later.*/
 		unsigned char mLayer;
 
-		std::vector<Script*> mScripts;
+		std::map<std::string, Script*> mScripts;
 
-		std::string mName;
 		Tag* mTag;
 
 		Transform* mTransform;
 		Renderer* mRenderer;
 		Physics* mPhysics;
+		Controller* mController;
 
-		World* mOwner;
+		Level* mLevel;
 	};
+
+	FORCEINLINE Tag* GameObject::GetTag() const
+	{
+		assert(IsValid());
+		assert(mTag != nullptr);
+		return mTag;
+	}
+
+	FORCEINLINE bool GameObject::IsActive() const
+	{
+		assert(IsValid());
+		return mbActive;
+	}
+
+	FORCEINLINE void GameObject::SetStatic(bool state)
+	{
+		assert(IsValid());
+		mbStatic = state;
+	}
+
+	FORCEINLINE bool GameObject::IsStatic() const
+	{
+		assert(IsValid());
+		return mbStatic;
+	}
+
+	FORCEINLINE void GameObject::SetLayer(unsigned char layer)
+	{
+		assert(IsValid());
+		mLayer = layer;
+	}
+
+	FORCEINLINE unsigned char GameObject::GetLayer() const
+	{
+		assert(IsValid());
+		return mLayer;
+	}
+
+	FORCEINLINE Transform* GameObject::GetTransform() const
+	{
+		assert(IsValid());
+		return mTransform;
+	}
+
+	FORCEINLINE Renderer* GameObject::GetRenderer() const
+	{
+		assert(IsValid());
+		return mRenderer;
+	}
+
+	FORCEINLINE Physics* GameObject::GetPhysics() const
+	{
+		assert(IsValid());
+		return mPhysics;
+	}
+
+	FORCEINLINE Controller* GameObject::GetController() const
+	{
+		assert(IsValid() & IsControlled());
+		return mController;
+	}
+
+	FORCEINLINE bool GameObject::IsControlled() const
+	{
+		assert(IsValid());
+		return mbControlled;
+	}
+
+	FORCEINLINE void GameObject::SetLevel(Level& level)
+	{
+		assert(IsValid());
+		mLevel = &level;
+	}
+
+	FORCEINLINE Level* GameObject::GetLevel() const
+	{
+		assert(IsValid());
+		return mLevel;
+	}
 }
