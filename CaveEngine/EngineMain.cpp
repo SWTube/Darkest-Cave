@@ -271,7 +271,6 @@
 
 int main()
 {
-	cave::TagPoolTest::Test();
 
 	_CrtDumpMemoryLeaks();
 

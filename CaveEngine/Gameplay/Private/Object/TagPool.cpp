@@ -7,33 +7,30 @@
 #include <iostream>
 #endif // CAVE_BUILD_DEBUG
 
-
+#include "CoreGlobals.h"
 #include "Assertion/Assert.h"
-#include "Memory/MemoryPool.h"
 #include "Object/TagPool.h"
 #include "Object/Tag.h"
 
 namespace cave
 {
-	MemoryPool* TagPool::mMemoryPool = nullptr;
-	std::unordered_map<std::string, Tag*> TagPool::mTags;
+	bool TagPool::mbValid = false;
+	std::map<std::string, Tag*> TagPool::mTags;
 
 	TagPool::~TagPool()
 	{
 
 	}
 
-	void TagPool::Init(MemoryPool& memoryPool)
+	void TagPool::Init()
 	{
-		mMemoryPool = &memoryPool;
+		mbValid = true;
+		AddTag("None");
 	}
 
 	void TagPool::ShutDown()
 	{
-		assert(IsValid());
-
-		
-		mMemoryPool = nullptr;
+		mbValid = false;
 	}
 
 	void TagPool::AddTag(std::string& name)
@@ -48,7 +45,8 @@ namespace cave
 	{
 		assert(IsValid());
 		
-		std::string convertedName(name);
+		Tag* tag = createTag(name);
+		mTags[name] = tag;
 	}
 
 	void TagPool::RemoveTag(std::string& name)
@@ -60,7 +58,7 @@ namespace cave
 		if (iter != mTags.end())
 		{
 			iter->second = nullptr;
-			mMemoryPool->Deallocate(iter->second, sizeof(Tag));
+			gCoreMemoryPool->Deallocate(iter->second, sizeof(Tag));
 		}
 	}
 
@@ -68,7 +66,13 @@ namespace cave
 	{
 		assert(IsValid());
 
-		std::string convertedName(name);
+		auto iter = mTags.find(name);
+
+		if (iter != mTags.end())
+		{
+			iter->second = nullptr;
+			gCoreMemoryPool->Deallocate(iter->second, sizeof(Tag));
+		}
 	}
 
 	Tag* TagPool::FindTagByName(std::string& name)
@@ -84,8 +88,7 @@ namespace cave
 	{
 		assert(IsValid());
 
-		std::string convertedName(name);
-		auto iter = mTags.find(convertedName);
+		auto iter = mTags.find(name);
 
 		return iter != mTags.end() ? iter->second : nullptr;
 	}
@@ -94,7 +97,7 @@ namespace cave
 	{
 		assert(IsValid());
 
-		Tag* tag = new(reinterpret_cast<Tag*>(mMemoryPool->Allocate(sizeof(Tag)))) Tag(name);
+		Tag* tag = new(reinterpret_cast<Tag*>(gCoreMemoryPool->Allocate(sizeof(Tag)))) Tag(name);
 		assert(tag != nullptr);
 
 		return tag;
@@ -102,7 +105,7 @@ namespace cave
 	
 	bool TagPool::IsValid()
 	{
-		return mMemoryPool != nullptr ? true : false;
+		return mbValid;
 	}
 
 #ifdef CAVE_BUILD_DEBUG
@@ -123,7 +126,7 @@ namespace cave
 		{
 			MemoryPool memoryPool(1024ul);
 
-			TagPool::Init(memoryPool);
+			TagPool::Init();
 
 			const char* testString = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 

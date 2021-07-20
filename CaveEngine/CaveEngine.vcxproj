@@ -240,6 +240,7 @@
     <ClInclude Include="Engine\Public\UnixEngine.h" />
     <ClInclude Include="Engine\Public\WindowsEngine.h" />
     <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
+    <ClInclude Include="Gameplay\Public\Object\Transform.h" />
     <ClInclude Include="Gameplay\Public\World\Level.h" />
     <ClInclude Include="Gameplay\Public\World\World.h" />
     <ClInclude Include="Graphics\Public\Device\DeviceResources.h" />
@@ -292,6 +293,7 @@
     <ClCompile Include="Engine\Private\UnixEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Transform.cpp" />
     <ClCompile Include="Gameplay\Private\World\Level.cpp" />
     <ClCompile Include="Gameplay\Private\World\World.cpp" />
     <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp" />

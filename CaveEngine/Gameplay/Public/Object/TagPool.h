@@ -5,7 +5,7 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
+#include <map>
 
 #include "CoreTypes.h"
 
@@ -22,8 +22,10 @@ namespace cave
 		TagPool(TagPool&&) = delete;
 
 		~TagPool();
+		TagPool& operator=(const TagPool&) = delete;
+		TagPool& operator=(TagPool&&) = delete;
 		
-		static void Init(MemoryPool& memoryPool);
+		static void Init();
 		static void ShutDown();
 
 		static void AddTag(std::string& name);
@@ -45,8 +47,8 @@ namespace cave
 		static Tag* createTag(std::string& name);
 
 	private:
-		static MemoryPool* mMemoryPool;
-		static std::unordered_map<std::string, Tag*> mTags;
+		static bool mbValid;
+		static std::map<std::string, Tag*> mTags;
 	};
 
 #ifdef CAVE_BUILD_DEBUG

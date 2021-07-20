@@ -9,9 +9,9 @@
 
 namespace cave
 {
-	Tag::Tag(std::string& name) :
-		mName(name),
-		mCompareSeed(std::hash<std::string>{}(mName))
+	Tag::Tag(std::string& name) 
+		: mName(name) 
+		, mCompareSeed(std::hash<std::string>{}(mName))
 	{
 
 	}
@@ -19,10 +19,5 @@ namespace cave
 	Tag::~Tag()
 	{
 
-	}
-
-	std::string& Tag::GetName()
-	{
-		return mName;
 	}
 }
