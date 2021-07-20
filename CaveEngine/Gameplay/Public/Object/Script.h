@@ -6,18 +6,20 @@
 #pragma once
 
 #include <string>
-#include <unordered_set>
+#include <set>
 
+#include "CoreTypes.h"
 #include "Object/Obejct.h"
+#include "Object/GameObject.h"
 
 namespace cave
 {	
-	class GameObject;
-
 	class Script : public Object
     {
     public:
-		Script();
+		Script() = delete;
+		Script(std::string& name);
+		Script(const char* name);
 		Script(const Script& other) = delete;
 		Script(Script&& other) = delete;
 
@@ -25,19 +27,7 @@ namespace cave
 		Script& operator=(const Script& other) = delete;
 		Script& operator=(Script&& other) = delete;
 
-		__forceinline const std::string& GetName() const
-		{
-			return mName;
-		}
-
 		virtual void FixedUpdate(GameObject& gameObject);
 		virtual void Update(GameObject& gameObject);
-
-    private:
-		/*Global unique name.*/
-		static std::unordered_set<std::string> mGUName;
-
-		/*Script's name.*/
-		std::string mName;
     };
 }

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <unordered_map>
-#include <unordered_set>
+
+#include "Containers/Node.h"
 
 namespace cave
 {
@@ -26,6 +26,5 @@ namespace cave
 		Game();
 
 	private:
-		MemoryPool* mObjectMemoryPool;
 	};
 }
