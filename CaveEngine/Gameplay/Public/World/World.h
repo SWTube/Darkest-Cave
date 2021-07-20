@@ -4,19 +4,21 @@
  */
 #pragma once
 
-#include <vector>
 #include <unordered_map>
+
+#include "CoreTypes.h"
+#include "Object/Obejct.h"
 
 namespace cave
 {
-	class Tag;
-	class GameObject;
 	class Level;
 
-	class World final
+	class World final : public Object
 	{
 	public:
-		World();
+		World() = delete;
+		World(std::string& name);
+		World(const char* name);
 		World(const World&) = delete;
 		World(World&&) = delete;
 
@@ -28,33 +30,17 @@ namespace cave
 		void RemoveLevel(std::string& name);
 		void RemoveLevel(const char* name);
 
-		void AddGameObject(GameObject& gameObject);
-		void RemoveGameObject(std::string& name);
-		void RemoveGameObject(const char* name);
-
 		Level* FindLevelByName(std::string& name);
 		Level* FindLevelByName(const char* name);
 
-		GameObject* FindGameObjectByName(std::string& name);
-		GameObject* FindGameObjectByName(const char* name);
-		std::vector<GameObject*>& FindGameObjectsByName(std::string& name);
-		std::vector<GameObject*>& FindGameObjectsByName(const char* name);
-
-		GameObject* FindGameObjectByTag(std::string& tag);
-		GameObject* FindGameObjectByTag(const char* tag);
-		std::vector<GameObject*>& FindGameObjectsByTag(std::string& tag);
-		std::vector<GameObject*>& FindGameObjectsByTag(const char* tag);
-
-		void UpdateGameObjectInWorld();
-		void UpdateAllGameObjectInWorld();
+		void UpdateGameObjectInCurrentLevel();
 
 	private:
 		std::unordered_map<std::string, Level*> mLevels;
-		/*Read only.*/
-		std::unordered_multimap<std::string, GameObject*> mGameObjects;
-		/*Read only.*/
-		std::unordered_multimap<Tag*, GameObject*> mGameObjectsSortByTag;
-
+		Level* mPreviousLevel;
 		Level* mCurrentLevel;
+		Level* mNextLevel;
+
+		std::string mName;
 	};
 }
