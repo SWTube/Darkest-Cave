@@ -2,79 +2,90 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
+#include "CoreGlobals.h"
 #include "Object/Obejct.h"
-#include "Memory/MemoryPool.h"
 
 namespace cave
 {
 	int Object::mNextGUID = 0;
 
 	Object::Object()
+		: mName()
 	{
 		assert(mNextGUID >= 0);
 		mGUID = mNextGUID;
+		assert(IsValid());
+		++mNextGUID;
+	}
+
+	Object::Object(std::string& name)
+		: mName(name)
+	{
+		assert(mNextGUID >= 0);
+		mGUID = mNextGUID;
+		assert(IsValid());
+		++mNextGUID;
+	}
+
+	Object::Object(const char* name)
+		: mName(name)
+	{
+		assert(name != nullptr);
+		assert(mNextGUID >= 0);
+		mGUID = mNextGUID;
+		assert(IsValid());
 		++mNextGUID;
 	}
 
 	Object::Object(const Object& other)
-		: mFlags(other.mFlags)
+		: mName(other.mName)
 	{
 		assert(mNextGUID >= 0);
 		mGUID = mNextGUID;
+		assert(GetGUID() != other.GetGUID());
 		++mNextGUID;
 	}
 
-	Object::Object(Object&& other)
-		: mFlags(other.GetFlags())
+	Object::Object(Object&& other) noexcept
+		: mName(std::move(other.GetName()))
 	{
-		assert(mGUID >= 0);
+		assert(mNextGUID >= 0);
 		mGUID = mNextGUID;
-		++mGUID;
+		assert(GetGUID() != other.GetGUID());
+		++mNextGUID;
 	}
 
 	Object::~Object()
 	{
 		assert(IsValid());
-		mFlags = 0;
 		mGUID = -1;
 	}
 
 	Object& Object::operator=(const Object& other)
 	{
-		assert(other.IsValid());
-		mFlags = other.GetFlags();
+		assert(GetGUID() != other.GetGUID());
+		mName = other.mName;
 
 		return *this;
 	}
 
-	Object& Object::operator=(Object&& other)
+	Object& Object::operator=(Object&& other) noexcept
 	{
-		assert(other.IsValid());
-		mFlags = other.GetFlags();
-		mGUID = other.GetGUID();
+		assert(GetGUID() != other.GetGUID());
 
 		return *this;
 	}
 
-	int Object::GetGUID() const
+	void Object::SetName(std::string& name)
 	{
 		assert(IsValid());
-		return mGUID;
+		mName = name;
 	}
 
-	void Object::SetFlags(unsigned char flags)
-	{
-		mFlags = flags;
-	}
-
-	unsigned char Object::GetFlags() const
+	void Object::SetName(const char* name)
 	{
 		assert(IsValid());
-		return mFlags;
-	}
-
-	bool Object::IsValid() const
-	{
-		return mGUID == -1 ? false : true;
+		assert(name != nullptr);
+		mName = name;
 	}
 }

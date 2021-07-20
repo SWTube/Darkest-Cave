@@ -6,9 +6,14 @@
 
 namespace cave
 {
-	std::unordered_set<std::string> Script::mGUName;
+	Script::Script(std::string& name)
+		: Object(name)
+	{
 
-	Script::Script()
+	}
+
+	Script::Script(const char* name)
+		: Object(name)
 	{
 
 	}
@@ -23,7 +28,7 @@ namespace cave
 
 	}
 
-	void Script::Update(GameObject& gameObject)
+	void Script::Update(GameObject& gameObject	)
 	{
 
 	}
