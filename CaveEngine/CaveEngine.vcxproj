@@ -90,7 +90,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;$(ProjectDir)\ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Box2d\include;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;$(ProjectDir)\ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -100,9 +100,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>$(ProjectDir)\Physics\Box2d\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
@@ -270,6 +271,13 @@
     <ClInclude Include="Graphics\Public\Sprite\Vertex.h" />
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
+    <ClInclude Include="Physics\Public\Object\PhysicsObject.h" />
+    <ClInclude Include="Physics\Public\Object\Player.h" />
+    <ClInclude Include="Physics\Public\Object\Wall.h" />
+    <ClInclude Include="Physics\Public\Physics.h" />
+    <ClInclude Include="Physics\Public\PhysicsBody.h" />
+    <ClInclude Include="Physics\Public\PhysicsWorld.h" />
+    <ClInclude Include="Physics\Public\Shape.h" />
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
@@ -309,6 +317,12 @@
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
+    <ClCompile Include="Physics\Private\Object\PhysicsObject.cpp" />
+    <ClCompile Include="Physics\Private\Object\Player.cpp" />
+    <ClCompile Include="Physics\Private\Object\Wall.cpp" />
+    <ClCompile Include="Physics\Private\PhysicsBody.cpp" />
+    <ClCompile Include="Physics\Private\PhysicsWorld.cpp" />
+    <ClCompile Include="Physics\Private\Shape.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
