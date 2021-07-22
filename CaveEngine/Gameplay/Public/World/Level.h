@@ -21,7 +21,7 @@ namespace cave
 	public:
 		friend class GameObject;
 
-		Level() = delete;
+		Level();
 		Level(std::string& name);
 		Level(const char* name);
 		Level(const Level&) = delete;
@@ -34,11 +34,7 @@ namespace cave
 		void AddGameObject(GameObject& gameObject);
 		void AddGameObjects(std::vector<GameObject*>& gameObjects);
 
-		void RemoveGameObject(std::string& name);
-		void RemoveGameObject(const char* name);
 		void RemoveGameObject(GameObject& gameObject);
-		void RemoveGameObjects(std::string& name);
-		void RemoveGameObjects(const char* name);
 		void RemoveGameObjects(std::vector<GameObject*>& gameObjects);
 
 		GameObject* FindGameObjectByName(std::string& name);
@@ -56,21 +52,18 @@ namespace cave
 
 	private:
 		void addActiveGameObject(GameObject& gameObject);
-		void addActiveGameObjects(std::vector<GameObject*>& gameObjects);
-
 		void removeActiveGameObject(GameObject& gameObject);
-		void removeActiveGameObjects(std::vector<GameObject*>& gameObjects);
+
+		void addTaggedGameObject(GameObject& gameObject);
+		void removeTaggedGameObject(GameObject& gameObject);
+
+		bool findGameObject(GameObject& gameObject);
 
 	private:
 		std::unordered_multimap<std::string, GameObject*> mAllGameObjects;
 		std::unordered_multimap<std::string, GameObject*> mActiveGameObjects;
-		
-		/*Read only.*/
-		std::unordered_multimap<Tag*, GameObject*> mAllTaggedGameObjects;
-		std::unordered_multimap<Tag*, GameObject*> mActiveTaggedGameObjects;
+		std::unordered_multimap<Tag*, GameObject*> mTagGameObjects;
 
 		Map* mMap;
-
-		World* mWorld;
 	};
 }
