@@ -36,21 +36,20 @@ namespace cave
 		friend bool operator!=(const Tag& lhs, const char* rhs);
 		friend bool operator<(const Tag& lhs, const Tag& rhs);
 
-		FORCEINLINE bool IsValid() const;
+		bool IsValid() const;
+
+#ifdef CAVE_BUILD_DEBUG
+		std::string& GetName();
+#endif // CAVE_BUILD_DEBUG
 
 	private:
 		Tag(std::string& name);
 		Tag(const char* name);
 
 	private:
-		bool mbValid = false;
-
 		std::string mName;
 		size_t mNameHashCode;
-	};
 
-	FORCEINLINE bool Tag::IsValid() const
-	{
-		return mbValid;
-	}
+		bool mbValid = false;
+	};
 }

@@ -81,4 +81,18 @@ namespace cave
 		assert(lhs.IsValid() & rhs.IsValid());
 		return lhs.mNameHashCode < rhs.mNameHashCode;
 	}
+
+	bool Tag::IsValid() const
+	{
+		return mbValid;
+	}
+
+#ifdef CAVE_BUILD_DEBUG
+	std::string& Tag::GetName()
+	{
+		assert(IsValid());
+		return mName;
+	}
+#endif // CAVE_BUILD_DEBUG
+
 }
