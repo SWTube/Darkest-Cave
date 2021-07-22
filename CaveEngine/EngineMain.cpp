@@ -257,22 +257,11 @@
 //	main.Destroy();
 //}
 
-#include <iostream>
-#include <random>
-#include <chrono>
-#include <crtdbg.h>
-#include <cstdlib>
-#if _DEBUG
-//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
-//#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
-#endif // _DEBUG
-
 #include "Object/TagPool.h"
 
 int main()
 {
-
-	_CrtDumpMemoryLeaks();
+	cave::TagPoolTest::Test();
 
 	return 0;
 }

@@ -100,9 +100,10 @@ namespace cave
 	void TagPool::PrintElement()
 	{
 		assert(IsValid());
+		std::cout << '\n' << std::endl;
 		for (auto begin = mTags.begin(); begin != mTags.end(); ++begin)
 		{
-			std::cout << (begin->second) << std::endl;
+			std::cout << (begin->second)->GetName() << std::endl;
 		}
 	}
 #endif //CAVE_BUILD_DEBUG
@@ -118,39 +119,40 @@ namespace cave
 			
 			const char* testString = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-			std::vector<std::string> vec;
+			std::vector<std::string> vecString;
+			std::vector<char*> vecConstChar;
 
 			std::random_device rd;
 			std::mt19937 gen(rd());
-			std::uniform_int_distribution<int> disIndex(1, 20);
+			std::uniform_int_distribution<int> disIndex(1, 40);
 			std::uniform_int_distribution<int> disStr(0, 61);
 
 			for (size_t i = 0; i < 100; ++i)
 			{
-				auto index = disIndex(gen);
+				int index = disIndex(gen);
 				char* str = new char[index + 1];
-				for (size_t j = 0; j < index; ++j)
+				for (int j = 0; j < index; ++j)
 				{
 					str[j] = testString[disStr(gen)];
 				}
 				str[index] = '\0';
 				std::cout << "word: " << str << std::endl;
 
-				std::string tmp(str);
-				vec.push_back(tmp);
-
-				TagPool::AddTag(tmp);
-				assert(TagPool::FindTagByName(tmp) != nullptr);
-
-				delete str;
+				vecConstChar.push_back(str);
 			}
 
-			TagPool::PrintElement();
-
-			for (size_t i = 0; i < 100; ++i)
+			for (auto element : vecConstChar)
 			{
-				TagPool::RemoveTag(vec[i]);
-				assert(TagPool::FindTagByName(vec[i]) == nullptr);
+				TagPool::AddTag(element);
+				assert(TagPool::FindTagByName(element) != nullptr);
+			}
+
+			for (auto element : vecConstChar)
+			{
+				assert(TagPool::FindTagByName(element)->GetName() == element);
+				TagPool::RemoveTag(element);
+				assert(TagPool::FindTagByName(element) == nullptr);
+				delete element;
 			}
 		}
 	}
