@@ -2,17 +2,16 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-#include "CoreGlobals.h"
 #include "Object/Obejct.h"
 
 namespace cave
 {
-	int Object::mNextGUID = 0;
+	unsigned int Object::mNextGUID = 1;
 
 	Object::Object()
 		: mName()
 	{
-		assert(mNextGUID >= 0);
+		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
 		assert(IsValid());
 		++mNextGUID;
@@ -21,7 +20,7 @@ namespace cave
 	Object::Object(std::string& name)
 		: mName(name)
 	{
-		assert(mNextGUID >= 0);
+		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
 		assert(IsValid());
 		++mNextGUID;
@@ -30,8 +29,7 @@ namespace cave
 	Object::Object(const char* name)
 		: mName(name)
 	{
-		assert(name != nullptr);
-		assert(mNextGUID >= 0);
+		assert((name != nullptr) & (mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
 		assert(IsValid());
 		++mNextGUID;
@@ -40,7 +38,7 @@ namespace cave
 	Object::Object(const Object& other)
 		: mName(other.mName)
 	{
-		assert(mNextGUID >= 0);
+		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
 		assert(GetGUID() != other.GetGUID());
 		++mNextGUID;
@@ -49,7 +47,7 @@ namespace cave
 	Object::Object(Object&& other) noexcept
 		: mName(std::move(other.GetName()))
 	{
-		assert(mNextGUID >= 0);
+		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
 		assert(GetGUID() != other.GetGUID());
 		++mNextGUID;
@@ -58,7 +56,7 @@ namespace cave
 	Object::~Object()
 	{
 		assert(IsValid());
-		mGUID = -1;
+		mGUID = 0;
 	}
 
 	Object& Object::operator=(const Object& other)
@@ -84,8 +82,7 @@ namespace cave
 
 	void Object::SetName(const char* name)
 	{
-		assert(IsValid());
-		assert(name != nullptr);
+		assert(IsValid() && (name != nullptr));
 		mName = name;
 	}
 }

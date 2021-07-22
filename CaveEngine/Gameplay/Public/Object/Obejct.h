@@ -39,9 +39,9 @@ namespace cave
 		Object(Object&& other) noexcept;
 
 	private:
-		static int mNextGUID;
+		static unsigned int mNextGUID;
 		/*Object's unique ID.*/
-		int mGUID = -1;
+		unsigned int mGUID = 0;
 
 		std::string mName;
 	};
@@ -69,7 +69,7 @@ namespace cave
 
 	FORCEINLINE bool Object::IsValid() const
 	{
-		return mGUID < 0 ? false : true;
+		return mGUID == 0 ? false : true;
 	}
 
 	FORCEINLINE std::string& Object::GetName()
