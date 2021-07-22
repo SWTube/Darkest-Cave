@@ -21,19 +21,20 @@ namespace cave
 	class Physics;
 	class Level;
 
-	class GameObject : public Object
+	class GameObject final : public Object
 	{
 	public:
 		GameObject() = delete;
+		GameObject(bool isControlled = false);
 		GameObject(std::string& name, bool isControlled = false);
 		GameObject(const char* name = "GameObject", bool isControlled = false);
 		GameObject(const GameObject& gameObject);
 		GameObject(GameObject&& gameObject) noexcept;
 
-		virtual ~GameObject();
+		~GameObject();
 		GameObject& operator=(const GameObject& other);
 		GameObject& operator=(GameObject&& other) noexcept;
-		
+	
 		void UpdateScripts();
 		void FixedUpdateScripts();
 
@@ -103,8 +104,7 @@ namespace cave
 
 	FORCEINLINE Tag* GameObject::GetTag() const
 	{
-		assert(IsValid());
-		assert(mTag != nullptr);
+		assert(IsValid() & (mTag != nullptr));
 		return mTag;
 	}
 
