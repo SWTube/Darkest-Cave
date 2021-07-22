@@ -25,11 +25,13 @@ namespace cave
 	void TagPool::Init()
 	{
 		mbValid = true;
+		assert(IsValid());
 		AddTag("None");
 	}
 
 	void TagPool::ShutDown()
 	{
+		assert(IsValid());
 		mbValid = false;
 	}
 
@@ -37,42 +39,38 @@ namespace cave
 	{
 		assert(IsValid());
 
-		Tag* tag = createTag(name);
-		mTags[name] = tag;
+		Tag* tag = new(gCoreMemoryPool.Allocate(sizeof(Tag))) Tag(name);
+		assert(tag != nullptr);
+		mTags.insert({ name, tag });
 	}
 
 	void TagPool::AddTag(const char* name)
 	{
 		assert(IsValid());
 		
-		Tag* tag = createTag(name);
-		mTags[name] = tag;
+		Tag* tag = new(gCoreMemoryPool.Allocate(sizeof(Tag))) Tag(name);
+		assert(tag != nullptr);
+		mTags.insert({ name, tag });
 	}
 
 	void TagPool::RemoveTag(std::string& name)
 	{
 		assert(IsValid());
 
-		auto iter = mTags.find(name);
-
-		if (iter != mTags.end())
-		{
-			iter->second = nullptr;
-			gCoreMemoryPool->Deallocate(iter->second, sizeof(Tag));
-		}
+		Tag* tag = FindTagByName(name);
+		assert(tag != nullptr);
+		mTags.erase(name);
+		gCoreMemoryPool.Deallocate(tag, sizeof(Tag));
 	}
 
 	void TagPool::RemoveTag(const char* name)
 	{
 		assert(IsValid());
 
-		auto iter = mTags.find(name);
-
-		if (iter != mTags.end())
-		{
-			iter->second = nullptr;
-			gCoreMemoryPool->Deallocate(iter->second, sizeof(Tag));
-		}
+		Tag* tag = FindTagByName(name);
+		assert(tag != nullptr);
+		mTags.erase(name);
+		gCoreMemoryPool.Deallocate(tag, sizeof(Tag));
 	}
 
 	Tag* TagPool::FindTagByName(std::string& name)
@@ -92,16 +90,6 @@ namespace cave
 
 		return iter != mTags.end() ? iter->second : nullptr;
 	}
-
-	Tag* TagPool::createTag(std::string& name)
-	{
-		assert(IsValid());
-
-		Tag* tag = new(reinterpret_cast<Tag*>(gCoreMemoryPool->Allocate(sizeof(Tag)))) Tag(name);
-		assert(tag != nullptr);
-
-		return tag;
-	}
 	
 	bool TagPool::IsValid()
 	{
@@ -111,6 +99,7 @@ namespace cave
 #ifdef CAVE_BUILD_DEBUG
 	void TagPool::PrintElement()
 	{
+		assert(IsValid());
 		for (auto begin = mTags.begin(); begin != mTags.end(); ++begin)
 		{
 			std::cout << (begin->second) << std::endl;
@@ -124,10 +113,9 @@ namespace cave
 	{
 		void Test()
 		{
-			MemoryPool memoryPool(1024ul);
-
 			TagPool::Init();
-
+			assert(TagPool::IsValid());
+			
 			const char* testString = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 			std::vector<std::string> vec;

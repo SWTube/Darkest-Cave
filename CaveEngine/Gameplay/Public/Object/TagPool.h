@@ -44,9 +44,6 @@ namespace cave
 #endif // CAVE_BULID_DEBUG
 
 	private:
-		static Tag* createTag(std::string& name);
-
-	private:
 		static bool mbValid;
 		static std::map<std::string, Tag*> mTags;
 	};
