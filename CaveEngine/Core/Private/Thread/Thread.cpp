@@ -65,7 +65,7 @@ namespace cave
 	}
 
 	template<class Function, class... Arguments>
-	std::future<typename std::result_of<Function(Arguments...)>::type>
+	std::future<class std::invoke_result<Function(Arguments...)>::type>
 		Thread::enqueue(Function&& function, Arguments&& ... arguments)
 	{
 		if (mStopAllThread)

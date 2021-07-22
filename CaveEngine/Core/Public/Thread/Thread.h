@@ -30,7 +30,7 @@ namespace cave
 
 		//	Enqueue job
 		template<class Function, class... Arguments>
-		std::future<typename std::result_of<Function(Arguments...)>::type>
+		std::future<class std::invoke_result<Function(Arguments...)>::type>
 			enqueue(Function&& function, Arguments&& ... arguments);
 
 		//	Non-copyable
