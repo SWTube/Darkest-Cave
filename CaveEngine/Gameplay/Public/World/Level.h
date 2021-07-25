@@ -50,14 +50,18 @@ namespace cave
 		void UpdateGameObjectInLevel();
 		void UpdateAllGameObjectInLevel();
 
+		void FixedUpdateGameObjectInLevel();
+		void FixedUpdateAllGameObjectInLevel();
+
 	private:
 		void addActiveGameObject(GameObject& gameObject);
 		void removeActiveGameObject(GameObject& gameObject);
 
-		void addTaggedGameObject(GameObject& gameObject);
-		void removeTaggedGameObject(GameObject& gameObject);
+		void addTagGameObject(GameObject& gameObject);
+		void removeTagGameObject(GameObject& gameObject);
 
 		bool findGameObject(GameObject& gameObject);
+		bool findActiveGameObject(GameObject& gameObject);
 
 	private:
 		std::unordered_multimap<std::string, GameObject*> mAllGameObjects;
@@ -66,4 +70,11 @@ namespace cave
 
 		Map* mMap;
 	};
+
+#ifdef CAVE_BUILD_DEBUG
+	namespace LevelTest
+	{
+		void Test();
+	}
+#endif //CAVE_BUILD_DEBUG
 }

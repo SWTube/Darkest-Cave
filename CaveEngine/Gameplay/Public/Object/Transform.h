@@ -49,4 +49,10 @@ namespace cave
 		assert(IsValid());
 		return &mScale;
 	}
+#ifdef CAVE_BUILD_DEBUG
+	namespace TransformTest
+	{
+		void Test();
+	}
+#endif //CAVE_BUILD_DEBUG
 }

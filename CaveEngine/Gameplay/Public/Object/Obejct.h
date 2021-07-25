@@ -16,20 +16,16 @@ namespace cave
 	class Object
 	{
 	public:
-		virtual ~Object();
-		Object& operator=(const Object& other);
-		Object& operator=(Object&& other) noexcept;
-
 		FORCEINLINE friend bool operator==(const Object& lhs, const Object& rhs);
 		FORCEINLINE friend bool operator!=(const Object& lhs, const Object& rhs);
 		FORCEINLINE friend bool operator<(const Object& lhs, const Object& rhs);
 
+		virtual ~Object();
+
 		FORCEINLINE int GetGUID() const;
 		FORCEINLINE bool IsValid() const;
 
-		void SetName(std::string& name);
-		void SetName(const char* name);
-		FORCEINLINE std::string& GetName();
+		FORCEINLINE const std::string& GetName() const;
 
 	protected:
 		Object();
@@ -38,12 +34,15 @@ namespace cave
 		Object(const Object& other);
 		Object(Object&& other) noexcept;
 
+		Object& operator=(const Object& other);
+		Object& operator=(Object&& other) noexcept;
+
 	private:
 		static unsigned int mNextGUID;
 		/*Object's unique ID.*/
 		unsigned int mGUID = 0;
 
-		std::string mName;
+		const std::string mName;
 	};
 
 	FORCEINLINE bool operator==(const Object& lhs, const Object& rhs)
@@ -72,7 +71,7 @@ namespace cave
 		return mGUID == 0 ? false : true;
 	}
 
-	FORCEINLINE std::string& Object::GetName()
+	FORCEINLINE const std::string& Object::GetName() const
 	{
 		assert(IsValid());
 		return mName;

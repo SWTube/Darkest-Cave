@@ -39,7 +39,7 @@ namespace cave
 		bool IsValid() const;
 
 #ifdef CAVE_BUILD_DEBUG
-		std::string& GetName();
+		const std::string& GetName() const;
 #endif // CAVE_BUILD_DEBUG
 
 	private:
@@ -47,7 +47,7 @@ namespace cave
 		Tag(const char* name);
 
 	private:
-		std::string mName;
+		const std::string mName;
 		size_t mNameHashCode;
 
 		bool mbValid = false;

@@ -15,7 +15,7 @@
 namespace cave
 {
 	bool TagPool::mbValid = false;
-	std::map<std::string, Tag*> TagPool::mTags;
+	std::unordered_map<std::string, Tag*> TagPool::mTags;
 
 	TagPool::~TagPool()
 	{
@@ -85,6 +85,7 @@ namespace cave
 	Tag* TagPool::FindTagByName(const char* name)
 	{
 		assert(IsValid());
+		assert(name != nullptr);
 
 		auto iter = mTags.find(name);
 

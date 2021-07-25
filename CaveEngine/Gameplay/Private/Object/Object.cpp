@@ -36,7 +36,7 @@ namespace cave
 	}
 
 	Object::Object(const Object& other)
-		: mName(other.mName)
+		: mName(other.GetName())
 	{
 		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
@@ -45,7 +45,7 @@ namespace cave
 	}
 
 	Object::Object(Object&& other) noexcept
-		: mName(std::move(other.GetName()))
+		: mName(other.GetName())
 	{
 		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
@@ -62,27 +62,12 @@ namespace cave
 	Object& Object::operator=(const Object& other)
 	{
 		assert(GetGUID() != other.GetGUID());
-		mName = other.mName;
-
 		return *this;
 	}
 
 	Object& Object::operator=(Object&& other) noexcept
 	{
 		assert(GetGUID() != other.GetGUID());
-
 		return *this;
-	}
-
-	void Object::SetName(std::string& name)
-	{
-		assert(IsValid());
-		mName = name;
-	}
-
-	void Object::SetName(const char* name)
-	{
-		assert(IsValid() && (name != nullptr));
-		mName = name;
 	}
 }

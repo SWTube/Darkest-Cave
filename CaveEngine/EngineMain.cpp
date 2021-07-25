@@ -3,20 +3,20 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include <exception>
-#include <fstream>
-#include <iomanip>
-#include <time.h>
-
-#include "CoreGlobals.h"
-#include "CoreMinimal.h"
-
-#include "Containers/TStack.h"
-#include "Engine.h"
-#include "Sprite/Sprite.h"
-#include "Sprite/Vertex.h"
-#include "String/String.h"
-#include "Time/TimeManager.h"
+//#include <exception>
+//#include <fstream>
+//#include <iomanip>
+//#include <time.h>
+//
+//#include "CoreGlobals.h"
+//#include "CoreMinimal.h"
+//
+//#include "Containers/TStack.h"
+//#include "Engine.h"
+//#include "Sprite/Sprite.h"
+//#include "Sprite/Vertex.h"
+//#include "String/String.h"
+//#include "Time/TimeManager.h"
 
 //template <size_t N>
 //void MemoryTest1(cave::MemoryPool& pool);
@@ -258,10 +258,13 @@
 //}
 
 #include "Object/TagPool.h"
+#include "Object/Transform.h"
+#include "Object/Script.h"
+#include "World/Level.h"
 
 int main()
 {
-	cave::TagPoolTest::Test();
+	cave::LevelTest::Test();
 
 	return 0;
 }

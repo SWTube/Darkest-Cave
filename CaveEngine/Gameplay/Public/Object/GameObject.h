@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 
+#include "Engine.h"
 #include "Object/Obejct.h"
 #include "Assertion/Assert.h"
 
@@ -17,23 +18,28 @@ namespace cave
 	class Script;
 	class Tag;
 	class Transform;
-	class Renderer;
 	class Physics;
 	class Level;
 
-	class GameObject final : public Object
+	class GameObject : public Object
 	{
 	public:
 		GameObject() = delete;
 		GameObject(bool isControlled = false);
 		GameObject(std::string& name, bool isControlled = false);
-		GameObject(const char* name = "GameObject", bool isControlled = false);
+		GameObject(const char* name, bool isControlled = false);
+		GameObject(std::string& name, std::string& tag, bool isControlled = false);
+		GameObject(std::string& name, const char* tag, bool isControlled = false);
+		GameObject(std::string& name, Tag& tag, bool isControlled = false);
+		GameObject(const char* name, std::string& tag, bool isControlled = false);
+		GameObject(const char* name, const char* tag, bool isControlled = false);
+		GameObject(const char* name, Tag& tag, bool isControlled = false);
 		GameObject(const GameObject& gameObject);
 		GameObject(GameObject&& gameObject) noexcept;
 
-		~GameObject();
-		GameObject& operator=(const GameObject& other);
-		GameObject& operator=(GameObject&& other) noexcept;
+		virtual ~GameObject();
+		GameObject& operator=(const GameObject& other) = delete;
+		GameObject& operator=(GameObject&& other) = delete;
 	
 		void UpdateScripts();
 		void FixedUpdateScripts();
@@ -49,15 +55,10 @@ namespace cave
 		Script* FindScriptByName(std::string& name);
 		Script* FindScriptByName(const char* name);
 
-		void SetTag(std::string& name);
-		void SetTag(const char* name);
 		FORCEINLINE Tag* GetTag() const;
 
 		void SetActive(bool state);
 		FORCEINLINE bool IsActive() const;
-
-		FORCEINLINE void SetStatic(bool state);
-		FORCEINLINE bool IsStatic() const;
 
 		FORCEINLINE void SetLayer(unsigned char layer);
 		FORCEINLINE unsigned char GetLayer() const;
@@ -75,15 +76,15 @@ namespace cave
 		FORCEINLINE Controller* GetController() const;
 		FORCEINLINE bool IsControlled() const;
 		
-		FORCEINLINE void SetLevel(Level& level);
+		void SetLevel(Level& level);
 		FORCEINLINE Level* GetLevel() const;
+
 		void RemoveGameObjectInLevel();
 
 	private:
 		/*Active indicates the game object was active or deactive.
 		  Gameloop updates active game object for defalut option.*/
 		bool mbActive = false;
-		bool mbStatic;
 		bool mbControlled;
 
 		/*Layer indicates draw order.
@@ -112,18 +113,6 @@ namespace cave
 	{
 		assert(IsValid());
 		return mbActive;
-	}
-
-	FORCEINLINE void GameObject::SetStatic(bool state)
-	{
-		assert(IsValid());
-		mbStatic = state;
-	}
-
-	FORCEINLINE bool GameObject::IsStatic() const
-	{
-		assert(IsValid());
-		return mbStatic;
 	}
 
 	FORCEINLINE void GameObject::SetLayer(unsigned char layer)
@@ -158,7 +147,7 @@ namespace cave
 
 	FORCEINLINE Controller* GameObject::GetController() const
 	{
-		assert(IsValid() & IsControlled());
+		assert(IsValid());
 		return mController;
 	}
 
@@ -168,15 +157,16 @@ namespace cave
 		return mbControlled;
 	}
 
-	FORCEINLINE void GameObject::SetLevel(Level& level)
-	{
-		assert(IsValid());
-		mLevel = &level;
-	}
-
 	FORCEINLINE Level* GameObject::GetLevel() const
 	{
 		assert(IsValid());
 		return mLevel;
 	}
+
+#ifdef CAVE_BUILD_DEBUG
+	namespace GameObjectTest
+	{
+		void Test();
+	}
+#endif //CAVE_BUILD_DEBUG
 }

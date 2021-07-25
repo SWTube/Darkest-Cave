@@ -2,11 +2,10 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-
 #pragma once
 
 #include <string>
-#include <set>
+#include <unordered_set>
 
 #include "CoreTypes.h"
 #include "Object/Obejct.h"
@@ -29,5 +28,14 @@ namespace cave
 
 		virtual void FixedUpdate(GameObject& gameObject);
 		virtual void Update(GameObject& gameObject);
+
+	private:
+		static std::unordered_set<std::string> mGlobalUniqueName;
     };
+#ifdef CAVE_BUILD_DEBUG
+	namespace ScriptTest
+	{
+		void Test();
+	}
+#endif //CAVE_BUILD_DEBUG
 }

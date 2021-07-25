@@ -51,7 +51,7 @@ namespace cave
 		assert(lhs.IsValid());
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
-		return lhs == *tag;
+		return &lhs == tag;
 	}
 
 	bool operator!=(const Tag& lhs, const Tag& rhs)
@@ -88,7 +88,7 @@ namespace cave
 	}
 
 #ifdef CAVE_BUILD_DEBUG
-	std::string& Tag::GetName()
+	const std::string& Tag::GetName() const
 	{
 		assert(IsValid());
 		return mName;

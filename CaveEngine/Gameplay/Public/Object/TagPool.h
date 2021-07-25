@@ -5,14 +5,13 @@
 #pragma once
 
 #include <string>
-#include <map>
+#include <unordered_map>
 
 #include "CoreTypes.h"
 
 namespace cave
 {
 	class Tag;
-	class MemoryPool;
 
 	class TagPool final
 	{
@@ -45,7 +44,7 @@ namespace cave
 
 	private:
 		static bool mbValid;
-		static std::map<std::string, Tag*> mTags;
+		static std::unordered_map<std::string, Tag*> mTags;
 	};
 
 #ifdef CAVE_BUILD_DEBUG
