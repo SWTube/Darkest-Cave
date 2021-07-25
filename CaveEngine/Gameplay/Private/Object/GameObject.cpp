@@ -19,7 +19,8 @@
 namespace cave
 {
 	GameObject::GameObject(bool isControlled)
-		: mbActive(true)
+		: Object()
+		, mbActive(true)
 		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
@@ -216,18 +217,18 @@ namespace cave
 	void GameObject::UpdateScripts()
 	{
 		assert(IsValid());
-		for (auto& iter : mScripts)
+		for (auto& script : mScripts)
 		{
-			iter.second->Update(*this);
+			script.second->Update(*this);
 		}
 	}
 
 	void GameObject::FixedUpdateScripts()
 	{
 		assert(IsValid());
-		for (auto& iter : mScripts)
+		for (auto& script : mScripts)
 		{
-			iter.second->FixedUpdate(*this);
+			script.second->FixedUpdate(*this);
 		}
 	}
 
@@ -239,9 +240,9 @@ namespace cave
 
 	void GameObject::AddScripts(std::vector<Script*>& scripts)
 	{
-		for (auto element : scripts)
+		for (auto& script : scripts)
 		{
-			AddScript(*element);
+			AddScript(*script);
 		}
 	}
 
@@ -278,7 +279,7 @@ namespace cave
 
 	void GameObject::RemoveScripts(std::vector<const char*>& names)
 	{
-		for (auto name : names)
+		for (auto& name : names)
 		{
 			RemoveScript(name);
 		}
@@ -406,7 +407,7 @@ namespace cave
 			TagPool::AddTag("Monster");
 			Tag* tag = TagPool::FindTagByName("Monster");
 
-			for (auto element : vecConstChar)
+			for (auto& element : vecConstChar)
 			{
 				GameObject* gameObject = new GameObject(element, *tag);
 				gameObjects.push_back(gameObject);
@@ -414,7 +415,7 @@ namespace cave
 
 			Script* script = new Script("Move");
 
-			for (auto element : gameObjects)
+			for (auto& element : gameObjects)
 			{
 				std::cout << element->GetName() << std::endl;
 				assert((*(element->GetTag())) == "Monster");
@@ -437,12 +438,12 @@ namespace cave
 				assert(element->FindScriptByName("Move") == nullptr);
 			}
 
-			for (auto element : gameObjects)
+			for (auto& element : gameObjects)
 			{
 				delete element;
 			}
 
-			for (auto element : vecConstChar)
+			for (auto& element : vecConstChar)
 			{
 				delete element;
 			}

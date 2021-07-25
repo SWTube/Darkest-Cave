@@ -90,7 +90,7 @@ namespace cave
 
 	void Level::RemoveGameObjects(std::vector<GameObject*>& gameObjects)
 	{
-		for (auto gameObject : gameObjects)
+		for (auto& gameObject : gameObjects)
 		{
 			RemoveGameObject(*gameObject);
 		}
@@ -361,19 +361,19 @@ namespace cave
 				tags.push_back(str);
 			}
 
-			for (auto element : tags)
+			for (auto& element : tags)
 			{
 				TagPool::AddTag(element);
 			}
 
-			for (auto element : names)
+			for (auto& element : names)
 			{
 				GameObject* gameObject = new(gCoreMemoryPool.Allocate(sizeof(GameObject))) GameObject(element, *TagPool::FindTagByName(tags[disTag(gen)]));
 				gameObjects.push_back(gameObject);
 				level->AddGameObject(*gameObject);
 			}
 
-			for (auto element : gameObjects)
+			for (auto& element : gameObjects)
 			{
 				assert(level->FindGameObjectByName(element->GetName().c_str()) != nullptr);
 			}
@@ -383,27 +383,27 @@ namespace cave
 			level->FixedUpdateGameObjectInLevel();
 			level->FixedUpdateAllGameObjectInLevel();
 
-			for (auto element : gameObjects)
+			for (auto& element : gameObjects)
 			{
 				level->RemoveGameObject(*element);
 			}
 
-			for (auto element : gameObjects)
+			for (auto& element : gameObjects)
 			{
 				assert(level->FindGameObjectByName(element->GetName().c_str()) == nullptr);
 			}
 
-			for (auto element : gameObjects)
+			for (auto& element : gameObjects)
 			{
 				delete element;
 			}
 
-			for (auto element : names)
+			for (auto& element : names)
 			{
 				delete element;
 			}
 
-			for (auto element : tags)
+			for (auto& element : tags)
 			{
 				delete element;
 			}

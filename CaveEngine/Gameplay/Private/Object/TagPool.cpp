@@ -142,13 +142,13 @@ namespace cave
 				vecConstChar.push_back(str);
 			}
 
-			for (auto element : vecConstChar)
+			for (auto& element : vecConstChar)
 			{
 				TagPool::AddTag(element);
 				assert(TagPool::FindTagByName(element) != nullptr);
 			}
 
-			for (auto element : vecConstChar)
+			for (auto& element : vecConstChar)
 			{
 				assert(TagPool::FindTagByName(element)->GetName() == element);
 				TagPool::RemoveTag(element);

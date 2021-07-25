@@ -86,7 +86,7 @@ namespace cave
 				vec.push_back(transform);
 			}
 
-			for (auto element : vec)
+			for (auto& element : vec)
 			{
 				element->GetLocation()->x = disFloat(gen);
 				element->GetLocation()->y = disFloat(gen);
@@ -96,7 +96,7 @@ namespace cave
 				element->GetScale()->y = disFloat(gen);
 			}
 
-			for (auto element : vec)
+			for (auto& element : vec)
 			{
 				std::cout << element->GetLocation()->x << '\n';
 				std::cout << element->GetLocation()->y << '\n';
@@ -116,7 +116,7 @@ namespace cave
 			*vec[20] = *vec[21];
 			*vec[40] = std::move(*vec[41]);
 
-			for (auto element : vec)
+			for (auto& element : vec)
 			{
 				delete element;
 			}
