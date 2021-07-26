@@ -18,11 +18,14 @@ namespace cave
 
         virtual bool Run() override
         {
-            for(int i = 0; i < mRepeatCount; i++)
+            int i;
+            for(i = 0; i < mRepeatCount; i++)
             {
                 GetChild()->Run();
             }
-            return true;
+            if(i == mRepeatCount)
+                return true;
+            return false;
         }
 
         void SetCount(int);

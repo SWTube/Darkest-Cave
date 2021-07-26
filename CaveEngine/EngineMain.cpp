@@ -53,7 +53,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     cave::RootNode* root = new cave::RootNode("a");
     cave::Sequencer* sequencer = new cave::Sequencer("b");
     cave::ActionNode* a = new cave::ActionNode("c", action1);
-    cave::IfDecorator* ifD = new cave::IfDecorator("d", false);
+    cave::RepeatDecorator* ifD = new cave::RepeatDecorator("d", 5);
     cave::ActionNode* b = new cave::ActionNode("e", action2);
     cave::ActionNode* c = new cave::ActionNode("e", action3);
     cave::ActionNode* d = new cave::ActionNode("e", action5);
