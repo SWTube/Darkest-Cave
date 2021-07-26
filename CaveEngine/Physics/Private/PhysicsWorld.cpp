@@ -4,7 +4,6 @@
  */
 
 #include "PhysicsWorld.h"
-#include "PhysicsWorld.h"
 
 namespace cave
 {

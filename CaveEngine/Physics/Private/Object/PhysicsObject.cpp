@@ -7,6 +7,39 @@
 
 namespace cave
 {
+	PhyscisObject::PhysicsObject()
+	{
+		
+	}
+	b2BodyDef* PhysicsObject::GetBodyDef()
+	{
+		return &mBodyDef;
+	}
+	b2FixtureDef* PhyscisObject::GetFixtureDef()
+	{
+		return &mFixtureDef;
+	}
+	// b2BodyDef properties
+	void PhysicsObject::SetType(ePhysicsObjectTypes objectType)
+	{
+		if (objectType == ePhysicsObjectTypes::STATIC)
+		{
+			mBodyDef.type = b2_staticBody;
+		}
+		else if (objectType == ePhysicsObjectTypes::DYNAMIC)
+		{
+			mBodyDef.type = b2_dynamicBody;
+		}
+		else if (objectType == ePhysicsObjectTypes::KINEMATIC)
+		{
+			mBodyDef.type = b2_kinematicBody;
+		}
+	}
+	void PhysicsObject::SetPosition(b2Vec2 objectPosition)
+	{
+		mBodyDef.position.Set(objectPosition.x, objectPosition.y);
+	}
+	// b2FixtureDef properties
 	void PhysicsObject::SetShape(b2Shape* shape)
 	{
 		mFixtureDef.shape = shape;
@@ -19,20 +52,9 @@ namespace cave
 	{
 		mFixtureDef.friction = friction;
 	}
+	// PhysicsObject methods
 	void PhysicsObject::ApplyForce(b2Vec2 forceVec, b2Vec2 point, bool wake)
 	{
 		mBody->ApplyForce(forceVec, point, wake);
-	}
-	void PhysicsObject::SetType(b2BodyType objectType)
-	{
-		mBodyDef->type = objectType;
-	}
-	void PhysicsObject::SetPosition(b2Vec2 objectPosition)
-	{
-		mBodyDef->position.Set(objectPosition.x, objectPosition.y);
-	}
-	void PhysicsObject::SetPosition(float x, float y)
-	{
-		mBodyDef->position.Set(x, y);
 	}
 }
