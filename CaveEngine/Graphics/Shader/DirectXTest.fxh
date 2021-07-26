@@ -11,19 +11,11 @@
 Texture2D txDiffuse : register(t0);
 SamplerState samLinear : register(s0);
 
-cbuffer cbNeverChanges : register(b0)
+cbuffer MatrixBuffer : register( b0 )
 {
-    matrix View;
-};
-
-cbuffer cbChangeOnResize : register(b1)
-{
-    matrix Projection;
-};
-
-cbuffer cbChangesEveryFrame : register(b2)
-{
-    matrix World;
+	matrix World;
+	matrix View;
+	matrix Projection;
 };
 
 
@@ -47,9 +39,12 @@ struct PS_INPUT
 PS_INPUT VS(VS_INPUT input)
 {
     PS_INPUT output = (PS_INPUT)0;
+
+    //input.Pos.w = 1.0f;
     output.Pos = mul(input.Pos, World);
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
+    output.Pos.w = input.Pos.w;
     output.Tex = input.Tex;
 
     return output;

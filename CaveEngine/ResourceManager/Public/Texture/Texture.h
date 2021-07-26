@@ -11,6 +11,7 @@
 
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
+#include "Sprite/Vertex.h"
 
 namespace cave
 {
@@ -19,27 +20,23 @@ namespace cave
 		RGB,
 		RGBA,
 	};
-
-	struct Texture final
+	
+	class Texture 
 	{
 	public:
-		Texture(const std::filesystem::path& filePath, eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
+		Texture(ID3D11Device* device, const std::filesystem::path& filePath, eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
 		Texture(const Texture& other);
 		Texture(Texture&& other);
 		Texture& operator=(const Texture& other);
 		Texture& operator=(Texture&& other);
-		~Texture();
+		virtual ~Texture();
 		MemoryPool* GetMemoryPool();
 
-		void Init();
 		void Destroy();
-		void DeleteTexture();
 
-#ifdef __WIN32__
+		//virtual void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		constexpr ID3D11ShaderResourceView* GetTexture();
-#else
-		constexpr uint8_t* GetTexture();
-#endif
+
 		const char* GetCStringFilePath() const;
 		constexpr const std::filesystem::path& GetFilePath() const;
 		constexpr uint32_t GetWidth() const;
@@ -47,19 +44,17 @@ namespace cave
 		constexpr eTextureFormat GetFormat() const;
 		constexpr uint32_t GetIndex() const;
 		constexpr int32_t GetTarget() const;
-	private:
+		constexpr Float2 GetStartUV() const;
+		constexpr Float2 GetEndUV() const;
+	protected:
 
-#ifdef __WIN32__
-		void LoadFromPngData(ID3D11Device* device ,unsigned char* pngData);
-#endif
+		//void LoadFromPngData(ID3D11Device* device, ID3D11DeviceContext* deviceContext, unsigned char* pngData);
+
 		typedef struct TexturePointer
 		{
 			uint32_t ReferenceCount = 0u;
-#ifdef __WIN32__
+
 			ID3D11ShaderResourceView* Texture = nullptr;
-#else
-			uint8_t* Texture = nullptr;
-#endif
 			constexpr TexturePointer()
 				: ReferenceCount(0u)
 				, Texture(nullptr)
@@ -72,9 +67,8 @@ namespace cave
 				: ReferenceCount(other.ReferenceCount)
 				, Texture(other.Texture)
 			{
-#ifdef __WIN32__
 				other.Texture->Release();
-#endif
+
 				other.Texture = nullptr;
 				other.ReferenceCount = 0u;
 			}
@@ -90,12 +84,8 @@ namespace cave
 			{
 				if (Texture != nullptr && ReferenceCount == 0u)
 				{
-#ifdef __WIN32__
+
 					Texture->Release();
-#endif
-#ifdef __UNIX__
-					Memory::Free(Texture);
-#endif
 					Texture = nullptr;
 				}
 			}
@@ -111,13 +101,11 @@ namespace cave
 		TexturePointer* mTexture = nullptr;
 		uint32_t mIndex = 0u;
 		int32_t mTarget = -1;
+		Float2 mStartUV = Float2(0.0f, 0.0f);
+		Float2 mEndUV = Float2(1.0f, 1.0f);
 	};
 
-#ifdef __WIN32__
 	constexpr ID3D11ShaderResourceView* Texture::GetTexture()
-#else
-	constexpr uint8_t* Texture::GetTexture()
-#endif
 	{
 		if (mTexture != nullptr)
 		{
@@ -156,4 +144,15 @@ namespace cave
 	{
 		return mTarget;
 	}
+
+	constexpr Float2 Texture::GetStartUV() const 
+	{
+		return mStartUV;
+	}
+
+	constexpr Float2 Texture::GetEndUV() const
+	{
+		return mEndUV;
+	}
+
 } // namespace cave

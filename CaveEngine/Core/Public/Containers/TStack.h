@@ -482,7 +482,7 @@ namespace cave
 		template <typename T>
 		void Test()
 		{
-			LOGD(eLogChannel::CORE_CONTAINER, "======Stack Test======");
+			//LOGD(eLogChannel::CORE_CONTAINER, "======Stack Test======");
 			Constructor<T>();
 			// AssignmentOperator<T>();
 			// GetTop<T>();
@@ -497,12 +497,12 @@ namespace cave
 		template <typename T>
 		void Constructor()
 		{
-			LOGD(eLogChannel::CORE_CONTAINER, "====Constructor Test====");
+			//LOGD(eLogChannel::CORE_CONTAINER, "====Constructor Test====");
 
 			{
 				TStack<T> stack;
 				
-				LOGD(eLogChannel::CORE_CONTAINER, "Constructor #1 Success");
+				//LOGD(eLogChannel::CORE_CONTAINER, "Constructor #1 Success");
 			}
 		}
 

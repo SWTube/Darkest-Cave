@@ -45,15 +45,6 @@ namespace cave
 	//--------------------------------------------------------------------------------------
 	void WindowsRenderer::Destroy()
 	{
-		if (mConstantBufferNeverChanges)
-		{
-			mConstantBufferNeverChanges->Release();
-		}
-		if (mConstantBufferChangeOnResize)
-		{
-			mConstantBufferChangeOnResize->Release();
-		}
-
 		GenericRenderer::Destroy();
 	}
 
@@ -76,23 +67,23 @@ namespace cave
 		DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
 		DirectX::XMMATRIX& ortho = mDeviceResources->GetOrthoMatrix();
 
+		// 모든 2D 렌더링을 시작하려면 Z 버퍼를 끕니다.
+		//mDeviceResources->TurnZBufferOff(); // 이거 없으면 안 그려짐...
+		mDeviceResources->TurnOnAlphaBlending();
 		// 3. Set Render Data ---------------------------------------------------------------------------------------------
 		for (Sprite* const object : mSprites)
 		{
-			object->Render();
+			object->Render(mDeviceResources->GetDeviceContext());
 
 			mShader->Render(context, object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, mTextures[object->GetTextureIndex()]->GetTexture());
 		}
 
-		// ���� flip�̳� swap ���ؼ� front buffer�� ����
-		// front buffer�� ������
-		// ���� �׷����� ������ GPU Driver���� �ٸ�. ������ ���������� �񵿱�� �Ͼ
-		// Present the information rendered to the back buffer to the front buffer (the screen)
-		// gSwapChain->Present(0, 0);
-
+		mDeviceResources->TurnOffAlphaBlending();
 		mDeviceResources->TurnZBufferOn();
 		// Present the frame to the screen.
 		mDeviceResources->RenderEnd();
+
+	
 	}
 
 	eResult WindowsRenderer::CreateDeviceDependentResources()
@@ -129,40 +120,6 @@ namespace cave
 		}
 	}
 
-	// eResult WindowsRenderer::createShaders()
-	// {
-	// 	ID3D11Device* device = mDeviceResources->GetDevice();
-	// 	for (Shader& shader : mShaders)
-	// 	{
-	// 		if (eResult result = shader.Compile(mDeviceResources->GetDevice()); result != eResult::CAVE_OK)
-	// 		{
-	// 			return result;
-	// 		}
-	// 	}
-
-	// 	// Create the constant buffers
-	// 	D3D11_BUFFER_DESC bd = {};
-	// 	bd.Usage = D3D11_USAGE_DEFAULT;
-	// 	bd.ByteWidth = sizeof(ConstantBufferNeverChanges);
-	// 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	// 	bd.CPUAccessFlags = 0;
-	// 	int32_t result = device->CreateBuffer(&bd, nullptr, &mConstantBufferNeverChanges);
-	// 	if(FAILED(result))
-	// 	{
-	// 		return eResult::CAVE_FAIL;
-	// 	}
-		
-	// 	bd.ByteWidth = sizeof(ConstantBufferChangeOnResize);
-	// 	result = device->CreateBuffer(&bd, nullptr, &mConstantBufferChangeOnResize);
-	// 	if(FAILED(result))
-	// 	{
-	// 		return eResult::CAVE_FAIL;
-	// 	}
-		
-	// 	device->Release();
-
-	// 	return eResult::CAVE_OK;
-	// }
 
 	bool WindowsRenderer::WindowShouldClose()
 	{
