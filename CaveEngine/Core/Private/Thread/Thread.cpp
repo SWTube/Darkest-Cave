@@ -64,6 +64,7 @@ namespace cave
 		}
 	}
 
+	/*
 	template<class Function, class... Arguments>
 	std::future<class std::invoke_result<Function(Arguments...)>::type>
 		Thread::enqueue(Function&& function, Arguments&& ... arguments)
@@ -88,4 +89,5 @@ namespace cave
 
 		return jobFutureResult;
 	}
+	*/
 }

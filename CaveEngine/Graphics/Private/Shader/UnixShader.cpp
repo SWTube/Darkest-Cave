@@ -7,7 +7,7 @@
 #include <filesystem>
 
 #include "Shader/UnixShader.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 
 namespace cave
 {

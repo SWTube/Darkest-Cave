@@ -220,6 +220,7 @@
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
     <ClInclude Include="Core\Public\Containers\TStack.h" />
+    <ClInclude Include="Core\Public\Containers\Vertex.h" />
     <ClInclude Include="Core\Public\Core.h" />
     <ClInclude Include="Core\Public\CoreFwd.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
@@ -263,9 +264,10 @@
     <ClInclude Include="Graphics\Public\Sprite\GenericSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\UnixSprite.h" />
-    <ClInclude Include="Graphics\Public\Sprite\Vertex.h" />
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
+    <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
+    <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
@@ -273,6 +275,7 @@
   <ItemGroup>
     <ClCompile Include="Core\Private\Containers\Array.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
+    <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
     <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
@@ -298,7 +301,6 @@
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\UnixSprite.cpp" />
-    <ClCompile Include="Graphics\Private\Sprite\Vertex.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\UnixRenderer.cpp" />
@@ -306,8 +308,9 @@
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\UnixShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
-    <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
+    <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
+    <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
     <ClCompile Include="ThirdParty\tictoc\src\tictoc.c" />
   </ItemGroup>

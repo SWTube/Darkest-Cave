@@ -8,7 +8,7 @@
 #include "GraphicsApiPch.h"
 
 #include "CoreTypes.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 #include "Texture/Texture.h"
 
 namespace cave

@@ -16,7 +16,7 @@
 #include "Containers/TStack.h"
 #include "Engine.h"
 #include "Sprite/Sprite.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 #include "String/String.h"
 
 template <size_t N>
