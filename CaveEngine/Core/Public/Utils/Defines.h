@@ -23,7 +23,11 @@
 
 	#define PLATFORM_NAME Windows
 
-	#define __FORCEINLINE__ __forceinline
+	#ifdef CORE_EXPORTS
+	#define CORE_API __declspec(dllexport)
+	#else
+	//#define CORE_API __declspec(dllimport)
+	#endif
 #endif
 
 #define GET_PLATFORM_HEADER(x) STRINGIZE_TOKEN(CONCATENATE_TOKENS(PLATFORM_NAME, x))
