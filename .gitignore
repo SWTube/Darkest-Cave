@@ -14,3 +14,8 @@ Darkest-Cave.vcxproj.user
 out
 Release
 x64
+CaveEngine/Core/Debug/
+CaveEngine/Core/Core.sln
+CaveEngine/Core/Core.vcxproj
+CaveEngine/Core/Core.vcxproj.filters
+CaveEngine/Core/Core.vcxproj.user
