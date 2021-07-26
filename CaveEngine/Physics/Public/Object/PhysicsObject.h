@@ -9,6 +9,12 @@
 
 namespace cave
 {
+	enum class ePhysicsObjectTypes {
+		STATIC,
+		DYNAMIC,
+		KINEMATIC
+	};
+
 	class PhysicsObject
 	{
 	public:
@@ -20,9 +26,8 @@ namespace cave
 		void SetBodyDef();
 
 		// bodyDef properties
-		void SetType(b2BodyType objectType);
+		void SetType(ePhysicsObjectTypes physicsObjectType);
 		void SetPosition(b2Vec2 objectPosition);
-		void SetPosition(float x, float y);
 
 		// b2FixtureDef properties
 		void SetShape(b2Shape* shape);
