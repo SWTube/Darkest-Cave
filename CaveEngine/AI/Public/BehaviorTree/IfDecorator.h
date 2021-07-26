@@ -13,19 +13,20 @@ namespace cave
     {
     public:
         IfDecorator();
-        IfDecorator(const char*, bool (*)());
+        IfDecorator(const char*, bool);
         ~IfDecorator();
 
         virtual bool Run() override
         {
-            if (mCondition())
+            if (mCondition)
             {
                 return GetChild()->Run();
             }
+            return mCondition;
         }
 
-        void SetCondition(bool (*)());
+        void SetCondition(bool);
     private:
-        bool (*mCondition)();
+        bool mCondition;
     };
 }

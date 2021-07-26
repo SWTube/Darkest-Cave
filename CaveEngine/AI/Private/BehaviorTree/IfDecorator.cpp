@@ -14,7 +14,7 @@ namespace cave
         SetChild(NULL);
         SetCondition(NULL);
     }
-    IfDecorator::IfDecorator(const char* nodeName, bool (*condition)())
+    IfDecorator::IfDecorator(const char* nodeName, bool condition)
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);
@@ -27,7 +27,7 @@ namespace cave
 
     }
 
-    void IfDecorator::SetCondition(bool (*condition)())
+    void IfDecorator::SetCondition(bool condition)
     {
         mCondition = condition;
     }
