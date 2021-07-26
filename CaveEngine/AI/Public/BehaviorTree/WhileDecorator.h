@@ -13,7 +13,7 @@ namespace cave
     {
     public:
         WhileDecorator();
-        WhileDecorator(const char*, bool (*)());
+        WhileDecorator(const char*, bool);
         ~WhileDecorator();
 
         virtual bool Run() override
@@ -22,11 +22,11 @@ namespace cave
             {
                 GetChild()->Run();
             }
-            return false;
+            return mCondition;
         }
 
-        void SetCondition(bool (*)());
+        void SetCondition(bool);
     private:
-        bool (*mCondition)();
+        bool mCondition;
     };
 }
