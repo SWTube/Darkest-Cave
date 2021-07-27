@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Assertion">
+      <UniqueIdentifier>{fe3e8d9d-cfb7-439f-b0b6-1e8589533736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Containers">
+      <UniqueIdentifier>{6a651f11-70d4-465c-af1d-543275253d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Debug">
+      <UniqueIdentifier>{2bfc6f36-2c80-4919-82da-e6960f37597d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Memory">
+      <UniqueIdentifier>{387e4df7-12b8-4b4b-971c-1c1f3532f42b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\String">
+      <UniqueIdentifier>{0fd66fe9-4cf1-42f7-ab6c-2a3f6139f04e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Template">
+      <UniqueIdentifier>{e6ac0408-3691-4235-b84d-15933a724e2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{9bf9ec3a-8c26-4e2b-842b-7de6d0de5b96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Thread">
+      <UniqueIdentifier>{78c87c6d-8c6a-4044-a316-34e1dde7a09b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Containers">
+      <UniqueIdentifier>{8b431d6f-5e38-4af1-a1c5-c8eb7f6a0c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Debug">
+      <UniqueIdentifier>{cec91625-ffc7-4cc4-bc7e-628cf4a65de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory">
+      <UniqueIdentifier>{10f9c345-6bd8-4843-a6c5-4483ea4b0183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\String">
+      <UniqueIdentifier>{9dadf095-be1c-44e5-87c0-68a837fa0db8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Thread">
+      <UniqueIdentifier>{8cd9957f-95ae-4f3f-8aae-0062d6b109e7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="private\CoreGlobals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Public\Debug\Log.ixx">
+      <Filter>Header Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Public\Template\IteratorType.ixx">
+      <Filter>Header Files\Template</Filter>
+    </ClCompile>
+    <ClCompile Include="Public\Containers\Matrix.ixx">
+      <Filter>Header Files\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="private\containers\Array.cpp">
+      <Filter>Source Files\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="private\debug\Log.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="private\memory\Memory.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="private\memory\MemoryPool.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="private\memory\DataBlock.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="private\containers\Vertex.cpp">
+      <Filter>Source Files\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="private\containers\Node.cpp">
+      <Filter>Source Files\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="private\string\String.cpp">
+      <Filter>Source Files\String</Filter>
+    </ClCompile>
+    <ClCompile Include="private\thread\Thread.cpp">
+      <Filter>Source Files\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Public\String\String.ixx">
+      <Filter>Header Files\String</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="public\Core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\CoreFwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\CoreGlobals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\CoreMinimal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\CorePch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\CoreTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\assertion\Assert.h">
+      <Filter>Header Files\Assertion</Filter>
+    </ClInclude>
+    <ClInclude Include="public\containers\Array.h">
+      <Filter>Header Files\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\containers\ContainersFwd.h">
+      <Filter>Header Files\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\containers\Node.h">
+      <Filter>Header Files\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\containers\TStack.h">
+      <Filter>Header Files\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\containers\Vertex.h">
+      <Filter>Header Files\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\debug\Log.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="public\memory\DataBlock.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="public\memory\Memory.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="public\memory\MemoryPool.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="public\string\String.h">
+      <Filter>Header Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="public\template\IteratorType.h">
+      <Filter>Header Files\Template</Filter>
+    </ClInclude>
+    <ClInclude Include="public\utils\Crt.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="public\utils\Defines.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="public\thread\Thread.h">
+      <Filter>Header Files\Thread</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
