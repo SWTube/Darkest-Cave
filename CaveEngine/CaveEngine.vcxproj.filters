@@ -22,25 +22,16 @@
     <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\UnixDeviceResources.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\UnixRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Private\GenericEngine.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Private\UnixEngine.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Private\WindowsEngine.cpp">
@@ -52,16 +43,10 @@
     <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\UnixWindow.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp">
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp">
-      <Filter>Source Files\Graphics\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Sprite\UnixSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\Vertex.cpp">
@@ -71,9 +56,6 @@
       <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
-      <Filter>Source Files\Graphics\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Shader\UnixShader.cpp">
       <Filter>Source Files\Graphics\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
@@ -111,6 +93,15 @@
     </ClCompile>
     <ClCompile Include="Core\Public\String\String.ixx">
       <Filter>Header Files\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
@@ -190,12 +181,6 @@
     <Filter Include="Header Files\Gameplay\Object">
       <UniqueIdentifier>{23b9f94a-9557-48e2-9815-e2065b3f9ecf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Gameplay\Tmp">
-      <UniqueIdentifier>{a50049df-759e-4ca7-8f38-316d83e98626}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Gameplay\Tmp">
-      <UniqueIdentifier>{6881057e-a26c-4853-b503-b31763bf5d03}</UniqueIdentifier>
-    </Filter>
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
@@ -204,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\World\Level.cpp">
       <Filter>Source Files\Gameplay\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Transform.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,19 +220,10 @@
     <ClInclude Include="Core\Public\CoreTypes.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Graphics.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\GraphicsCommon.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\Renderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\UnixRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
@@ -254,9 +233,6 @@
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\UnixDeviceResources.h">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h">
@@ -283,9 +259,6 @@
     <ClInclude Include="Graphics\Public\Device\GenericWindow.h">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\UnixWindow.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Device\Window.h">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
@@ -296,9 +269,6 @@
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Shader\Shader.h">
-      <Filter>Header Files\Graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Shader\UnixShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">
@@ -331,9 +301,6 @@
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h">
       <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\UnixSprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Sprite\Vertex.h">
       <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
@@ -351,6 +318,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\Camera.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
@@ -370,9 +343,6 @@
     <ClInclude Include="Gameplay\Public\Object\GameObject.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Tmp\Transform.h">
-      <Filter>Header Files\Gameplay\Tmp</Filter>
-    </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Tag.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
@@ -384,6 +354,12 @@
     </ClInclude>
     <ClInclude Include="Gameplay\Public\World\Level.h">
       <Filter>Header Files\Gameplay\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Transform.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Graphics.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

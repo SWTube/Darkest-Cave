@@ -5,45 +5,51 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
+#include <vector>
+
+#include "CoreTypes.h"
+#include "Assertion/Assert.h"
 
 namespace cave
 {
+	class GameObject;
+
 	class Tag final
 	{
 	public:
 		friend class TagPool;
 
-		~Tag();
-
-		__forceinline friend bool operator==(const Tag& lhs, const Tag& rhs)
-		{
-			return lhs.mCompareSeed == rhs.mCompareSeed;
-		}
-
-		__forceinline friend bool operator!=(const Tag& lhs, const Tag& rhs)
-		{
-			return lhs.mCompareSeed != rhs.mCompareSeed;
-		}
-
-		__forceinline friend bool operator<(const Tag& lhs, const Tag& rhs)
-		{
-			return lhs.mCompareSeed < rhs.mCompareSeed;
-		}
-
-		std::string& GetName();
-
-	private:
 		Tag() = delete;
-		Tag(std::string& name);
 		Tag(const Tag& other) = delete;
 		Tag(Tag&& other) = delete;
 
+		~Tag();
 		Tag& operator=(const Tag& other) = delete;
 		Tag& operator=(const Tag&& other) = delete;
 
+		friend bool operator==(const Tag& lhs, const Tag& rhs);
+		friend bool operator==(const Tag& lhs, std::string& rhs);
+		friend bool operator==(const Tag& lhs, const char* rhs);
+		friend bool operator!=(const Tag& lhs, const Tag& rhs);
+		friend bool operator!=(const Tag& lhs, std::string& rhs);
+		friend bool operator!=(const Tag& lhs, const char* rhs);
+		friend bool operator<(const Tag& lhs, const Tag& rhs);
+
+		bool IsValid() const;
+
+#ifdef CAVE_BUILD_DEBUG
+		const std::string& GetName() const;
+#endif // CAVE_BUILD_DEBUG
+
 	private:
-		std::string mName;
-		/*Used only compare tag.*/
-		size_t mCompareSeed;
+		Tag(std::string& name);
+		Tag(const char* name);
+
+	private:
+		const std::string mName;
+		size_t mNameHashCode;
+
+		bool mbValid = false;
 	};
 }

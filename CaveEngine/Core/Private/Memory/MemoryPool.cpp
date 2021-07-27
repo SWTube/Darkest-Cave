@@ -69,7 +69,7 @@ namespace cave
 		// Terminate if user requests memory larger than what pool can provide
 		if (memoryIndex >= mDataBlocks.size())
 		{
-			LOGEF(eLogChannel::CORE_MEMORY, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
+			//LOGEF(eLogChannel::CORE_MEMORY, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
 			assert(memoryIndex < mDataBlocks.size());
 			// return nullptr;
 		}
@@ -185,39 +185,39 @@ namespace cave
 	{
 		void Test()
 		{
-			LOGD(eLogChannel::CORE_MEMORY, "======Memory Pool Test======");
+			//LOGD(eLogChannel::CORE_MEMORY, "======Memory Pool Test======");
 			Constructor();
 		}
 
 		void Constructor()
 		{
-			LOGD(eLogChannel::CORE_MEMORY, "====Constructor Test====");
+			//LOGD(eLogChannel::CORE_MEMORY, "====Constructor Test====");
 
 			// 1 kb
 			for (size_t poolSize = 513ul; poolSize <= 1024ul; ++poolSize) {
 				MemoryPool memoryPool(poolSize);
-				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				//LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
 				assert(memoryPool.GetPoolSize() == 1024ul);
 			}
 
 			// 2 kb
 			for (size_t poolSize = 1025ul; poolSize <= 2048ul; ++poolSize) {
 				MemoryPool memoryPool(poolSize);
-				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				//LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
 				assert(memoryPool.GetPoolSize() == 2048ul);
 			}
 
 			// 4 kb
 			for (size_t poolSize = 2049ul; poolSize <= 4096ul; ++poolSize) {
 				MemoryPool memoryPool(poolSize);
-				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				//LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
 				assert(memoryPool.GetPoolSize() == 4096ul);
 			}
 
 			// 8 kb
 			for (size_t poolSize = 4097ul; poolSize <= 8192ul; ++poolSize) {
 				MemoryPool memoryPool(poolSize);
-				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				//LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
 				assert(memoryPool.GetPoolSize() == 8192ul);
 			}
 		}

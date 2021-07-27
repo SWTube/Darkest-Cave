@@ -39,15 +39,10 @@ namespace cave
 		constexpr MemoryPool* GetMemoryPool();
 		constexpr Window* GetWindow();
 
-#ifdef __WIN32__
 		constexpr virtual DirectX::XMMATRIX& GetProjectionMatrix();
 		constexpr virtual DirectX::XMMATRIX& GetWorldMatrix();
 		constexpr virtual DirectX::XMMATRIX& GetOrthoMatrix();
-#else
-		constexpr virtual glm::mat4& GetProjectionMatrix();
-		constexpr virtual glm::mat4& GetWorldMatrix();
-		constexpr virtual glm::mat4& GetOrthoMatrix();
-#endif
+
 
 		virtual void GetVideoCardInfo(char* cardName, int& memory) = 0;
 
@@ -62,40 +57,23 @@ namespace cave
 		bool mbVsyncEnabled = false;
 		int32_t mVideoCardMemory = 0;
 		char mVideoCardDescription[128] = {'\0', };
-#ifdef __WIN32__
+
 		DirectX::XMMATRIX mProjection = DirectX::XMMatrixIdentity();
 		DirectX::XMMATRIX mWorld = DirectX::XMMatrixIdentity();
 		DirectX::XMMATRIX mOrtho = DirectX::XMMatrixIdentity();
-#else
-		glm::mat4 mProjection = glm::mat4(1.0f);
-		glm::mat4 mWorld = glm::mat4(1.0f);
-		glm::mat4 mOrtho= glm::mat4(1.0f);
-#endif
 	};
 
-#ifdef __WIN32__
 	constexpr DirectX::XMMATRIX& GenericDeviceResources::GetProjectionMatrix()
-#else
-	constexpr glm::mat4& GenericDeviceResources::GetProjectionMatrix()
-#endif
 	{
 		return mProjection;	
 	}
 
-#ifdef __WIN32__
 	constexpr DirectX::XMMATRIX& GenericDeviceResources::GetWorldMatrix()
-#else
-	constexpr glm::mat4& GenericDeviceResources::GetWorldMatrix()
-#endif
 	{
 		return mWorld;
 	}
 
-#ifdef __WIN32__
 	constexpr DirectX::XMMATRIX& GenericDeviceResources::GetOrthoMatrix()
-#else
-	constexpr glm::mat4& GenericDeviceResources::GetOrthoMatrix()
-#endif
 	{
 		return mOrtho;
 	}

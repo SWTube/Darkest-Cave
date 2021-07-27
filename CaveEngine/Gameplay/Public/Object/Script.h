@@ -2,22 +2,23 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-
 #pragma once
 
 #include <string>
 #include <unordered_set>
 
+#include "CoreTypes.h"
 #include "Object/Obejct.h"
+#include "Object/GameObject.h"
 
 namespace cave
 {	
-	class GameObject;
-
 	class Script : public Object
     {
     public:
-		Script();
+		Script() = delete;
+		Script(std::string& name);
+		Script(const char* name);
 		Script(const Script& other) = delete;
 		Script(Script&& other) = delete;
 
@@ -25,19 +26,16 @@ namespace cave
 		Script& operator=(const Script& other) = delete;
 		Script& operator=(Script&& other) = delete;
 
-		__forceinline const std::string& GetName() const
-		{
-			return mName;
-		}
-
 		virtual void FixedUpdate(GameObject& gameObject);
 		virtual void Update(GameObject& gameObject);
 
-    private:
-		/*Global unique name.*/
-		static std::unordered_set<std::string> mGUName;
-
-		/*Script's name.*/
-		std::string mName;
+	private:
+		static std::unordered_set<std::string> mGlobalUniqueName;
     };
+#ifdef CAVE_BUILD_DEBUG
+	namespace ScriptTest
+	{
+		void Test();
+	}
+#endif //CAVE_BUILD_DEBUG
 }

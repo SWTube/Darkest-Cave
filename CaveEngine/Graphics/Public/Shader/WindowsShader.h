@@ -34,7 +34,6 @@
 			virtual ~WindowsShader();
 
 			virtual eResult Compile(ID3D11Device* device) override;
-			virtual eResult SetInputLayout() override;
 			virtual void Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture) override;
 
 			virtual void Destroy() override;
