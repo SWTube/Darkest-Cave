@@ -11,6 +11,7 @@
 
 #include "Assertion/Assert.h"
 #include "Object/Script.h"
+#include "Object/Transform.h"
 
 namespace cave
 {
@@ -31,6 +32,11 @@ namespace cave
 	}
 
 	Script::~Script()
+	{
+
+	}
+
+	void Script::Init(GameObject& gameObject)
 	{
 
 	}
@@ -95,6 +101,50 @@ namespace cave
 				delete element;
 			}
 		}
+	}
+
+	TestScript::TestScript(const char* name, uint32_t spriteIndex, uint32_t textureIndex, float speed)
+		: Script(name)
+		, mSpriteIndex(spriteIndex)
+		, mTextureIndex(textureIndex)
+		, mNextTextureIndex(mTextureIndex + 1)
+		, mSpeed(speed)
+	{
+		
+	}
+
+	TestScript::~TestScript()
+	{
+
+	}
+
+	void TestScript::Init(GameObject& gameObject)
+	{
+		gameObject.GetTransform()->GetPosition()->Y = 200.f;
+	}
+
+	void TestScript::FixedUpdate(GameObject& gameObject)
+	{
+		gameObject.GetTransform()->GetPosition()->X += mSpeed;
+		if (gameObject.GetTransform()->GetPosition()->X > 250.f)
+		{
+			gameObject.GetRenderer()->SetSpriteTexture(mSpriteIndex, mNextTextureIndex);
+		}
+		gameObject.GetRenderer()->SetSpritePosition(mSpriteIndex, *(gameObject.GetTransform()->GetPosition()));
+		if (gameObject.GetTransform()->GetPosition()->X > 400.f)
+		{
+			gameObject.RemoveGameObjectInLevel();
+		}
+	}
+
+	void TestScript::Update(GameObject& gameObject)
+	{
+	
+	}
+
+	uint32_t TestScript::GetTextureIndex() const
+	{
+		return mTextureIndex;
 	}
 #endif //CAVE_BUILD_DEBUG
 }

@@ -22,20 +22,20 @@ namespace cave
 		Transform& operator=(const Transform& other);
 		Transform& operator=(Transform&& other) noexcept;
 
-		FORCEINLINE Float2* GetLocation();
+		FORCEINLINE Float2* GetPosition();
 		FORCEINLINE Float2* GetRotation();
 		FORCEINLINE Float2* GetScale();
 
 	private:
-		Float2 mLocation;
+		Float2 mPosition;
 		Float2 mRotation;
 		Float2 mScale;
 	};
 
-	FORCEINLINE Float2* Transform::GetLocation()
+	FORCEINLINE Float2* Transform::GetPosition()
 	{
 		assert(IsValid());
-		return &mLocation;
+		return &mPosition;
 	}
 
 	FORCEINLINE Float2* Transform::GetRotation()

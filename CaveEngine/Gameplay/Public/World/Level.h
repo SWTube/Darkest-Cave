@@ -7,6 +7,7 @@
 #include <vector>
 #include <unordered_map>
 
+#include "Engine.h"
 #include "Object/Obejct.h"
 
 namespace cave
@@ -47,11 +48,19 @@ namespace cave
 		std::vector<GameObject*>&& FindGameObjectsByTag(std::string& tag);
 		std::vector<GameObject*>&& FindGameObjectsByTag(const char* tag);
 
-		void UpdateGameObjectInLevel();
-		void UpdateAllGameObjectInLevel();
+		void InitializeGameObjectsInLevel();
 
-		void FixedUpdateGameObjectInLevel();
-		void FixedUpdateAllGameObjectInLevel();
+		void UpdateGameObjectsInLevel();
+		void UpdateAllGameObjectsInLevel();
+
+		void FixedUpdateGameObjectsInLevel();
+		void FixedUpdateAllGameObjectsInLevel();
+
+#ifdef CAVE_BUILD_DEBUG
+		void SetRenderer(Renderer& renderer);
+
+		void PrintGameObjects();
+#endif // CAVE_BUILD_DEBUG
 
 	private:
 		void addActiveGameObject(GameObject& gameObject);
@@ -59,6 +68,8 @@ namespace cave
 
 		void addTagGameObject(GameObject& gameObject);
 		void removeTagGameObject(GameObject& gameObject);
+
+		void removeGameObjects();
 
 		bool findGameObject(GameObject& gameObject);
 		bool findActiveGameObject(GameObject& gameObject);
@@ -68,13 +79,18 @@ namespace cave
 		std::unordered_multimap<std::string, GameObject*> mActiveGameObjects;
 		std::unordered_multimap<Tag*, GameObject*> mTagGameObjects;
 
+		std::vector<GameObject*> mDeferredRemoveGameObjects;
+
 		Map* mMap;
+
+		Renderer* mRenderer;
 	};
 
 #ifdef CAVE_BUILD_DEBUG
 	namespace LevelTest
 	{
 		void Test();
+		Level* CreateTmpLevel();
 	}
 #endif //CAVE_BUILD_DEBUG
 }
