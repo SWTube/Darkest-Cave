@@ -7,7 +7,7 @@
 #include "CoreTypes.h"
 #include "Assertion/Assert.h"
 #include "Object/Obejct.h"
-#include "Math/Vector2.h"
+#include "Sprite/Vertex.h"
 
 namespace cave
 {
@@ -22,29 +22,29 @@ namespace cave
 		Transform& operator=(const Transform& other);
 		Transform& operator=(Transform&& other) noexcept;
 
-		FORCEINLINE Vector2* GetLocation();
-		FORCEINLINE Vector2* GetRotation();
-		FORCEINLINE Vector2* GetScale();
+		FORCEINLINE Float2* GetLocation();
+		FORCEINLINE Float2* GetRotation();
+		FORCEINLINE Float2* GetScale();
 
 	private:
-		Vector2 mLocation;
-		Vector2 mRotation;
-		Vector2 mScale;
+		Float2 mLocation;
+		Float2 mRotation;
+		Float2 mScale;
 	};
 
-	FORCEINLINE Vector2* Transform::GetLocation()
+	FORCEINLINE Float2* Transform::GetLocation()
 	{
 		assert(IsValid());
 		return &mLocation;
 	}
 
-	FORCEINLINE Vector2* Transform::GetRotation()
+	FORCEINLINE Float2* Transform::GetRotation()
 	{
 		assert(IsValid());
 		return &mRotation;
 	}
 
-	FORCEINLINE Vector2* Transform::GetScale()
+	FORCEINLINE Float2* Transform::GetScale()
 	{
 		assert(IsValid());
 		return &mScale;

@@ -61,7 +61,7 @@ namespace cave
 		FORCEINLINE bool IsActive() const;
 
 		FORCEINLINE void SetLayer(unsigned char layer);
-		FORCEINLINE unsigned char GetLayer() const;
+		FORCEINLINE uint8_t GetLayer() const;
 
 		void SetTransform(Transform& transform);
 		FORCEINLINE Transform* GetTransform() const;
@@ -89,7 +89,7 @@ namespace cave
 
 		/*Layer indicates draw order.
 		  Default value is 0. If value > 0, game object draw later.*/
-		unsigned char mLayer;
+		uint8_t mLayer;
 
 		std::map<std::string, Script*> mScripts;
 

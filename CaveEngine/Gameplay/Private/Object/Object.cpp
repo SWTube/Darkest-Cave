@@ -6,7 +6,7 @@
 
 namespace cave
 {
-	unsigned int Object::mNextGUID = 1;
+	uint32_t Object::mNextGUID = 1;
 
 	Object::Object()
 		: mName()

@@ -11,8 +11,6 @@
 
 namespace cave
 {
-	class MemoryPool;
-
 	class Object
 	{
 	public:
@@ -22,7 +20,7 @@ namespace cave
 
 		virtual ~Object();
 
-		FORCEINLINE int GetGUID() const;
+		FORCEINLINE uint32_t GetGUID() const;
 		FORCEINLINE bool IsValid() const;
 
 		FORCEINLINE const std::string& GetName() const;
@@ -38,9 +36,9 @@ namespace cave
 		Object& operator=(Object&& other) noexcept;
 
 	private:
-		static unsigned int mNextGUID;
+		static uint32_t mNextGUID;
 		/*Object's unique ID.*/
-		unsigned int mGUID = 0;
+		uint32_t mGUID = 0;
 
 		const std::string mName;
 	};
@@ -60,7 +58,7 @@ namespace cave
 		return lhs.GetGUID() < rhs.GetGUID();
 	}
 
-	FORCEINLINE int Object::GetGUID() const
+	FORCEINLINE uint32_t Object::GetGUID() const
 	{
 		assert(IsValid());
 		return mGUID;

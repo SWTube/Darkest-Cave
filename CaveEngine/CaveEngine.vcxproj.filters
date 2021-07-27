@@ -181,12 +181,6 @@
     <Filter Include="Header Files\Gameplay\Object">
       <UniqueIdentifier>{23b9f94a-9557-48e2-9815-e2065b3f9ecf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Gameplay\Tmp">
-      <UniqueIdentifier>{a50049df-759e-4ca7-8f38-316d83e98626}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Gameplay\Tmp">
-      <UniqueIdentifier>{6881057e-a26c-4853-b503-b31763bf5d03}</UniqueIdentifier>
-    </Filter>
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
@@ -349,9 +343,6 @@
     <ClInclude Include="Gameplay\Public\Object\GameObject.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Tmp\Transform.h">
-      <Filter>Header Files\Gameplay\Tmp</Filter>
-    </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Tag.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
@@ -366,6 +357,9 @@
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Transform.h">
       <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Graphics.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

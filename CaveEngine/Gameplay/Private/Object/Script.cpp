@@ -9,6 +9,7 @@
 #include <vector>
 #endif // CAVE_BUILD_DEBUG
 
+#include "Assertion/Assert.h"
 #include "Object/Script.h"
 
 namespace cave
@@ -41,7 +42,6 @@ namespace cave
 
 	void Script::Update(GameObject& gameObject)
 	{
-
 	}
 
 #ifdef CAVE_BUILD_DEBUG

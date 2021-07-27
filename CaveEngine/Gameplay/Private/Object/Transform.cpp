@@ -17,9 +17,9 @@ namespace cave
 {
 	Transform::Transform()
 		: Object()
-		, mLocation({.x = 0.f, .y = 0.f})
-		, mRotation({.x = 0.f, .y = 0.f})
-		, mScale({.x = 1.f, .y = 1.f})
+		, mLocation()
+		, mRotation()
+		, mScale()
 	{
 
 	}
@@ -60,9 +60,9 @@ namespace cave
 	Transform& Transform::operator=(Transform&& other) noexcept
 	{
 		Object::operator=(std::move(other));
-		mLocation = other.mLocation;
-		mRotation = other.mRotation;
-		mScale = other.mScale;
+		mLocation = std::move(other.mLocation);
+		mRotation = std::move(other.mRotation);
+		mScale = std::move(other.mScale);
 
 		return *this;
 	}
@@ -88,22 +88,22 @@ namespace cave
 
 			for (auto& element : vec)
 			{
-				element->GetLocation()->x = disFloat(gen);
-				element->GetLocation()->y = disFloat(gen);
-				element->GetRotation()->x = disFloat(gen);
-				element->GetRotation()->y = disFloat(gen);
-				element->GetScale()->x = disFloat(gen);
-				element->GetScale()->y = disFloat(gen);
+				element->GetLocation()->X = disFloat(gen);
+				element->GetLocation()->Y = disFloat(gen);
+				element->GetRotation()->X = disFloat(gen);
+				element->GetRotation()->Y = disFloat(gen);
+				element->GetScale()->X = disFloat(gen);
+				element->GetScale()->Y = disFloat(gen);
 			}
 
 			for (auto& element : vec)
 			{
-				std::cout << element->GetLocation()->x << '\n';
-				std::cout << element->GetLocation()->y << '\n';
-				std::cout << element->GetRotation()->x << '\n';
-				std::cout << element->GetRotation()->y << '\n';
-				std::cout << element->GetScale()->x << '\n';
-				std::cout << element->GetScale()->y << '\n';
+				std::cout << element->GetLocation()->X << '\n';
+				std::cout << element->GetLocation()->Y << '\n';
+				std::cout << element->GetRotation()->X << '\n';
+				std::cout << element->GetRotation()->Y << '\n';
+				std::cout << element->GetScale()->X << '\n';
+				std::cout << element->GetScale()->Y << '\n';
 				std::cout << '\n' << std::endl;
 			}
 

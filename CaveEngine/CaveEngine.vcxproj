@@ -98,7 +98,7 @@
       <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
@@ -254,7 +254,6 @@
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
     <ClInclude Include="Gameplay\Public\Object\Tag.h" />
-    <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
     <ClInclude Include="Graphics\Public\Renderer\Camera.h" />
