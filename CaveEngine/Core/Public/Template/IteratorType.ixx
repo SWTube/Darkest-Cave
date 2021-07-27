@@ -2,29 +2,54 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-#include <iterator>
-
 export module IteratorType;
 
-namespace cave
+export namespace cave
 {
-	export template<class Iter>
-	concept IterType = TIsIterator<Iter>::Value;
-
-	template<class Iter>
-	concept StdIterType = std::_Is_iterator_v<Iter>;
-
-	export template<class Iter>
-	struct TIsIterator
+	template<class T>
+	concept InputIterator = requires(T a, T b)
 	{
-		static constexpr bool Value = false;
+		T(a);
+		b = a;
+		++a;
+		a++;
+
+		a == b;
+		a != b;
+
+		*a;
 	};
 
-	export template<StdIterType Iter>
-	struct TIsIterator<Iter>
+	template<class T>
+	concept ForwardIterator = InputIterator<T> && requires()
 	{
-		static constexpr bool Value = true;
+		T();
 	};
 
-	
+	template<class T>
+	concept BidirectionalIterator = ForwardIterator<T> && requires(T a)
+	{
+		--a;
+		a--;
+		*a--;
+	};
+
+	template<class T>
+	concept RandomAccessIterator = BidirectionalIterator<T> && requires(T a, T b, size_t n)
+	{
+		a + n;
+		n + a;
+		a - n;
+		a - b;
+
+		a < b;
+		a <= b;
+		a > b;
+		a >= b;
+		
+		a += n;
+		a -= n;
+
+		a[n];
+	};
 }
