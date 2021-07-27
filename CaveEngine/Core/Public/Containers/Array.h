@@ -4,8 +4,6 @@
  */
 #pragma once
 
-// temporary wrapper
-#include "CoreTypes.h"
 // include assertion macros
 #include "Assertion/Assert.h"
 // include memory
@@ -75,119 +73,91 @@ namespace cave
         constexpr float* operator+(size_t index);
 
     private:
-        float* mData;
         size_t mSize;
+        float* mData;
     };
 
-    template<typename ContainerType, typename ElementType, typename SizeType>
-    class TArrayIterator
+    template<typename ElementType>
+    class TArrayConstIterator
     {
     public:
         template<typename otherElementType>
         friend class TArray;
 
-        TArrayIterator(ContainerType& container, SizeType startIndex = 0)
-            : mContainer(container), mIndex(startIndex)
-        {
-        }
+        constexpr TArrayConstIterator();
+        constexpr TArrayConstIterator(TArray<ElementType>& container, size_t startIndex = 0);
+        constexpr TArrayConstIterator(const TArrayConstIterator& other);
 
-        TArrayIterator& operator++()
-        {
-            ++mIndex;
-            return *this;
-        }
+        constexpr TArrayConstIterator& operator=(const TArrayConstIterator& other);
+        constexpr TArrayConstIterator& operator=(TArrayConstIterator&& other);
 
-        TArrayIterator operator++(int)
-        {
-            TArrayIterator temp(*this);
-            ++mIndex;
-            return temp;
-        }
+        constexpr TArrayConstIterator& operator++();
+        constexpr TArrayConstIterator operator++(int);
 
-        TArrayIterator& operator--()
-        {
-            --mIndex;
-            return *this;
-        }
+        constexpr TArrayConstIterator& operator--();
+        constexpr TArrayConstIterator operator--(int);
 
-        TArrayIterator operator--(int)
-        {
-            TArrayIterator temp(*this);
-            --mIndex;
-            return temp;
-        }
+        constexpr TArrayConstIterator& operator+=(size_t offset);
+        constexpr TArrayConstIterator operator+(size_t offset);
 
-        TArrayIterator& operator+=(SizeType offset)
-        {
-            mIndex += offset;
-            return *this;
-        }
+        constexpr TArrayConstIterator& operator-=(size_t offset);
+        constexpr TArrayConstIterator operator-(size_t offset);
 
-        TArrayIterator operator+(SizeType offset)
-        {
-            TArrayIterator temp(*this);
-            return temp += offset;
-        }
+        constexpr size_t operator-(const TArrayConstIterator& other);
 
-        TArrayIterator& operator-=(SizeType offset)
-        {
-            mIndex -= offset;
-            return *this;
-        }
+        constexpr const ElementType& operator*() const;
+        constexpr const ElementType& operator[](size_t offset) const;
 
-        TArrayIterator operator-(SizeType offset)
-        {
-            TArrayIterator temp(*this);
-            return temp -= offset;
-        }
-
-        ElementType& operator*() const
-        {
-            return mContainer[mIndex];
-        }
-
-        ElementType* operator->() const
-        {
-            return &mContainer[mIndex];
-        }
-
-        SizeType GetIndex() const
-        {
-            return mIndex;
-        }
-
-        void Reset()
-        {
-            mIndex = 0;
-        }
-
-        friend bool operator==(const TArrayIterator& lhs, const TArrayIterator& rhs)
-        {
-            return &lhs.mContainer == &rhs.mContainer && lhs.mIndex == rhs.mIndex;
-        }
-
-        friend bool operator!=(const TArrayIterator& lhs, const TArrayIterator& rhs)
-        {
-            return &lhs.mContainer != &rhs.mContainer || lhs.mIndex != rhs.mIndex;
-        }
+        constexpr bool operator==(const TArrayConstIterator& other) const;
+        constexpr bool operator!=(const TArrayConstIterator& other) const;
+        constexpr bool operator<=(const TArrayConstIterator& other) const;
+        constexpr bool operator<(const TArrayConstIterator& other) const;
+        constexpr bool operator>=(const TArrayConstIterator& other) const;
+        constexpr bool operator>(const TArrayConstIterator& other) const;
 
     private:
-        ContainerType& mContainer;
-        SizeType mIndex;
+        TArray<ElementType>* mContainer;
+        size_t mIndex;
+    };
+
+    template<typename ElementType>
+    class TArrayIterator : public TArrayConstIterator<ElementType>
+    {
+    public:
+        using Base = TArrayConstIterator<ElementType>;
+
+        constexpr TArrayIterator();
+        constexpr TArrayIterator(TArray<ElementType>& container, size_t startIndex = 0);
+        constexpr TArrayIterator(const TArrayIterator& other);
+
+        constexpr TArrayIterator& operator++();
+        constexpr TArrayIterator operator++(int);
+
+        constexpr TArrayIterator& operator--();
+        constexpr TArrayIterator operator--(int);
+
+        constexpr TArrayIterator& operator+=(size_t offset);
+        constexpr TArrayIterator operator+(size_t offset);
+
+        constexpr TArrayIterator& operator-=(size_t offset);
+        constexpr TArrayIterator operator-(size_t offset);
+
+        constexpr ElementType& operator*();
+        constexpr ElementType& operator[](size_t offset);
     };
 
     template<class ElementType>
     class TArray
     {
     public:
-        using Iterator = TArrayIterator<TArray, ElementType, size_t>;
-        using ConstIterator = TArrayIterator<TArray, const ElementType, size_t>;
+        using ConstIterator = TArrayConstIterator<ElementType>;
+        using Iterator = TArrayIterator<ElementType>;
 
         constexpr explicit TArray(MemoryPool& pool = gCoreMemoryPool) noexcept;
         constexpr TArray(size_t count, const ElementType& value, MemoryPool& pool = gCoreMemoryPool);
         constexpr TArray(size_t count, MemoryPool& pool = gCoreMemoryPool);
-        template<IterType InputIt>
-        constexpr TArray(InputIt first, InputIt last, MemoryPool& pool = gCoreMemoryPool);
+        template<InputIterator IteratorType>
+        constexpr TArray(IteratorType first, IteratorType last, MemoryPool& pool = gCoreMemoryPool);
         constexpr TArray(const TArray& other, MemoryPool& pool = gCoreMemoryPool);
         constexpr TArray(TArray&& other, MemoryPool& pool = gCoreMemoryPool) noexcept;
         ~TArray();
@@ -204,16 +174,16 @@ namespace cave
 
 
         constexpr void Assign(size_t count, const ElementType& initializeElement);
-        template<IterType Iter>
-        constexpr void Assign(Iter first, Iter last);
+        template<InputIterator IteratorType>
+        constexpr void Assign(IteratorType first, IteratorType last);
 
-        constexpr Iterator Insert(Iterator position, const ElementType& element);
-        constexpr Iterator Insert(Iterator position, size_t count, const ElementType& element);
-        template<IterType Iter>
-        constexpr Iterator Insert(Iterator position, Iter first, Iter last);
+        constexpr Iterator Insert(ConstIterator position, const ElementType& element);
+        constexpr Iterator Insert(ConstIterator position, size_t count, const ElementType& element);
+        template<InputIterator IteratorType>
+        constexpr Iterator Insert(ConstIterator position, IteratorType first, IteratorType last);
 
-        constexpr Iterator Erase(Iterator position);
-        constexpr Iterator Erase(Iterator first, Iterator last);
+        constexpr Iterator Erase(ConstIterator position);
+        constexpr Iterator Erase(ConstIterator first, ConstIterator last);
 
         constexpr void PushBack(const ElementType& element);
 
@@ -243,10 +213,15 @@ namespace cave
 
         // Iterators
         constexpr Iterator GetBeginIterator();
+        constexpr Iterator begin();
         constexpr Iterator GetEndIterator();
+        constexpr Iterator end();
 
         constexpr ConstIterator GetBeginConstIterator() const;
         constexpr ConstIterator GetEndConstIterator() const;
+
+        constexpr bool operator==(const TArray& other) const;
+        constexpr bool operator!=(const TArray& other) const;
 
     private:
         MemoryPool* mPool;
@@ -254,6 +229,277 @@ namespace cave
         size_t mCapacity;
         ElementType* mData;
     };
+
+    /*
+    *
+    * TArrayConstIterator Implement
+    * 
+    */
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType>::TArrayConstIterator()
+        : mContainer(nullptr)
+        , mIndex(0)
+    { }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType>::TArrayConstIterator(TArray<ElementType>& container, size_t startIndex)
+        : mContainer(&container)
+        , mIndex(startIndex)
+    { }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType>::TArrayConstIterator(const TArrayConstIterator& other)
+        : mContainer(other.mContainer)
+        , mIndex(other.mIndex)
+    { }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType>& TArrayConstIterator<ElementType>::operator=(const TArrayConstIterator& other)
+    {
+        mContainer = other.mContainer;
+        mIndex = other.mIndex;
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType>& TArrayConstIterator<ElementType>::operator++()
+    {
+        ++mIndex;
+
+        return *this;
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType> TArrayConstIterator<ElementType>::operator++(int)
+    {
+        TArrayConstIterator temp = *this;
+        ++mIndex;
+
+        return temp;
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType>& TArrayConstIterator<ElementType>::operator--()
+    {
+        --mIndex;
+
+        return *this;
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType> TArrayConstIterator<ElementType>::operator--(int)
+    {
+        TArrayConstIterator temp = *this;
+        --mIndex;
+
+        return temp;
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType>& TArrayConstIterator<ElementType>::operator+=(size_t offset)
+    {
+        mIndex += offset;
+
+        return *this;
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType> TArrayConstIterator<ElementType>::operator+(size_t offset)
+    {
+        mIndex += offset;
+        TArrayConstIterator temp = *this;
+
+        return temp;
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType>& TArrayConstIterator<ElementType>::operator-=(size_t offset)
+    {
+        mIndex -= offset;
+
+        return *this;
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType> TArrayConstIterator<ElementType>::operator-(size_t offset)
+    {
+        mIndex -= offset;
+        TArrayConstIterator temp = *this;
+
+        return temp;
+    }
+
+    template<class ElementType>
+    constexpr size_t TArrayConstIterator<ElementType>::operator-(const TArrayConstIterator& other)
+    {
+        return mIndex - other.mIndex;
+    }
+
+    template<class ElementType>
+    constexpr const ElementType& TArrayConstIterator<ElementType>::operator*() const
+    {
+        return (*mContainer)[mIndex];
+    }
+
+    template<class ElementType>
+    constexpr const ElementType& TArrayConstIterator<ElementType>::operator[](size_t offset) const
+    {
+        return (*mContainer)[mIndex + offset];
+    }
+
+    template<class ElementType>
+    constexpr bool TArrayConstIterator<ElementType>::operator==(const TArrayConstIterator& other) const
+    {
+        return (mIndex == other.mIndex && mContainer == other.mContainer);
+    }
+
+    template<class ElementType>
+    constexpr bool TArrayConstIterator<ElementType>::operator!=(const TArrayConstIterator& other) const
+    {
+        return (mIndex != other.mIndex || mContainer != other.mContainer);
+    }
+
+    template<class ElementType>
+    constexpr bool TArrayConstIterator<ElementType>::operator<=(const TArrayConstIterator& other) const
+    {
+        return (mIndex <= other.mIndex && mContainer == other.mContainer);
+    }
+
+    template<class ElementType>
+    constexpr bool TArrayConstIterator<ElementType>::operator<(const TArrayConstIterator& other) const
+    {
+        return (mIndex < other.mIndex&& mContainer == other.mContainer);
+    }
+
+    template<class ElementType>
+    constexpr bool TArrayConstIterator<ElementType>::operator>=(const TArrayConstIterator& other) const
+    {
+        return (mIndex >= other.mIndex && mContainer == other.mContainer);
+    }
+
+    template<class ElementType>
+    constexpr bool TArrayConstIterator<ElementType>::operator>(const TArrayConstIterator& other) const
+    {
+        return (mIndex > other.mIndex && mContainer == other.mContainer);
+    }
+
+    template<class ElementType>
+    constexpr TArrayConstIterator<ElementType> operator+(size_t offset, TArrayConstIterator<ElementType> Iterator)
+    {
+        return Iterator += offset;
+    }
+
+    /*
+    *
+    * TArrayIterator Implement
+    * 
+    */
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType>::TArrayIterator()
+        : Base()
+    { }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType>::TArrayIterator(TArray<ElementType>& container, size_t startIndex)
+        : Base(container, startIndex)
+    { }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType>::TArrayIterator(const TArrayIterator& other)
+        : Base(other)
+    { }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType>& TArrayIterator<ElementType>::operator++()
+    {
+        Base::operator++();
+
+        return *this;
+    }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType> TArrayIterator<ElementType>::operator++(int)
+    {
+        TArrayIterator Temp = *this;
+        Base::operator++();
+
+        return Temp;
+    }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType>& TArrayIterator<ElementType>::operator--()
+    {
+        Base::operator--();
+
+        return *this;
+    }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType> TArrayIterator<ElementType>::operator--(int)
+    {
+        TArrayIterator Temp = *this;
+        Base::operator--();
+
+        return Temp;
+    }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType>& TArrayIterator<ElementType>::operator+=(size_t offset)
+    {
+        Base::operator+=(offset);
+
+        return *this;
+    }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType> TArrayIterator<ElementType>::operator+(size_t offset)
+    {
+        TArrayIterator Temp = *this;
+        
+        return Temp += offset;
+    }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType>& TArrayIterator<ElementType>::operator-=(size_t offset)
+    {
+        Base::operator-=(offset);
+
+        return *this;
+    }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType> TArrayIterator<ElementType>::operator-(size_t offset)
+    {
+        TArrayIterator Temp = *this;
+
+        return Temp -= offset;
+
+    }
+
+    template<class ElementType>
+    constexpr ElementType& TArrayIterator<ElementType>::operator*()
+    {
+        return const_cast<ElementType&>(Base::operator*());
+    }
+
+    template<class ElementType>
+    constexpr ElementType& TArrayIterator<ElementType>::operator[](size_t offset)
+    {
+        return const_cast<ElementType&>(Base::operator[](offset));
+    }
+
+    template<class ElementType>
+    constexpr TArrayIterator<ElementType> operator+(size_t offset, TArrayIterator<ElementType> Iterator)
+    {
+        return Iterator += offset;
+    }
+
+    /*
+    *
+    * TArray Implement
+    * 
+    */
 
     template<class ElementType>
     constexpr TArray<ElementType>::TArray(MemoryPool& pool) noexcept
@@ -285,13 +531,14 @@ namespace cave
     { }
 
     template<class ElementType>
-    template<IterType InputIt>
-    constexpr TArray<ElementType>::TArray(InputIt first, InputIt last, MemoryPool& pool)
+    template<InputIterator IteratorType>
+    constexpr TArray<ElementType>::TArray(IteratorType first, IteratorType last, MemoryPool& pool)
         : mPool(&pool)
     {
-        size_t count = 0;
         //GetIteratorDIstance(first, last)
-        for (InputIt iter = first; iter != last; ++iter, ++count);
+
+        size_t count = 0;
+        for (IteratorType iter = first; iter != last; ++iter, ++count);
 
         mSize = count;
         mCapacity = count;
@@ -299,7 +546,7 @@ namespace cave
         new(mData) ElementType[count];
 
         size_t i = 0;
-        for (InputIt iterator = first; iterator != last; ++iterator, ++i)
+        for (IteratorType iterator = first; iterator != last; ++iterator, ++i)
         {
             mData[i] = *iterator;
         }
@@ -394,6 +641,8 @@ namespace cave
     template<class ElementType>
     constexpr void TArray<ElementType>::Resize(size_t size, const ElementType& initializeElement)
     {
+        assert(size <= GetMaxSize());
+
         if (size > mCapacity)
         {
             Reserve(size);
@@ -424,17 +673,17 @@ namespace cave
     }
 
     template<class ElementType>
-    template<IterType Iter>
-    constexpr void TArray<ElementType>::Assign(Iter first, Iter last)
+    template<InputIterator IteratorType>
+    constexpr void TArray<ElementType>::Assign(IteratorType first, IteratorType last)
     {
         size_t count = 0;
-        for (Iter iterator = first; iterator != last; ++iterator, ++count);
+        for (IteratorType iterator = first; iterator != last; ++iterator, ++count);
 
         ClearElements();
         Reserve(count);
 
         size_t i = 0;
-        for (Iter iterator = first; iterator != last; ++iterator, ++i)
+        for (IteratorType iterator = first; iterator != last; ++iterator, ++i)
         {
             mData[i] = *iterator;
         }
@@ -442,7 +691,7 @@ namespace cave
     }
 
     template<class ElementType>
-    constexpr typename TArray<ElementType>::Iterator TArray<ElementType>::Insert(Iterator position, const ElementType& element)
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::Insert(ConstIterator position, const ElementType& element)
     {
         size_t index = position.mIndex;
         
@@ -470,7 +719,7 @@ namespace cave
     }
 
     template<class ElementType>
-    constexpr typename TArray<ElementType>::Iterator TArray<ElementType>::Insert(TArray<ElementType>::Iterator position, size_t count, const ElementType& element)
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::Insert(ConstIterator position, size_t count, const ElementType& element)
     {
         size_t index = position.mIndex;
 
@@ -502,8 +751,8 @@ namespace cave
     }
 
     template<class ElementType>
-    template<IterType Iter>
-    constexpr typename TArray<ElementType>::Iterator TArray<ElementType>::Insert(Iterator position, Iter first, Iter last)
+    template<InputIterator IteratorType>
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::Insert(ConstIterator position, IteratorType first, IteratorType last)
     {
         size_t count = 0;
         size_t index = position.mIndex;
@@ -513,7 +762,7 @@ namespace cave
 
         size_t newMaxSize = mCapacity;
 
-        for (Iter iterator = first; iterator != last; ++iterator, ++count);
+        for (IteratorType iterator = first; iterator != last; ++iterator, ++count);
 
         if (newMaxSize == 0)
         {
@@ -521,7 +770,7 @@ namespace cave
         }
         while (mSize + count > newMaxSize)
         {
-            newMaxSize *= 2;
+            newMaxSize <<= 1;
         }
         Reserve(newMaxSize);
 
@@ -530,7 +779,7 @@ namespace cave
         mSize += count;
 
         size_t i = 0;
-        for (Iter iterator = first; iterator != last; ++iterator, ++i)
+        for (IteratorType iterator = first; iterator != last; ++iterator, ++i)
         {
             mData[index + i] = *iterator;
         }
@@ -539,7 +788,7 @@ namespace cave
     }
 
     template<class ElementType>
-    constexpr typename TArray<ElementType>::Iterator TArray<ElementType>::Erase(Iterator position)
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::Erase(ConstIterator position)
     {
         size_t index = position.mIndex;
 
@@ -555,10 +804,14 @@ namespace cave
     }
 
     template<class ElementType>
-    constexpr typename TArray<ElementType>::Iterator TArray<ElementType>::Erase(Iterator first, Iterator last)
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::Erase(ConstIterator first, ConstIterator last)
     {
         size_t count = 0;
         size_t index = first.mIndex;
+
+        assert(first.mIndex >= 0);
+        assert(last.mIndex < mSize);
+        assert(first <= last);
 
         for (Iterator iterator = first; iterator != last; ++iterator, ++count);
 
@@ -654,27 +907,51 @@ namespace cave
     }
 
     template<class ElementType>
-    constexpr typename TArray<ElementType>::Iterator TArray<ElementType>::GetBeginIterator()
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::GetBeginIterator()
     {
         return Iterator(*this, 0);
     }
 
     template<class ElementType>
-    constexpr typename TArray<ElementType>::Iterator TArray<ElementType>::GetEndIterator()
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::begin()
     {
-        return Iterator(*this, 0 + mSize);
+        return Iterator(*this, 0);
     }
 
     template<class ElementType>
-    constexpr typename TArray<ElementType>::ConstIterator TArray<ElementType>::GetBeginConstIterator() const
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::GetEndIterator()
+    {
+        return Iterator(*this, mSize);
+    }
+
+    template<class ElementType>
+    constexpr TArray<ElementType>::Iterator TArray<ElementType>::end()
+    {
+        return Iterator(*this, mSize);
+    }
+
+    template<class ElementType>
+    constexpr TArray<ElementType>::ConstIterator TArray<ElementType>::GetBeginConstIterator() const
     {
         return ConstIterator(*this, 0);
     }
 
     template<class ElementType>
-    constexpr typename TArray<ElementType>::ConstIterator TArray<ElementType>::GetEndConstIterator() const
+    constexpr TArray<ElementType>::ConstIterator TArray<ElementType>::GetEndConstIterator() const
     {
-        return ConstIterator(*this, 0 + mSize);
+        return ConstIterator(*this, mSize);
+    }
+
+    template<class ElementType>
+    constexpr bool  TArray<ElementType>::operator==(const TArray<ElementType>& other) const
+    {
+        return mData == other.mData;
+    }
+
+    template<class ElementType>
+    constexpr bool  TArray<ElementType>::operator!=(const TArray<ElementType>& other) const
+    {
+        return mData != other.mData;
     }
 
 } // namespace cave
