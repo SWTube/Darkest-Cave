@@ -8,12 +8,12 @@
 
 namespace cave
 {
-    class Node
+    class BehaviorTreeNode
     {
         public:
-            Node();
-            Node(const char*);
-            virtual ~Node();
+            BehaviorTreeNode();
+            BehaviorTreeNode(const char*);
+            virtual ~BehaviorTreeNode();
 
             virtual bool Run() = 0;
 
@@ -24,13 +24,13 @@ namespace cave
             // Set node name
             void SetNodeName(const char*);
             // Set parent node
-            void SetParentNode(Node*);
+            void SetParentNode(BehaviorTreeNode*);
             // Set tree depth
             void SetTreeDepth(int);
             // Clear tree
             virtual void Clear();
         private:
-    	    Node* mParentNode = NULL;
+            BehaviorTreeNode* mParentNode = NULL;
             const char* mNodeName = "";
             int mTreeDepth = 0;
     };

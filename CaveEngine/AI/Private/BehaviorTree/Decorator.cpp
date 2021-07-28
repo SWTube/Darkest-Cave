@@ -24,11 +24,11 @@ namespace cave
     {
 
     }
-    Node* Decorator::GetChild() const
+    BehaviorTreeNode* Decorator::GetChild() const
     {
         return mChild;
     }
-    void Decorator::SetChild(Node* child)
+    void Decorator::SetChild(BehaviorTreeNode* child)
     {
         mChild = child;
     }

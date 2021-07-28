@@ -2,47 +2,47 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-#include "BehaviorTree/Node.h"
+#include "BehaviorTree/BehaviorTreeNode.h"
 
 namespace cave
 {
-	Node::Node()
+	BehaviorTreeNode::BehaviorTreeNode()
 	{
 		mNodeName = "";
 		mParentNode = NULL;
 		mTreeDepth = 0;
 	}
-	Node::Node(const char* nodeName)
+	BehaviorTreeNode::BehaviorTreeNode(const char* nodeName)
 	{
 		mNodeName = nodeName;
 		mParentNode = NULL;
 		mTreeDepth = 0;
 	}
-	Node::~Node()
+	BehaviorTreeNode::~BehaviorTreeNode()
 	{
 		// delete mNodeName;
 	}
-	const char* Node::GetNodeName() const
+	const char* BehaviorTreeNode::GetNodeName() const
 	{
 		return mNodeName;
 	}
-	int Node::GetTreeDepth() const
+	int BehaviorTreeNode::GetTreeDepth() const
 	{
 		return mTreeDepth;
 	}
-	void Node::SetNodeName(const char* nodeName)
+	void BehaviorTreeNode::SetNodeName(const char* nodeName)
 	{
 		mNodeName = nodeName;
 	}
-	void Node::SetParentNode(Node* parentNode)
+	void BehaviorTreeNode::SetParentNode(BehaviorTreeNode* parentNode)
 	{
 		mParentNode = parentNode;
 	}
-	void Node::SetTreeDepth(int treeDepth)
+	void BehaviorTreeNode::SetTreeDepth(int treeDepth)
 	{
 		mTreeDepth = treeDepth;
 	}
-	void Node::Clear()
+	void BehaviorTreeNode::Clear()
 	{
 		delete this;
 	}

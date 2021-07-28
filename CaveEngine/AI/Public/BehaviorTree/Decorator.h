@@ -4,11 +4,11 @@
  */
 #pragma once
 
-#include "Node.h"
+#include "BehaviorTreeNode.h"
 
 namespace cave
 {
-    class Decorator : public Node
+    class Decorator : public BehaviorTreeNode
     {
     public:
         Decorator();
@@ -16,12 +16,12 @@ namespace cave
         virtual ~Decorator();
 
         // return child node at given index
-        Node* GetChild() const;
+        BehaviorTreeNode* GetChild() const;
         // set child node
-        void SetChild(Node*);
+        void SetChild(BehaviorTreeNode*);
         // clear node
         virtual void Clear() override;
     private:
-        Node* mChild;
+        BehaviorTreeNode* mChild;
     };
 }

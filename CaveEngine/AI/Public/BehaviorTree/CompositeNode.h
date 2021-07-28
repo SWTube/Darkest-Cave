@@ -5,11 +5,11 @@
 #pragma once
 
 #include <vector>
-#include "Node.h"
+#include "BehaviorTreeNode.h"
 
 namespace cave
 {
-    class CompositeNode: public Node
+    class CompositeNode: public BehaviorTreeNode
     {
     public:
         CompositeNode();
@@ -17,18 +17,18 @@ namespace cave
         ~CompositeNode();
 
         // Add child back or at position
-        void AddChild(Node*);
+        void AddChild(BehaviorTreeNode*);
         // return child node at given index
-        Node* GetChild(int) const;
+        BehaviorTreeNode* GetChild(int) const;
         // return children 
-        std::vector<Node*>& GetChildren();
+        std::vector<BehaviorTreeNode*>& GetChildren();
         // return children count
         int GetChildrenCount() const;
         // Clear node
         virtual void Clear() override;
 
     private:
-        std::vector<Node*> mChildren;
+        std::vector<BehaviorTreeNode*> mChildren;
         int mChildrenCount = 0;
     };
 }

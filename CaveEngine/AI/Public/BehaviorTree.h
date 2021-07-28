@@ -4,7 +4,7 @@
  */
 #pragma once
 
-#include "BehaviorTree/Node.h"
+#include "BehaviorTree/BehaviorTreeNode.h"
 #include "BehaviorTree/CompositeNode.h"
 #include "BehaviorTree/RootNode.h"
 #include "BehaviorTree/ActionNode.h"

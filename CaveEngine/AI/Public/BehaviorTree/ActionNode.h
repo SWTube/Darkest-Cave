@@ -5,11 +5,11 @@
 #pragma once
 
 #include <vector>
-#include "Node.h"
+#include "BehaviorTreeNode.h"
 
 namespace cave
 {
-    class ActionNode : public Node
+    class ActionNode : public BehaviorTreeNode
     {
     public:
         ActionNode();

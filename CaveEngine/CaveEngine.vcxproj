@@ -221,7 +221,7 @@
     <ClInclude Include="AI\Public\BehaviorTree\CompositeNode.h" />
     <ClInclude Include="AI\Public\BehaviorTree\Decorator.h" />
     <ClInclude Include="AI\Public\BehaviorTree\IfDecorator.h" />
-    <ClInclude Include="AI\Public\BehaviorTree\Node.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\BehaviorTreeNode.h" />
     <ClInclude Include="AI\Public\BehaviorTree\RepeatDecorator.h" />
     <ClInclude Include="AI\Public\BehaviorTree\RootNode.h" />
     <ClInclude Include="AI\Public\BehaviorTree\Selector.h" />
@@ -278,14 +278,12 @@
     <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\Decorator.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\IfDecorator.cpp" />
-    <ClCompile Include="AI\Private\BehaviorTree\Node.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\BehaviorTreeNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\RepeatDecorator.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\RootNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\Sequencer.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\WhileDecorator.cpp" />
-    <ClCompile Include="Core\Private\Debug\LogManager.cpp" />
-    <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
