@@ -70,6 +70,12 @@
     <Filter Include="Header Files\AI\BehaviorTree">
       <UniqueIdentifier>{d0ade8d8-d83f-4bcb-95e8-c166dd10c48a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\AI\FiniteStateMachine">
+      <UniqueIdentifier>{442d054c-1880-480a-afff-8094fcf25826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI\FiniteStateMachine">
+      <UniqueIdentifier>{d115c529-ee09-455f-83f1-e34efdb78d4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -156,6 +162,12 @@
     <ClInclude Include="AI\Public\BehaviorTree\RepeatDecorator.h">
       <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClInclude>
+    <ClInclude Include="FiniteStateMachine.h">
+      <Filter>Header Files\AI\FiniteStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Header Files\AI\FiniteStateMachine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Debug\LogManager.cpp">
@@ -214,6 +226,12 @@
     </ClCompile>
     <ClCompile Include="AI\Private\BehaviorTree\RepeatDecorator.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="FiniteStateMachine.cpp">
+      <Filter>Source Files\AI\FiniteStateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Source Files\AI\FiniteStateMachine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

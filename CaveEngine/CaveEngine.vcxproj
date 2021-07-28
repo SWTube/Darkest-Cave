@@ -220,12 +220,14 @@
     <ClInclude Include="Core\Public\Memory\Allocator.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
+    <ClInclude Include="FiniteStateMachine.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveNode.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveRenderer.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
+    <ClInclude Include="State.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp" />
@@ -244,11 +246,13 @@
     <ClCompile Include="EngineMain.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FiniteStateMachine.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx" />
     <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />

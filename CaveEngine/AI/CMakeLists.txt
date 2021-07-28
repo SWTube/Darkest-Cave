@@ -38,8 +38,10 @@ file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
 # )
 
 file(GLOB BT_NODE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/BehaviorTree/*.h")
+file(GLOB BT_NODE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/FiniteStateMachine/*.h")
 
 file(GLOB BT_NODE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/BehaviorTree/*.cpp")
+file(GLOB BT_NODE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/FiniteStateMachine/*.cpp")
 
 # # Add platform specific files
 # if (EMSCRIPTEN)
