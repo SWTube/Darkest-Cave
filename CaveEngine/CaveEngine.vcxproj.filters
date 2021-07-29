@@ -121,6 +121,9 @@
     <ClCompile Include="Core\Private\Containers\Array.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Containers\TList.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
