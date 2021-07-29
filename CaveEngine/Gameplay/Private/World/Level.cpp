@@ -6,6 +6,7 @@
 #include <random>
 #include <limits>
 #include <iostream>
+#include "Object/Script.h"
 #endif //CAVE_BUILD_DEBUG
 
 #include "CoreGlobals.h"
@@ -19,6 +20,7 @@ namespace cave
 	Level::Level()
 		: Object("Level")
 		, mMap(nullptr)
+		, mRenderer(nullptr)
 	{
 
 	}
@@ -26,6 +28,7 @@ namespace cave
 	Level::Level(std::string& name) 
 		: Object(name)
 		, mMap(nullptr)
+		, mRenderer(nullptr)
 	{
 
 	}
@@ -33,6 +36,7 @@ namespace cave
 	Level::Level(const char* name)
 		: Object(name)
 		, mMap(nullptr)
+		, mRenderer(nullptr)
 	{
 
 	}
@@ -54,6 +58,7 @@ namespace cave
 		{
 			addActiveGameObject(gameObject);
 		}
+		gameObject.SetLevel(*this);
 	}
 
 	void Level::AddGameObjects(std::vector<GameObject*>& gameObjects)
@@ -66,26 +71,8 @@ namespace cave
 
 	void Level::RemoveGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & findGameObject(gameObject));
-
-		if (findActiveGameObject(gameObject))
-		{
-			removeActiveGameObject(gameObject);
-		}
-		
-		removeTagGameObject(gameObject);
-
-		auto range = mAllGameObjects.equal_range(gameObject.GetName());
-		for (; range.first != range.second; )
-		{
-			if (range.first->second == &gameObject)
-			{
-				mAllGameObjects.erase(range.first++);
-				//gCoreMemoryPool.Deallocate(range.first->second, sizeof(GameObject));
-				continue;
-			}
-			++range.first;
-		}
+		assert(IsValid() & gameObject.IsValid());
+		mDeferredRemoveGameObjects.push_back(&gameObject);
 	}
 
 	void Level::RemoveGameObjects(std::vector<GameObject*>& gameObjects)
@@ -194,28 +181,38 @@ namespace cave
 
 		return std::move(result);
 	}
+
+	void Level::InitializeGameObjectsInLevel()
+	{
+		assert(IsValid());
+		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
+		{
+			(iter->second)->SetRenderer(*mRenderer);
+			(iter->second)->Init();
+		}
+	}
 	
-	void Level::UpdateGameObjectInLevel()
+	void Level::UpdateGameObjectsInLevel()
 	{
 		assert(IsValid());
 		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
 		{
-			assert((iter->second)->IsValid());
 			(iter->second)->UpdateScripts();
 		}
+		removeGameObjects();
 	}
 
-	void Level::UpdateAllGameObjectInLevel()
+	void Level::UpdateAllGameObjectsInLevel()
 	{
 		assert(IsValid());
 		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
 		{
-			assert((iter->second)->IsValid());
 			(iter->second)->UpdateScripts();
 		}
+		removeGameObjects();
 	}
 
-	void Level::FixedUpdateGameObjectInLevel()
+	void Level::FixedUpdateGameObjectsInLevel()
 	{
 		assert(IsValid());
 		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
@@ -223,9 +220,10 @@ namespace cave
 			assert((iter->second)->IsValid());
 			(iter->second)->FixedUpdateScripts();
 		}
+		removeGameObjects();
 	}
 
-	void Level::FixedUpdateAllGameObjectInLevel()
+	void Level::FixedUpdateAllGameObjectsInLevel()
 	{
 		assert(IsValid());
 		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
@@ -233,6 +231,7 @@ namespace cave
 			assert((iter->second)->IsValid());
 			(iter->second)->FixedUpdateScripts();
 		}
+		removeGameObjects();
 	}
 
 	void Level::addActiveGameObject(GameObject& gameObject)
@@ -247,14 +246,13 @@ namespace cave
 		assert(IsValid() & gameObject.IsValid() & findActiveGameObject(gameObject));
 
 		auto range = mActiveGameObjects.equal_range(gameObject.GetName());
-		for (; range.first != range.second; )
+		for (; range.first != range.second; ++range.first)
 		{
 			if (range.first->second == &gameObject)
 			{
-				mActiveGameObjects.erase(range.first++);
-				continue;
+				mActiveGameObjects.erase(range.first);
+				break;
 			}
-			++range.first;
 		}
 	}
 
@@ -270,15 +268,49 @@ namespace cave
 		assert(IsValid() & gameObject.IsValid() & findGameObject(gameObject));
 
 		auto range = mTagGameObjects.equal_range(gameObject.GetTag());
-		for (; range.first != range.second; )
+		for (; range.first != range.second; ++range.first)
 		{
 			if (range.first->second == &gameObject)
 			{
-				mTagGameObjects.erase(range.first++);
-				continue;
+				mTagGameObjects.erase(range.first);
+				break;
 			}
-			++range.first;
 		}
+	}
+
+	void Level::removeGameObjects()
+	{
+		assert(IsValid());
+
+		if (mDeferredRemoveGameObjects.empty())
+		{
+			return;
+		}
+
+		for (size_t index = 0, end = mDeferredRemoveGameObjects.size(); index != end; ++index)
+		{
+			GameObject* gameObject = mDeferredRemoveGameObjects[index];
+
+			if (findActiveGameObject(*gameObject))
+			{
+				removeActiveGameObject(*gameObject);
+			}
+
+			removeTagGameObject(*gameObject);
+
+			auto range = mAllGameObjects.equal_range(gameObject->GetName());
+			for (; range.first != range.second; ++range.first)
+			{
+				if (range.first->second == gameObject)
+				{
+					mAllGameObjects.erase(range.first);
+					//gCoreMemoryPool.Deallocate(range.first->second, sizeof(GameObject));
+					break;
+				}
+			}
+		}
+
+		mDeferredRemoveGameObjects.clear();
 	}
 
 	bool Level::findGameObject(GameObject& gameObject)
@@ -314,6 +346,29 @@ namespace cave
 	}
 
 #ifdef CAVE_BUILD_DEBUG
+	void Level::SetRenderer(Renderer& renderer)
+	{
+		mRenderer = &renderer;
+	}
+
+	void Level::PrintGameObjects()
+	{
+		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
+		{
+			std::cout << (iter->second)->GetName() << std::endl;
+		}
+
+		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
+		{
+			std::cout << (iter->second)->GetName() << std::endl;
+		}
+
+		for (auto iter = mTagGameObjects.begin(); iter != mTagGameObjects.end(); ++iter)
+		{
+			std::cout << (iter->second)->GetName() << std::endl;
+		}
+	}
+
 	namespace LevelTest
 	{
 		void Test()
@@ -378,10 +433,10 @@ namespace cave
 				assert(level->FindGameObjectByName(element->GetName().c_str()) != nullptr);
 			}
 
-			level->UpdateGameObjectInLevel();
-			level->UpdateAllGameObjectInLevel();
-			level->FixedUpdateGameObjectInLevel();
-			level->FixedUpdateAllGameObjectInLevel();
+			level->UpdateGameObjectsInLevel();
+			level->UpdateAllGameObjectsInLevel();
+			level->FixedUpdateGameObjectsInLevel();
+			level->FixedUpdateAllGameObjectsInLevel();
 
 			for (auto& element : gameObjects)
 			{
@@ -408,6 +463,33 @@ namespace cave
 				delete element;
 			}
 			TagPool::ShutDown();
+		}
+
+		Level* CreateTmpLevel()
+		{
+			TagPool::Init();
+
+			Level* level = new Level("Level_1");
+
+			GameObject* lapland = new GameObject("lapland");
+			GameObject* amiya = new GameObject("amiya");
+			GameObject* texas = new GameObject("texas");
+
+			TestScript* lapland_script = new TestScript("lapland_script", 0, 0, 0.05f);
+			TestScript* amiya_script = new TestScript("amiya_script", 1, 2, 0.03f);
+			TestScript* texas_script = new TestScript("texas_script", 2, 4, 0.01f);
+
+			lapland->AddScript(*lapland_script);
+			amiya->AddScript(*amiya_script);
+			texas->AddScript(*texas_script);
+
+			level->AddGameObject(*lapland);
+			level->AddGameObject(*amiya);
+			level->AddGameObject(*texas);
+
+			level->PrintGameObjects();
+
+			return level;
 		}
 	}
 #endif //CAVE_BUILD_DEBUG

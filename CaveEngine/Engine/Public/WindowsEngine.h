@@ -19,7 +19,7 @@ namespace cave
 
 		eResult Init(uint32_t screenWidth, uint32_t screenHeight) override;
 		void Destroy() override;
-		eResult Run() override;
+		eResult Run(Level& level) override;
 
 		static LRESULT CALLBACK StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam);
 		

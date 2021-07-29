@@ -214,11 +214,22 @@ namespace cave
 		}
 	}
 
+	void GameObject::Init()
+	{
+		assert(IsValid());
+		for (auto& script : mScripts)
+		{
+			assert(script.second->IsValid());
+			script.second->Init(*this);
+		}
+	}
+
 	void GameObject::UpdateScripts()
 	{
 		assert(IsValid());
 		for (auto& script : mScripts)
 		{
+			assert(script.second->IsValid());
 			script.second->Update(*this);
 		}
 	}
@@ -228,6 +239,7 @@ namespace cave
 		assert(IsValid());
 		for (auto& script : mScripts)
 		{
+			assert(script.second->IsValid());
 			script.second->FixedUpdate(*this);
 		}
 	}

@@ -41,6 +41,8 @@ namespace cave
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 	
+		void Init();
+
 		void UpdateScripts();
 		void FixedUpdateScripts();
 
