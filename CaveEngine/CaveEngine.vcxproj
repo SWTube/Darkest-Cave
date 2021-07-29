@@ -335,6 +335,7 @@
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
     <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx" />
+    <ClCompile Include="ResourceManager\Public\Texture\WicTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
     <ClCompile Include="Gameplay\Private\Game.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Script.cpp" />

@@ -25,7 +25,7 @@
       <Filter>Source Files\Graphics\Device</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
-        <Filter>Source Files\Graphics\Renderer</Filter>
+      <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
@@ -47,9 +47,6 @@
     </ClCompile>
     <ClCompile Include="Core\Public\Template\IteratorType.ixx">
       <Filter>Header Files\Core\Template</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Private\UnixEngine.cpp">
-      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Private\WindowsEngine.cpp">
       <Filter>Source Files\Engine</Filter>
@@ -105,9 +102,6 @@
     <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\UnixRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
@@ -137,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="Core\Public\String\String.ixx">
       <Filter>Header Files\Core\String</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
@@ -234,6 +225,9 @@
     <ClCompile Include="Gameplay\Private\Object\Transform.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager\Public\Texture\WicTextureLoader.ixx">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Containers\Array.h">
@@ -276,9 +270,6 @@
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\GraphicsCommon.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Public\UnixEngine.h">
@@ -341,9 +332,6 @@
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h">
       <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\UnixSprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h">
       <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
@@ -372,9 +360,6 @@
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\UnixRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h">
@@ -413,9 +398,6 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Math\Vector2.h">
-      <Filter>Header Files\Core\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Obejct.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
@@ -446,6 +428,9 @@
     <ClInclude Include="Graphics\Public\Graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Public\Math\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Memory\Memory.cpp">
@@ -468,12 +453,6 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Public\CoreTmp\CoreType.ixx">
-      <Filter>Header Files\Gameplay\CoreTmp</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Public\CoreTmp\Log.ixx">
-      <Filter>Header Files\Gameplay\CoreTmp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

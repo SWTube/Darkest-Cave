@@ -11,7 +11,7 @@
 
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 
 namespace cave
 {
