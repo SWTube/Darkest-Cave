@@ -32,6 +32,10 @@ namespace cave
 	void TagPool::ShutDown()
 	{
 		assert(IsValid());
+		for (auto iter = mTags.begin(); iter != mTags.end(); ++iter)
+		{
+			gCoreMemoryPool.Deallocate(iter->second, sizeof(Tag));
+		}
 		mbValid = false;
 	}
 
