@@ -9,6 +9,12 @@ namespace cave
 	State::State()
 	{
 		mAnimation = true;
+		mNeighborState.clear();
+	}
+	State::State(bool Animation)
+	{
+		mAnimation = Animation;
+		mNeighborState.clear();
 	}
 	State::~State() 
 	{

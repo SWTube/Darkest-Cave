@@ -165,7 +165,7 @@
     <ClInclude Include="FiniteStateMachine.h">
       <Filter>Header Files\AI\FiniteStateMachine</Filter>
     </ClInclude>
-    <ClInclude Include="State.h">
+    <ClInclude Include="AI\Public\FiniteStateMachine\State.h">
       <Filter>Header Files\AI\FiniteStateMachine</Filter>
     </ClInclude>
   </ItemGroup>
@@ -230,7 +230,7 @@
     <ClCompile Include="FiniteStateMachine.cpp">
       <Filter>Source Files\AI\FiniteStateMachine</Filter>
     </ClCompile>
-    <ClCompile Include="State.cpp">
+    <ClCompile Include="AI\Private\FiniteStateMachine\State.cpp">
       <Filter>Source Files\AI\FiniteStateMachine</Filter>
     </ClCompile>
   </ItemGroup>

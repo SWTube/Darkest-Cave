@@ -10,11 +10,12 @@ namespace cave
 {
 	class FiniteStateMachine
 	{
-		public:
-			FiniteStateMachine();
-			virtual ~FiniteStateMachine();
+	public:
+		FiniteStateMachine();
+		virtual ~FiniteStateMachine();
+		void setBool()
 
-		private:
+	private:
 
 	};
 }

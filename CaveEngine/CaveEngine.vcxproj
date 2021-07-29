@@ -209,6 +209,7 @@
     <ClInclude Include="AI\Public\BehaviorTree\Selector.h" />
     <ClInclude Include="AI\Public\BehaviorTree\Sequencer.h" />
     <ClInclude Include="AI\Public\BehaviorTree\WhileDecorator.h" />
+    <ClInclude Include="AI\Public\FiniteStateMachine\State.h" />
     <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Core.h" />
@@ -227,7 +228,6 @@
     <ClInclude Include="Graphics\Public\Renderer\CaveNode.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveRenderer.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
-    <ClInclude Include="State.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp" />
@@ -240,6 +240,7 @@
     <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\Sequencer.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\WhileDecorator.cpp" />
+    <ClCompile Include="AI\Private\FiniteStateMachine\State.cpp" />
     <ClCompile Include="Core\Private\Debug\LogManager.cpp" />
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
@@ -252,7 +253,6 @@
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\Renderer.ixx" />
     <ClCompile Include="Graphics\Private\Test\DirectXTest.cpp" />
-    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />
