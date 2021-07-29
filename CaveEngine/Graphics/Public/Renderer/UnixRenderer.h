@@ -10,7 +10,7 @@
 
 #include "CoreMinimal.h"
 #include "Device/DeviceResources.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 #include "Renderer/GenericRenderer.h"
 
 #define BUFFER_OFFSET(a) (reinterpret_cast<void*>(a))

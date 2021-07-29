@@ -769,7 +769,7 @@ export namespace cave
 		 * @note Current implementation do not change capacity. This means that they do not release the allocated memory
 		 *
 		 */
-		constexpr void Clear() noexcept
+		void Clear() noexcept
 		{
 			Memory::Memset(mString, '\0', mLength);
 			mLength = 0ul;
@@ -1685,7 +1685,7 @@ export namespace cave
 		 * @return *this
 		 *
 		 */
-		constexpr String& Replace(size_t pos, size_t count, size_t count2, char ch)
+		String& Replace(size_t pos, size_t count, size_t count2, char ch)
 		{
 			assert(pos <= mLength);
 
@@ -2416,7 +2416,7 @@ export namespace cave
 		{
 			os.rdbuf()->sputn(str.mString, str.GetLength());
 		}
-		else if (os.flags() & std::ios_base::adjustfield == std::ios_base::left)
+		else if ((os.flags() & std::ios_base::adjustfield) == std::ios_base::left)
 		{
 			os.rdbuf()->sputn(str.mString, str.GetLength());
 			for (size_t i = 0ul; i < os.width() - str.GetLength(); ++i)
@@ -2458,9 +2458,9 @@ export namespace cave
 	{
 		str.Clear();
 
-		size_t readCharacterCount = 0ul;
+		int64_t readCharacterCount = 0ll;
 		bool isEof = false;
-		size_t width = (is.width() > 0) ? is.width() : str.GetMaxSize();
+		int64_t width = static_cast<int64_t>((is.width() > 0) ? is.width() : str.GetMaxSize());
 		for (
 			char c = static_cast<char>(is.get()), isEof = is.eof();
 			readCharacterCount < width && !isEof && !std::isspace(c);
@@ -2478,7 +2478,7 @@ export namespace cave
 			}
 			catch (const std::ios_base::failure& e)
 			{
-				//LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+				LOGEF(eLogChannel::CORE_STRING, "%s", e.what());
 			}
 		}
 
@@ -2513,7 +2513,7 @@ export namespace cave
 		size_t readCharacterCount = 0ul;
 		size_t maxSize = str.GetMaxSize();
 		bool isEof = false;
-		size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
+		// int64_t width = static_cast<int64_t>((input.width() > 0) ? input.width() : str.GetMaxSize());
 		for (
 			char c = static_cast<char>(input.get()), isEof = input.eof();
 			!isEof && c != delim && readCharacterCount < maxSize;
@@ -2531,7 +2531,7 @@ export namespace cave
 			}
 			catch (const std::ios_base::failure& e)
 			{
-				//LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+				LOGEF(eLogChannel::CORE_STRING, "%s", e.what());
 			}
 		}
 
@@ -2543,7 +2543,7 @@ export namespace cave
 			}
 			catch (const std::ios_base::failure& e)
 			{
-				//LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+				LOGEF(eLogChannel::CORE_STRING, "%s", e.what());
 			}
 		}
 
@@ -2576,7 +2576,7 @@ export namespace cave
 		size_t readCharacterCount = 0ul;
 		size_t maxSize = str.GetMaxSize();
 		bool isEof = false;
-		size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
+		// size_t width = (input.width() > 0) ? input.width() : str.GetMaxSize();
 		for (
 			char c = static_cast<char>(input.get()), isEof = input.eof();
 			!isEof && c != delim && readCharacterCount < maxSize;
@@ -2594,7 +2594,7 @@ export namespace cave
 			}
 			catch (const std::ios_base::failure& e)
 			{
-				//LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+				LOGEF(eLogChannel::CORE_STRING, "%s", e.what());
 			}
 		}
 
@@ -2606,7 +2606,7 @@ export namespace cave
 			}
 			catch (const std::ios_base::failure& e)
 			{
-				//LOGEF(eLogChannel::CORE_STRING, std::cerr, "%s", e.what());
+				LOGEF(eLogChannel::CORE_STRING, "%s", e.what());
 			}
 		}
 
@@ -3699,7 +3699,7 @@ export namespace cave
 		size_t sLength = size + 1ul;
 		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
 		Memory::Memset(s, 0, sLength);
-		snprintf(s, sLength, "%ld", value);
+		snprintf(s, sLength, "%lld", value);
 
 		String result = String{s};
 		Memory::Free(s);
@@ -3761,7 +3761,7 @@ export namespace cave
 		size_t sLength = size + 1ul;
 		char* s = reinterpret_cast<char*>(Memory::Malloc(sLength * sizeof(char)));
 		Memory::Memset(s, 0, sLength);
-		snprintf(s, sLength, "%lu", value);
+		snprintf(s, sLength, "%llu", value);
 
 		String result = String{s};
 		Memory::Free(s);

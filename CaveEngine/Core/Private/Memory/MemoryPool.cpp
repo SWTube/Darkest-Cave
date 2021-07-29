@@ -8,23 +8,22 @@
 namespace cave
 {
 	MemoryPool::MemoryPool(size_t maxPoolSize)
-		: mPoolSize(maxPoolSize)
-		, mFreeSize(maxPoolSize)
+		: mPoolSize(GetUpperPowerOfTwo(maxPoolSize))
+		, mFreeSize(GetUpperPowerOfTwo(maxPoolSize))
 		, mMaxNumDataBlocks(0)
 	{
 		// Set size of blocks to preallocate half the size of requested size for the pool
-		size_t poolSize = GetUpperPowerOfTwo(maxPoolSize);
-		size_t minAllocateSize = poolSize / 8;
-		if (poolSize > 4096)
+		size_t minAllocateSize = mPoolSize / 8;
+		if (mPoolSize > 4096)
 		{
 			mMinBlockSize = 32;
 			mMaxBlockSize = 256;
 			minAllocateSize = 1024;
 		}
-		else if (poolSize <= 32)
+		else if (mPoolSize <= 32)
 		{
 			mMinBlockSize = 1;
-			if (poolSize > 16)
+			if (mPoolSize > 16)
 			{
 				mMaxBlockSize = 2;
 			}
@@ -35,12 +34,12 @@ namespace cave
 		}
 		else
 		{
-			mMaxBlockSize = poolSize / 32;
-			mMinBlockSize = poolSize / 128;
+			mMaxBlockSize = mPoolSize / 32;
+			mMinBlockSize = mPoolSize / 128;
 		}
 		
 		// Initialize vector of predefined Data Blocks to preallocate memories
-		mDataBlocks = std::vector<DataBlock*>(GetExponent(poolSize));
+		mDataBlocks = std::vector<DataBlock*>(GetExponent(mPoolSize));
 		for (size_t i = GetExponent(mMinBlockSize); i <= GetExponent(mMaxBlockSize); ++i)
 		{
 			// Initialize corresponding Data Block size of power of i

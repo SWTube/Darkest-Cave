@@ -34,12 +34,12 @@ namespace cave
 		static void* Realloc(void* ptr, size_t newSize);
 		static void Free(void* ptr);
 		static int32_t Memcmp(const void* lhs, const void* rhs, size_t count);
-		constexpr static void* Memset(void* dest, int32_t fill, size_t count);
+		static void* Memset(void* dest, int32_t fill, size_t count);
 		static void* Memcpy(void* dest, const void* src, size_t count);
 		static void* Memmove(void* dest, const void* src, size_t count);
 	};
 
-	inline uintptr_t AlignAddress(uintptr_t address, size_t align)
+	FORCEINLINE uintptr_t AlignAddress(uintptr_t address, size_t align)
 	{
 		const size_t mask = align - 1;
 		assert((align & mask) == 0);	// pwr of 2
@@ -47,15 +47,10 @@ namespace cave
 	}
 
 	template<typename T>
-	inline T* AlignPointer(T* ptr, size_t align)
+	FORCEINLINE T* AlignPointer(T* ptr, size_t align)
 	{
 		const uintptr_t address = reinterpret_cast<uintptr_t>(ptr);
 		const uintptr_t alignedAddress = AlignAddress(address, align);
 		return reinterpret_cast<T*>(alignedAddress);
-	}
-
-	constexpr void* Memory::Memset(void* dest, int32_t fill, size_t count)
-	{
-		return memset(dest, fill, count);
 	}
 } // namespace cave
