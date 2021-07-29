@@ -2772,7 +2772,7 @@ namespace cave
 	 *
   	 * @brief (2) Converts a string to a signed integer
 	 * @details Interprets a signed integer value in the string str.@n
-	 * 			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found, 
+	 *			Discards any whitespace characters (as identified by calling isspace()) until the first non-whitespace character is found,
 	 * 			then takes as many characters as possible to form a valid base-n (where n=base) integer number representation 
 	 * 			and converts them to an integer value. The valid integer value consists of the following parts: @n
 	 * 			* (optional) plus or minus sign@n

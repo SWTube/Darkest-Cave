@@ -21,15 +21,15 @@ namespace cave
 		Float3() = default;
 		Float3(const Float3& other) = default;
 		Float3& operator=(const Float3& other) = default;
-		constexpr Float3(const Float3&& other);
-		constexpr Float3& operator=(const Float3&& other);
+		constexpr Float3(Float3&& other) noexcept;
+		constexpr Float3& operator=(Float3&& other) noexcept;
 		constexpr Float3(float x, float y, float z);
 		constexpr Float3(float* array);
 
 		constexpr bool operator==(const Float3& rhs) const;
 	} Float3;
 
-	constexpr Float3::Float3(const Float3&& other)
+	constexpr Float3::Float3(Float3&& other) noexcept
 	{
 		if (this != &other)
 		{
@@ -39,7 +39,7 @@ namespace cave
 		}
 	}
 
-	constexpr Float3& Float3::operator=(const Float3&& other)
+	constexpr Float3& Float3::operator=(Float3&& other) noexcept
 	{
 		if (this != &other)
 		{
@@ -77,14 +77,14 @@ namespace cave
 		Float2() = default;
 		Float2(const Float2& other) = default;
 		Float2& operator=(const Float2& other) = default;
-		constexpr Float2(const Float2&& other);
-		constexpr Float2& operator=(const Float2&& other);
+		constexpr Float2(Float2&& other) noexcept;
+		constexpr Float2& operator=(Float2&& other) noexcept;
 		constexpr Float2 operator+(const Float2& other);
 		constexpr Float2(float x, float y);
 		constexpr Float2(float* array);
 	};
 
-	constexpr Float2::Float2(const Float2&& other)
+	constexpr Float2::Float2(Float2&& other) noexcept
 		: X(other.X)
 		, Y(other.Y)
 	{
@@ -95,7 +95,7 @@ namespace cave
 		return Float2(X + other.X, Y + other.Y);
 	}
 
-	constexpr Float2& Float2::operator=(const Float2&& other)
+	constexpr Float2& Float2::operator=(Float2&& other) noexcept
 	{
 		X = other.X;
 		Y = other.Y;
@@ -118,8 +118,6 @@ namespace cave
 	constexpr uint32_t VERTEX_POSITION = 0b01;
 	constexpr uint32_t VERTEX_TEXCOORD = 0b10;
 
-
-
 	typedef struct Vertex
 	{
 	public:
@@ -128,18 +126,18 @@ namespace cave
 		Vertex() = default;
 		Vertex(const Vertex& other) = default;
 		Vertex& operator=(const Vertex& other) = default;
-		constexpr Vertex(const Vertex&& other);
-		constexpr Vertex& operator=(const Vertex&& other);
+		constexpr Vertex(Vertex&& other) noexcept;
+		constexpr Vertex& operator=(Vertex&& other) noexcept;
 		constexpr Vertex(float x, float y, float z);
 		constexpr Vertex(float* array);
 		constexpr Vertex(const Float3& array);
-		constexpr Vertex(const Float3&& array);
+		constexpr Vertex(Float3&& array);
 		constexpr uint32_t GetSize() const;
 
 		constexpr bool operator==(const Vertex& rhs) const;
 	} Vertex;
 
-	constexpr Vertex& Vertex::operator=(const Vertex&& other)
+	constexpr Vertex& Vertex::operator=(Vertex&& other) noexcept
 	{
 		if (this != &other)
 		{
@@ -149,7 +147,7 @@ namespace cave
 		return *this;
 	}
 
-	constexpr Vertex::Vertex(const Vertex&& other)
+	constexpr Vertex::Vertex(Vertex&& other) noexcept
 	{
 		if (this != &other)
 		{
@@ -167,8 +165,8 @@ namespace cave
 	{
 	}
 
-	constexpr Vertex::Vertex(const Float3&& array)
-		: Position(array)
+	constexpr Vertex::Vertex(Float3&& array)
+		: Position(std::move(array))
 	{
 	}
 
@@ -214,15 +212,15 @@ namespace cave
 		VertexT() = default;
 		VertexT(const VertexT& other) = default;
 		VertexT& operator=(const VertexT& other) = default;
-		constexpr VertexT(const VertexT&& other);
-		constexpr VertexT& operator=(const VertexT&& other);
+		constexpr VertexT(VertexT&& other) noexcept;
+		constexpr VertexT& operator=(VertexT&& other) noexcept;
 		constexpr VertexT(float posX, float posY, float posZ, float texX, float texY);
 		constexpr VertexT(float* array);
 		constexpr VertexT(const Float3& position, const Float2& texCoord);
-		constexpr VertexT(const Float3&& position, const Float2&& texCoord);
+		constexpr VertexT(Float3&& position, Float2&& texCoord);
 	} VertexT;
 
-	constexpr VertexT::VertexT(const VertexT&& other)
+	constexpr VertexT::VertexT(VertexT&& other) noexcept
 	{
 		if (this != &other)
 		{
@@ -232,7 +230,7 @@ namespace cave
 		}
 	}
 
-	constexpr VertexT& VertexT::operator=(const VertexT&& other)
+	constexpr VertexT& VertexT::operator=(VertexT&& other) noexcept
 	{
 		if (this != &other)
 		{
@@ -258,7 +256,7 @@ namespace cave
 		VertexFlag |= VERTEX_TEXCOORD;
 	}
 
-	constexpr VertexT::VertexT(const Float3&& position, const Float2&& texCoord)
+	constexpr VertexT::VertexT(Float3&& position, Float2&& texCoord)
 		: Vertex(std::move(position))
 		, TexCoord(std::move(texCoord))
 	{
