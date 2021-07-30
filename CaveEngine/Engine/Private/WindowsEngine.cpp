@@ -51,7 +51,7 @@ namespace cave
 		}
 	}
 
-	eResult WindowsEngine::Run(Level& level)
+	eResult WindowsEngine::Run()
 	{
 		int32_t hr = S_OK;
 		Window* window = mWindow; // ���� : mWindow->GetWindow()
