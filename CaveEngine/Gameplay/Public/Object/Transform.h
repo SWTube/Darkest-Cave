@@ -7,7 +7,7 @@
 #include "CoreTypes.h"
 #include "Assertion/Assert.h"
 #include "Object/Object.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 
 namespace cave
 {

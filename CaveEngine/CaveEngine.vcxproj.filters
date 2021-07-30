@@ -49,9 +49,6 @@
     <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Sprite\Vertex.cpp">
-      <Filter>Source Files\Graphics\Sprite</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
@@ -217,6 +214,9 @@
     <ClCompile Include="Gameplay\Private\Object\Transform.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Vertex.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
@@ -325,9 +325,6 @@
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h">
       <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\Vertex.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h">
       <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
@@ -367,9 +364,6 @@
     <ClInclude Include="Core\Public\Math\Vector2.h">
       <Filter>Header Files\Core\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Object\Obejct.h">
-      <Filter>Header Files\Gameplay\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Script.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
@@ -396,6 +390,15 @@
     </ClInclude>
     <ClInclude Include="Graphics\Public\Graphics.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Player.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Object.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Vertex.h">
+      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

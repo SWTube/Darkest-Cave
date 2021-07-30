@@ -67,8 +67,6 @@ namespace cave
 		msg.message = WM_NULL;
 		PeekMessage(&msg, nullptr, 0u, 0u, PM_NOREMOVE);
 
-		level.InitializeGameObjectsInLevel();
-
 		while (WM_QUIT != msg.message)
 		{
 			// Process window events.
@@ -83,8 +81,6 @@ namespace cave
 			}
 			else
 			{
-				level.FixedUpdateGameObjectsInLevel();
-
 				// Update the scene.
 				mRenderer->Update();
 

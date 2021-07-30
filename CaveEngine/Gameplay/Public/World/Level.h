@@ -7,7 +7,6 @@
 #include <vector>
 #include <unordered_map>
 
-#include "Engine.h"
 #include "CoreTypes.h"
 #include "Object/Object.h"
 
@@ -35,8 +34,8 @@ namespace cave
 		void AddGameObject(GameObject& gameObject);
 		void AddGameObjects(std::vector<GameObject*>& gameObjects);
 
-		void DefferedRemoveGameObject(GameObject& gameObject);
-		void DefferedRemoveGameObjects(std::vector<GameObject*>& gameObjects);
+		void RemoveGameObject(GameObject& gameObject);
+		void RemoveGameObjects(std::vector<GameObject*>& gameObjects);
 
 		GameObject* FindGameObjectByName(std::string& name);
 		GameObject* FindGameObjectByName(const char* name);
@@ -52,28 +51,23 @@ namespace cave
 		void UpdateGameObjectsInLevel();
 		void FixedUpdateGameObjectsInLevel();
 
-#ifdef CAVE_BUILD_DEBUG
-		void PrintGameObjects();
-#endif // CAVE_BUILD_DEBUG
-
 	private:
 		void addActiveGameObject(GameObject& gameObject);
 		void removeActiveGameObject(GameObject& gameObject);
 
 		void addTagGameObject(GameObject& gameObject);
-		void removeTagGameObject(GameObject& gameObject);
+		void removeTaggedGameObject(GameObject& gameObject);
 
-		void removeGameObjects();
+		void destroyGameObjects();
 
-		bool findGameObject(GameObject& gameObject);
-		bool findActiveGameObject(GameObject& gameObject);
+		bool isGameObjectInLevel(GameObject& gameObject);
 
 	private:
 		std::unordered_multimap<std::string, GameObject*> mAllGameObjects;
 		std::unordered_multimap<uint32_t, GameObject*> mActiveGameObjects;
-		std::unordered_multimap<Tag*, GameObject*> mTagGameObjects;
+		std::unordered_multimap<Tag*, GameObject*> mTaggedGameObjects;
 
-		std::vector<GameObject*> mDeferredRemoveGameObjects;
+		std::vector<GameObject*> mGameObjectsToRemove;
 
 		World* mOwner;
 	};
@@ -81,8 +75,7 @@ namespace cave
 #ifdef CAVE_BUILD_DEBUG
 	namespace LevelTest
 	{
-		void Test();
-		Level* CreateTmpLevel();
+
 	}
 #endif //CAVE_BUILD_DEBUG
 }

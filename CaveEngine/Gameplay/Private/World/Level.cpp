@@ -10,43 +10,37 @@
 #endif //CAVE_BUILD_DEBUG
 
 #include "CoreGlobals.h"
-#include "World/Level.h"
 #include "Assertion/Assert.h"
 #include "Object/GameObject.h"
 #include "Object/TagPool.h"
+#include "World/Level.h"
 
 namespace cave
 {
 	Level::Level()
 		: Object("Level")
-		, mMap(nullptr)
-		, mRenderer(nullptr)
+		, mOwner(nullptr)
 	{
 
 	}
 
 	Level::Level(std::string& name) 
 		: Object(name)
-		, mMap(nullptr)
-		, mRenderer(nullptr)
+		, mOwner(nullptr)
 	{
 
 	}
 
 	Level::Level(const char* name)
 		: Object(name)
-		, mMap(nullptr)
-		, mRenderer(nullptr)
+		, mOwner(nullptr)
 	{
 
 	}
 
 	Level::~Level()
 	{
-		if (mMap != nullptr)
-		{
-			delete mMap;
-		}
+	
 	}
 
 	void Level::AddGameObject(GameObject& gameObject)
@@ -69,13 +63,13 @@ namespace cave
 		}
 	}
 
-	void Level::DefferedRemoveGameObject(GameObject& gameObject)
+	void Level::RemoveGameObject(GameObject& gameObject)
 	{
 		assert(IsValid() & gameObject.IsValid());
-		mDeferredRemoveGameObjects.push_back(&gameObject);
+		mGameObjectsToRemove.push_back(&gameObject);
 	}
 
-	void Level::DefferedRemoveGameObjects(std::vector<GameObject*>& gameObjects)
+	void Level::RemoveGameObjects(std::vector<GameObject*>& gameObjects)
 	{
 		for (auto& gameObject : gameObjects)
 		{
@@ -133,9 +127,9 @@ namespace cave
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
 
-		auto iter = mTagGameObjects.find(tag);
+		auto iter = mTaggedGameObjects.find(tag);
 
-		return iter != mTagGameObjects.end() ? iter->second : nullptr;
+		return iter != mTaggedGameObjects.end() ? iter->second : nullptr;
 	}
 
 	GameObject* Level::FindGameObjectByTag(const char* name)
@@ -144,9 +138,9 @@ namespace cave
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
 
-		auto iter = mTagGameObjects.find(tag);
+		auto iter = mTaggedGameObjects.find(tag);
 
-		return iter != mTagGameObjects.end() ? iter->second : nullptr;
+		return iter != mTaggedGameObjects.end() ? iter->second : nullptr;
 	}
 
 	std::vector<GameObject*>&& Level::FindGameObjectsByTag(std::string& name)
@@ -155,7 +149,7 @@ namespace cave
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
 
-		auto range = mTagGameObjects.equal_range(tag);
+		auto range = mTaggedGameObjects.equal_range(tag);
 		std::vector<GameObject*> result;
 		for (; range.first != range.second; ++range.first)
 		{
@@ -172,7 +166,7 @@ namespace cave
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
 
-		auto range = mTagGameObjects.equal_range(tag);
+		auto range = mTaggedGameObjects.equal_range(tag);
 		std::vector<GameObject*> result;
 		for (; range.first != range.second; ++range.first)
 		{
@@ -187,7 +181,6 @@ namespace cave
 		assert(IsValid());
 		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
 		{
-			(iter->second)->SetRenderer(*mRenderer);
 			(iter->second)->Init();
 		}
 	}
@@ -195,81 +188,83 @@ namespace cave
 	void Level::UpdateGameObjectsInLevel()
 	{
 		assert(IsValid());
+
 		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
 		{
 			(iter->second)->UpdateScripts();
 		}
-		removeGameObjects();
+		destroyGameObjects();
 	}
 
 	void Level::FixedUpdateGameObjectsInLevel()
 	{
 		assert(IsValid());
+
 		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
 		{
 			assert((iter->second)->IsValid());
 			(iter->second)->FixedUpdateScripts();
 		}
-		removeGameObjects();
+		destroyGameObjects();
 	}
 
 	void Level::addActiveGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & findGameObject(gameObject));
+		assert(IsValid() & gameObject.IsValid() & isGameObjectInLevel(gameObject));
 
-		mActiveGameObjects.insert({ gameObject.GetName(), &gameObject });
+		mActiveGameObjects.insert({ gameObject.GetGUID(), &gameObject });
 	}
 
 	void Level::removeActiveGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & findActiveGameObject(gameObject));
+		assert(IsValid() & gameObject.IsValid() & isGameObjectInLevel(gameObject));
 
 		auto iter = mActiveGameObjects.find(gameObject.GetGUID());
-		if()
 		
+		if (iter != mActiveGameObjects.end())
+		{
+			mActiveGameObjects.erase(iter);
+		}
 	}
 
 	void Level::addTagGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & findGameObject(gameObject));
+		assert(IsValid() & gameObject.IsValid() & isGameObjectInLevel(gameObject));
 
-		mTagGameObjects.insert({ gameObject.GetTag(), &gameObject });
+		mTaggedGameObjects.insert({ gameObject.GetTag(), &gameObject });
 	}
 
-	void Level::removeTagGameObject(GameObject& gameObject)
+	void Level::removeTaggedGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & findGameObject(gameObject));
+		assert(IsValid() & gameObject.IsValid() & isGameObjectInLevel(gameObject));
 
-		auto range = mTagGameObjects.equal_range(gameObject.GetTag());
+		auto range = mTaggedGameObjects.equal_range(gameObject.GetTag());
 		for (; range.first != range.second; ++range.first)
 		{
-			if (range.first->second == &gameObject)
+			if (*(range.first->second) == gameObject)
 			{
-				mTagGameObjects.erase(range.first);
+				mTaggedGameObjects.erase(range.first);
 				break;
 			}
 		}
 	}
 
-	void Level::removeGameObjects()
+	void Level::destroyGameObjects()
 	{
 		assert(IsValid());
 
-		if (mDeferredRemoveGameObjects.empty())
+		if (mGameObjectsToRemove.empty())
 		{
 			return;
 		}
 
-		for (size_t index = 0, end = mDeferredRemoveGameObjects.size(); index != end; ++index)
+		for (size_t index = 0, end = mGameObjectsToRemove.size(); index != end; ++index)
 		{
-			GameObject* gameObject = mDeferredRemoveGameObjects[index];
+			GameObject* gameObject = mGameObjectsToRemove[index];
+			assert(gameObject != nullptr);
 
-			if (findActiveGameObject(*gameObject))
-			{
-				removeActiveGameObject(*gameObject);
-			}
-
-			removeTagGameObject(*gameObject);
+			removeActiveGameObject(*gameObject);
+			removeTaggedGameObject(*gameObject);
 
 			auto range = mAllGameObjects.equal_range(gameObject->GetName());
 			for (; range.first != range.second; ++range.first)
@@ -277,16 +272,16 @@ namespace cave
 				if (range.first->second == gameObject)
 				{
 					mAllGameObjects.erase(range.first);
-					//gCoreMemoryPool.Deallocate(range.first->second, sizeof(GameObject));
+					delete gameObject;
 					break;
 				}
 			}
 		}
 
-		mDeferredRemoveGameObjects.clear();
+		mGameObjectsToRemove.clear();
 	}
 
-	bool Level::findGameObject(GameObject& gameObject)
+	bool Level::isGameObjectInLevel(GameObject& gameObject)
 	{
 		assert(IsValid() & gameObject.IsValid());
 
@@ -302,160 +297,9 @@ namespace cave
 		return false;
 	}
 
-	bool Level::findActiveGameObject(GameObject& gameObject)
-	{
-		assert(IsValid() & gameObject.IsValid());
-
-		auto iter = mActiveGameObjects.find(gameObject.GetGUID());
-		if(iter != mActiveGameObjects.end())
-		{
-			return true;
-		}
-
-		return false;
-	}
-
 #ifdef CAVE_BUILD_DEBUG
-	void Level::PrintGameObjects()
-	{
-		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
-		{
-			std::cout << (iter->second)->GetName() << std::endl;
-		}
-
-		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
-		{
-			std::cout << (iter->second)->GetName() << std::endl;
-		}
-
-		for (auto iter = mTagGameObjects.begin(); iter != mTagGameObjects.end(); ++iter)
-		{
-			std::cout << (iter->second)->GetName() << std::endl;
-		}
-	}
-
 	namespace LevelTest
 	{
-		void Test()
-		{
-			TagPool::Init();
-
-			const char* testString = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-			std::vector<char*> names;
-			std::vector<char*> tags;
-			std::vector<GameObject*> gameObjects;
-
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			std::uniform_int_distribution<int> disIndex(1, 30);
-			std::uniform_int_distribution<int> disStr(0, 61);
-			std::uniform_int_distribution<int> disTag(0, 19);
-
-			for (size_t i = 0; i < 100; ++i)
-			{
-				int index = disIndex(gen);
-				char* str = new char[index + 1];
-				for (int j = 0; j < index; ++j)
-				{
-					str[j] = testString[disStr(gen)];
-				}
-				str[index] = '\0';
-				std::cout << "word: " << str << std::endl;
-
-				names.push_back(str);
-			}
-
-			Level* level = new Level(names[0]);
-
-			for (size_t i = 0; i < 20; ++i)
-			{
-				int index = disIndex(gen);
-				char* str = new char[index + 1];
-				for (int j = 0; j < index; ++j)
-				{
-					str[j] = testString[disStr(gen)];
-				}
-				str[index] = '\0';
-
-				tags.push_back(str);
-			}
-
-			for (auto& element : tags)
-			{
-				TagPool::AddTag(element);
-			}
-
-			for (auto& element : names)
-			{
-				GameObject* gameObject = new(gCoreMemoryPool.Allocate(sizeof(GameObject))) GameObject(element, *TagPool::FindTagByName(tags[disTag(gen)]));
-				gameObjects.push_back(gameObject);
-				level->AddGameObject(*gameObject);
-			}
-
-			for (auto& element : gameObjects)
-			{
-				assert(level->FindGameObjectByName(element->GetName().c_str()) != nullptr);
-			}
-
-			level->UpdateGameObjectsInLevel();
-			level->UpdateAllGameObjectsInLevel();
-			level->FixedUpdateGameObjectsInLevel();
-			level->FixedUpdateAllGameObjectsInLevel();
-
-			for (auto& element : gameObjects)
-			{
-				level->RemoveGameObject(*element);
-			}
-
-			for (auto& element : gameObjects)
-			{
-				assert(level->FindGameObjectByName(element->GetName().c_str()) == nullptr);
-			}
-
-			for (auto& element : gameObjects)
-			{
-				delete element;
-			}
-
-			for (auto& element : names)
-			{
-				delete element;
-			}
-
-			for (auto& element : tags)
-			{
-				delete element;
-			}
-			TagPool::ShutDown();
-		}
-
-		Level* CreateTmpLevel()
-		{
-			TagPool::Init();
-
-			Level* level = new Level("Level_1");
-
-			GameObject* lapland = new GameObject("lapland");
-			GameObject* amiya = new GameObject("amiya");
-			GameObject* texas = new GameObject("texas");
-
-			TestScript* lapland_script = new TestScript("lapland_script", 0, 0, 0.05f);
-			TestScript* amiya_script = new TestScript("amiya_script", 1, 2, 0.03f);
-			TestScript* texas_script = new TestScript("texas_script", 2, 4, 0.01f);
-
-			lapland->AddScript(*lapland_script);
-			amiya->AddScript(*amiya_script);
-			texas->AddScript(*texas_script);
-
-			level->AddGameObject(*lapland);
-			level->AddGameObject(*amiya);
-			level->AddGameObject(*texas);
-
-			level->PrintGameObjects();
-
-			return level;
-		}
 	}
 #endif //CAVE_BUILD_DEBUG
 }

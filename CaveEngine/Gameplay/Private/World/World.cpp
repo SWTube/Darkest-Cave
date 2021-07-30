@@ -12,12 +12,14 @@ namespace cave
 
 	World::World(std::string& name) 
 		: Object(name)
+		, mMap(nullptr)
 	{
 		assert(IsValid() & mGlobalUniqueName.contains(name));
 	}
 
 	World::World(const char* name) 
 		: Object(name)
+		, mMap(nullptr)
 	{
 		assert(IsValid() & mGlobalUniqueName.contains(name));
 	}
@@ -27,14 +29,14 @@ namespace cave
 		assert(IsValid());
 	}
 
-	World::AddLevel(Level& level)
+	void World::AddLevel(Level& level)
 	{
 		assert(IsValid() & level.IsValid());
 
 		mLevels.insert({ level.GetGUID(), &level });
 	}
 
-	World::AddLevels(std::vector<Level*>& levels)
+	 void World::AddLevels(std::vector<Level*>& levels)
 	{
 		for (auto& level : levels)
 		{
@@ -42,33 +44,45 @@ namespace cave
 		}
 	}
 
-	World::UpdateGameObjectsInWorld()
-	{
-		assert(IsValid());
+	 void World::InitializeGameObjectsInWorld()
+	 {
+		 assert(IsValid());
 
-		for (auto& iter = mLevels.begin(); iter != mLevels.end(); ++iter)
-		{
-			iter->second->UpdateGameObjectsInLevel();
-		}
+		 for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
+		 {
+			 assert(iter->second->IsValid());
+			 iter->second->InitializeGameObjectsInLevel();
+		 }
 	}
 
-	World::FixedUpdateGameObjectsInWorld()
+	void World::UpdateGameObjectsInWorld()
 	{
 		assert(IsValid());
 
-		for (auto& iter = mLevels.begin(); iter != mLevels.end(); ++iter)
+		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
 		{
 			assert(iter->second->IsValid());
 			iter->second->UpdateGameObjectsInLevel();
 		}
 	}
 
-	World::isLevelInWorld(Level& level)
+	void World::FixedUpdateGameObjectsInWorld()
 	{
-		assert(level.IsValid());
+		assert(IsValid());
+
+		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
+		{
+			assert(iter->second->IsValid());
+			iter->second->UpdateGameObjectsInLevel();
+		}
+	}
+
+	bool World::isLevelInWorld(Level& level)
+	{
+		assert(IsValid() & level.IsValid());
 
 		auto iter = mLevels.find(level.GetGUID());
 
-		return iter->second != mLevels.end() ? true : false;
+		return iter != mLevels.end() ? true : false;
 	}
 }

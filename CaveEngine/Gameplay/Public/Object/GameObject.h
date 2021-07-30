@@ -24,6 +24,8 @@ namespace cave
 	class GameObject : public Object
 	{
 	public:
+		friend class Level;
+
 		GameObject();
 		GameObject(std::string& name);
 		GameObject(const char* name);
@@ -40,8 +42,7 @@ namespace cave
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 	
-		void Init();
-
+		void InitializeScripts();
 		void UpdateScripts();
 		void FixedUpdateScripts();
 
@@ -149,7 +150,7 @@ namespace cave
 #ifdef CAVE_BUILD_DEBUG
 	namespace GameObjectTest
 	{
-		void Test();
+	
 	}
 #endif //CAVE_BUILD_DEBUG
 }

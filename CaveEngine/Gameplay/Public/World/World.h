@@ -14,6 +14,7 @@
 namespace cave
 {
 	class Level;
+	class Map;
 
 	class World final : public Object
 	{
@@ -33,6 +34,7 @@ namespace cave
 		void AddLevel(Level& level);
 		void AddLevels(std::vector<Level*>& levels);
 
+		void InitializeGameObjectsInWorld();
 		void UpdateGameObjectsInWorld();
 		void FixedUpdateGameObjectsInWorld();
 
@@ -43,6 +45,6 @@ namespace cave
 		static std::unordered_set<std::string> mGlobalUniqueName;
 		std::unordered_map<uint32_t, Level*> mLevels;
 
-		Level* mCurrentLevel;
+		Map* mMap;
 	};
 }

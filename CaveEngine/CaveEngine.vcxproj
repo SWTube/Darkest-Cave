@@ -220,6 +220,7 @@
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
     <ClInclude Include="Core\Public\Containers\TStack.h" />
+    <ClInclude Include="Core\Public\Containers\Vertex.h" />
     <ClInclude Include="Core\Public\Core.h" />
     <ClInclude Include="Core\Public\CoreFwd.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
@@ -240,6 +241,8 @@
     <ClInclude Include="Engine\Public\GenericEngine.h" />
     <ClInclude Include="Engine\Public\UnixEngine.h" />
     <ClInclude Include="Engine\Public\WindowsEngine.h" />
+    <ClInclude Include="Gameplay\Public\Object\Object.h" />
+    <ClInclude Include="Gameplay\Public\Object\Player.h" />
     <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
     <ClInclude Include="Gameplay\Public\Object\Transform.h" />
     <ClInclude Include="Gameplay\Public\World\Level.h" />
@@ -253,7 +256,6 @@
     <ClInclude Include="Gameplay\Public\GameInstance.h" />
     <ClInclude Include="Gameplay\Public\Object\Script.h" />
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
-    <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
     <ClInclude Include="Gameplay\Public\Object\Tag.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
@@ -267,7 +269,6 @@
     <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\GenericSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h" />
-    <ClInclude Include="Graphics\Public\Sprite\Vertex.h" />
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
@@ -278,6 +279,7 @@
   <ItemGroup>
     <ClCompile Include="Core\Private\Containers\Array.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
+    <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
     <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
@@ -304,7 +306,6 @@
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp" />
-    <ClCompile Include="Graphics\Private\Sprite\Vertex.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp" />

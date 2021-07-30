@@ -7,10 +7,11 @@
 #include <unordered_map>
 
 #include "CoreTypes.h"
-#include "GenericEngine.h"
+#include "Renderer/Renderer.h"
 
 namespace cave
 {
+	class GenericEngine;
 	class World;
 	class WorldMap;
 
@@ -33,8 +34,14 @@ namespace cave
 	private:
 		GameInstance();
 
+		/*Tmp method*/
+		GameInstance(Renderer& renderer);
+
 	private:
 		std::unordered_map<uint32_t, World*> mWorlds;
 		WorldMap* mWorldMap;
+
+		/*Tmp variable*/
+		Renderer* mRenderer;
 	};
 }

@@ -195,7 +195,7 @@ namespace cave
 		mScripts.clear();
 	}
 
-	void GameObject::Init()
+	void GameObject::InitializeScripts()
 	{
 		assert(IsValid());
 		for (auto& script : mScripts)
@@ -355,87 +355,13 @@ namespace cave
 	{
 		assert(IsValid());
 		assert(mLevel != nullptr);
-		mLevel->DefferedRemoveGameObject(*this);
+		mLevel->RemoveGameObject(*this);
 	}
 
 #ifdef CAVE_BUILD_DEBUG
 	namespace GameObjectTest
 	{
-		void Test()
-		{
-			TagPool::Init();
-
-			const char* testString = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-			std::vector<std::string> vecString;
-			std::vector<char*> vecConstChar;
-			std::vector<GameObject*> gameObjects;
-
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			std::uniform_int_distribution<int> disIndex(1, 40);
-			std::uniform_int_distribution<int> disStr(0, 61);
-
-			for (size_t i = 0; i < 100; ++i)
-			{
-				int index = disIndex(gen);
-				char* str = new char[index + 1];
-				for (int j = 0; j < index; ++j)
-				{
-					str[j] = testString[disStr(gen)];
-				}
-				str[index] = '\0';
-				std::cout << "word: " << str << std::endl;
-
-				vecConstChar.push_back(str);
-			}
-
-			TagPool::AddTag("Monster");
-			Tag* tag = TagPool::FindTagByName("Monster");
-
-			for (auto& element : vecConstChar)
-			{
-				GameObject* gameObject = new GameObject(element, *tag);
-				gameObjects.push_back(gameObject);
-			}
-
-			Script* script = new Script("Move");
-
-			for (auto& element : gameObjects)
-			{
-				std::cout << element->GetName() << std::endl;
-				assert((*(element->GetTag())) == "Monster");
-				assert(element->IsActive());
-				element->SetActive(false);
-				assert(!element->IsActive());
-				assert(element->GetLayer() == 0);
-				element->SetLayer(12);
-				assert(element->GetLayer() == 12);
-				assert(element->GetTransform() != nullptr);
-				assert(element->GetLevel() == nullptr);
-				assert(element->GetPhysics() == nullptr);
-				assert(element->GetRenderer() == nullptr);
-				assert(!element->IsControlled());
-				assert(element->GetController() == nullptr);
-				assert(element->FindScriptByName("Move") == nullptr);
-				element->AddScript(*script);
-				assert(element->FindScriptByName("Move") != nullptr);
-				element->RemoveScript("Move");
-				assert(element->FindScriptByName("Move") == nullptr);
-			}
-
-			for (auto& element : gameObjects)
-			{
-				delete element;
-			}
-
-			for (auto& element : vecConstChar)
-			{
-				delete element;
-			}
-
-			TagPool::ShutDown();
-		}
+		
 	}
 #endif //CAVE_BUILD_DEBUG
 }

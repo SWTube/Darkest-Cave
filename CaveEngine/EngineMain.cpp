@@ -97,15 +97,13 @@ int main(int32_t argc, char** argv)
 		}
 	}
 #endif
-	DemoTest();
+	//DemoTest();
 	//RenderTest();
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
-
-	_CrtDumpMemoryLeaks();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 #endif
 
@@ -272,9 +270,6 @@ void DemoTest()
 
 	cave::Renderer* renderer = main.GetRenderer();
 
-	cave::Level* level = cave::LevelTest::CreateTmpLevel();
-	level->SetRenderer(*renderer);
-
 	renderer->AddSprite("lapland.png");
 	renderer->AddTexture("lapland_2.png");
 	renderer->AddSprite("amiya.png");
@@ -293,7 +288,7 @@ void DemoTest()
 		//renderer->CreateWindowSizeDependentResources();
 
 		// Run the program.
-		result = main.Run(*level);
+		result = main.Run();
 	}
 
 	main.Destroy();
