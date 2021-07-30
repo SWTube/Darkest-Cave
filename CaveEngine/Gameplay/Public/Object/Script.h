@@ -8,7 +8,7 @@
 #include <unordered_set>
 
 #include "CoreTypes.h"
-#include "Object/Obejct.h"
+#include "Object/Object.h"
 #include "Object/GameObject.h"
 
 namespace cave
