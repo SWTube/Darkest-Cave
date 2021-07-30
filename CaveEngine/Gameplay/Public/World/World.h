@@ -4,10 +4,12 @@
  */
 #pragma once
 
+#include <unordered_set>
 #include <unordered_map>
+#include <vector>
 
 #include "CoreTypes.h"
-#include "Object/Obejct.h"
+#include "Object/Object.h"
 
 namespace cave
 {
@@ -16,6 +18,8 @@ namespace cave
 	class World final : public Object
 	{
 	public:
+		friend class Level;
+
 		World() = delete;
 		World(std::string& name);
 		World(const char* name);
@@ -27,20 +31,18 @@ namespace cave
 		World& operator=(World&&) = delete;
 
 		void AddLevel(Level& level);
-		void RemoveLevel(std::string& name);
-		void RemoveLevel(const char* name);
+		void AddLevels(std::vector<Level*>& levels);
 
-		Level* FindLevelByName(std::string& name);
-		Level* FindLevelByName(const char* name);
-
-		void UpdateGameObjectInCurrentLevel();
+		void UpdateGameObjectsInWorld();
+		void FixedUpdateGameObjectsInWorld();
 
 	private:
-		std::unordered_map<std::string, Level*> mLevels;
-		Level* mPreviousLevel;
-		Level* mCurrentLevel;
-		Level* mNextLevel;
+		bool isLevelInWorld(Level& level);
 
-		std::string mName;
+	private:
+		static std::unordered_set<std::string> mGlobalUniqueName;
+		std::unordered_map<uint32_t, Level*> mLevels;
+
+		Level* mCurrentLevel;
 	};
 }

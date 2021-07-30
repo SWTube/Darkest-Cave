@@ -32,6 +32,14 @@ namespace cave
 	void TagPool::ShutDown()
 	{
 		assert(IsValid());
+		for (auto iter = mTags.begin(); iter != mTags.end(); ++iter)
+		{
+			Tag* tag = iter->second;
+			iter->second = nullptr;
+			assert(tag != nullptr);
+			delete tag;
+		}
+		mTags.clear();
 		mbValid = false;
 	}
 
@@ -39,7 +47,7 @@ namespace cave
 	{
 		assert(IsValid());
 
-		Tag* tag = new(gCoreMemoryPool.Allocate(sizeof(Tag))) Tag(name);
+		Tag* tag = new Tag(name);
 		assert(tag != nullptr);
 		mTags.insert({ name, tag });
 	}
@@ -48,7 +56,7 @@ namespace cave
 	{
 		assert(IsValid());
 		
-		Tag* tag = new(gCoreMemoryPool.Allocate(sizeof(Tag))) Tag(name);
+		Tag* tag = new Tag(name);
 		assert(tag != nullptr);
 		mTags.insert({ name, tag });
 	}
@@ -60,7 +68,7 @@ namespace cave
 		Tag* tag = FindTagByName(name);
 		assert(tag != nullptr);
 		mTags.erase(name);
-		gCoreMemoryPool.Deallocate(tag, sizeof(Tag));
+		delete tag;
 	}
 
 	void TagPool::RemoveTag(const char* name)
@@ -70,7 +78,7 @@ namespace cave
 		Tag* tag = FindTagByName(name);
 		assert(tag != nullptr);
 		mTags.erase(name);
-		gCoreMemoryPool.Deallocate(tag, sizeof(Tag));
+		delete tag;
 	}
 
 	Tag* TagPool::FindTagByName(std::string& name)

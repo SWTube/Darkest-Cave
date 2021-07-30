@@ -58,7 +58,7 @@ namespace cave
 		{
 			addActiveGameObject(gameObject);
 		}
-		gameObject.SetLevel(*this);
+		gameObject.setLevel(*this);
 	}
 
 	void Level::AddGameObjects(std::vector<GameObject*>& gameObjects)
@@ -69,13 +69,13 @@ namespace cave
 		}
 	}
 
-	void Level::RemoveGameObject(GameObject& gameObject)
+	void Level::DefferedRemoveGameObject(GameObject& gameObject)
 	{
 		assert(IsValid() & gameObject.IsValid());
 		mDeferredRemoveGameObjects.push_back(&gameObject);
 	}
 
-	void Level::RemoveGameObjects(std::vector<GameObject*>& gameObjects)
+	void Level::DefferedRemoveGameObjects(std::vector<GameObject*>& gameObjects)
 	{
 		for (auto& gameObject : gameObjects)
 		{
@@ -202,31 +202,10 @@ namespace cave
 		removeGameObjects();
 	}
 
-	void Level::UpdateAllGameObjectsInLevel()
-	{
-		assert(IsValid());
-		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
-		{
-			(iter->second)->UpdateScripts();
-		}
-		removeGameObjects();
-	}
-
 	void Level::FixedUpdateGameObjectsInLevel()
 	{
 		assert(IsValid());
 		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
-		{
-			assert((iter->second)->IsValid());
-			(iter->second)->FixedUpdateScripts();
-		}
-		removeGameObjects();
-	}
-
-	void Level::FixedUpdateAllGameObjectsInLevel()
-	{
-		assert(IsValid());
-		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
 		{
 			assert((iter->second)->IsValid());
 			(iter->second)->FixedUpdateScripts();
@@ -245,15 +224,9 @@ namespace cave
 	{
 		assert(IsValid() & gameObject.IsValid() & findActiveGameObject(gameObject));
 
-		auto range = mActiveGameObjects.equal_range(gameObject.GetName());
-		for (; range.first != range.second; ++range.first)
-		{
-			if (range.first->second == &gameObject)
-			{
-				mActiveGameObjects.erase(range.first);
-				break;
-			}
-		}
+		auto iter = mActiveGameObjects.find(gameObject.GetGUID());
+		if()
+		
 	}
 
 	void Level::addTagGameObject(GameObject& gameObject)
@@ -333,24 +306,16 @@ namespace cave
 	{
 		assert(IsValid() & gameObject.IsValid());
 
-		auto range = mActiveGameObjects.equal_range(gameObject.GetName());
-		for (; range.first != range.second; ++range.first)
+		auto iter = mActiveGameObjects.find(gameObject.GetGUID());
+		if(iter != mActiveGameObjects.end())
 		{
-			if (range.first->second == &gameObject)
-			{
-				return true;
-			}
+			return true;
 		}
 
 		return false;
 	}
 
 #ifdef CAVE_BUILD_DEBUG
-	void Level::SetRenderer(Renderer& renderer)
-	{
-		mRenderer = &renderer;
-	}
-
 	void Level::PrintGameObjects()
 	{
 		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)

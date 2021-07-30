@@ -6,7 +6,7 @@
 
 #include "CoreTypes.h"
 #include "Assertion/Assert.h"
-#include "Object/Obejct.h"
+#include "Object/Object.h"
 #include "Sprite/Vertex.h"
 
 namespace cave
