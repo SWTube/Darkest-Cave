@@ -90,6 +90,7 @@
     </ClCompile>
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Public\Debug\Log.ixx">
       <Filter>Header Files\Core\Debug</Filter>
     </ClCompile>
@@ -107,6 +108,7 @@
     </ClCompile>
     <ClCompile Include="ThirdParty\tictoc\src\tictoc.c">
       <Filter>Source Files\ThirdParty\Tictoc</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Public\Containers\Matrix.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
@@ -115,6 +117,7 @@
     </ClCompile>
     <ClCompile Include="Core\Private\Containers\Array.cpp">
       <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx">
       <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
@@ -123,6 +126,7 @@
     </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
+    </ClCompile>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -345,12 +349,12 @@
     <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
       <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Thread\Thread.h">
-      <Filter>Header Files\Core</Filter>
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h">
       <Filter>Header Files\ThirdParty\Tictoc</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Public\Containers\TStack.h">
       <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
       <Filter>Header Files\ResourceManager\Texture</Filter>
     </ClInclude>
@@ -369,7 +373,7 @@
     <ClInclude Include="Gameplay\Public\Object\Script.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Game.h">
+    <ClInclude Include="Gameplay\Public\GameInstance.h">
       <Filter>Header Files\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\GameObject.h">
@@ -407,7 +411,7 @@
     <ClCompile Include="Gameplay\Private\Object\Script.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\Game.cpp">
+    <ClCompile Include="Gameplay\Private\GameInstance.cpp">
       <Filter>Source Files\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
@@ -415,12 +419,6 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Public\CoreTmp\CoreType.ixx">
-      <Filter>Header Files\Gameplay\CoreTmp</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Public\CoreTmp\Log.ixx">
-      <Filter>Header Files\Gameplay\CoreTmp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -548,8 +546,10 @@
     </Filter>
     <Filter Include="Source Files\ThirdParty\Tictoc">
       <UniqueIdentifier>{8fbd3835-8552-4d7b-bac2-9e2cc63bb095}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Core\Template">
       <UniqueIdentifier>{377a7821-e104-4395-abb3-6dadcb02f4e5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Gameplay\World">
       <UniqueIdentifier>{77713b56-0d16-4326-9587-110d2a0bdf10}</UniqueIdentifier>
     </Filter>

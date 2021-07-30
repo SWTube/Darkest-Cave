@@ -250,7 +250,7 @@
     <ClInclude Include="Graphics\Public\Device\Window.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsWindow.h" />
-    <ClInclude Include="Gameplay\Public\Game.h" />
+    <ClInclude Include="Gameplay\Public\GameInstance.h" />
     <ClInclude Include="Gameplay\Public\Object\Script.h" />
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
@@ -316,7 +316,7 @@
     <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
     <ClCompile Include="ThirdParty\tictoc\src\tictoc.c" />
-    <ClCompile Include="Gameplay\Private\Game.cpp" />
+    <ClCompile Include="Gameplay\Private\GameInstance.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Script.cpp" />
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Object.cpp" />

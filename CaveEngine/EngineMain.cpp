@@ -33,7 +33,6 @@ template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool);
 void RenderTest();
 void DemoTest();
-void LevelTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
@@ -105,7 +104,6 @@ int main(int32_t argc, char** argv)
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
-	cave::TagPoolTest::Test();
 
 	_CrtDumpMemoryLeaks();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
