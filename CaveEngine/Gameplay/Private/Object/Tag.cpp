@@ -11,17 +11,13 @@
 namespace cave
 {
 	Tag::Tag(std::string& name)
-		: mName(name)
-		, mNameHashCode(std::hash<std::string>{}(mName))
-		, mbValid(true)
+		: Object(name)
 	{
 
 	}
 
 	Tag::Tag(const char* name)
-		: mName(name)
-		, mNameHashCode(std::hash<std::string>{}(mName))
-		, mbValid(true)
+		: Object(name)
 	{
 
 	}
@@ -29,13 +25,6 @@ namespace cave
 	Tag::~Tag()
 	{
 		assert(IsValid());
-		mbValid = false;
-	}
-
-	bool operator==(const Tag& lhs, const Tag& rhs)
-	{
-		assert(lhs.IsValid() & rhs.IsValid());
-		return lhs.mNameHashCode == rhs.mNameHashCode;
 	}
 
 	bool operator==(const Tag& lhs, std::string& rhs)
@@ -51,13 +40,7 @@ namespace cave
 		assert(lhs.IsValid());
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
-		return &lhs == tag;
-	}
-
-	bool operator!=(const Tag& lhs, const Tag& rhs)
-	{
-		assert(lhs.IsValid() & rhs.IsValid());
-		return lhs.mNameHashCode != rhs.mNameHashCode;
+		return lhs == *tag;
 	}
 
 	bool operator!=(const Tag& lhs, std::string& name)
@@ -75,24 +58,4 @@ namespace cave
 		assert(tag != nullptr);
 		return lhs != *tag;
 	}
-
-	bool operator<(const Tag& lhs, const Tag& rhs)
-	{
-		assert(lhs.IsValid() & rhs.IsValid());
-		return lhs.mNameHashCode < rhs.mNameHashCode;
-	}
-
-	bool Tag::IsValid() const
-	{
-		return mbValid;
-	}
-
-#ifdef CAVE_BUILD_DEBUG
-	const std::string& Tag::GetName() const
-	{
-		assert(IsValid());
-		return mName;
-	}
-#endif // CAVE_BUILD_DEBUG
-
 }
