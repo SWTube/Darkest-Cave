@@ -103,6 +103,7 @@
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
@@ -114,6 +115,10 @@
       <EntryPointName>VS</EntryPointName>
       <ShaderModel>4.0_level_9_3</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -136,6 +141,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -143,6 +149,10 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -165,8 +175,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
@@ -184,6 +193,10 @@
       <EntryPointName>VS</EntryPointName>
       <ShaderModel>4.0_level_9_3</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -206,6 +219,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -213,6 +227,10 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
@@ -235,6 +253,7 @@
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\String\String.h" />
+    <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
     <ClInclude Include="Core\Public\Utils\Defines.h" />
     <ClInclude Include="Engine\Public\Engine.h" />
@@ -271,6 +290,8 @@
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
+    <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
+    <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
@@ -311,17 +332,18 @@
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
-    <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
+    <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
-    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx" />
+    <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx" />
+    <ClCompile Include="ResourceManager\Public\Texture\WicTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
-    <ClCompile Include="ThirdParty\tictoc\src\tictoc.c" />
     <ClCompile Include="Gameplay\Private\GameInstance.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Script.cpp" />
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Object.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp" />
+    <ClCompile Include="ThirdParty\tictoc\src\tictoc.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />

@@ -105,6 +105,7 @@ int main(int32_t argc, char** argv)
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	// cave::StackTest::Test<int>();
 #endif
 
 	// Cleanup is handled in destructors.

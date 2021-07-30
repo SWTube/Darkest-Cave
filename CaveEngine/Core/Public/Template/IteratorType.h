@@ -7,6 +7,8 @@
 #include <iterator>
 #include <vector>
 
+#include <CoreTypes.h>
+
 namespace cave
 {
 #ifdef __WIN32__
