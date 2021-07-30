@@ -4,15 +4,18 @@
  */
 
 #include "GenericEngine.h"
+#include "GameInstance.h"
 
 namespace cave
 {
+	const wchar_t* GenericEngine::msWindowClassName = L"GenericWindowClass";
+
 	GenericEngine::GenericEngine()
 		: mPool(&gCoreMemoryPool)
+		, mGameInstance(new GameInstance())
 	{
-	}
 
-	const wchar_t* GenericEngine::msWindowClassName = L"GenericWindowClass";
+	}
 
 	GenericEngine::~GenericEngine()
 	{

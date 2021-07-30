@@ -11,7 +11,7 @@
 
 namespace cave
 {
-	class Level;
+	class GameInstance;
 
 	class GenericEngine
 	{
@@ -20,18 +20,19 @@ namespace cave
 		virtual ~GenericEngine();
 
 		virtual eResult Init(uint32_t screenWidth, uint32_t screenHeight) = 0;
+		//virtual eResult Run(DeviceResources* deviceResources, Renderer* renderer);
+		virtual eResult Run() = 0;
 		virtual void Destroy() = 0;
 
 		virtual Window* GetWindowHandle();
-
-		//virtual eResult Run(DeviceResources* deviceResources, Renderer* renderer);
-		virtual eResult Run(Level& level) = 0;
-
 		virtual Renderer* GetRenderer();
+
 	protected:
 		MemoryPool* mPool = nullptr;
 		Renderer* mRenderer = nullptr;
 		Window* mWindow = nullptr;
+
+		GameInstance* mGameInstance;
 
 		static const wchar_t* msWindowClassName;
 	};
