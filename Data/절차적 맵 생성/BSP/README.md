@@ -6,3 +6,4 @@
  - 방 크기 사이즈에 대한 오류 문제 해결
  - 부모 노드들의 연결 함수 생성
  - GUI
+![image](https://user-images.githubusercontent.com/37788658/127624893-4ac5cb9c-6b1c-444b-bdb8-6f7548ffe5fc.png)
