@@ -9,7 +9,7 @@
 #include <map>
 
 #include "Engine.h"
-#include "Object/Obejct.h"
+#include "Object/Object.h"
 #include "Assertion/Assert.h"
 
 namespace cave
@@ -24,16 +24,15 @@ namespace cave
 	class GameObject : public Object
 	{
 	public:
-		GameObject() = delete;
-		GameObject(bool isControlled = false);
-		GameObject(std::string& name, bool isControlled = false);
-		GameObject(const char* name, bool isControlled = false);
-		GameObject(std::string& name, std::string& tag, bool isControlled = false);
-		GameObject(std::string& name, const char* tag, bool isControlled = false);
-		GameObject(std::string& name, Tag& tag, bool isControlled = false);
-		GameObject(const char* name, std::string& tag, bool isControlled = false);
-		GameObject(const char* name, const char* tag, bool isControlled = false);
-		GameObject(const char* name, Tag& tag, bool isControlled = false);
+		GameObject();
+		GameObject(std::string& name);
+		GameObject(const char* name);
+		GameObject(std::string& name, std::string& tag);
+		GameObject(std::string& name, const char* tag);
+		GameObject(std::string& name, Tag& tag);
+		GameObject(const char* name, std::string& tag);
+		GameObject(const char* name, const char* tag);
+		GameObject(const char* name, Tag& tag);
 		GameObject(const GameObject& gameObject);
 		GameObject(GameObject&& gameObject) noexcept;
 
@@ -65,7 +64,6 @@ namespace cave
 		FORCEINLINE void SetLayer(unsigned char layer);
 		FORCEINLINE uint8_t GetLayer() const;
 
-		void SetTransform(Transform& transform);
 		FORCEINLINE Transform* GetTransform() const;
 
 		void SetRenderer(Renderer& renderer);
@@ -73,34 +71,29 @@ namespace cave
 
 		void SetPhysics(Physics& physics);
 		FORCEINLINE Physics* GetPhysics() const;
-
-		void SetController(Controller& controller);
-		FORCEINLINE Controller* GetController() const;
-		FORCEINLINE bool IsControlled() const;
 		
-		void SetLevel(Level& level);
 		FORCEINLINE Level* GetLevel() const;
 
 		void RemoveGameObjectInLevel();
 
 	private:
+		void setLevel(Level& level);
+
+	private:
 		/*Active indicates the game object was active or deactive.
 		  Gameloop updates active game object for defalut option.*/
 		bool mbActive = false;
-		bool mbControlled;
 
 		/*Layer indicates draw order.
 		  Default value is 0. If value > 0, game object draw later.*/
 		uint8_t mLayer;
 
 		std::map<std::string, Script*> mScripts;
-
 		Tag* mTag;
 
 		Transform* mTransform;
 		Renderer* mRenderer;
 		Physics* mPhysics;
-		Controller* mController;
 
 		Level* mLevel;
 	};
@@ -131,7 +124,7 @@ namespace cave
 
 	FORCEINLINE Transform* GameObject::GetTransform() const
 	{
-		assert(IsValid());
+		assert(IsValid() & (mTransform != nullptr));
 		return mTransform;
 	}
 
@@ -145,18 +138,6 @@ namespace cave
 	{
 		assert(IsValid());
 		return mPhysics;
-	}
-
-	FORCEINLINE Controller* GameObject::GetController() const
-	{
-		assert(IsValid());
-		return mController;
-	}
-
-	FORCEINLINE bool GameObject::IsControlled() const
-	{
-		assert(IsValid());
-		return mbControlled;
 	}
 
 	FORCEINLINE Level* GameObject::GetLevel() const

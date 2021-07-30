@@ -337,9 +337,6 @@
     <ClInclude Include="Gameplay\Public\Object\Script.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Game.h">
-      <Filter>Header Files\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\GameObject.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
@@ -374,9 +371,6 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Script.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Private\Game.cpp">
-      <Filter>Source Files\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>

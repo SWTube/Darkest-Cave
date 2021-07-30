@@ -18,145 +18,127 @@
 
 namespace cave
 {
-	GameObject::GameObject(bool isControlled)
+	GameObject::GameObject()
 		: Object()
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
-	GameObject::GameObject(std::string& name, bool isControlled)
+	GameObject::GameObject(std::string& name)
 		: Object(name)
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
-	GameObject::GameObject(const char* name, bool isControlled)
+	GameObject::GameObject(const char* name)
 		: Object(name)
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
-	GameObject::GameObject(std::string& name, std::string& tag, bool isControlled)
+	GameObject::GameObject(std::string& name, std::string& tag)
 		: Object(name)
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
-	GameObject::GameObject(std::string& name, const char* tag, bool isControlled)
+	GameObject::GameObject(std::string& name, const char* tag)
 		: Object(name)
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
-	GameObject::GameObject(std::string& name, Tag& tag, bool isControlled)
+	GameObject::GameObject(std::string& name, Tag& tag)
 		: Object(name)
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(&tag)
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
-	GameObject::GameObject(const char* name, std::string& tag, bool isControlled)
+	GameObject::GameObject(const char* name, std::string& tag)
 		: Object(name)
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
-	GameObject::GameObject(const char* name, const char* tag, bool isControlled)
+	GameObject::GameObject(const char* name, const char* tag)
 		: Object(name)
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
-	GameObject::GameObject(const char* name, Tag& tag, bool isControlled)
+	GameObject::GameObject(const char* name, Tag& tag)
 		: Object(name)
 		, mbActive(true)
-		, mbControlled(isControlled)
 		, mLayer(0)
 		, mScripts()
 		, mTag(&tag)
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -165,14 +147,12 @@ namespace cave
 	GameObject::GameObject(const GameObject& other)
 		: Object(other)
 		, mbActive(other.IsActive())
-		, mbControlled(other.IsControlled())
 		, mLayer(other.GetLayer())
 		, mScripts(other.mScripts)
 		, mTag(other.GetTag())
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysics(nullptr)
-		, mController(other.GetController())
 		, mLevel(other.GetLevel())
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -181,20 +161,18 @@ namespace cave
 	GameObject::GameObject(GameObject&& other) noexcept
 		: Object(std::move(other))
 		, mbActive(other.IsActive())
-		, mbControlled(other.IsControlled())
 		, mLayer(other.GetLayer())
 		, mScripts(std::move(other.mScripts))
 		, mTag(other.GetTag())
 		, mTransform(other.GetTransform())
 		, mRenderer(other.GetRenderer())
 		, mPhysics(other.GetPhysics())
-		, mController(other.GetController())
 		, mLevel(other.GetLevel())
 	{
+		other.mTag = nullptr;
 		other.mTransform = nullptr;
 		other.mRenderer = nullptr;
 		other.mPhysics = nullptr;
-		other.mController = nullptr;
 		other.RemoveGameObjectInLevel();
 
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -207,11 +185,14 @@ namespace cave
 		{
 			delete mTransform;
 		}
-
-		if (mController != nullptr)
+		for (auto& iter : mScripts)
 		{
-			delete mController;
+			Script* script = iter.second;
+			iter.second = nullptr;
+			assert(script != nullptr);
+			delete script;
 		}
+		mScripts.clear();
 	}
 
 	void GameObject::Init()
@@ -265,7 +246,11 @@ namespace cave
 		auto iter = mScripts.find(name);
 		if (iter != mScripts.end())
 		{
+			Script* script = iter->second;
+			iter->second = nullptr;
+			assert(script != nullptr);
 			mScripts.erase(iter);
+			delete script;
 		}
 	}
 
@@ -277,7 +262,11 @@ namespace cave
 		auto iter = mScripts.find(name);
 		if (iter != mScripts.end())
 		{
+			Script* script = iter->second;
+			iter->second = nullptr;
+			assert(script != nullptr);
 			mScripts.erase(iter);
+			delete script;
 		}
 	}
 
@@ -319,6 +308,11 @@ namespace cave
 	void GameObject::SetActive(bool state)
 	{
 		assert(IsValid());
+		if (mbActive == state)
+		{
+			return;
+		}
+
 		mbActive = state;
 		if (mLevel != nullptr)
 		{
@@ -329,16 +323,6 @@ namespace cave
 			}
 			mLevel->addActiveGameObject(*this);
 		}
-	}
-
-	void GameObject::SetTransform(Transform& transform)
-	{
-		assert(IsValid());
-		if (mTransform != nullptr)
-		{
-			delete mTransform;
-		}
-		mTransform = &transform;
 	}
 
 	void GameObject::SetRenderer(Renderer& renderer)
@@ -361,17 +345,7 @@ namespace cave
 		mPhysics = &physics;
 	}
 
-	void GameObject::SetController(Controller& controller)
-	{
-		assert(IsValid() & IsControlled());
-		if (mController != nullptr)
-		{
-			delete mController;
-		}
-		mController = &controller;
-	}
-
-	void GameObject::SetLevel(Level& level)
+	void GameObject::setLevel(Level& level)
 	{
 		assert(IsValid() & level.IsValid());
 		mLevel = &level;
@@ -381,7 +355,7 @@ namespace cave
 	{
 		assert(IsValid());
 		assert(mLevel != nullptr);
-		mLevel->RemoveGameObject(*this);
+		mLevel->DefferedRemoveGameObject(*this);
 	}
 
 #ifdef CAVE_BUILD_DEBUG
