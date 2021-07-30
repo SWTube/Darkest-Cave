@@ -138,9 +138,6 @@
     <ClCompile Include="Core\Public\String\String.ixx">
       <Filter>Header Files\Core\String</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
@@ -228,17 +225,11 @@
     <Filter Include="Source Files\Gameplay">
       <UniqueIdentifier>{9b27ea53-ca8e-4c0d-a523-f2e1f502c625}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Gameplay\Time">
-      <UniqueIdentifier>{384c0ef1-c681-451e-9b8d-85a443461d62}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Gameplay\Object">
       <UniqueIdentifier>{e16925c7-671b-411b-913b-36ff2013f1de}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Gameplay">
       <UniqueIdentifier>{c36930bf-d7ad-4ab4-bb19-82b980721c23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Gameplay\Time">
-      <UniqueIdentifier>{ee3e6f30-d5df-4750-b17e-4cb6b75caed4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Gameplay\Object">
       <UniqueIdentifier>{23b9f94a-9557-48e2-9815-e2065b3f9ecf}</UniqueIdentifier>
@@ -478,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\Vertex.h">
       <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Math\Vector2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -24,7 +24,6 @@
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
 #include "String/String.h"
-#include "Time/TimeManager.h"
 #include "World/Level.h"
 
 template <size_t N>
@@ -98,7 +97,7 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 	//DemoTest();
-	//RenderTest();
+	RenderTest();
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
@@ -252,7 +251,7 @@ void RenderTest()
 		//renderer->CreateWindowSizeDependentResources();
 
 		// Run the program.
-		//result = main.Run();
+		result = main.Run();
 	}
 
 	main.Destroy();

@@ -181,7 +181,7 @@ namespace cave
 		assert(IsValid());
 		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
 		{
-			(iter->second)->Init();
+			(iter->second)->InitializeScripts();
 		}
 	}
 	
