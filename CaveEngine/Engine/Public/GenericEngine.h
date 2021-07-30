@@ -11,6 +11,8 @@
 
 namespace cave
 {
+	class Level;
+
 	class GenericEngine
 	{
 	public:
@@ -23,7 +25,7 @@ namespace cave
 		virtual Window* GetWindowHandle();
 
 		//virtual eResult Run(DeviceResources* deviceResources, Renderer* renderer);
-		virtual eResult Run() = 0;
+		virtual eResult Run(Level& level) = 0;
 
 		virtual Renderer* GetRenderer();
 	protected:

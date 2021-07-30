@@ -8,15 +8,14 @@
 
 namespace cave
 {
-	Game::Game() :
-		mObjectMemoryPool(new MemoryPool(10192ul))
+	Game::Game()
 	{
-		TagPool::Init(*mObjectMemoryPool);
+		TagPool::Init();
 	}
 
 	Game::~Game()
 	{
-		delete mObjectMemoryPool;
+
 	}
 
 	Game* Game::Instance()

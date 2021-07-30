@@ -4,18 +4,27 @@
  */
 #pragma once
 
+#include <vector>
 #include <unordered_map>
+
+#include "Engine.h"
+#include "Object/Obejct.h"
 
 namespace cave
 {
+	class World;
 	class GameObject;
 	class Map;
 	class Tag;
 
-	class Level final
+	class Level final : public Object
 	{
 	public:
+		friend class GameObject;
+
 		Level();
+		Level(std::string& name);
+		Level(const char* name);
 		Level(const Level&) = delete;
 		Level(Level&&) = delete;
 
@@ -24,28 +33,64 @@ namespace cave
 		Level& operator=(Level&&) = delete;
 
 		void AddGameObject(GameObject& gameObject);
-		void RemoveGameObject(std::string& name);
-		void RemoveGameObject(const char* name);
+		void AddGameObjects(std::vector<GameObject*>& gameObjects);
+
+		void RemoveGameObject(GameObject& gameObject);
+		void RemoveGameObjects(std::vector<GameObject*>& gameObjects);
 
 		GameObject* FindGameObjectByName(std::string& name);
 		GameObject* FindGameObjectByName(const char* name);
-		std::vector<GameObject*>& FindGameObjectsByName(std::string& name);
-		std::vector<GameObject*>& FindGameObjectsByName(const char* name);
+		std::vector<GameObject*>&& FindGameObjectsByName(std::string& name);
+		std::vector<GameObject*>&& FindGameObjectsByName(const char* name);
 
 		GameObject* FindGameObjectByTag(std::string& tag);
 		GameObject* FindGameObjectByTag(const char* tag);
-		std::vector<GameObject*>& FindGameObjectsByTag(std::string& tag);
-		std::vector<GameObject*>& FindGameObjectsByTag(const char* tag);
+		std::vector<GameObject*>&& FindGameObjectsByTag(std::string& tag);
+		std::vector<GameObject*>&& FindGameObjectsByTag(const char* tag);
 
-		void UpdateGameObjectInLevel();
-		void UpdateAllGameObjectInLevel();
+		void InitializeGameObjectsInLevel();
+
+		void UpdateGameObjectsInLevel();
+		void UpdateAllGameObjectsInLevel();
+
+		void FixedUpdateGameObjectsInLevel();
+		void FixedUpdateAllGameObjectsInLevel();
+
+#ifdef CAVE_BUILD_DEBUG
+		void SetRenderer(Renderer& renderer);
+
+		void PrintGameObjects();
+#endif // CAVE_BUILD_DEBUG
 
 	private:
+		void addActiveGameObject(GameObject& gameObject);
+		void removeActiveGameObject(GameObject& gameObject);
+
+		void addTagGameObject(GameObject& gameObject);
+		void removeTagGameObject(GameObject& gameObject);
+
+		void removeGameObjects();
+
+		bool findGameObject(GameObject& gameObject);
+		bool findActiveGameObject(GameObject& gameObject);
+
+	private:
+		std::unordered_multimap<std::string, GameObject*> mAllGameObjects;
 		std::unordered_multimap<std::string, GameObject*> mActiveGameObjects;
-		std::unordered_multimap<std::string, GameObject*> mDeactiveGameObjects;
-		/*Read only.*/
-		std::unordered_multimap<Tag*, GameObject*> mGameObjectsSortByTag;
+		std::unordered_multimap<Tag*, GameObject*> mTagGameObjects;
+
+		std::vector<GameObject*> mDeferredRemoveGameObjects;
 
 		Map* mMap;
+
+		Renderer* mRenderer;
 	};
+
+#ifdef CAVE_BUILD_DEBUG
+	namespace LevelTest
+	{
+		void Test();
+		Level* CreateTmpLevel();
+	}
+#endif //CAVE_BUILD_DEBUG
 }

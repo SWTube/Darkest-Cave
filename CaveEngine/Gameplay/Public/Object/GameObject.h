@@ -6,102 +6,169 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
+#include "Engine.h"
 #include "Object/Obejct.h"
+#include "Assertion/Assert.h"
 
 namespace cave
 {
+	class Controller;
 	class Script;
 	class Tag;
 	class Transform;
-	class Renderer;
 	class Physics;
+	class Level;
 
-	class World;
-
-	class GameObject final : public Object
+	class GameObject : public Object
 	{
 	public:
-		GameObject();
+		GameObject() = delete;
+		GameObject(bool isControlled = false);
+		GameObject(std::string& name, bool isControlled = false);
+		GameObject(const char* name, bool isControlled = false);
+		GameObject(std::string& name, std::string& tag, bool isControlled = false);
+		GameObject(std::string& name, const char* tag, bool isControlled = false);
+		GameObject(std::string& name, Tag& tag, bool isControlled = false);
+		GameObject(const char* name, std::string& tag, bool isControlled = false);
+		GameObject(const char* name, const char* tag, bool isControlled = false);
+		GameObject(const char* name, Tag& tag, bool isControlled = false);
 		GameObject(const GameObject& gameObject);
 		GameObject(GameObject&& gameObject) noexcept;
 
 		virtual ~GameObject();
-		GameObject& operator=(const GameObject& other);
-		GameObject& operator=(GameObject&& other) noexcept;
-		
+		GameObject& operator=(const GameObject& other) = delete;
+		GameObject& operator=(GameObject&& other) = delete;
+	
+		void Init();
+
 		void UpdateScripts();
+		void FixedUpdateScripts();
 
-		FORCEINLINE void SetTag(Tag& tag)
-		{
-			mTag = &tag;
-		}
+		void AddScript(Script& script);
+		void AddScripts(std::vector<Script*>& scripts);
 
-		FORCEINLINE Tag* GetTag() const
-		{
-			return mTag;
-		}
+		void RemoveScript(std::string& name);
+		void RemoveScript(const char* name);
+		void RemoveScripts(std::vector<std::string>& names);
+		void RemoveScripts(std::vector<const char*>& names);
 
-		FORCEINLINE void SetActive(bool state)
-		{
-			mbActive = state;
-		}
+		Script* FindScriptByName(std::string& name);
+		Script* FindScriptByName(const char* name);
 
-		FORCEINLINE void SetStatic(bool state)
-		{
-			mbStatic = state;
-		}
+		FORCEINLINE Tag* GetTag() const;
 
-		FORCEINLINE bool IsActive() const
-		{
-			return mbActive;
-		}
+		void SetActive(bool state);
+		FORCEINLINE bool IsActive() const;
 
-		FORCEINLINE bool IsStatic() const
-		{
-			return mbStatic;
-		}
+		FORCEINLINE void SetLayer(unsigned char layer);
+		FORCEINLINE uint8_t GetLayer() const;
 
-		FORCEINLINE void SetLayer(unsigned char layer)
-		{
-			mLayer = layer;
-		}
+		void SetTransform(Transform& transform);
+		FORCEINLINE Transform* GetTransform() const;
 
-		FORCEINLINE unsigned char GetLayer() const
-		{
-			return mLayer;
-		}
+		void SetRenderer(Renderer& renderer);
+		FORCEINLINE Renderer* GetRenderer() const;
+
+		void SetPhysics(Physics& physics);
+		FORCEINLINE Physics* GetPhysics() const;
+
+		void SetController(Controller& controller);
+		FORCEINLINE Controller* GetController() const;
+		FORCEINLINE bool IsControlled() const;
 		
-		FORCEINLINE void SetName(std::string& name)
-		{
-			mName = std::move(name);
-		}
+		void SetLevel(Level& level);
+		FORCEINLINE Level* GetLevel() const;
 
-		FORCEINLINE std::string& GetName()
-		{
-			return mName;
-		}
-
-		FORCEINLINE Transform* GetTransform()
-		{
-			return mTransform;
-		}
+		void RemoveGameObjectInLevel();
 
 	private:
-		bool mbActive;
-		bool mbStatic;
+		/*Active indicates the game object was active or deactive.
+		  Gameloop updates active game object for defalut option.*/
+		bool mbActive = false;
+		bool mbControlled;
 
-		unsigned char mLayer;
+		/*Layer indicates draw order.
+		  Default value is 0. If value > 0, game object draw later.*/
+		uint8_t mLayer;
 
-		std::vector<Script*> mScripts;
+		std::map<std::string, Script*> mScripts;
 
-		std::string mName;
 		Tag* mTag;
 
 		Transform* mTransform;
 		Renderer* mRenderer;
 		Physics* mPhysics;
+		Controller* mController;
 
-		World* mOwner;
+		Level* mLevel;
 	};
+
+	FORCEINLINE Tag* GameObject::GetTag() const
+	{
+		assert(IsValid() & (mTag != nullptr));
+		return mTag;
+	}
+
+	FORCEINLINE bool GameObject::IsActive() const
+	{
+		assert(IsValid());
+		return mbActive;
+	}
+
+	FORCEINLINE void GameObject::SetLayer(unsigned char layer)
+	{
+		assert(IsValid());
+		mLayer = layer;
+	}
+
+	FORCEINLINE unsigned char GameObject::GetLayer() const
+	{
+		assert(IsValid());
+		return mLayer;
+	}
+
+	FORCEINLINE Transform* GameObject::GetTransform() const
+	{
+		assert(IsValid());
+		return mTransform;
+	}
+
+	FORCEINLINE Renderer* GameObject::GetRenderer() const
+	{
+		assert(IsValid());
+		return mRenderer;
+	}
+
+	FORCEINLINE Physics* GameObject::GetPhysics() const
+	{
+		assert(IsValid());
+		return mPhysics;
+	}
+
+	FORCEINLINE Controller* GameObject::GetController() const
+	{
+		assert(IsValid());
+		return mController;
+	}
+
+	FORCEINLINE bool GameObject::IsControlled() const
+	{
+		assert(IsValid());
+		return mbControlled;
+	}
+
+	FORCEINLINE Level* GameObject::GetLevel() const
+	{
+		assert(IsValid());
+		return mLevel;
+	}
+
+#ifdef CAVE_BUILD_DEBUG
+	namespace GameObjectTest
+	{
+		void Test();
+	}
+#endif //CAVE_BUILD_DEBUG
 }

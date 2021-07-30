@@ -24,17 +24,16 @@
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
 #include "String/String.h"
-
-#if _DEBUG
-//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
-//#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
-#endif // _DEBUG
+#include "Time/TimeManager.h"
+#include "World/Level.h"
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
 template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool);
 void RenderTest();
+void DemoTest();
+void LevelTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
@@ -99,7 +98,8 @@ int main(int32_t argc, char** argv)
 		}
 	}
 #endif
-
+	DemoTest();
+	//RenderTest();
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
@@ -253,8 +253,49 @@ void RenderTest()
 		//// Whoops! We resized the "window" when we went full-screen. Better
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
-	// 	// Run the program.
-	// 	result = main.Run();
+
+		// Run the program.
+		//result = main.Run();
+	}
+
+	main.Destroy();
+}
+
+void DemoTest()
+{
+	// Main message loop
+	// Begin initialization.
+
+	// Instantiate the window manager class.
+	cave::Engine main;
+	// Create a window.
+	cave::eResult result = main.Init(1600u, 900u);
+
+
+	cave::Renderer* renderer = main.GetRenderer();
+
+	cave::Level* level = cave::LevelTest::CreateTmpLevel();
+	level->SetRenderer(*renderer);
+
+	renderer->AddSprite("lapland.png");
+	renderer->AddTexture("lapland_2.png");
+	renderer->AddSprite("amiya.png");
+	renderer->AddTexture("amiya_2.png");
+	renderer->AddSprite("texas.png");
+	renderer->AddTexture("texas_2.png");
+
+
+	if (result == cave::eResult::CAVE_OK)
+	{
+		//// Go full-screen.
+		//deviceResources->GoFullScreen();
+
+		//// Whoops! We resized the "window" when we went full-screen. Better
+		//// tell the renderer.
+		//renderer->CreateWindowSizeDependentResources();
+
+		// Run the program.
+		result = main.Run(*level);
 	}
 
 	main.Destroy();
