@@ -21,6 +21,9 @@ namespace cave
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
 		new(mRenderer) Renderer();
 
+		mGameInstance = reinterpret_cast<GameInstance*>(mPool->Allocate(sizeof(GameInstance)));
+		new(mGameInstance) GameInstance();
+
 		mRenderer->Init(mWindow);
 		//mRenderer->CreateDeviceDependentResources();
 
@@ -38,15 +41,21 @@ namespace cave
 
 	void WindowsEngine::Destroy()
 	{
+		if (mWindow != nullptr)
+		{
+			mPool->Deallocate(mWindow, sizeof(Window));
+		}
+
+		if (mGameInstance != nullptr)
+		{
+			mGameInstance->~GameInstance();
+			mPool->Deallocate(mGameInstance, sizeof(GameInstance));
+		}
+
 		if (mRenderer != nullptr)
 		{
 			mRenderer->Destroy();
 			mPool->Deallocate(mRenderer, sizeof(Renderer));
-		}
-
-		if (mWindow != nullptr)
-		{
-			mPool->Deallocate(mWindow, sizeof(Window));
 		}
 	}
 
@@ -65,6 +74,9 @@ namespace cave
 		MSG  msg;
 		msg.message = WM_NULL;
 		PeekMessage(&msg, nullptr, 0u, 0u, PM_NOREMOVE);
+
+		mGameInstance->Init();
+
 		while (WM_QUIT != msg.message)
 		{
 			// Process window events.
@@ -79,6 +91,10 @@ namespace cave
 			}
 			else
 			{
+				mGameInstance->FixedUpdate();
+
+				mGameInstance->Update();
+
 				// Update the scene.
 				mRenderer->Update();
 

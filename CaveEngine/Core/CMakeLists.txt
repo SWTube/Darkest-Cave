@@ -226,7 +226,13 @@ file(GLOB UNIT_TEST_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/UnitTest/*
 # setup OgreMain target
 
 # get_native_precompiled_header(OgreMain)
-add_library(Core SHARED ${HEADER_FILES} ${SOURCE_FILES} ${CONTAINERS_HEADER_FILES} ${CONTAINERS_SOURCE_FILES} ${DEBUG_HEADER_FILES} ${DEBUG_SOURCE_FILES} ${MEMORY_HEADER_FILES} ${MEMORY_SOURCE_FILES} ${STRING_HEADER_FILES} ${STRING_SOURCE_FILES} ${UTIL_HEADER_FILES})
+add_library(Core SHARED ${HEADER_FILES} ${SOURCE_FILES} 
+						${CONTAINERS_HEADER_FILES} ${CONTAINERS_SOURCE_FILES} 
+						${TEMPLATE_HEADER_FILES} ${TEMPLATE_SOURCE_FILES}
+						${DEBUG_HEADER_FILES} ${DEBUG_SOURCE_FILES} 
+						${MEMORY_HEADER_FILES} ${MEMORY_SOURCE_FILES} 
+						${STRING_HEADER_FILES} ${STRING_SOURCE_FILES} 
+						${UTIL_HEADER_FILES})
 
 if(MSVC)
 	target_compile_options(Core PRIVATE /W4 /WX)
@@ -247,6 +253,10 @@ endif()
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
 target_precompile_headers(Core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Public/CorePch.h)
+
+link_libraries(${tictor-BINARY_DIR})
+target_include_directories(Core PUBLIC ${PROJECT_SOURCE_DIR}/CaveEngine/ThirdParty/tictoc)
+target_link_libraries(Core PUBLIC tictoc)
 
 # target_include_directories(Core PUBLIC 
 #   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 

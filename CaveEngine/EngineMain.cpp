@@ -3,10 +3,17 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <chrono>
+#include <crtdbg.h>
+#include <cstdlib>
 #include <exception>
 #include <fstream>
 #include <iomanip>
-#include <time.h>
+#include <iostream>
+#include <random>
+#include <vector>
+
+#include "tictoc.h"
 
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
@@ -14,15 +21,19 @@
 #include "Containers/TStack.h"
 #include "Engine.h"
 #include "Sprite/Sprite.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 #include "String/String.h"
-#include "Time/TimeManager.h"
+#include "World/Level.h"
+#include "World/World.h"
+#include "Object/GameObject.h"
+#include "Object/Script.h"
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
 template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool);
 void RenderTest();
+void DemoTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
@@ -46,8 +57,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #else
 int main(int32_t argc, char** argv)
 {
-	cave::TimeManager timeManager;
-
 	uint32_t commandFlag = 0u;
 	constexpr uint32_t LOG_FLAG = 0x01;
 	for (int32_t currentArgIndex = 0; currentArgIndex < argc; ++currentArgIndex)
@@ -89,10 +98,14 @@ int main(int32_t argc, char** argv)
 		}
 	}
 #endif
-
-	 RenderTest();
+	DemoTest();
+	//RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	//cave::MemoryPoolTest::Test();
+	//TicTocTimer clock = tic();
+	// cave::MemoryPoolTest::Test();
+	// cave::StackTest::Test<int>();
+	//  RenderTest();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// cave::StackTest::Test<int>();
 #endif
 
@@ -228,8 +241,65 @@ void RenderTest()
 	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
 	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
 	renderer->SetSpritePosition(2, cave::Float2(500, 200));
-	//renderer->SetSpriteZIndex(0, 1);  // ¼ýÀÚ°¡ Å¬ ¼ö·Ï ¾Õ¿¡ ¿È. (ÁÖ¼®Áö¿ì¸é ºñÇà±âº¸´Ù ¹ö¼¸±×¸²ÀÌ ¾Õ¿¡¿È) 
+	//renderer->SetSpriteZIndex(0, 1);  // ï¿½ï¿½ï¿½Ú°ï¿½ Å¬ ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ ï¿½ï¿½. (ï¿½Ö¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½âº¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ï¿½ï¿½) 
 	
+	if (result == cave::eResult::CAVE_OK)
+	{
+		//// Go full-screen.
+		//deviceResources->GoFullScreen();
+
+		//// Whoops! We resized the "window" when we went full-screen. Better
+		//// tell the renderer.
+		//renderer->CreateWindowSizeDependentResources();
+
+		// Run the program.
+		result = main.Run();
+	}
+
+	main.Destroy();
+}
+
+void DemoTest()
+{
+	// Main message loop
+	// Begin initialization.
+
+	// Instantiate the window manager class.
+	cave::Engine main;
+	// Create a window.
+	cave::eResult result = main.Init(1600u, 900u);
+
+	cave::Renderer* renderer = main.GetRenderer();
+
+											// index
+	renderer->AddSprite("lapland.png");		// 0 sprite
+	renderer->AddTexture("lapland_2.png");	// 1 texture
+	renderer->AddSprite("amiya.png");		// 1 sprite
+	renderer->AddTexture("amiya_2.png");	// 3 texture
+	renderer->AddSprite("texas.png");		// 2 sprite
+	renderer->AddTexture("texas_2.png");	// 5 texture
+
+	renderer->SetSpritePosition(0, { 0.f, 0.f });
+	renderer->SetSpritePosition(1, { 0.f, 0.f });
+	renderer->SetSpritePosition(2, { 0.f, 0.f });
+
+	cave::World* world = new cave::World("World_1");
+
+	cave::Level* level = new cave::Level("Level_1");
+
+	cave::GameObject* gameObject = new cave::GameObject("lapland");
+
+	cave::TestScript* move = new cave::TestScript("Move", 0, 0, 0.03f);
+
+	cave::GameInstance* gameInstance = main.GetGameInstance();
+	
+	gameObject->SetRenderer(*main.GetRenderer());
+	gameObject->AddScript(*move);
+	level->AddGameObject(*gameObject);
+	world->AddLevel(*level) ;
+	gameInstance->AddWorld(*world);
+
+
 	if (result == cave::eResult::CAVE_OK)
 	{
 		//// Go full-screen.

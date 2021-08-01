@@ -23,7 +23,7 @@
 
 	#define PLATFORM_NAME Windows
 
-	#define __FORCEINLINE__ __forceinline
+	#define FORCEINLINE __forceinline
 #endif
 
 #ifdef __WIN32__
