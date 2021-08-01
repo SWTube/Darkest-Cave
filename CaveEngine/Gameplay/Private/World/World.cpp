@@ -12,21 +12,27 @@ namespace cave
 
 	World::World(std::string& name) 
 		: Object(name)
-		, mMap(nullptr)
 	{
-		assert(IsValid() & mGlobalUniqueName.contains(name));
+		assert(IsValid() & (!mGlobalUniqueName.contains(name)));
 	}
 
 	World::World(const char* name) 
 		: Object(name)
-		, mMap(nullptr)
 	{
-		assert(IsValid() & mGlobalUniqueName.contains(name));
+		assert(IsValid() & (!mGlobalUniqueName.contains(name)));
 	}
 
 	World::~World()
 	{
 		assert(IsValid());
+		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
+		{
+			Level* level = iter->second;
+			assert(level != nullptr);
+			iter->second = nullptr;
+			delete level;
+		}
+		mLevels.clear();
 	}
 
 	void World::AddLevel(Level& level)
@@ -73,7 +79,7 @@ namespace cave
 		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
 		{
 			assert(iter->second->IsValid());
-			iter->second->UpdateGameObjectsInLevel();
+			iter->second->FixedUpdateGameObjectsInLevel();
 		}
 	}
 

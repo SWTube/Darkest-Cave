@@ -20,11 +20,13 @@
 
 #include "Containers/TStack.h"
 #include "Engine.h"
-#include "Object/TagPool.h"
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
 #include "String/String.h"
 #include "World/Level.h"
+#include "World/World.h"
+#include "Object/GameObject.h"
+#include "Object/Script.h"
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
@@ -96,14 +98,14 @@ int main(int32_t argc, char** argv)
 		}
 	}
 #endif
-	//DemoTest();
-	RenderTest();
+	DemoTest();
+	//RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	TicTocTimer clock = tic();
+	//TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// cave::StackTest::Test<int>();
 #endif
 
@@ -267,15 +269,35 @@ void DemoTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 
-
 	cave::Renderer* renderer = main.GetRenderer();
 
-	renderer->AddSprite("lapland.png");
-	renderer->AddTexture("lapland_2.png");
-	renderer->AddSprite("amiya.png");
-	renderer->AddTexture("amiya_2.png");
-	renderer->AddSprite("texas.png");
-	renderer->AddTexture("texas_2.png");
+											// index
+	renderer->AddSprite("lapland.png");		// 0 sprite
+	renderer->AddTexture("lapland_2.png");	// 1 texture
+	renderer->AddSprite("amiya.png");		// 1 sprite
+	renderer->AddTexture("amiya_2.png");	// 3 texture
+	renderer->AddSprite("texas.png");		// 2 sprite
+	renderer->AddTexture("texas_2.png");	// 5 texture
+
+	renderer->SetSpritePosition(0, { 0.f, 0.f });
+	renderer->SetSpritePosition(1, { 0.f, 0.f });
+	renderer->SetSpritePosition(2, { 0.f, 0.f });
+
+	cave::World* world = new cave::World("World_1");
+
+	cave::Level* level = new cave::Level("Level_1");
+
+	cave::GameObject* gameObject = new cave::GameObject("lapland");
+
+	cave::TestScript* move = new cave::TestScript("Move", 0, 0, 0.03f);
+
+	cave::GameInstance* gameInstance = main.GetGameInstance();
+	
+	gameObject->SetRenderer(*main.GetRenderer());
+	gameObject->AddScript(*move);
+	level->AddGameObject(*gameObject);
+	world->AddLevel(*level);
+	gameInstance->AddWorld(*world);
 
 
 	if (result == cave::eResult::CAVE_OK)

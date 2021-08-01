@@ -8,11 +8,10 @@
 #include "CoreTypes.h"
 #include "Device/DeviceResources.h"
 #include "Renderer/Renderer.h"
+#include "Game/GameInstance.h"
 
 namespace cave
 {
-	class GameInstance;
-
 	class GenericEngine
 	{
 	public:
@@ -26,13 +25,14 @@ namespace cave
 
 		virtual Window* GetWindowHandle();
 		virtual Renderer* GetRenderer();
+		virtual GameInstance* GetGameInstance();
 
 	protected:
 		MemoryPool* mPool = nullptr;
 		Renderer* mRenderer = nullptr;
 		Window* mWindow = nullptr;
 
-		GameInstance* mGameInstance;
+		GameInstance* mGameInstance = nullptr;
 
 		static const wchar_t* msWindowClassName;
 	};

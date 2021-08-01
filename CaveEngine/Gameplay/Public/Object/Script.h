@@ -33,10 +33,11 @@ namespace cave
 	private:
 		static std::unordered_set<std::string> mGlobalUniqueName;
     };
+
 #ifdef CAVE_BUILD_DEBUG
 	namespace ScriptTest
 	{
-		void Test();
+
 	}
 
 	class TestScript : public Script

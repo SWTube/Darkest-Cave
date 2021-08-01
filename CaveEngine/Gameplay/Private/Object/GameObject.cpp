@@ -361,7 +361,10 @@ namespace cave
 #ifdef CAVE_BUILD_DEBUG
 	namespace GameObjectTest
 	{
-		
+		void Test()
+		{
+			GameObject* gameObject = new GameObject("lapland");
+		}
 	}
 #endif //CAVE_BUILD_DEBUG
 }

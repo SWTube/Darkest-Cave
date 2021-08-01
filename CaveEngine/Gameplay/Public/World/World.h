@@ -4,9 +4,9 @@
  */
 #pragma once
 
+#include <string>
 #include <unordered_set>
 #include <unordered_map>
-#include <vector>
 
 #include "CoreTypes.h"
 #include "Object/Object.h"
@@ -45,6 +45,6 @@ namespace cave
 		static std::unordered_set<std::string> mGlobalUniqueName;
 		std::unordered_map<uint32_t, Level*> mLevels;
 
-		Map* mMap;
+		Map* mMap = nullptr;
 	};
 }

@@ -156,9 +156,6 @@
     <ClCompile Include="Core\Private\Containers\Array.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
@@ -252,6 +249,9 @@
     <ClCompile Include="Core\Private\Containers\Vertex.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp">
+      <Filter>Source Files\Gameplay\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Containers\Array.h">
@@ -289,9 +289,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Public\GenericEngine.h">
       <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Graphics.h">
-      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h">
       <Filter>Header Files\Graphics</Filter>
@@ -437,9 +434,6 @@
     <ClInclude Include="Gameplay\Public\Object\Script.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\GameInstance.h">
-      <Filter>Header Files\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\GameObject.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
@@ -470,8 +464,8 @@
     <ClInclude Include="Core\Public\Containers\Vertex.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Math\Vector2.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Gameplay\Public\Game\GameInstance.h">
+      <Filter>Header Files\Gameplay\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -486,9 +480,6 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Script.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameplay\Private\GameInstance.cpp">
-      <Filter>Source Files\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
@@ -657,6 +648,12 @@
     </Filter>
     <Filter Include="Source Files\Gameplay\World">
       <UniqueIdentifier>{ea3a80c0-0244-48ad-8f00-24af5d3cd0da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Game">
+      <UniqueIdentifier>{300dc9c2-fab9-4044-85ca-67ad6a2745dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Game">
+      <UniqueIdentifier>{83aaa7f9-b724-4c99-9ab4-1ccec13b627d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

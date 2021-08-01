@@ -6,20 +6,15 @@
 
 #include <unordered_map>
 
-#include "CoreTypes.h"
-#include "Renderer/Renderer.h"
-
 namespace cave
 {
-	class GenericEngine;
 	class World;
 	class WorldMap;
 
 	class GameInstance final
 	{
 	public:
-		friend class GenericEngine;
-
+		GameInstance();
 		GameInstance(const GameInstance&) = delete;
 		GameInstance(GameInstance&&) = delete;
 
@@ -28,20 +23,18 @@ namespace cave
 		GameInstance& operator=(GameInstance&&) = delete;
 
 		void Init();
-		void Run();
-		void Destroy();
+		void FixedUpdate();
+		void Update();
+		void Shutdown();
+
+		void AddWorld(World& world);
+		void RemoveWorld(World& world);
 
 	private:
-		GameInstance();
-
-		/*Tmp method*/
-		GameInstance(Renderer& renderer);
+		bool isWorldInGameInstance(World& world);
 
 	private:
 		std::unordered_map<uint32_t, World*> mWorlds;
 		WorldMap* mWorldMap;
-
-		/*Tmp variable*/
-		Renderer* mRenderer;
 	};
 }

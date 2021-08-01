@@ -14,7 +14,6 @@
 
 namespace cave
 {
-	class Controller;
 	class Script;
 	class Tag;
 	class Transform;
@@ -150,7 +149,7 @@ namespace cave
 #ifdef CAVE_BUILD_DEBUG
 	namespace GameObjectTest
 	{
-	
+		void Test();
 	}
 #endif //CAVE_BUILD_DEBUG
 }

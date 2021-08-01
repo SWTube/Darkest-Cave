@@ -40,7 +40,19 @@ namespace cave
 
 	Level::~Level()
 	{
-	
+		assert(IsValid());
+
+		mActiveGameObjects.clear();
+		mTaggedGameObjects.clear();
+		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
+		{
+			GameObject* gameObject = iter->second;
+			assert(gameObject != nullptr);
+			iter->second = nullptr;
+			delete gameObject;
+		}
+
+		mAllGameObjects.clear();
 	}
 
 	void Level::AddGameObject(GameObject& gameObject)
