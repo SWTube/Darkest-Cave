@@ -4,6 +4,8 @@
  */
 #pragma once
 
+#include "CoreTypes.h"
+
 namespace cave
 {
 	class Object

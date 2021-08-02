@@ -6,6 +6,8 @@
 
 #include <string>
 
+#include "CoreTypes.h"
+
 namespace cave
 {
 	class Tag final

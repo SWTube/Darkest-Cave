@@ -38,7 +38,7 @@ void RenderTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
-#if defined(__WIN32__)
+#ifdef __WIN32__
 import Log;
 
 //--------------------------------------------------------------------------------------
@@ -51,9 +51,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	CoInitialize(0);
 	// Enable run-time memory check for debug builds.
-#if defined(CAVE_BUILD_DEBUG)
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
+	#if defined(CAVE_BUILD_DEBUG)
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	#endif
 
 #else
 int main(int32_t argc, char** argv)

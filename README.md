@@ -45,7 +45,6 @@ Game Team develops the custom engine for the game, and the game application itse
 * [adfa0117](https://github.com/adfa0117) - Core Engineer
 * [tjswodud](https://github.com/tjswodud) - Junior Core Engineer
 * [Choi-Eunseok](https://github.com/Choi-Eunseok) - Junior Core Engineer
-* [Su-Yong](https://github.com/Su-Yong) - Junior Core Engineer
 
 ## Data
 Data team implements different data analysis techniques on the game being developed.
