@@ -5,6 +5,8 @@
 #pragma once
 
 #include <iostream>
+#include <functional>
+#include "Object/GameObject.h"
 
 namespace cave
 {
@@ -15,7 +17,7 @@ namespace cave
             BehaviorTreeNode(const char*);
             virtual ~BehaviorTreeNode();
 
-            virtual bool Run() = 0;
+            virtual bool Run(GameObject& gameObject) = 0;
 
             // Get node name
             const char* GetNodeName() const;

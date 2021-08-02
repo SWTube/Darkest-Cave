@@ -13,7 +13,7 @@ namespace cave
         SetTreeDepth(0);
         SetNodeFunction(NULL);
     }
-    ActionNode::ActionNode(const char* nodeName, void (*nodeFunction)())
+    ActionNode::ActionNode(const char* nodeName, std::function<void(GameObject&)> nodeFunction)
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);
@@ -24,7 +24,7 @@ namespace cave
     {
 
     }
-    void ActionNode::SetNodeFunction(void (*nodeFunction)())
+    void ActionNode::SetNodeFunction(std::function<void(GameObject&)> nodeFunction)
     {
         mNodeFunction = nodeFunction;
     }

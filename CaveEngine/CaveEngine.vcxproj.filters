@@ -321,6 +321,9 @@
     <Filter Include="Header Files\AI\BehaviorTree">
       <UniqueIdentifier>{d0ade8d8-d83f-4bcb-95e8-c166dd10c48a}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="AI\Private\BehaviorTreeTestScript.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Containers\Array.h">
@@ -530,6 +533,9 @@
     <ClInclude Include="AI\Public\BehaviorTree.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTreeScriptTest.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Memory\Memory.cpp">
@@ -591,9 +597,6 @@
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Transform.h">
       <Filter>Header Files\Gameplay\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Graphics.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Player.h">
       <Filter>Header Files\Gameplay\Object</Filter>

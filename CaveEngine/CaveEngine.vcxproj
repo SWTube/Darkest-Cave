@@ -233,6 +233,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AI\Public\BehaviorTreeScriptTest.h" />
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
     <ClInclude Include="AI\Public\BehaviorTree.h" />
     <ClInclude Include="AI\Public\BehaviorTree\ActionNode.h" />
@@ -307,6 +308,7 @@
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AI\Private\BehaviorTreeTestScript.cpp" />
     <ClCompile Include="Core\Private\Containers\Array.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp" />

@@ -28,6 +28,8 @@
 #include "Object/GameObject.h"
 #include "Object/Script.h"
 
+#include "BehaviorTreeScriptTest.h"
+
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
 template <size_t N>
@@ -272,29 +274,23 @@ void DemoTest()
 	cave::Renderer* renderer = main.GetRenderer();
 
 											// index
-	renderer->AddSprite("lapland.png");		// 0 sprite
-	renderer->AddTexture("lapland_2.png");	// 1 texture
-	renderer->AddSprite("amiya.png");		// 1 sprite
-	renderer->AddTexture("amiya_2.png");	// 3 texture
-	renderer->AddSprite("texas.png");		// 2 sprite
-	renderer->AddTexture("texas_2.png");	// 5 texture
+	renderer->AddSprite("mario.png");		// 0 sprite
+	renderer->AddTexture("mario_2.png");	// 1 texture
 
 	renderer->SetSpritePosition(0, { 0.f, 0.f });
-	renderer->SetSpritePosition(1, { 0.f, 0.f });
-	renderer->SetSpritePosition(2, { 0.f, 0.f });
 
 	cave::World* world = new cave::World("World_1");
 
 	cave::Level* level = new cave::Level("Level_1");
 
-	cave::GameObject* gameObject = new cave::GameObject("lapland");
+	cave::GameObject* gameObject = new cave::GameObject("mario");
 
-	cave::TestScript* move = new cave::TestScript("Move", 0, 0, 0.03f);
+	cave::BehaviorTreeTestScript* bt = new cave::BehaviorTreeTestScript("BT_Test", 0, 0, 0.03f);
 
 	cave::GameInstance* gameInstance = main.GetGameInstance();
 	
 	gameObject->SetRenderer(*main.GetRenderer());
-	gameObject->AddScript(*move);
+	gameObject->AddScript(*bt);
 	level->AddGameObject(*gameObject);
 	world->AddLevel(*level) ;
 	gameInstance->AddWorld(*world);

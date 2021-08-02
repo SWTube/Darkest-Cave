@@ -16,12 +16,12 @@ namespace cave
         RepeatDecorator(const char*, int);
         ~RepeatDecorator();
 
-        virtual bool Run() override
+        virtual bool Run(GameObject& gameObject) override
         {
             int i;
             for(i = 0; i < mRepeatCount; i++)
             {
-                GetChild()->Run();
+                GetChild()->Run(gameObject);
             }
             if(i == mRepeatCount)
                 return true;
