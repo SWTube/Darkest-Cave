@@ -7,12 +7,16 @@
 
 namespace cave
 {
+	Player::Player() : PhysicsObject()
+	{
+		
+	}
 	void Player::Move(b2Vec2 movementVec)
 	{
 		
 	}
 	void Player::Jump(b2Vec2 forceVec)
 	{
-		mPhysicsObject.ApplyForce(forceVec);
+		ApplyForce(forceVec, this->GetBody()->GetPosition(), true);
 	}
 }

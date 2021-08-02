@@ -147,9 +147,6 @@
     <ClCompile Include="Physics\Private\PhysicsWorld.cpp">
       <Filter>Source Files\CaveEngine\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Physics\Private\Shape.cpp">
-      <Filter>Source Files\CaveEngine\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="Physics\Private\PhysicsBody.cpp">
       <Filter>Source Files\CaveEngine\Physics</Filter>
     </ClCompile>
@@ -339,9 +336,6 @@
       <Filter>Header Files\CaveEngine\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Physics\Public\PhysicsWorld.h">
-      <Filter>Header Files\CaveEngine\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\Public\Shape.h">
       <Filter>Header Files\CaveEngine\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Physics\Public\Physics.h">

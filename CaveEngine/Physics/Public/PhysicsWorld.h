@@ -16,6 +16,9 @@ namespace cave
 		PhysicsWorld(b2Vec2 gravity);
 		~PhysicsWorld();
 
+		void SetGravity(b2Vec2 gravity);
+		void SetTimeStep(float timeStep);
+
 		void AddPhysicsObject(PhysicsObject* physicsObject);
 
 		void Step();
@@ -25,9 +28,9 @@ namespace cave
 		b2World mWorld;
 		std::vector<PhysicsObject*> mPhysicsObjects;
 
-		float timeStep = 1.0f / 60.0f;
-		int32 velocityIterations = 6;
-		int32 positionIterations = 2;
+		float mTimeStep = 1.0f / 60.0f;
+		int32 mVelocityIterations = 6;
+		int32 mPositionIterations = 2;
 	};
 }
 

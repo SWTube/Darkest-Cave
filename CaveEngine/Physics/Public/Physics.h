@@ -17,7 +17,6 @@
 
 #include "PhysicsWorld.h"
 #include "PhysicsBody.h"
-#include "Shape.h"
 
  /*----------------------------------------------------------------------------
 	 inlcude Physics Object

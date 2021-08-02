@@ -14,13 +14,26 @@ namespace cave
 	PhysicsWorld::~PhysicsWorld()
 	{
 	}
+	void PhysicsWorld::SetGravity(b2Vec2 gravity)
+	{
+		mWorld.SetGravity(gravity);
+	}
+	void PhysicsWorld::SetTimeStep(float timeStep)
+	{
+		mTimeStep = timeStep;
+	}
 	void PhysicsWorld::AddPhysicsObject(PhysicsObject* physicsObject)
 	{
-		mWorld.CreateBody(physicsObject->GetBodyDef());
+		// add bodyDef, fixtureDef to physics world
+		b2Body* physicsBody = mWorld.CreateBody(physicsObject->GetBodyDef());
+		physicsBody->CreateFixture(physicsObject->GetFixtureDef());
+		// set body on physics object
+		physicsObject->SetBody(physicsBody);
+		// push physics object
 		mPhysicsObjects.push_back(physicsObject);
 	}
 	void PhysicsWorld::Step()
 	{
-		mWorld.Step(timeStep, velocityIterations, positionIterations);
+		mWorld.Step(mTimeStep, mVelocityIterations, mPositionIterations);
 	}
 }

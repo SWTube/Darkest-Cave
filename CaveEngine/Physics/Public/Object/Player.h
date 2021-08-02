@@ -9,13 +9,16 @@
 
 namespace cave
 {
-	class Player
+	class Player : public PhysicsObject
 	{
 	public:
+		Player();
+
 		void Move(b2Vec2 movementVec);
 		void Jump(b2Vec2 forceVec);
 
 	private:
-		PhysicsObject mPhysicsObject;
+		// Player status & ability
+		float mStrength;
 	};
 }

@@ -23,9 +23,14 @@ namespace cave
 		b2BodyDef* GetBodyDef();
 		b2FixtureDef* GetFixtureDef();
 
-		void SetBodyDef();
+		b2Body* GetBody();
+
+		// set body from physics world
+		void SetBody(b2Body* body);
 
 		// bodyDef properties
+		b2Vec2 GetPosition();
+
 		void SetType(ePhysicsObjectTypes physicsObjectType);
 		void SetPosition(b2Vec2 objectPosition);
 
@@ -37,9 +42,15 @@ namespace cave
 		// PhysicsObject methods
 		void ApplyForce(b2Vec2 forceVec, b2Vec2 point, bool wake);
 
+		// PhysicsObject child
+		void AddChild(PhysicsObject* physicsObject);
+
 	private:
+		bool hasBody();
+
 		b2BodyDef mBodyDef;
 		b2FixtureDef mFixtureDef;
+		b2Body* mBody;
 	};
 }
 

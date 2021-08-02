@@ -277,7 +277,6 @@
     <ClInclude Include="Physics\Public\Physics.h" />
     <ClInclude Include="Physics\Public\PhysicsBody.h" />
     <ClInclude Include="Physics\Public\PhysicsWorld.h" />
-    <ClInclude Include="Physics\Public\Shape.h" />
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
@@ -322,7 +321,6 @@
     <ClCompile Include="Physics\Private\Object\Wall.cpp" />
     <ClCompile Include="Physics\Private\PhysicsBody.cpp" />
     <ClCompile Include="Physics\Private\PhysicsWorld.cpp" />
-    <ClCompile Include="Physics\Private\Shape.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />

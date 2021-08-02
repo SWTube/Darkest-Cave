@@ -7,17 +7,29 @@
 
 namespace cave
 {
-	PhyscisObject::PhysicsObject()
+	PhysicsObject::PhysicsObject()
 	{
-		
+		mBody = nullptr;
 	}
 	b2BodyDef* PhysicsObject::GetBodyDef()
 	{
 		return &mBodyDef;
 	}
-	b2FixtureDef* PhyscisObject::GetFixtureDef()
+	b2FixtureDef* PhysicsObject::GetFixtureDef()
 	{
 		return &mFixtureDef;
+	}
+	b2Body* PhysicsObject::GetBody()
+	{
+		return mBody;
+	}
+	void PhysicsObject::SetBody(b2Body* body)
+	{
+		mBody = body;
+	}
+	b2Vec2 PhysicsObject::GetPosition()
+	{
+		return mBody->GetPosition();
 	}
 	// b2BodyDef properties
 	void PhysicsObject::SetType(ePhysicsObjectTypes objectType)
@@ -55,6 +67,13 @@ namespace cave
 	// PhysicsObject methods
 	void PhysicsObject::ApplyForce(b2Vec2 forceVec, b2Vec2 point, bool wake)
 	{
-		mBody->ApplyForce(forceVec, point, wake);
+		if (hasBody())
+		{
+			mBody->ApplyForce(forceVec, point, wake);
+		}
+	}
+	bool PhysicsObject::hasBody()
+	{
+		return mBody != nullptr;
 	}
 }
