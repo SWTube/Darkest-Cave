@@ -161,7 +161,7 @@ namespace cave
 		{
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
 			{
-				std::string buffer;
+				static std::string buffer;
 
 				switch (channel)
 				{
@@ -233,7 +233,7 @@ namespace cave
 					break;
 				}
 
-				char output[255] = { '\0', };
+				char output[255];
 				snprintf(output, 255, "%s%s/%s/line:%d :\t%s\n", buffer.c_str(), fileName, functionName, lineNumber, message);
 				OutputDebugStringA(output);
 			}
