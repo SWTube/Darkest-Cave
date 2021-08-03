@@ -252,9 +252,6 @@
     <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp">
       <Filter>Source Files\Gameplay\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Public\Object.ixx">
-      <Filter>Header Files\Gameplay\Object</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Containers\Array.h">

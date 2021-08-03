@@ -2,8 +2,6 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-#ifdef __WIN32__
-#else
 #include "Object/Object.h"
 
 namespace cave
@@ -75,5 +73,3 @@ namespace cave
 		return *this;
 	}
 }
-
-#endif // __WIN32__
