@@ -8,7 +8,7 @@
 #include "GraphicsApiPch.h"
 
 #include "CoreTypes.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 #include "Texture/Texture.h"
 #include "Texture/MultiTexture.h"
 
@@ -68,7 +68,7 @@ namespace cave
 
 		//VertexType mVertices[VERTICES_COUNT];
 		
-		// ¿ÖÀÎÁö ¸ð¸£°Ú´Âµ¥, uint32_t ·Î ÇßÀ» ¶§ 
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ð¸£°Ú´Âµï¿½, uint32_t ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ 
 		//D3D11 WARNING: ID3D11DeviceContext::DrawIndexed: Index buffer has not enough space! [ EXECUTION WARNING #359: DEVICE_DRAW_INDEX_BUFFER_TOO_SMALL]
 		static constexpr WORD INDICES[INDICES_COUNT] = {
 			0, 1, 2,

@@ -9,7 +9,9 @@ namespace cave
 	constexpr FFloatArray::FFloatArray(size_t size)
 		: mSize(size)
 		, mData(new float[size])
-	{ }
+	{
+	}
+
 	constexpr FFloatArray::FFloatArray(const FFloatArray& other)
 		: mSize(other.mSize)
 		, mData(new float[other.mSize])
@@ -19,6 +21,7 @@ namespace cave
 			mData[i] = other.mData[i];
 		}
 	}
+	
 	constexpr FFloatArray::FFloatArray(FFloatArray&& other) noexcept
 		: mSize(other.mSize)
 		, mData(other.mData)

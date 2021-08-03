@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{2d717754-a428-482f-bc99-1cf9f487610e}</ProjectGuid>
     <RootNamespace>CaveEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -90,12 +90,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
       <PreprocessToFile>false</PreprocessToFile>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,6 +104,7 @@
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
@@ -114,6 +116,10 @@
       <EntryPointName>VS</EntryPointName>
       <ShaderModel>4.0_level_9_3</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -124,11 +130,12 @@
       <PreprocessorDefinitions>WIN32;PROJECT_DIR=R"($(SolutionDir))";CAPACITY_INCREASE_MODE_DOUBLE=0;CAPACITY_INCREASE_MODE_SUFFICIENT=1;CAPACITY_INCREASE_MODE=CAPACITY_INCREASE_MODE_DOUBLE;CAVE_BUILD_DEBUG=0;CAVE_BUILD_DEVELOPMENT=0;CAVE_BUILD_TEST=0;CAVE_BUILD_RELEASE=1;__WIN32__;CAVE_BUILD_RELEASE;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,6 +143,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -143,6 +151,10 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -156,17 +168,17 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <OpenMPSupport>false</OpenMPSupport>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
@@ -184,6 +196,10 @@
       <EntryPointName>VS</EntryPointName>
       <ShaderModel>4.0_level_9_3</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -194,11 +210,12 @@
       <PreprocessorDefinitions>WIN32;PROJECT_DIR=R"($(SolutionDir))";CAPACITY_INCREASE_MODE_DOUBLE=0;CAPACITY_INCREASE_MODE_SUFFICIENT=1;CAPACITY_INCREASE_MODE=CAPACITY_INCREASE_MODE_DOUBLE;CAVE_BUILD_DEBUG=0;CAVE_BUILD_DEVELOPMENT=0;CAVE_BUILD_TEST=0;CAVE_BUILD_RELEASE=1;CAVE_BUILD_RELEASE;__WIN32__;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -206,6 +223,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -213,12 +231,18 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
     <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
+    <ClInclude Include="Core\Public\Containers\TStack.h" />
+    <ClInclude Include="Core\Public\Containers\Vertex.h" />
     <ClInclude Include="Core\Public\Core.h" />
     <ClInclude Include="Core\Public\CoreFwd.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
@@ -229,21 +253,33 @@
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
     <ClInclude Include="Core\Public\Memory\DataBlock.h" />
+    <ClInclude Include="Core\Public\Math\Vector2.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\String\String.h" />
+    <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
     <ClInclude Include="Core\Public\Utils\Defines.h" />
     <ClInclude Include="Engine\Public\Engine.h" />
     <ClInclude Include="Engine\Public\GenericEngine.h" />
     <ClInclude Include="Engine\Public\UnixEngine.h" />
     <ClInclude Include="Engine\Public\WindowsEngine.h" />
+    <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
+    <ClInclude Include="Gameplay\Public\World\Level.h" />
+    <ClInclude Include="Gameplay\Public\World\World.h" />
     <ClInclude Include="Graphics\Public\Device\DeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\GenericWindow.h" />
     <ClInclude Include="Graphics\Public\Device\Window.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsWindow.h" />
+    <ClInclude Include="Gameplay\Public\Game.h" />
+    <ClInclude Include="Gameplay\Public\Object\Script.h" />
+    <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
+    <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
+    <ClInclude Include="Gameplay\Public\Object\Tag.h" />
+    <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
+    <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
     <ClInclude Include="Graphics\Public\Renderer\Camera.h" />
     <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h" />
@@ -255,45 +291,61 @@
     <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\GenericSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h" />
-    <ClInclude Include="Graphics\Public\Sprite\Vertex.h" />
+    <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
+    <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
+    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
-    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
+    <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Private\Containers\Array.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
+    <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
     <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
+    <ClCompile Include="Core\Private\Thread\Thread.cpp" />
+    <ClCompile Include="Core\Public\Containers\Matrix.ixx" />
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
+    <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
+    <ClCompile Include="Gameplay\Private\World\Level.cpp" />
+    <ClCompile Include="Gameplay\Private\World\World.cpp" />
     <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\GenericDeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp" />
     <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp" />
+    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp" />
-    <ClCompile Include="Graphics\Private\Sprite\Vertex.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp" />
-    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
-    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
-    <ClCompile Include="ResourceManager\Private\Texture\DdsTextureLoader.ixx" />
+    <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
+    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
+    <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
-    <ClCompile Include="ResourceManager\Private\Texture\WicTextureLoader.ixx" />
+    <ClCompile Include="ResourceManager\Public\Texture\WicTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
+    <ClCompile Include="ThirdParty\tictoc\src\tictoc.c" />
+    <ClCompile Include="Gameplay\Private\Game.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Script.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\GameObject.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Object.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Tag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico" />

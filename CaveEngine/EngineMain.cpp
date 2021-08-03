@@ -3,20 +3,32 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <chrono>
+#include <crtdbg.h>
+#include <cstdlib>
 #include <exception>
 #include <fstream>
 #include <iomanip>
-#include <time.h>
+#include <iostream>
+#include <random>
+#include <vector>
+
+#include "tictoc.h"
 
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
 
 #include "Containers/TStack.h"
 #include "Engine.h"
+#include "Object/TagPool.h"
 #include "Sprite/Sprite.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 #include "String/String.h"
-#include "Time/TimeManager.h"
+
+#if _DEBUG
+//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
+#endif // _DEBUG
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
@@ -26,7 +38,7 @@ void RenderTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
-#if defined(__WIN32__)
+#ifdef __WIN32__
 import Log;
 
 //--------------------------------------------------------------------------------------
@@ -39,15 +51,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	CoInitialize(0);
 	// Enable run-time memory check for debug builds.
-#if defined(CAVE_BUILD_DEBUG)
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
+	#if defined(CAVE_BUILD_DEBUG)
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	#endif
 
 #else
 int main(int32_t argc, char** argv)
 {
-	cave::TimeManager timeManager;
-
 	uint32_t commandFlag = 0u;
 	constexpr uint32_t LOG_FLAG = 0x01;
 	for (int32_t currentArgIndex = 0; currentArgIndex < argc; ++currentArgIndex)
@@ -90,10 +100,15 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	 RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	//cave::MemoryPoolTest::Test();
+	TicTocTimer clock = tic();
+	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
+	//  RenderTest();
+	cave::TagPoolTest::Test();
+
+	_CrtDumpMemoryLeaks();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 #endif
 
 	// Cleanup is handled in destructors.
@@ -218,21 +233,18 @@ void RenderTest()
 	// Instantiate the window manager class.
 	cave::Engine main;
 	// Create a window.
-	cave::eResult result = main.Init(1600, 1000u);
+	cave::eResult result = main.Init(1600u, 900u);
 
 
 	cave::Renderer* renderer = main.GetRenderer();
 
 	renderer->AddSprite("orange_mushroom.png");
-	//renderer->AddAnimatedSprite("orange_mushroom.png", "default",4,4,2, 4.0f, true);
-	
+
 	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
-	renderer->AddSprite("slime_hit.bmp");
 	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
-	//renderer->RemoveSprite(0);
-	//renderer->SetSpritePosition(2, cave::Float2(500, 200));
-	//renderer->SetSpriteZIndex(0,4);  // ¼ýÀÚ°¡ Å¬ ¼ö·Ï ¾Õ¿¡ ¿È. (ÁÖ¼®Áö¿ì¸é ºñÇà±âº¸´Ù ¹ö¼¸±×¸²ÀÌ ¾Õ¿¡¿È) 
-	//renderer->SetSpriteZIndex(2, 0);
+	renderer->SetSpritePosition(2, cave::Float2(500, 200));
+	//renderer->SetSpriteZIndex(0, 1);  // ï¿½ï¿½ï¿½Ú°ï¿½ Å¬ ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ ï¿½ï¿½. (ï¿½Ö¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½âº¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ï¿½ï¿½) 
+	
 	if (result == cave::eResult::CAVE_OK)
 	{
 		//// Go full-screen.
@@ -241,9 +253,8 @@ void RenderTest()
 		//// Whoops! We resized the "window" when we went full-screen. Better
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
-
-		// Run the program.
-		result = main.Run();
+	// 	// Run the program.
+	// 	result = main.Run();
 	}
 
 	main.Destroy();
