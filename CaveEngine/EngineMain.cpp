@@ -18,6 +18,7 @@
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
 
+#include "Containers/Hash.h"
 #include "Containers/TStack.h"
 #include "Engine.h"
 #include "Object/TagPool.h"
@@ -105,10 +106,19 @@ int main(int32_t argc, char** argv)
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
-	cave::TagPoolTest::Test();
+	// cave::TagPoolTest::Test();
+
+	uint8_t bytes[5] = { 'h', 'e', 'l', 'l', 'o' };
+
+	cave::Hashable hash(bytes, sizeof(bytes) / sizeof(bytes[0]));
+	uint32_t crc32Hash = hash.GetHash();
+
+	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", crc32Hash);
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	_CrtDumpMemoryLeaks();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
 #endif
 
 	// Cleanup is handled in destructors.
