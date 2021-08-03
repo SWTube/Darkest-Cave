@@ -18,7 +18,6 @@
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
 
-#include "Containers/Hash.h"
 #include "Containers/TStack.h"
 #include "Engine.h"
 #include "Object/TagPool.h"
@@ -40,6 +39,7 @@ void RenderTest();
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
 #ifdef __WIN32__
+import Hash;
 import Log;
 
 //--------------------------------------------------------------------------------------
