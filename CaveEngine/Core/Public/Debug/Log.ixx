@@ -183,6 +183,9 @@ namespace cave
 				case eLogChannel::CORE:
 					buffer = "Core/";
 					break;
+				case eLogChannel::CORE_MODULE:
+					buffer = "Core/Module/";
+					break;
 				case eLogChannel::CORE_UNIT_TEST:
 					buffer = "Core/UnitTest/";
 					break;
@@ -217,7 +220,7 @@ namespace cave
 					buffer = "Core/Thread/";
 					break;
 				case eLogChannel::CORE_CONTAINER:
-					buffer = "Core/Container/";
+					buffer = "Core/Containers/";
 					break;
 				case eLogChannel::CORE_FILE_SYSTEM:
 					buffer = "Core/FileSystem/";
