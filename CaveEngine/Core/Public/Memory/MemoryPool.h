@@ -50,48 +50,6 @@ namespace cave
 		return mFreeSize;
 	}
 
-	FORCEINLINE constexpr size_t GetUpperPowerOfTwo(size_t number)
-	{
-		if (number && !(number & (number - 1ul)))
-		{
-			return number;
-		}
-
-		size_t count = 0ul;
-		for (; number != 0ul; number >>= 1, ++count)
-		{
-		}
-
-		return 1ul << count;
-	}
-
-	FORCEINLINE constexpr size_t GetExponent(size_t number)
-	{
-		if (!number || (number & (number - 1)))
-		{
-			return 0ul;
-		}
-
-		size_t exponent = 0ul;
-		for (size_t i = 1ul; !(i & number); i <<= 1, ++exponent)
-		{
-		}
-
-		return exponent;
-	}
-
-	FORCEINLINE constexpr size_t GetPowerOfTwo(size_t exponent)
-	{
-		size_t result = 1ul;
-
-		for (size_t i = 0; i < exponent; ++i)
-		{
-			result <<= 1;
-		}
-
-		return result;
-	}
-
 #if CAVE_BUILD_DEBUG
 	namespace MemoryPoolTest
 	{

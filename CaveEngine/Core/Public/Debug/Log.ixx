@@ -94,7 +94,6 @@ namespace cave
 
 		export void DebugF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const char* message, ...)
 		{
-			OutputDebugStringA(gBuffer);
 			va_list vl;
 			va_start(vl, message);
 			vsnprintf(gBuffer, MAX_BUFFER, message, vl);
@@ -162,7 +161,7 @@ namespace cave
 		{
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
 			{
-				std::string buffer;
+				static std::string buffer;
 
 				switch (channel)
 				{
@@ -183,6 +182,9 @@ namespace cave
 					break;
 				case eLogChannel::CORE:
 					buffer = "Core/";
+					break;
+				case eLogChannel::CORE_MODULE:
+					buffer = "Core/Module/";
 					break;
 				case eLogChannel::CORE_UNIT_TEST:
 					buffer = "Core/UnitTest/";
@@ -218,7 +220,7 @@ namespace cave
 					buffer = "Core/Thread/";
 					break;
 				case eLogChannel::CORE_CONTAINER:
-					buffer = "Core/Container/";
+					buffer = "Core/Containers/";
 					break;
 				case eLogChannel::CORE_FILE_SYSTEM:
 					buffer = "Core/FileSystem/";
