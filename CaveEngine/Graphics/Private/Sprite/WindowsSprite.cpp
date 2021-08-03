@@ -196,18 +196,6 @@ namespace cave
 		mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), Float2(mTexture->GetEndUV().X, mTexture->GetEndUV().Y)));		// bottom right
 		mVertices[3] = std::move(VertexT(Float3( left, bottom, mPosition.Z), Float2(mTexture->GetStartUV().X, mTexture->GetEndUV().Y)));		// bottom left
 
-		//float textureStart = mFrame * mDividedTexture;
-		//mVertices[0].position = DirectX::XMFLOAT3(left, top, 0.0f);  // Top left.
-		//mVertices[0].texture = DirectX::XMFLOAT2(mTexture->GetStartUV().X, mTexture->GetStartUV().Y);
-
-		//mVertices[1].position = DirectX::XMFLOAT3(right, top, 0.0f);  // Top right.
-		//mVertices[1].texture = DirectX::XMFLOAT2(mTexture->GetEndUV().X, mTexture->GetStartUV().Y);
-
-		//mVertices[2].position = DirectX::XMFLOAT3(right, bottom, 0.0f);  // bottom right.
-		//mVertices[2].texture = DirectX::XMFLOAT2(mTexture->GetEndUV().X, mTexture->GetEndUV().Y);
-
-		//mVertices[3].position = DirectX::XMFLOAT3(left, bottom, 0.0f);  // bottom left.
-		//mVertices[3].texture = DirectX::XMFLOAT2(mTexture->GetStartUV().X, mTexture->GetEndUV().Y);
 
 		HRESULT hResult = context->Map(mVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		if (FAILED(result)) {
@@ -230,14 +218,6 @@ namespace cave
 
 		// Set primitive topology
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	}
-	void WindowsSprite::SetMultiSprite(int frameCount, int framesPerSecond)
-	{
-		//mbIsMultiSprite = true;
-		//mFrameCount = frameCount;
-		//mTimePerFrame = 1.0f / float(framesPerSecond);
-		//mDividedTexture = 1.0f / float(mFrameCount);
-		//tempElapsed = 0.01f;
 	}
 } // namespace cave
 

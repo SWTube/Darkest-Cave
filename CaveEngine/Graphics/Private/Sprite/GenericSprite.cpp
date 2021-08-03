@@ -38,9 +38,9 @@ namespace cave
 	GenericSprite::GenericSprite(const GenericSprite& other)
 		: mWorld(other.mWorld)
 		, mTextureIndex(other.mTextureIndex)
-		, mPosition(other.mPosition)
 		, mWidth(other.mWidth)
 		, mHeight(other.mHeight)
+		, mPosition(other.mPosition)
 	{
 		mTexture = other.mTexture;
 		/*if (other.mTexture != nullptr)
@@ -129,7 +129,7 @@ namespace cave
 	{
 		if (mTexture != nullptr)
 		{
-			//mTexture->~Texture();
+			mTexture->~Texture(); //
 			mTexture = nullptr;
 		}
 	}

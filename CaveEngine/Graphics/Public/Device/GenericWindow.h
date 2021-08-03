@@ -44,19 +44,10 @@ namespace cave
 		bool mbIsFullScreen = false;
 		uint32_t mWidth = 0u;
 		uint32_t mHeight = 0u;
-#ifdef __WIN32__
 		float mNear = 0.1f;
 		float mFar = 1000.0f;
-#else
-		float mNear = -1.0f;
-		float mFar = 1.0f;
-#endif
-
-#ifdef __WIN32__
 		const wchar_t* mTitle = nullptr;
-#else
-		const char* mTitle = nullptr;
-#endif
+
 	};
 
 	constexpr bool GenericWindow::IsFullScreen() const

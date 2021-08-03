@@ -134,6 +134,24 @@ namespace cave
 		return result;
 	}
 
+	eResult GenericRenderer::AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t row, uint32_t column, uint32_t frame, float duration, bool isLoof)
+	{
+		MultiTexture* newTexture = reinterpret_cast<MultiTexture*>(mPool->Allocate(sizeof(MultiTexture)));
+		new(newTexture) cave::MultiTexture(mDeviceResources->GetDevice(), filePath,row,column,frame);
+		mTextures.push_back(newTexture);
+		cave::AnimatedSprite* newSprite = reinterpret_cast<AnimatedSprite*>(mPool->Allocate(sizeof(AnimatedSprite)));
+		new(newSprite) cave::AnimatedSprite(animationName, newTexture, frame, duration, isLoof, mPool);
+
+		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+		newSprite->SetTextureIndex(mTextures.back(), mTextures.size() - 1);
+		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
+		newSprite->SetPosition(300, 200); // temp
+		newSprite->SetZIndex(mSprites.size());
+		mSprites.push_back(newSprite);
+
+		return result;
+	}
+
 	eResult GenericRenderer::AddTexture(Texture&& texture)
 	{
 		Texture* newTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));

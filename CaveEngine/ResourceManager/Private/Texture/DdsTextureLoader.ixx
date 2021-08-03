@@ -1,5 +1,5 @@
 module;
-
+#pragma warning(disable : 4061)
 #include <algorithm>
 #include <memory>
 
