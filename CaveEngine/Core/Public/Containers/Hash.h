@@ -8,6 +8,7 @@
 #include "CoreTypes.h"
 
 #include "CoreGlobals.h"
+#include "Memory/Memory.h"
 
 namespace cave
 {
@@ -124,11 +125,14 @@ namespace cave
     uint32_t Hashable<ID>::GetHash() const
     {
         uint32_t crc32 = 0xFFFFFFFF;
-
-        for (size_t i = 0; i < mSize; ++i)
+        size_t capacity = GetUpperPowerOfTwo(static_cast<size_t>(mSize));
+        for (size_t i = 0; i < capacity; ++i)
         {
+            // SPECTRE MITIGATION
+            // https://docs.microsoft.com/en-us/cpp/security/developer-guidance-speculative-execution?view=msvc-160
+            // https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)#Mitigation
+            i &= (capacity - 1);
             uint32_t index = (crc32 ^ mBytes[i]) & 0xFF;
-            // SPECULATION BARRIER
             crc32 = (crc32 >> 8) ^ msTable[index];
         }
 
