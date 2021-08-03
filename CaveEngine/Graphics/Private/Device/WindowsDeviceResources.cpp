@@ -439,7 +439,7 @@ namespace cave
 		{
 			return false;
 		}
-
+		
 
 		////
 
@@ -676,6 +676,16 @@ namespace cave
 		if (mImmediateContext != nullptr)
 		{
 			mImmediateContext->ClearState();
+		}
+
+		if (mAlphaEnableBlendingState != nullptr) {
+			mAlphaEnableBlendingState->Release();
+			mAlphaEnableBlendingState = nullptr;
+		}
+
+		if (mAlphaDisableBlendingState != nullptr) {
+			mAlphaDisableBlendingState->Release();
+			mAlphaDisableBlendingState = nullptr;
 		}
 
 		if (mDepthDisabledStencilState != nullptr)

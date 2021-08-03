@@ -1,5 +1,6 @@
 module;
 
+#pragma warning(disable : 4061)
 #include <dxgiformat.h>
 
 #include <wincodec.h>

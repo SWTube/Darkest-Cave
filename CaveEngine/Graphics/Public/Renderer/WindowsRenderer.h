@@ -32,7 +32,7 @@ namespace cave
 		void Destroy() override;
 
 	private:
-		void cleanupDevice();
+	
 
 		DirectX::XMMATRIX	mView = DirectX::XMMatrixIdentity();
 		DirectX::XMMATRIX	mProjection = DirectX::XMMatrixIdentity();

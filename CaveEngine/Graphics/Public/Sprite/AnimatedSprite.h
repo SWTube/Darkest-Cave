@@ -4,33 +4,34 @@
 #include <string>
 namespace cave {
 	struct Animation {
-		bool mIsLoof;
-		uint32_t mFrames;
-		uint32_t mCurFrames;
-		float mDuration;
-		float mInterval;
-		MultiTexture* mTexture;
+		bool bIsLoof;
+		uint32_t frames;
+		uint32_t curFrames;
+		float duration;
+		float interval;
+		MultiTexture* texture;
 		
 		Animation() {
-			mIsLoof = false;
-			mFrames = 0;
-			mCurFrames = 0;
-			mDuration = 0.0f;
-			mInterval = 0.0f;
-			mTexture = nullptr;
+			bIsLoof = false;
+			frames = 0;
+			curFrames = 0;
+			duration = 0.0f;
+			interval = 0.0f;
+			texture = nullptr;
 		}
 		Animation(MultiTexture* texture, uint32_t frame, float duration, bool isLoof)
-			:mFrames(frame),
-			mDuration(duration),
-			mTexture(texture),
-			mIsLoof(isLoof)
+			:bIsLoof(isLoof),
+			frames(frame),
+			curFrames(0),
+			duration(duration),
+			texture(texture)
 		{
-			mCurFrames = 0;
 			assert(frame > 0);
-			mInterval = mDuration / mFrames;
+			interval = duration / static_cast<float>(frames);
 		}
+
 		~Animation() {
-			mTexture = nullptr;
+			texture = nullptr;
 		}
 
 
@@ -41,6 +42,8 @@ namespace cave {
 		AnimatedSprite() = delete;
 		AnimatedSprite(std::string name, Animation* animation, MemoryPool* pool);
 		AnimatedSprite(std::string name, MultiTexture* texture, uint32_t frame, const float duration, bool isLoof,MemoryPool* pool);
+		AnimatedSprite(const AnimatedSprite& other);
+		
 		virtual ~AnimatedSprite();
 
 		void Destroy() override;
@@ -51,8 +54,8 @@ namespace cave {
 		void SetState(std::string state);
 
 	private:
-		bool mbIsPlaying = false;
 		MemoryPool* mPool = nullptr;
+		bool mbIsPlaying = false;
 		std::string mState = "";
 		std::unordered_map<std::string, Animation*> mAnimations;
 		

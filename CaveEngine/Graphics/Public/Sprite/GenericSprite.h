@@ -129,7 +129,7 @@ namespace cave
 
 	inline constexpr void GenericSprite::SetZIndex(const uint32_t z)
 	{
-		mPosition.Z = 1.0f - z * 0.01f;
+		mPosition.Z = 1.0f - static_cast<float>(z) * 0.01f;
 	}
 
 	constexpr void GenericSprite::Move(float x, float y)

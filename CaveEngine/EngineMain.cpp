@@ -218,18 +218,21 @@ void RenderTest()
 	// Instantiate the window manager class.
 	cave::Engine main;
 	// Create a window.
-	cave::eResult result = main.Init(1600u, 900u);
+	cave::eResult result = main.Init(1600, 1000u);
 
 
 	cave::Renderer* renderer = main.GetRenderer();
 
 	renderer->AddSprite("orange_mushroom.png");
-
-	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
-	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
-	renderer->SetSpritePosition(2, cave::Float2(500, 200));
-	//renderer->SetSpriteZIndex(0, 1);  // 숫자가 클 수록 앞에 옴. (주석지우면 비행기보다 버섯그림이 앞에옴) 
+	//renderer->AddAnimatedSprite("orange_mushroom.png", "default",4,4,2, 4.0f, true);
 	
+	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
+	renderer->AddSprite("slime_hit.bmp");
+	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
+	//renderer->RemoveSprite(0);
+	//renderer->SetSpritePosition(2, cave::Float2(500, 200));
+	//renderer->SetSpriteZIndex(0,4);  // 숫자가 클 수록 앞에 옴. (주석지우면 비행기보다 버섯그림이 앞에옴) 
+	//renderer->SetSpriteZIndex(2, 0);
 	if (result == cave::eResult::CAVE_OK)
 	{
 		//// Go full-screen.

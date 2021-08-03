@@ -38,6 +38,8 @@ namespace cave
 		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
 		new(mShader) cave::Shader(L"DirectXTest.fxh", *mPool);
 		mShader->Compile(mDeviceResources->GetDevice());
+
+		return eResult::CAVE_OK;
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -55,16 +57,13 @@ namespace cave
 	{
 		ID3D11DeviceContext* context = mDeviceResources->GetDeviceContext();
 
-		ID3D11RenderTargetView* renderTarget = mDeviceResources->GetRenderTarget();
-		ID3D11DepthStencilView* depthStencil = mDeviceResources->GetDepthStencil();
-
 		mDeviceResources->RenderStart();
 
 		mCamera->Render();
 
 		DirectX::XMMATRIX& worldMatrix = mDeviceResources->GetWorldMatrix();
 		const DirectX::XMMATRIX& viewMatrix = mCamera->GetViewMatrix();
-		DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
+		//DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
 		DirectX::XMMATRIX& ortho = mDeviceResources->GetOrthoMatrix();
 
 		// 모든 2D 렌더링을 시작하려면 Z 버퍼를 끕니다.
@@ -79,7 +78,7 @@ namespace cave
 		}
 
 		mDeviceResources->TurnOffAlphaBlending();
-		mDeviceResources->TurnZBufferOn();
+		//mDeviceResources->TurnZBufferOn();
 		// Present the frame to the screen.
 		mDeviceResources->RenderEnd();
 
@@ -97,6 +96,8 @@ namespace cave
 		{
 			return result;
 		}
+
+		return result;
 	}
 
 	eResult WindowsRenderer::CreateWindowSizeDependentResources(Window* window)
@@ -116,7 +117,7 @@ namespace cave
 		++mFrameCount;
 		if (mFrameCount == UINT32_MAX)
 		{
-			mFrameCount == 0u;
+			mFrameCount = 0u;
 		}
 	}
 

@@ -65,8 +65,8 @@ namespace cave
 		mMenu = nullptr;
 
 		// This example uses a non-resizable 640 by 480 viewport for simplicity.
-		int32_t defaultWidth = 640;
-		int32_t defaultHeight = 480;
+		uint32_t defaultWidth = width;
+		uint32_t defaultHeight = height;
 		SetRect(&mRect, 0, 0, defaultWidth, defaultHeight);        
 		AdjustWindowRect(
 			&mRect,

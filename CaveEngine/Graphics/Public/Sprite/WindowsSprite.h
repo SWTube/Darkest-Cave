@@ -31,7 +31,6 @@ namespace cave
 		//void Render() override;
 		virtual void Render(ID3D11DeviceContext* context);
 
-		void SetMultiSprite(int frameCount, int framesPerSecond);
 
 	private:
 		eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context) override;
