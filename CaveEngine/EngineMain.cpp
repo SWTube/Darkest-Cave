@@ -274,9 +274,9 @@ void DemoTest()
 											// index
 	renderer->AddSprite("lapland.png");		// 0 sprite
 	renderer->AddTexture("lapland_2.png");	// 1 texture
-	renderer->AddSprite("amiya.png");		// 1 sprite
+	renderer->AddSprite("amiya.png");		// 1 sprite, 2 texture
 	renderer->AddTexture("amiya_2.png");	// 3 texture
-	renderer->AddSprite("texas.png");		// 2 sprite
+	renderer->AddSprite("texas.png");		// 2 sprite, 4 texture
 	renderer->AddTexture("texas_2.png");	// 5 texture
 
 	renderer->SetSpritePosition(0, { 0.f, 0.f });
@@ -288,14 +288,19 @@ void DemoTest()
 	cave::Level* level = new cave::Level("Level_1");
 
 	cave::GameObject* gameObject = new cave::GameObject("lapland");
+	cave::GameObject* gameObject2 = new cave::GameObject("amiya");
 
 	cave::TestScript* move = new cave::TestScript("Move", 0, 0, 0.03f);
+	cave::TestScript* move2 = new cave::TestScript("Move2", 1, 2, 0.01f);
 
 	cave::GameInstance* gameInstance = main.GetGameInstance();
 	
 	gameObject->SetRenderer(*main.GetRenderer());
 	gameObject->AddScript(*move);
+	gameObject2->SetRenderer(*main.GetRenderer());
+	gameObject2->AddScript(*move2);
 	level->AddGameObject(*gameObject);
+	level->AddGameObject(*gameObject2);
 	world->AddLevel(*level);
 	gameInstance->AddWorld(*world);
 
