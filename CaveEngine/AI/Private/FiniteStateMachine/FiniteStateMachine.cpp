@@ -5,17 +5,32 @@
 #pragma once
 
 #include <iostream>
+#include "FiniteStateMachine/FiniteStateMachine.h"
 
 namespace cave
 {
-	class FiniteStateMachine
+	FiniteStateMachine::FiniteStateMachine() 
 	{
-	public:
-		FiniteStateMachine();
-		virtual ~FiniteStateMachine();
-		void setBool()
+		mNode.clear();
+		mCheckList.clear();
+	}
+	FiniteStateMachine::FiniteStateMachine(State currentState)
+	{
+		mCurrentState = currentState;
+		mNode.clear();
+		mCheckList.clear();
+	}
+	FiniteStateMachine::~FiniteStateMachine()
+	{
+		// delete
+	}
+	void FiniteStateMachine::addState(State state)
+	{
+		mNode.push_back(state);
+		mCheckList.push_back(std::pair<std::string, bool>(state.getStateName(), false));
+	}
+	void FiniteStateMachine::updateCurrentState(char trigger)
+	{
 
-	private:
-
-	};
+	}
 }

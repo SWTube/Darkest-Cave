@@ -5,6 +5,10 @@
 #pragma once
 
 #include <iostream>
+#include <string>
+#include <vector>
+
+#include "State.h"
 
 namespace cave
 {
@@ -12,10 +16,15 @@ namespace cave
 	{
 	public:
 		FiniteStateMachine();
+		FiniteStateMachine(State currentState);
 		virtual ~FiniteStateMachine();
-		void setBool()
+		void addState(State state);
+		void updateCurrentState(char trigger);
+		State* checkCurrentState();
 
 	private:
-
+		State mCurrentState;
+		std::vector<State> mNode;
+		std::vector<std::pair<std::string, bool>> mCheckList;
 	};
 }

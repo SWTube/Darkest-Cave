@@ -8,16 +8,59 @@ namespace cave
 {
 	State::State()
 	{
-		mAnimation = true;
+		mStateName = "";
+		mIsCurrent = false;
+		mTrigger = NULL;
+		mAnimation = 0;
 		mNeighborState.clear();
 	}
-	State::State(bool Animation)
+	State::State(std::string stateName)
 	{
+		mStateName = stateName;
+		mIsCurrent = false;
+		mTrigger = NULL;
+		mAnimation = 0;
+		mNeighborState.clear();
+	}
+	State::State(std::string stateName, char trigger)
+	{
+		mStateName = stateName;
+		mIsCurrent = false;
+		mTrigger = trigger;
+		mAnimation = 0;
+		mNeighborState.clear();
+	}
+	State::State(std::string stateName, char trigger, int Animation)
+	{
+		mStateName = stateName;
+		mIsCurrent = false;
+		mTrigger = trigger;
 		mAnimation = Animation;
 		mNeighborState.clear();
 	}
-	State::~State() 
+	State::~State()
 	{
 		// delete ;
+	}
+	void State::LinkState(State* state) 
+	{
+		mNeighborState.push_back(state);
+		state->mNeighborState.push_back(this);
+	}
+	void State::setAnimation()
+	{
+
+	}
+	void State::setCurrentState()
+	{
+		mIsCurrent = true;
+	}
+	void State::cancelCurrentState()
+	{
+		mIsCurrent = false;
+	}
+	std::string State::getStateName() 
+	{
+		return mStateName;
 	}
 }

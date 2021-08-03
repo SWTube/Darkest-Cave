@@ -209,6 +209,7 @@
     <ClInclude Include="AI\Public\BehaviorTree\Selector.h" />
     <ClInclude Include="AI\Public\BehaviorTree\Sequencer.h" />
     <ClInclude Include="AI\Public\BehaviorTree\WhileDecorator.h" />
+    <ClInclude Include="AI\Public\FiniteStateMachine\FiniteStateMachine.h" />
     <ClInclude Include="AI\Public\FiniteStateMachine\State.h" />
     <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
@@ -221,7 +222,6 @@
     <ClInclude Include="Core\Public\Memory\Allocator.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
-    <ClInclude Include="FiniteStateMachine.h" />
     <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsCommon.h" />
     <ClInclude Include="Graphics\Public\Renderer\CaveApplication.h" />
@@ -240,6 +240,7 @@
     <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\Sequencer.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\WhileDecorator.cpp" />
+    <ClCompile Include="AI\Private\FiniteStateMachine\FiniteStateMachine.cpp" />
     <ClCompile Include="AI\Private\FiniteStateMachine\State.cpp" />
     <ClCompile Include="Core\Private\Debug\LogManager.cpp" />
     <ClCompile Include="Core\Private\Memory\Allocator.cpp" />
@@ -247,7 +248,6 @@
     <ClCompile Include="EngineMain.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="FiniteStateMachine.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveApplication.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveNode.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\CaveRenderer.cpp" />

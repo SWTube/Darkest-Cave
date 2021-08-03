@@ -162,10 +162,10 @@
     <ClInclude Include="AI\Public\BehaviorTree\RepeatDecorator.h">
       <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="FiniteStateMachine.h">
+    <ClInclude Include="AI\Public\FiniteStateMachine\State.h">
       <Filter>Header Files\AI\FiniteStateMachine</Filter>
     </ClInclude>
-    <ClInclude Include="AI\Public\FiniteStateMachine\State.h">
+    <ClInclude Include="AI\Public\FiniteStateMachine\FiniteStateMachine.h">
       <Filter>Header Files\AI\FiniteStateMachine</Filter>
     </ClInclude>
   </ItemGroup>
@@ -227,10 +227,10 @@
     <ClCompile Include="AI\Private\BehaviorTree\RepeatDecorator.cpp">
       <Filter>Source Files\AI\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="FiniteStateMachine.cpp">
+    <ClCompile Include="AI\Private\FiniteStateMachine\State.cpp">
       <Filter>Source Files\AI\FiniteStateMachine</Filter>
     </ClCompile>
-    <ClCompile Include="AI\Private\FiniteStateMachine\State.cpp">
+    <ClCompile Include="AI\Private\FiniteStateMachine\FiniteStateMachine.cpp">
       <Filter>Source Files\AI\FiniteStateMachine</Filter>
     </ClCompile>
   </ItemGroup>

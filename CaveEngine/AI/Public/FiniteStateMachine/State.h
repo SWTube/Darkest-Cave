@@ -13,12 +13,23 @@ namespace cave
 	{
 	public:
 		State();
-		State(bool Animation);
-		LinkState(State state);
+		State(std::string stateName);
+		State(std::string stateName, char trigger);
+		State(std::string stateName, char trigger, int Animation);
+		// animation 추가
+		// 이름추가
 		virtual ~State();
+		void LinkState(State* state);
+		void setAnimation();
+		void setCurrentState();
+		void cancelCurrentState();
+		std::string getStateName();
 		
 	private:
-		bool mAnimation;
+		int mAnimation;
+		bool mIsCurrent;
+		char mTrigger;
+		std::string mStateName;
 		std::vector<State*> mNeighborState;
 
 	};
