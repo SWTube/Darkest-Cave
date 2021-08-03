@@ -224,6 +224,7 @@ target_link_libraries(Gameplay PUBLIC Core)
 
 target_include_directories(Gameplay PUBLIC 
    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
+   "$<BUILD_INTERFACE:${PROJECT_SOUCE_DIR}/CaveEngine/ThirdParty/xhash/Public>"
    "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
    $<INSTALL_INTERFACE:include/CAVE_ENGINE>)
 

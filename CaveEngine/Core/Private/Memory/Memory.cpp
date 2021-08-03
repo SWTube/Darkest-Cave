@@ -56,6 +56,11 @@ namespace cave
 		return memcmp(lhs, rhs, count);
 	}
 
+	void* Memory::Memset(void* dest, int32_t fill, size_t count)
+	{
+		return memset(dest, fill, count);
+	}
+
 	void* Memory::Memcpy(void* dest, const void* src, size_t count)
 	{
 		return memcpy(dest, src, count);

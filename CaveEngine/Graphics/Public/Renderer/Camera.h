@@ -9,7 +9,7 @@
 
 #include "CoreTypes.h"
 // #include "Renderer/GenericRenderer.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 
 // #include GET_PLATFORM_HEADER(Camera.h)
 

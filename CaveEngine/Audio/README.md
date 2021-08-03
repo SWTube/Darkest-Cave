@@ -6,3 +6,4 @@ Audio of our engine contains following:
 
 # Team
 * [eunhwa19](https://github.com/eunhwa19) - Senior Sound Engineer
+* [SpellKiting](https://github.com/SpellKiting) - Junior Sound Engineer

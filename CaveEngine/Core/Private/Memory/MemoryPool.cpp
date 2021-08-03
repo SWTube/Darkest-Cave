@@ -8,23 +8,22 @@
 namespace cave
 {
 	MemoryPool::MemoryPool(size_t maxPoolSize)
-		: mPoolSize(maxPoolSize)
-		, mFreeSize(maxPoolSize)
+		: mPoolSize(GetUpperPowerOfTwo(maxPoolSize))
+		, mFreeSize(GetUpperPowerOfTwo(maxPoolSize))
 		, mMaxNumDataBlocks(0)
 	{
 		// Set size of blocks to preallocate half the size of requested size for the pool
-		size_t poolSize = GetUpperPowerOfTwo(maxPoolSize);
-		size_t minAllocateSize = poolSize / 8;
-		if (poolSize > 4096)
+		size_t minAllocateSize = mPoolSize / 8;
+		if (mPoolSize > 4096)
 		{
 			mMinBlockSize = 32;
 			mMaxBlockSize = 256;
 			minAllocateSize = 1024;
 		}
-		else if (poolSize <= 32)
+		else if (mPoolSize <= 32)
 		{
 			mMinBlockSize = 1;
-			if (poolSize > 16)
+			if (mPoolSize > 16)
 			{
 				mMaxBlockSize = 2;
 			}
@@ -35,12 +34,12 @@ namespace cave
 		}
 		else
 		{
-			mMaxBlockSize = poolSize / 32;
-			mMinBlockSize = poolSize / 128;
+			mMaxBlockSize = mPoolSize / 32;
+			mMinBlockSize = mPoolSize / 128;
 		}
 		
 		// Initialize vector of predefined Data Blocks to preallocate memories
-		mDataBlocks = std::vector<DataBlock*>(GetExponent(poolSize));
+		mDataBlocks = std::vector<DataBlock*>(GetExponent(mPoolSize));
 		for (size_t i = GetExponent(mMinBlockSize); i <= GetExponent(mMaxBlockSize); ++i)
 		{
 			// Initialize corresponding Data Block size of power of i
@@ -69,7 +68,7 @@ namespace cave
 		// Terminate if user requests memory larger than what pool can provide
 		if (memoryIndex >= mDataBlocks.size())
 		{
-			LOGEF(eLogChannel::CORE_MEMORY, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
+			//LOGEF(eLogChannel::CORE_MEMORY, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
 			assert(memoryIndex < mDataBlocks.size());
 			// return nullptr;
 		}
@@ -185,39 +184,39 @@ namespace cave
 	{
 		void Test()
 		{
-			LOGD(eLogChannel::CORE_MEMORY, "======Memory Pool Test======");
+			//LOGD(eLogChannel::CORE_MEMORY, "======Memory Pool Test======");
 			Constructor();
 		}
 
 		void Constructor()
 		{
-			LOGD(eLogChannel::CORE_MEMORY, "====Constructor Test====");
+			//LOGD(eLogChannel::CORE_MEMORY, "====Constructor Test====");
 
 			// 1 kb
 			for (size_t poolSize = 513ul; poolSize <= 1024ul; ++poolSize) {
 				MemoryPool memoryPool(poolSize);
-				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				//LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
 				assert(memoryPool.GetPoolSize() == 1024ul);
 			}
 
 			// 2 kb
 			for (size_t poolSize = 1025ul; poolSize <= 2048ul; ++poolSize) {
 				MemoryPool memoryPool(poolSize);
-				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				//LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
 				assert(memoryPool.GetPoolSize() == 2048ul);
 			}
 
 			// 4 kb
 			for (size_t poolSize = 2049ul; poolSize <= 4096ul; ++poolSize) {
 				MemoryPool memoryPool(poolSize);
-				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				//LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
 				assert(memoryPool.GetPoolSize() == 4096ul);
 			}
 
 			// 8 kb
 			for (size_t poolSize = 4097ul; poolSize <= 8192ul; ++poolSize) {
 				MemoryPool memoryPool(poolSize);
-				LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
+				//LOGDF(eLogChannel::CORE_MEMORY, "poolSize: %lu, freeMemorySize: %lu", poolSize, memoryPool.GetFreeMemorySize());
 				assert(memoryPool.GetPoolSize() == 8192ul);
 			}
 		}

@@ -172,11 +172,6 @@
     <ClInclude Include="..\CaveEngine\Core\Public\Debug\Log.h" />
     <ClInclude Include="..\CaveEngine\Graphics\Public\Graphics.h" />
     <ClInclude Include="..\CaveEngine\Graphics\Public\GraphicsCommon.h" />
-    <ClInclude Include="..\CaveEngine\Graphics\Public\OpenGlTest.h" />
-    <ClInclude Include="..\CaveEngine\Graphics\Public\Renderer\CaveApplication.h" />
-    <ClInclude Include="..\CaveEngine\Graphics\Public\Renderer\CaveNode.h" />
-    <ClInclude Include="..\CaveEngine\Graphics\Public\Renderer\CaveRenderer.h" />
-    <ClInclude Include="..\CaveEngine\Graphics\Public\Test\Resource.h" />
     <ClInclude Include="Public\Editor.h" />
     <ClInclude Include="Public\framework.h" />
     <ClInclude Include="Public\resource.h" />

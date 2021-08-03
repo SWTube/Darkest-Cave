@@ -3,20 +3,32 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#include <chrono>
+#include <crtdbg.h>
+#include <cstdlib>
 #include <exception>
 #include <fstream>
 #include <iomanip>
-#include <time.h>
+#include <iostream>
+#include <random>
+#include <vector>
+
+#include "tictoc.h"
 
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
 
 #include "Containers/TStack.h"
 #include "Engine.h"
+#include "Object/TagPool.h"
 #include "Sprite/Sprite.h"
-#include "Sprite/Vertex.h"
+#include "Containers/Vertex.h"
 #include "String/String.h"
-#include "Time/TimeManager.h"
+
+#if _DEBUG
+//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
+#endif // _DEBUG
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
@@ -26,7 +38,8 @@ void RenderTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
-#if defined(__WIN32__)
+#ifdef __WIN32__
+import Hash;
 import Log;
 
 //--------------------------------------------------------------------------------------
@@ -37,17 +50,15 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-
+	CoInitialize(0);
 	// Enable run-time memory check for debug builds.
-#if defined(CAVE_BUILD_DEBUG)
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
+	#if defined(CAVE_BUILD_DEBUG)
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	#endif
 
 #else
 int main(int32_t argc, char** argv)
 {
-	cave::TimeManager timeManager;
-
 	uint32_t commandFlag = 0u;
 	constexpr uint32_t LOG_FLAG = 0x01;
 	for (int32_t currentArgIndex = 0; currentArgIndex < argc; ++currentArgIndex)
@@ -90,10 +101,21 @@ int main(int32_t argc, char** argv)
 	}
 #endif
 
-	// RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	cave::MemoryPoolTest::Test();
+	TicTocTimer clock = tic();
+	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
+	//  RenderTest();
+	// cave::TagPoolTest::Test();
+	cave::Hashable<>::Initialize();
+	cave::String hello = "hello";
+
+	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	// _CrtDumpMemoryLeaks();
+
 #endif
 
 	// Cleanup is handled in destructors.
@@ -220,27 +242,16 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 
-	cave::Texture* texture1 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
-	new(texture1) cave::Texture("8471.png", cave::eTextureFormat::RGBA);
-	cave::Texture* texture2 = reinterpret_cast<cave::Texture*>(cave::gCoreMemoryPool.Allocate(sizeof(cave::Texture)));
-	new(texture2) cave::Texture("orange_mushroom.png", cave::eTextureFormat::RGBA);
-
-	cave::Sprite object(texture1, cave::gCoreMemoryPool);
-	object.SetSize(object.GetWidth() / 2u, object.GetHeight() / 2u);
-	cave::Sprite object2(texture2, cave::gCoreMemoryPool);
-	object2.SetPosition(cave::Float2(1000.0f, 500.0f));
-
-	texture1->~Texture();
-	texture2->~Texture();
-	cave::gCoreMemoryPool.Deallocate(texture1, sizeof(cave::Texture));
-	cave::gCoreMemoryPool.Deallocate(texture2, sizeof(cave::Texture));
-	texture1 = nullptr;
-	texture2 = nullptr;
 
 	cave::Renderer* renderer = main.GetRenderer();
-	renderer->AddSprite(std::move(object));
-	renderer->AddSprite(std::move(object2));
 
+	renderer->AddSprite("orange_mushroom.png");
+
+	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
+	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
+	renderer->SetSpritePosition(2, cave::Float2(500, 200));
+	//renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
+	
 	if (result == cave::eResult::CAVE_OK)
 	{
 		//// Go full-screen.
@@ -249,9 +260,8 @@ void RenderTest()
 		//// Whoops! We resized the "window" when we went full-screen. Better
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
-
-		// Run the program.
-		result = main.Run();
+	// 	// Run the program.
+	// 	result = main.Run();
 	}
 
 	main.Destroy();

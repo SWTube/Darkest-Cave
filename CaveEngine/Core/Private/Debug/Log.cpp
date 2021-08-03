@@ -12,7 +12,7 @@ namespace cave
 {
 	eLogVerbosity Log::msCurrentVerbosity = eLogVerbosity::All;
 	char Log::mBuffer[MAX_BUFFER] = {'\0', };
-	
+
 	void Log::SetVerbosity(eLogVerbosity verbosity)
 	{
 		msCurrentVerbosity = verbosity;
