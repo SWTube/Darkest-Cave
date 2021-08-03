@@ -94,7 +94,6 @@ namespace cave
 
 		export void DebugF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const char* message, ...)
 		{
-			OutputDebugStringA(gBuffer);
 			va_list vl;
 			va_start(vl, message);
 			vsnprintf(gBuffer, MAX_BUFFER, message, vl);
@@ -234,7 +233,7 @@ namespace cave
 					break;
 				}
 
-				char output[255];
+				char output[255] = { '\0', };
 				snprintf(output, 255, "%s%s/%s/line:%d :\t%s\n", buffer.c_str(), fileName, functionName, lineNumber, message);
 				OutputDebugStringA(output);
 			}

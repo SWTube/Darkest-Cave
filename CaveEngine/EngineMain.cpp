@@ -114,7 +114,7 @@ int main(int32_t argc, char** argv)
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
-	_CrtDumpMemoryLeaks();
+	// _CrtDumpMemoryLeaks();
 
 #endif
 
