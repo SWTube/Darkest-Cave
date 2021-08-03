@@ -12,11 +12,15 @@
 
 namespace cave
 {
-    template <uint32_t ID = 0xEDB88320>
+    enum class eHashId : uint32_t
+    {
+        DEFAULT_ID = 0xEDB88320,
+    };
+
+    template <eHashId ID = eHashId::DEFAULT_ID>
     class Hashable
     {
     public:
-        Hashable() = delete;
         constexpr Hashable(uint8_t* bytes, size_t data);
         constexpr Hashable(const Hashable& other);
         constexpr Hashable(Hashable&& other);
@@ -26,6 +30,10 @@ namespace cave
 
         virtual uint32_t GetHash() const;
     protected:
+        constexpr Hashable();
+        virtual void update(uint8_t* bytes, size_t size);
+        virtual void setSize(size_t size);
+
         size_t mSize;
         uint8_t* mBytes;
         constexpr static uint32_t TABLE_SIZE = 256u;
@@ -33,13 +41,44 @@ namespace cave
         static uint32_t* msTable;
     };
 
-    template <uint32_t ID>
+    template <eHashId ID>
     uint32_t* Hashable<ID>::msTable = nullptr;
 
-    template <uint32_t ID>
+    template <eHashId ID>
     uint64_t Hashable<ID>::msRefCount = 0ull;
 
-    template <uint32_t ID>
+    template <eHashId ID>
+    constexpr Hashable<ID>::Hashable()
+        : mSize(0u)
+        , mBytes(nullptr)
+    {
+        ++msRefCount;
+        if (msTable == nullptr)
+        {
+            msTable = reinterpret_cast<uint32_t*>(gCoreMemoryPool.Allocate(sizeof(uint32_t) * TABLE_SIZE));
+
+            uint32_t k = 0ull;
+
+            for (uint32_t i = 0; i < 256; ++i)
+            {
+                k = i;
+                for (uint32_t j = 0; j < 8; ++j)
+                {
+                    if (k & 1)
+                    {
+                        k = (k >> 1) ^ static_cast<uint32_t>(ID);
+                    }
+                    else
+                    {
+                        k >>= 1;
+                    }
+                }
+                msTable[i] = k;
+            }
+        }
+    }
+
+    template <eHashId ID>
     constexpr Hashable<ID>::Hashable(uint8_t* bytes, size_t size)
         : mSize(size)
         , mBytes(bytes)
@@ -58,7 +97,7 @@ namespace cave
                 {
                     if (k & 1)
                     {
-                        k = (k >> 1) ^ ID;
+                        k = (k >> 1) ^ static_cast<uint32_t>(ID);
                     }
                     else
                     {
@@ -70,7 +109,7 @@ namespace cave
         }
     }
 
-    template <uint32_t ID>
+    template <eHashId ID>
     constexpr Hashable<ID>::Hashable(const Hashable& other)
         : mSize(other.mSize)
         , mBytes(other.mBytes)
@@ -78,7 +117,7 @@ namespace cave
         ++msRefCount;
     }
 
-    template <uint32_t ID>
+    template <eHashId ID>
     constexpr Hashable<ID>::Hashable(Hashable&& other)
         : mSize(other.mSize)
         , mBytes(other.mBytes)
@@ -87,7 +126,7 @@ namespace cave
         other.mBytes = nullptr;
     }
 
-    template <uint32_t ID>
+    template <eHashId ID>
     constexpr Hashable<ID>& Hashable<ID>::operator=(const Hashable& other)
     {
         if (this != &other)
@@ -96,9 +135,11 @@ namespace cave
             mBytes = other.mBytes;
             ++msRefCount;
         }
+
+        return *this;
     }
 
-    template <uint32_t ID>
+    template <eHashId ID>
     constexpr Hashable<ID>& Hashable<ID>::operator=(Hashable&& other)
     {
         if (this != &other)
@@ -108,9 +149,11 @@ namespace cave
             other.mSize = 0u;
             other.mBytes = nullptr;
         }
+
+        return *this;
     }
 
-    template <uint32_t ID>
+    template <eHashId ID>
     Hashable<ID>::~Hashable()
     {
         --msRefCount;
@@ -121,7 +164,7 @@ namespace cave
         }
     }
 
-    template <uint32_t ID>
+    template <eHashId ID>
     uint32_t Hashable<ID>::GetHash() const
     {
         uint32_t crc32 = 0xFFFFFFFF;
@@ -139,6 +182,19 @@ namespace cave
         crc32 ^= 0xFFFFFFFF;
 
         return crc32;
+    }
+
+    template <eHashId ID>
+    void Hashable<ID>::update(uint8_t* bytes, size_t size)
+    {
+        mBytes = bytes;
+        mSize = size;
+    }
+
+    template <eHashId ID>
+    void Hashable<ID>::setSize(size_t size)
+    {
+        mSize = size;
     }
 
     // http://mwultong.blogspot.com/2006/05/c-c-crc32.html
