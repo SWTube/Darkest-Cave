@@ -252,6 +252,9 @@
     <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp">
       <Filter>Source Files\Gameplay\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Gameplay\Public\Object.ixx">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Containers\Array.h">
@@ -451,9 +454,6 @@
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Transform.h">
       <Filter>Header Files\Gameplay\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Graphics.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Player.h">
       <Filter>Header Files\Gameplay\Object</Filter>

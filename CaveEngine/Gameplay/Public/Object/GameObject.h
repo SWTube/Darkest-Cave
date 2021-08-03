@@ -17,7 +17,7 @@ namespace cave
 	class Script;
 	class Tag;
 	class Transform;
-	class Physics;
+	class PhysicsBody;
 	class Level;
 
 	class GameObject : public Object
@@ -69,8 +69,8 @@ namespace cave
 		void SetRenderer(Renderer& renderer);
 		FORCEINLINE Renderer* GetRenderer() const;
 
-		void SetPhysics(Physics& physics);
-		FORCEINLINE Physics* GetPhysics() const;
+		void SetPhysicsBody(PhysicsBody& physicsBody);
+		FORCEINLINE PhysicsBody* GetPhysicsBody() const;
 		
 		FORCEINLINE Level* GetLevel() const;
 
@@ -93,7 +93,7 @@ namespace cave
 
 		Transform* mTransform;
 		Renderer* mRenderer;
-		Physics* mPhysics;
+		PhysicsBody* mPhysicsBody;
 
 		Level* mLevel;
 	};
@@ -134,10 +134,10 @@ namespace cave
 		return mRenderer;
 	}
 
-	FORCEINLINE Physics* GameObject::GetPhysics() const
+	FORCEINLINE PhysicsBody* GameObject::GetPhysicsBody() const
 	{
 		assert(IsValid());
-		return mPhysics;
+		return mPhysicsBody;
 	}
 
 	FORCEINLINE Level* GameObject::GetLevel() const

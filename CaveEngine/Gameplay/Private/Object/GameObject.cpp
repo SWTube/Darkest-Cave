@@ -26,7 +26,7 @@ namespace cave
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -40,7 +40,7 @@ namespace cave
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -54,7 +54,7 @@ namespace cave
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -68,7 +68,7 @@ namespace cave
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -82,7 +82,7 @@ namespace cave
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -96,7 +96,7 @@ namespace cave
 		, mTag(&tag)
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -110,7 +110,7 @@ namespace cave
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -124,7 +124,7 @@ namespace cave
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -138,7 +138,7 @@ namespace cave
 		, mTag(&tag)
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -152,7 +152,7 @@ namespace cave
 		, mTag(other.GetTag())
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
-		, mPhysics(nullptr)
+		, mPhysicsBody(nullptr)
 		, mLevel(other.GetLevel())
 	{
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -166,13 +166,13 @@ namespace cave
 		, mTag(other.GetTag())
 		, mTransform(other.GetTransform())
 		, mRenderer(other.GetRenderer())
-		, mPhysics(other.GetPhysics())
+		, mPhysicsBody(other.GetPhysicsBody())
 		, mLevel(other.GetLevel())
 	{
 		other.mTag = nullptr;
 		other.mTransform = nullptr;
 		other.mRenderer = nullptr;
-		other.mPhysics = nullptr;
+		other.mPhysicsBody = nullptr;
 		other.RemoveGameObjectInLevel();
 
 		assert((mTag != nullptr) & (mTransform != nullptr));
@@ -335,14 +335,14 @@ namespace cave
 		mRenderer = &renderer;
 	}
 
-	void GameObject::SetPhysics(Physics& physics)
+	void GameObject::SetPhysicsBody(PhysicsBody& physicsBody)
 	{
 		assert(IsValid());
-		if (mPhysics != nullptr)
+		if (mPhysicsBody != nullptr)
 		{
-			delete mPhysics;
+			delete mPhysicsBody;
 		}
-		mPhysics = &physics;
+		mPhysicsBody = &physicsBody;
 	}
 
 	void GameObject::setLevel(Level& level)
