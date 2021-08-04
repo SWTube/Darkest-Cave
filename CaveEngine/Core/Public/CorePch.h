@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "Utils/Crt.h"
+
 #include "CoreTypes.h"
 // #include "Misc/Exec.h"
 #include "Assertion/Assert.h"
@@ -14,7 +16,6 @@
 #include "CoreFwd.h"
 #include "Containers/ContainersFwd.h"
 // #include "UObject/UObjectHierarchyFwd.h"
-#include "Utils/Crt.h"
 // #include "Containers/Array.h"
 #include "Memory/Memory.h"
 // #include "Templates/IsPointer.h"

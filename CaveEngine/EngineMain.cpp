@@ -23,7 +23,6 @@
 #include "Object/TagPool.h"
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
-#include "String/String.h"
 
 #if _DEBUG
 //#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -41,6 +40,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 #ifdef __WIN32__
 import Hash;
 import Log;
+import String;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 

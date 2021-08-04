@@ -151,6 +151,12 @@
     <ClCompile Include="Core\Public\Containers\Hash.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Memory\DataBlock.ixx">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Memory\Memory.ixx">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">

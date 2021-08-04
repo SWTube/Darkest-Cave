@@ -3,6 +3,7 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+#if !defined(__WIN32__)
 #include "Memory/Memory.h"
 
 namespace cave
@@ -71,3 +72,4 @@ namespace cave
 		return memmove(dest, src, count);
 	}
 } // namespace cave
+#endif

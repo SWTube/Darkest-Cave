@@ -10,12 +10,13 @@ module;
 #include <iostream>
 #include <string>
 
+#include "Utils/Crt.h"
+
 #include <windows.h>
 
 #include "CoreTypes.h"
 
 #include "Assertion/Assert.h"
-#include "Utils/Crt.h"
 
 export module Log;
 
