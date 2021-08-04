@@ -317,8 +317,10 @@
     <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
+    <ClCompile Include="Core\Public\Containers\GraphNode.ixx" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Matrix.ixx" />
+    <ClCompile Include="Core\Public\Containers\TreeNode.ixx" />
     <ClCompile Include="Core\Public\Containers\Trie.ixx" />
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
     <ClCompile Include="Core\Public\Memory\Memory.ixx" />

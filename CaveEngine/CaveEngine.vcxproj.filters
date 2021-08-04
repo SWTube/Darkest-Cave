@@ -172,6 +172,12 @@
     <ClCompile Include="Core\Public\Shapes\TempObject.ixx">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Containers\GraphNode.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
