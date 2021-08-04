@@ -317,6 +317,7 @@
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Matrix.ixx" />
+    <ClCompile Include="Core\Public\Containers\Trie.ixx" />
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
     <ClCompile Include="Core\Public\Memory\Memory.ixx" />
     <ClCompile Include="Core\Public\String\String.ixx" />

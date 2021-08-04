@@ -41,6 +41,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 import Hash;
 import Log;
 import String;
+import Trie;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -109,6 +110,8 @@ int main(int32_t argc, char** argv)
 	// cave::TagPoolTest::Test();
 	cave::Hashable<>::Initialize();
 	cave::String hello = "hello";
+
+	cave::TrieTest::Main();
 
 	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
