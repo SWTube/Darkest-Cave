@@ -116,7 +116,7 @@ namespace cave
 		mLayer = layer;
 	}
 
-	FORCEINLINE unsigned char GameObject::GetLayer() const
+	FORCEINLINE uint8_t GameObject::GetLayer() const
 	{
 		assert(IsValid());
 		return mLayer;
