@@ -324,6 +324,9 @@
     <ClCompile Include="AI\Private\BehaviorTreeTestScript.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\RandomNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Containers\Array.h">
@@ -535,6 +538,9 @@
     </ClInclude>
     <ClInclude Include="AI\Public\BehaviorTreeScriptTest.h">
       <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\RandomNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
