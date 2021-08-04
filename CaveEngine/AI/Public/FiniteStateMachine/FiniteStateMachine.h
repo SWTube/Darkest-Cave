@@ -16,14 +16,14 @@ namespace cave
 	{
 	public:
 		FiniteStateMachine();
-		FiniteStateMachine(State currentState);
+		FiniteStateMachine(State* currentState);
 		virtual ~FiniteStateMachine();
 		void addState(State state);
 		void updateCurrentState(char trigger);
 		State* checkCurrentState();
 
 	private:
-		State mCurrentState;
+		State* mCurrentState;
 		std::vector<State> mNode;
 		std::vector<std::pair<std::string, bool>> mCheckList;
 	};

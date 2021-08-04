@@ -14,7 +14,7 @@ namespace cave
 		mNode.clear();
 		mCheckList.clear();
 	}
-	FiniteStateMachine::FiniteStateMachine(State currentState)
+	FiniteStateMachine::FiniteStateMachine(State* currentState)
 	{
 		mCurrentState = currentState;
 		mNode.clear();
@@ -31,6 +31,8 @@ namespace cave
 	}
 	void FiniteStateMachine::updateCurrentState(char trigger)
 	{
-
+		State* newCurrentState = mCurrentState->searchNewCurrentState(trigger);
+		mCurrentState->updateState(newCurrentState);
+		mCurrentState = newCurrentState;
 	}
 }

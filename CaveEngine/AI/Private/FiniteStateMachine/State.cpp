@@ -47,9 +47,9 @@ namespace cave
 		mNeighborState.push_back(state);
 		state->mNeighborState.push_back(this);
 	}
-	void State::setAnimation()
+	void State::setAnimation(int animation)
 	{
-
+		mAnimation = animation;
 	}
 	void State::setCurrentState()
 	{
@@ -59,8 +59,36 @@ namespace cave
 	{
 		mIsCurrent = false;
 	}
+	State* State::searchNewCurrentState(char trigger)
+	{
+		for (int i = 0; i < mNeighborState.size(); ++i)
+		{
+			if (mNeighborState[i]->getTrigger() == trigger)
+			{
+				return mNeighborState[i];
+			}
+		}
+		return nullptr;
+	}
+	void State::updateState(State* newCurrentState)
+	{
+		mIsCurrent = false;
+		newCurrentState->setBool(true);
+	}
 	std::string State::getStateName() 
 	{
 		return mStateName;
+	}
+	char State::getTrigger()
+	{
+		return mTrigger;
+	}
+	void State::setBool(bool boolState)
+	{
+		mIsCurrent = boolState;
+	}
+	int State::showAnimation()
+	{
+		return mAnimation;
 	}
 }

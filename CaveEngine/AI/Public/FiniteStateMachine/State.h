@@ -20,10 +20,15 @@ namespace cave
 		// 이름추가
 		virtual ~State();
 		void LinkState(State* state);
-		void setAnimation();
+		void setAnimation(int animation);
 		void setCurrentState();
 		void cancelCurrentState();
+		State* searchNewCurrentState(char trigger);
+		void updateState(State* newCurrentState);
 		std::string getStateName();
+		char getTrigger();
+		void setBool(bool boolState);
+		int showAnimation();
 		
 	private:
 		int mAnimation;
