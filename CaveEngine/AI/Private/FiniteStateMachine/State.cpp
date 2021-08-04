@@ -72,6 +72,10 @@ namespace cave
 	}
 	void State::updateState(State* newCurrentState)
 	{
+		if (newCurrentState == nullptr)
+		{
+			return;
+		}
 		mIsCurrent = false;
 		newCurrentState->setBool(true);
 	}

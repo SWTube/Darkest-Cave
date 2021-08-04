@@ -16,8 +16,6 @@ namespace cave
 		State(std::string stateName);
 		State(std::string stateName, char trigger);
 		State(std::string stateName, char trigger, int Animation);
-		// animation 추가
-		// 이름추가
 		virtual ~State();
 		void LinkState(State* state);
 		void setAnimation(int animation);

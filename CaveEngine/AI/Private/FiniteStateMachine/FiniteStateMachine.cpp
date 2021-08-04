@@ -11,6 +11,7 @@ namespace cave
 {
 	FiniteStateMachine::FiniteStateMachine() 
 	{
+		mCurrentState = nullptr;
 		mNode.clear();
 		mCheckList.clear();
 	}
@@ -24,15 +25,23 @@ namespace cave
 	{
 		// delete
 	}
-	void FiniteStateMachine::addState(State state)
+	void FiniteStateMachine::addState(State* state)
 	{
 		mNode.push_back(state);
-		mCheckList.push_back(std::pair<std::string, bool>(state.getStateName(), false));
+		mCheckList.push_back(std::pair<std::string, bool>(state->getStateName(), false));
 	}
 	void FiniteStateMachine::updateCurrentState(char trigger)
 	{
 		State* newCurrentState = mCurrentState->searchNewCurrentState(trigger);
+		if (newCurrentState == nullptr)
+		{
+			return;
+		}
 		mCurrentState->updateState(newCurrentState);
 		mCurrentState = newCurrentState;
+	}
+	State* FiniteStateMachine::returnCurrentState()
+	{
+		return mCurrentState;
 	}
 }
