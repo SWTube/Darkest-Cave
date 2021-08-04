@@ -16,32 +16,32 @@ namespace cave
 	{
 	public:
 		Point() = delete;
-		constexpr explicit Point(uint32_t x, uint32_t y);
+		constexpr explicit Point(float x, float y);
 		constexpr explicit Point(const Point& other) = default;
 		constexpr explicit Point(Point&& other) = default;
 		constexpr Point& operator=(const Point& other) = default;
 		constexpr Point& operator=(Point && other) = default;
 		~Point() = default;
 
-		constexpr uint32_t GetX() const;
-		constexpr uint32_t GetY() const;
+		constexpr float GetX() const;
+		constexpr float GetY() const;
 	private:
-		uint32_t mX;
-		uint32_t mY;
+		float mX;
+		float mY;
 	};
 
-	constexpr Point::Point(uint32_t x, uint32_t y)
+	constexpr Point::Point(float x, float y)
 		: mX(x)
 		, mY(y)
 	{
 	}
 
-	constexpr uint32_t Point::GetX() const
+	constexpr float Point::GetX() const
 	{
 		return mX;
 	}
 
-	constexpr uint32_t Point::GetY() const
+	constexpr float Point::GetY() const
 	{
 		return mY;
 	}

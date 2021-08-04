@@ -19,15 +19,15 @@ namespace cave
 	{
 	public:
 		BoundingRect() = delete;
-		constexpr explicit BoundingRect(const Point& topLeft, uint32_t width, uint32_t height);
-		constexpr explicit BoundingRect(const BoundingRect& other) = default;
-		constexpr explicit BoundingRect(BoundingRect&& other) = default;
+		constexpr explicit BoundingRect(const Point& topLeft, float width, float height);
+		constexpr explicit BoundingRect(const BoundingRect& other);
+		constexpr explicit BoundingRect(BoundingRect&& other);
 		constexpr BoundingRect& operator=(const BoundingRect& other) = delete;
 		constexpr BoundingRect& operator=(BoundingRect && other) = delete;
 		~BoundingRect() = default;
 
-		constexpr uint32_t GetWidth() const;
-		constexpr uint32_t GetHeight() const;
+		constexpr float GetWidth() const;
+		constexpr float GetHeight() const;
 		constexpr const Point& GetTopLeft() const;
 		constexpr const Point& GetBottomRight() const;
 		constexpr bool Contains(const Point& point) const;
@@ -37,24 +37,36 @@ namespace cave
 		const Point mBottomRight;
 	};
 
-	constexpr BoundingRect::BoundingRect(const Point& topLeft, uint32_t width, uint32_t height)
+	constexpr BoundingRect::BoundingRect(const Point& topLeft, float width, float height)
 		: mTopLeft(topLeft)
 		, mBottomRight(Point(mTopLeft.GetX() + width, mTopLeft.GetY() + height))
 	{
 	}
 
-	constexpr uint32_t BoundingRect::GetWidth() const
+	constexpr BoundingRect::BoundingRect(const BoundingRect& other)
+		: mTopLeft(other.mTopLeft)
+		, mBottomRight(other.mBottomRight)
 	{
-		uint32_t x1 = mTopLeft.GetX();
-		uint32_t x2 = mBottomRight.GetX();
+	}
+
+	constexpr BoundingRect::BoundingRect(BoundingRect&& other)
+		: mTopLeft(std::move(other.mTopLeft))
+		, mBottomRight(std::move(other.mBottomRight))
+	{
+	}
+
+	constexpr float BoundingRect::GetWidth() const
+	{
+		float x1 = mTopLeft.GetX();
+		float x2 = mBottomRight.GetX();
 
 		return (x1 - x2) > 0 ? (x1 - x2) : (x2 - x1);
 	}
 
-	constexpr uint32_t BoundingRect::GetHeight() const
+	constexpr float BoundingRect::GetHeight() const
 	{
-		uint32_t y1 = mTopLeft.GetY();
-		uint32_t y2 = mBottomRight.GetY();
+		float y1 = mTopLeft.GetY();
+		float y2 = mBottomRight.GetY();
 
 		return (y1 - y2) > 0 ? (y1 - y2) : (y2 - y1);
 	}
@@ -72,23 +84,23 @@ namespace cave
 
 	constexpr bool BoundingRect::Contains(const Point& point) const
 	{
-		uint32_t pX = point.GetX();
-		uint32_t pY = point.GetY();
+		float pX = point.GetX();
+		float pY = point.GetY();
 
 		return pX >= mTopLeft.GetX() && pX <= mBottomRight.GetX() && pY >= mTopLeft.GetY() && pY <= mBottomRight.GetY();
 	}
 
 	constexpr bool BoundingRect::Contains(const BoundingRect& other) const
 	{
-		uint32_t x1 = mTopLeft.GetX();
-		uint32_t x2 = mBottomRight.GetX();
-		uint32_t y1 = mTopLeft.GetY();
-		uint32_t y2 = mBottomRight.GetY();
+		float x1 = mTopLeft.GetX();
+		float x2 = mBottomRight.GetX();
+		float y1 = mTopLeft.GetY();
+		float y2 = mBottomRight.GetY();
 
-		uint32_t otherX1 = other.mTopLeft.GetX();
-		uint32_t otherX2 = other.mBottomRight.GetX();
-		uint32_t otherY1 = other.mTopLeft.GetY();
-		uint32_t otherY2 = other.mBottomRight.GetY();
+		float otherX1 = other.mTopLeft.GetX();
+		float otherX2 = other.mBottomRight.GetX();
+		float otherY1 = other.mTopLeft.GetY();
+		float otherY2 = other.mBottomRight.GetY();
 
 		return x1 <= otherX1 && x2 >= otherX2 && y1 <= otherY1 && y2 >= otherY2;
 	}

@@ -21,6 +21,7 @@
 #include "Containers/TStack.h"
 #include "Engine.h"
 #include "Object/TagPool.h"
+#include "Shapes/Quadrant.h"
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
 
@@ -112,6 +113,7 @@ int main(int32_t argc, char** argv)
 	cave::String hello = "hello";
 
 	cave::TrieTest::Main();
+	cave::QuadrantTest::Main();
 
 	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));

@@ -259,6 +259,7 @@
     <ClInclude Include="Core\Public\Math\Vector2.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
+    <ClInclude Include="Core\Public\Shapes\Quadrant.h" />
     <ClInclude Include="Core\Public\String\String.h" />
     <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
@@ -313,6 +314,7 @@
     <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
+    <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
@@ -322,6 +324,7 @@
     <ClCompile Include="Core\Public\Memory\Memory.ixx" />
     <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx" />
     <ClCompile Include="Core\Public\Shapes\Point.ixx" />
+    <ClCompile Include="Core\Public\Shapes\TempObject.ixx" />
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />

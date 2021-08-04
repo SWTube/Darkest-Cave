@@ -166,6 +166,12 @@
     <ClCompile Include="Core\Public\Shapes\Point.ixx">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Private\Shapes\Quadrant.cpp">
+      <Filter>Source Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\TempObject.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -351,6 +357,9 @@
     <ClInclude Include="Core\Public\Containers\Hash.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Public\Shapes\Quadrant.h">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -524,6 +533,9 @@
     </Filter>
     <Filter Include="Header Files\Core\Shapes">
       <UniqueIdentifier>{a097aa5a-7064-42cf-bfa6-410b58283d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Shapes">
+      <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
