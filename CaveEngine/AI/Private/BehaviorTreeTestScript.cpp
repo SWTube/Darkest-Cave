@@ -38,14 +38,14 @@ namespace cave
 		mIsDirectionLeft = new IfDecorator("IsDirectionLeft", std::bind(&BehaviorTreeTestScript::IsDirectionLeft, this, std::placeholders::_1));
 		mIsJumpTime = new IfDecorator("IsDirectionLeft", std::bind(&BehaviorTreeTestScript::IsJumpTime, this, std::placeholders::_1));
 		
-		mRoot->AddChild(mSetDirection);
-		mRoot->AddChild(mIsDirectionRight);
-		mRoot->AddChild(mIsDirectionLeft);
-		mRoot->AddChild(mIsJumpTime);
+		mRoot->AddChild(mSetDirection);			// ActionNode
+		mRoot->AddChild(mIsDirectionRight);		// IfDecorator
+		mRoot->AddChild(mIsDirectionLeft);		// IfDecorator
+		mRoot->AddChild(mIsJumpTime);			// IfDecorator
 
-		mIsDirectionRight->SetChild(mRight);
-		mIsDirectionLeft->SetChild(mLeft);
-		mIsJumpTime->SetChild(mJump);
+		mIsDirectionRight->SetChild(mRight);	// ActionNode
+		mIsDirectionLeft->SetChild(mLeft);		// ActionNode
+		mIsJumpTime->SetChild(mJump);			// ActionNode
 	}
 
 	void BehaviorTreeTestScript::FixedUpdate(GameObject& gameObject)
@@ -63,19 +63,23 @@ namespace cave
 		return mTextureIndex;
 	}
 
-	void BehaviorTreeTestScript::ActionMoveRight(GameObject& gameObject)
+	bool BehaviorTreeTestScript::ActionMoveRight(GameObject& gameObject)
 	{
 		gameObject.GetTransform()->GetPosition()->X += mSpeed;
 		gameObject.GetRenderer()->SetSpritePosition(mSpriteIndex, *gameObject.GetTransform()->GetPosition());
+
+		return true;
 	}
 
-	void BehaviorTreeTestScript::ActionMoveLeft(GameObject& gameObject)
+	bool BehaviorTreeTestScript::ActionMoveLeft(GameObject& gameObject)
 	{
 		gameObject.GetTransform()->GetPosition()->X -= mSpeed;
 		gameObject.GetRenderer()->SetSpritePosition(mSpriteIndex, *gameObject.GetTransform()->GetPosition());
+
+		return true;
 	}
 
-	void BehaviorTreeTestScript::ActionSetDirection(GameObject& gameObject)
+	bool BehaviorTreeTestScript::ActionSetDirection(GameObject& gameObject)
 	{
 		if (gameObject.GetTransform()->GetPosition()->X > 500.f)
 		{
@@ -87,14 +91,18 @@ namespace cave
 			gameObject.GetRenderer()->SetSpriteTexture(mSpriteIndex, 0);
 			mDirection = true;
 		}
+
+		return true;
 	}
 
-	void BehaviorTreeTestScript::ActionJump(GameObject& gameObject)
+	bool BehaviorTreeTestScript::ActionJump(GameObject& gameObject)
 	{
 		mSinX += 0.00095f;
 
 		gameObject.GetTransform()->GetPosition()->Y = -abs(sin(mSinX) * 100) + 200;
 		gameObject.GetRenderer()->SetSpritePosition(mSpriteIndex, *gameObject.GetTransform()->GetPosition());
+
+		return true;
 	}
 
 	bool BehaviorTreeTestScript::IsDirectionRight(GameObject& gameObject)

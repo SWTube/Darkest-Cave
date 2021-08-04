@@ -31,10 +31,10 @@ namespace cave
 		float mSpeed;
 
 	public:
-		void ActionSetDirection(GameObject&);
-		void ActionMoveRight(GameObject&);
-		void ActionMoveLeft(GameObject&);
-		void ActionJump(GameObject&);
+		bool ActionSetDirection(GameObject&);
+		bool ActionMoveRight(GameObject&);
+		bool ActionMoveLeft(GameObject&);
+		bool ActionJump(GameObject&);
 
 		bool IsDirectionRight(GameObject&);
 		bool IsDirectionLeft(GameObject&);

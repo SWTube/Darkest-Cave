@@ -13,7 +13,7 @@ namespace cave
     {
     public:
         WhileDecorator();
-        WhileDecorator(const char*, bool);
+        WhileDecorator(const char*, std::function<bool(GameObject&)>);
         ~WhileDecorator();
 
         virtual bool Run(GameObject& gameObject) override
@@ -22,11 +22,11 @@ namespace cave
             {
                 GetChild()->Run(gameObject);
             }
-            return mCondition;
+            return true;
         }
 
-        void SetCondition(bool);
+        void SetCondition(std::function<bool(GameObject&)>);
     private:
-        bool mCondition;
+        std::function<bool(GameObject&)> mCondition;
     };
 }

@@ -13,18 +13,17 @@ namespace cave
     {
     public:
         ActionNode();
-        ActionNode(const char*, std::function<void(GameObject&)>);
+        ActionNode(const char*, std::function<bool(GameObject&)>);
         ~ActionNode();
 
         virtual bool Run(GameObject& gameObject) override
         {
-            mNodeFunction(gameObject);
-            return true;
+            return mNodeFunction(gameObject);
         }
 
-        void SetNodeFunction(std::function<void(GameObject&)>);
+        void SetNodeFunction(std::function<bool(GameObject&)>);
         virtual void Clear() override;
     private:
-        std::function<void(GameObject&)> mNodeFunction;
+        std::function<bool(GameObject&)> mNodeFunction;
     };
 }

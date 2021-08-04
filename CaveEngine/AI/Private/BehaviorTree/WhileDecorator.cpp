@@ -14,7 +14,7 @@ namespace cave
         SetChild(NULL);
         SetCondition(NULL);
     }
-    WhileDecorator::WhileDecorator(const char* nodeName, bool condition)
+    WhileDecorator::WhileDecorator(const char* nodeName, std::function<bool(GameObject&)> condition)
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);
@@ -26,7 +26,7 @@ namespace cave
     {
 
     }
-    void WhileDecorator::SetCondition(bool condition)
+    void WhileDecorator::SetCondition(std::function<bool(GameObject&)> condition)
     {
         mCondition = condition;
     }
