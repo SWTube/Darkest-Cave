@@ -320,6 +320,8 @@
     <ClCompile Include="Core\Public\Containers\Trie.ixx" />
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
     <ClCompile Include="Core\Public\Memory\Memory.ixx" />
+    <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx" />
+    <ClCompile Include="Core\Public\Shapes\Point.ixx" />
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
