@@ -13,12 +13,12 @@ namespace cave
     {
     public:
         RepeatDecorator();
-        RepeatDecorator(const char*, int);
+        RepeatDecorator(const char*, uint32_t);
         ~RepeatDecorator();
 
         virtual bool Run(GameObject& gameObject) override
         {
-            int i;
+            uint32_t i;
             for(i = 0; i < mRepeatCount; i++)
             {
                 GetChild()->Run(gameObject);
@@ -28,8 +28,8 @@ namespace cave
             return false;
         }
 
-        void SetCount(int);
+        void SetCount(uint32_t);
     private:
-        int mRepeatCount;
+        uint32_t mRepeatCount;
     };
 }

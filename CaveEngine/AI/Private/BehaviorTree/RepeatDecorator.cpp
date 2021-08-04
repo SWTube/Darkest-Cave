@@ -14,7 +14,7 @@ namespace cave
         SetChild(NULL);
         SetCount(0);
     }
-    RepeatDecorator::RepeatDecorator(const char* nodeName, int repeatCount)
+    RepeatDecorator::RepeatDecorator(const char* nodeName, uint32_t repeatCount)
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);
@@ -26,7 +26,7 @@ namespace cave
     {
 
     }
-    void RepeatDecorator::SetCount(int repeatCount)
+    void RepeatDecorator::SetCount(uint32_t repeatCount)
     {
         mRepeatCount = repeatCount;
     }

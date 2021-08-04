@@ -22,18 +22,18 @@ namespace cave
             // Get node name
             const char* GetNodeName() const;
             // Get tree depth
-            int GetTreeDepth() const;
+            uint32_t GetTreeDepth() const;
             // Set node name
             void SetNodeName(const char*);
             // Set parent node
             void SetParentNode(BehaviorTreeNode*);
             // Set tree depth
-            void SetTreeDepth(int);
+            void SetTreeDepth(uint32_t);
             // Clear tree
             virtual void Clear();
         private:
             BehaviorTreeNode* mParentNode = NULL;
             const char* mNodeName = "";
-            int mTreeDepth = 0;
+            uint32_t mTreeDepth = 0;
     };
 }

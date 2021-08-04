@@ -19,16 +19,16 @@ namespace cave
         // Add child back or at position
         void AddChild(BehaviorTreeNode*);
         // return child node at given index
-        BehaviorTreeNode* GetChild(int) const;
+        BehaviorTreeNode* GetChild(uint32_t) const;
         // return children 
         std::vector<BehaviorTreeNode*>& GetChildren();
         // return children count
-        int GetChildrenCount() const;
+        uint32_t GetChildrenCount() const;
         // Clear node
         virtual void Clear() override;
 
     private:
         std::vector<BehaviorTreeNode*> mChildren;
-        int mChildrenCount = 0;
+        uint32_t mChildrenCount = 0;
     };
 }

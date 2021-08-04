@@ -31,7 +31,7 @@ namespace cave
         node->SetTreeDepth(this->GetTreeDepth() + 1);
     }
 
-    BehaviorTreeNode* CompositeNode::GetChild(int childNum) const
+    BehaviorTreeNode* CompositeNode::GetChild(uint32_t childNum) const
     {
         return mChildren[childNum];
     }
@@ -41,7 +41,7 @@ namespace cave
         return mChildren;
     }
 
-    int CompositeNode::GetChildrenCount() const
+    uint32_t CompositeNode::GetChildrenCount() const
     {
         return mChildrenCount;
     }

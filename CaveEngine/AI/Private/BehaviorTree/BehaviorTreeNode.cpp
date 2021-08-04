@@ -26,7 +26,7 @@ namespace cave
 	{
 		return mNodeName;
 	}
-	int BehaviorTreeNode::GetTreeDepth() const
+	uint32_t BehaviorTreeNode::GetTreeDepth() const
 	{
 		return mTreeDepth;
 	}
@@ -38,7 +38,7 @@ namespace cave
 	{
 		mParentNode = parentNode;
 	}
-	void BehaviorTreeNode::SetTreeDepth(int treeDepth)
+	void BehaviorTreeNode::SetTreeDepth(uint32_t treeDepth)
 	{
 		mTreeDepth = treeDepth;
 	}
