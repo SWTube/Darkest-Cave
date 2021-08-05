@@ -6,6 +6,7 @@
 #pragma once
 
 #include "Physics.h"
+#include <vector>
 
 namespace cave
 {
@@ -27,11 +28,13 @@ namespace cave
 		void SetDensity(float density);
 		void SetFriction(float friction);
 
-		void ApplyForce(b2Vec2 forceVec, b2Vec2 point, bool wake);
+		void AddChild(PhysicsBody* child);
+		std::vector<PhysicsBody*> GetChildren();
 
 	private:
 		b2BodyDef *mBodyDef;
 		b2Body *mBody;
 		b2FixtureDef mFixtureDef;
+		std::vector<PhysicsBody*> mChildren;
 	};
 }

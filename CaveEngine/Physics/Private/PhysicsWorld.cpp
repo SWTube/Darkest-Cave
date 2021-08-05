@@ -27,8 +27,16 @@ namespace cave
 		// add bodyDef, fixtureDef to physics world
 		b2Body* body = mWorld.CreateBody(physicsBody->GetBodyDef());
 		body->CreateFixture(physicsBody->GetFixtureDef());
-		// set body on physics object
+		// set body on physicsBody
 		physicsBody->SetBody(body);
+		/// add child physicsBody
+		std::vector<PhysicsBody*> children = physicsBody->GetChildren()
+		for(std::size_t i = 0; i < children.size; ++i)
+		{
+			b2Body* childBody = mWorld.CreateBody(children[i]->GetBodyDef());
+			childBody->CreateFixture(children[i]->GetFixtureDef());
+			children[i]->SetBody(childBody);
+		}
 	}
 	void PhysicsWorld::Step()
 	{

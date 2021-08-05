@@ -27,12 +27,20 @@ namespace cave
   {
     return mBody->GetPosition();
   }
-  void RigidBody::SetDensity(float density)
+  void PhysicsBody::SetDensity(float density)
   {
     mFixtureDef.density = density;
   }
-  void RigidBody::SetFriction(float friction)
+  void PhysicsBody::SetFriction(float friction)
   {
     mFixtureDef.friction = friction;
+  }
+  void PhysicsBody::AddChild(PhysicsBody* child)
+  {
+    mChildren.push_back(child);
+  }
+  std::vector<PhysicsBody*> PhysicsBody::GetChildren()
+  {
+    return mChildren;
   }
 }
