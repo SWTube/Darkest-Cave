@@ -9,16 +9,14 @@
 
 namespace cave
 {
-	class Player : public PhysicsObject
+	class RigidBody : public PhysicsBody
 	{
 	public:
-		Player();
+		PhysicsObject();
 
-		void Move(b2Vec2 movementVec);
-		void Jump(b2Vec2 forceVec);
+		void SetDensity(float density);
+		void SetFriction(float friction);
 
-	private:
-		// Player status & ability
-		float mStrength;
+		void ApplyForce(b2Vec2 forceVec, b2Vec2 point, bool wake);
 	};
 }

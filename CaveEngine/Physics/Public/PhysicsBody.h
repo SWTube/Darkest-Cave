@@ -5,12 +5,32 @@
 
 #pragma once
 
+#include "Physics.h"
+
 namespace cave
 {
 	class PhysicsBody
 	{
 	public:
-	private:
+		PhysicsObject();
 
+		b2BodyDef *GetBodyDef();
+
+		void SetBodyDef();
+
+		void SetType(b2BodyType objectType);
+		void SetPosition(b2Vec2 objectPosition);
+		void SetPosition(float x, float y);
+
+		void SetShape(b2Shape *shape);
+		void SetDensity(float density);
+		void SetFriction(float friction);
+
+		void ApplyForce(b2Vec2 forceVec, b2Vec2 point, bool wake);
+
+	private:
+		b2BodyDef *mBodyDef;
+		b2Body *mBody;
+		b2FixtureDef mFixtureDef;
 	};
 }
