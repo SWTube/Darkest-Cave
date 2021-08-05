@@ -148,7 +148,7 @@
     <ClCompile Include="Core\Public\Containers\Hash.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\TList.ixx">
+    <ClCompile Include="Core\Public\Containers\TLinkedList.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Pulic\Containers\TArray.ixx">
@@ -200,9 +200,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\Assertion\Assert.h">
       <Filter>Header Files\Core\Assertion</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Array.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
       <Filter>Header Files\Core\Containers</Filter>

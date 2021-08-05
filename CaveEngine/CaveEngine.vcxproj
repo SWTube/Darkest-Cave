@@ -240,7 +240,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
-    <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Containers\Hash.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
@@ -316,7 +315,7 @@
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Matrix.ixx" />
-    <ClCompile Include="Core\Public\Containers\TList.ixx" />
+    <ClCompile Include="Core\Public\Containers\TLinkedList.ixx" />
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
