@@ -113,13 +113,13 @@ export namespace cave
 		
 		void Clear();
 
-		void Insert(ConstIterator position, const ElementType& element);
-		void Insert(ConstIterator position, size_t count, const ElementType& element);
+		Iterator Insert(ConstIterator position, const ElementType& element);
+		Iterator Insert(ConstIterator position, size_t count, const ElementType& element);
 		template<class IteratorType>
-		void Insert(ConstIterator position, IteratorType first, IteratorType last);
+		Iterator Insert(ConstIterator position, IteratorType first, IteratorType last);
 
-		void Delete(ConstIterator position);
-		void Delete(ConstIterator first, ConstIterator last);
+		Iterator Delete(ConstIterator position);
+		Iterator Delete(ConstIterator first, ConstIterator last);
 
 		void InsertFront(const ElementType& element);
 		void InsertBack(const ElementType& element);
@@ -598,7 +598,7 @@ export namespace cave
 	}
 
 	template<class ElementType>
-	void TList<ElementType>::Insert(ConstIterator position, const ElementType& element)
+	TList<ElementType>::Iterator TList<ElementType>::Insert(ConstIterator position, const ElementType& element)
 	{
 		assert(position.mNode != mHead);
 
@@ -611,14 +611,22 @@ export namespace cave
 
 		positionNode->mPrev = newNode;
 		newNode->mNext = positionNode;
+
+		return Iterator(newNode);
 	}
 
 	template<class ElementType>
-	void TList<ElementType>::Insert(ConstIterator position, size_t count, const ElementType& element)
+	TList<ElementType>::Iterator TList<ElementType>::Insert(ConstIterator position, size_t count, const ElementType& element)
 	{
 		assert(position.mNode != mHead);
 
+		if (count = 0)
+		{
+			return Iterator(position);
+		}
+
 		TListNode<ElementType>* prevNode = position.mNode->mPrev;
+		Iterator returnIterator(prevNode);
 
 		for (size_t i = 0; i < count; ++i)
 		{
@@ -633,15 +641,23 @@ export namespace cave
 
 		prevNode->mNext = position.mNode;
 		position.mNode->mPrev = prevNode;
+
+		return ++returnIterator;
 	}
 
 	template<class ElementType>
 	template<class IteratorType>
-	void TList<ElementType>::Insert(ConstIterator position, IteratorType first, IteratorType last)
+	TList<ElementType>::Iterator TList<ElementType>::Insert(ConstIterator position, IteratorType first, IteratorType last)
 	{
 		assert(position.mNode != mHead);
 
+		if (first == last)
+		{
+			return Iterator(position);
+		}
+
 		TListNode<ElementType>* prevNode = position.mNode->mPrev;
+		Iterator returnIterator(prevNode);
 
 		for (auto iter = first; iter != last; ++iter)
 		{
@@ -656,24 +672,34 @@ export namespace cave
 
 		prevNode->mNext = position.mNode;
 		position.mNode->mPrev = prevNode;
+
+		return ++returnIterator;
 	}
 
 	template<class ElementType>
-	void TList<ElementType>::Delete(ConstIterator position)
+	TList<ElementType>::Iterator TList<ElementType>::Delete(ConstIterator position)
 	{
 		assert(position.mNode != mHead);
 		assert(position.mNode != mTail);
 
+		Iterator returnIterator(position.mNode->mPrev);
+
 		position.mNode->mNext->mPrev = position.mNode->mPrev;
 		position.mNode->mPrev->mNext = position.mNode->mNext;
 
-		mPool->Deallocate(positionNode, sizeof(TListNode<ElementType>));
+		mPool->Deallocate(position.mNode, sizeof(TListNode<ElementType>));
+
+		return returnIterator;
 	}
 
 	template<class ElementType>
-	void TList<ElementType>::Delete(ConstIterator first, ConstIterator last)
+	TList<ElementType>::Iterator TList<ElementType>::Delete(ConstIterator first, ConstIterator last)
 	{
+		assert(first.mNode != mHead);
+
 		TListNode<ElementType>* deleteNode = first.mNode;
+
+		Iterator returnIterator(first.mNode->mPrev);
 
 		first.mNode->mPrev->mNext = last.mNode;
 		last.mNode->mPrev = first.mNode->mPrev;
@@ -685,6 +711,8 @@ export namespace cave
 
 			mPool->Deallocate(tempNode, sizeof(TListNode<ElementType>));
 		}
+
+		return returnIterator;
 	}
 
 	template<class ElementType>
