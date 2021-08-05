@@ -320,6 +320,7 @@
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
+    <ClCompile Include="Core\Pulic\Containers\TArray.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
