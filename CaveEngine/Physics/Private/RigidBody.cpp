@@ -7,14 +7,6 @@
 
 namespace cave
 {
-  void RigidBody::SetDensity(float density)
-  {
-    mFixtureDef.density = density;
-  }
-  void RigidBody::SetFriction(float friction)
-  {
-    mFixtureDef.friction = friction;
-  }
   void RigidBody::ApplyForce(b2Vec2 forceVec, b2Vec2 point, bool wake)
   {
     mBody->ApplyForce(forceVec, point, wake);

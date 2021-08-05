@@ -14,9 +14,6 @@ namespace cave
 	public:
 		RigidBody();
 
-		void SetDensity(float density);
-		void SetFriction(float friction);
-
 		void ApplyForce(b2Vec2 forceVec, b2Vec2 point, bool wake);
 	};
 }

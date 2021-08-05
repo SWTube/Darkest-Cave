@@ -23,4 +23,16 @@ namespace cave
   {
     mBodyDef->position.Set(x, y);
   }
+  b2Vec2 PhysicsBody::GetPosition()
+  {
+    return mBody->GetPosition();
+  }
+  void RigidBody::SetDensity(float density)
+  {
+    mFixtureDef.density = density;
+  }
+  void RigidBody::SetFriction(float friction)
+  {
+    mFixtureDef.friction = friction;
+  }
 }

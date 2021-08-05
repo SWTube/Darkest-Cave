@@ -21,6 +21,7 @@ namespace cave
 		void SetType(b2BodyType objectType);
 		void SetPosition(b2Vec2 objectPosition);
 		void SetPosition(float x, float y);
+		b2Vec2 GetPosition();
 
 		void SetShape(b2Shape *shape);
 		void SetDensity(float density);
