@@ -6,7 +6,6 @@
 #pragma once
 
 #include "Physics.h"
-#include <vector>
 
 namespace cave
 {
@@ -19,14 +18,13 @@ namespace cave
 		void SetGravity(b2Vec2 gravity);
 		void SetTimeStep(float timeStep);
 
-		void AddPhysicsObject(PhysicsObject* physicsObject);
+		void AddPhysicsBody(PhysicsBody* physicsBody);
 
 		void Step();
 
 	private:
 		b2Vec2 mGravity;
 		b2World mWorld;
-		std::vector<PhysicsObject*> mPhysicsObjects;
 
 		float mTimeStep = 1.0f / 60.0f;
 		int32 mVelocityIterations = 6;

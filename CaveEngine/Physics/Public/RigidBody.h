@@ -12,7 +12,7 @@ namespace cave
 	class RigidBody : public PhysicsBody
 	{
 	public:
-		PhysicsObject();
+		RigidBody();
 
 		void SetDensity(float density);
 		void SetFriction(float friction);

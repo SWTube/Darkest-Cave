@@ -22,15 +22,13 @@ namespace cave
 	{
 		mTimeStep = timeStep;
 	}
-	void PhysicsWorld::AddPhysicsObject(PhysicsObject* physicsObject)
+	void PhysicsWorld::AddPhysicsBody(PhysicsBody* physicsBody)
 	{
 		// add bodyDef, fixtureDef to physics world
-		b2Body* physicsBody = mWorld.CreateBody(physicsObject->GetBodyDef());
-		physicsBody->CreateFixture(physicsObject->GetFixtureDef());
+		b2Body* body = mWorld.CreateBody(physicsBody->GetBodyDef());
+		body->CreateFixture(physicsBody->GetFixtureDef());
 		// set body on physics object
-		physicsObject->SetBody(physicsBody);
-		// push physics object
-		mPhysicsObjects.push_back(physicsObject);
+		physicsBody->SetBody(body);
 	}
 	void PhysicsWorld::Step()
 	{
