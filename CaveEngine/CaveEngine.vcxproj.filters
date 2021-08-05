@@ -40,9 +40,6 @@
     <ClCompile Include="Core\Public\Template\IteratorType.ixx">
       <Filter>Header Files\Core\Template</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Array.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Containers\Node.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
