@@ -186,7 +186,7 @@ export namespace cave
 	template<class ElementType>
 	TListConstIterator<ElementType> TListConstIterator<ElementType>::operator++(int)
 	{
-		TSinglyListConstIterator temp = *this;
+		TListConstIterator temp = *this;
 		mNode = mNode->mNext;
 
 		return temp;
@@ -243,7 +243,7 @@ export namespace cave
 	template<class ElementType>
 	TListIterator<ElementType> TListIterator<ElementType>::operator++(int)
 	{
-		TSinglyListIterator temp = *this;
+		TListConstIterator temp = *this;
 		Base::operator++();
 
 		return temp;
@@ -403,7 +403,7 @@ export namespace cave
 
 	template<class ElementType>
 	TList<ElementType>::TList(std::initializer_list<ElementType> init, MemoryPool& pool)
-		: mPool(other.mPool)
+		: mPool(&Pool)
 		, mHead(reinterpret_cast<TListNode<ElementType>*>(mPool->Allocate(sizeof(TListNode<ElementType>))))
 		, mTail(reinterpret_cast<TListNode<ElementType>*>(mPool->Allocate(sizeof(TListNode<ElementType>))))
 	{
