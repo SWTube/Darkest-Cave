@@ -1,9 +1,0 @@
-{
-    "Version": "1.1",
-    "Data": {
-        "Source": "c:\\users\\ttd85\\documents\\github\\darkestcave\\caveengine\\core\\public\\template\\iteratortype.ixx",
-        "ProvidedModule": "IteratorType",
-        "ImportedModules": [],
-        "ImportedHeaderUnits": []
-    }
-}
