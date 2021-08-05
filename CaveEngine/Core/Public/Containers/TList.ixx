@@ -2,11 +2,11 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-export module TList;
-
 #include "Memory/Memory.h"
 #include "Memory/MemoryPool.h"
 #include "CoreGlobals.h"
+
+export module TList;
 
 import IteratorType;
 
@@ -403,7 +403,7 @@ export namespace cave
 
 	template<class ElementType>
 	TList<ElementType>::TList(std::initializer_list<ElementType> init, MemoryPool& pool)
-		: mPool(&Pool)
+		: mPool(&pool)
 		, mHead(reinterpret_cast<TListNode<ElementType>*>(mPool->Allocate(sizeof(TListNode<ElementType>))))
 		, mTail(reinterpret_cast<TListNode<ElementType>*>(mPool->Allocate(sizeof(TListNode<ElementType>))))
 	{
