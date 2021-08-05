@@ -2,7 +2,7 @@
     "Version": "1.1",
     "Data": {
         "Source": "c:\\users\\ttd85\\documents\\github\\darkestcave\\caveengine\\core\\public\\debug\\log.ixx",
-        "ProvidedModule": "",
+        "ProvidedModule": "Log",
         "Includes": [
             "c:\\program files (x86)\\microsoft visual studio\\2019\\community\\vc\\tools\\msvc\\14.28.29910\\include\\cstdarg",
             "c:\\program files (x86)\\microsoft visual studio\\2019\\community\\vc\\tools\\msvc\\14.28.29910\\include\\yvals_core.h",

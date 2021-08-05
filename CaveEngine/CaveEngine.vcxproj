@@ -234,6 +234,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AI\Public\BehaviorTreeScriptTest.h" />
+    <ClInclude Include="AI\Public\BehaviorTreeScriptTest2.h" />
     <ClInclude Include="AI\Public\BehaviorTree\RandomNode.h" />
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
     <ClInclude Include="AI\Public\BehaviorTree.h" />
@@ -309,6 +310,7 @@
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AI\Private\BehaviorTreeScriptTest2.cpp" />
     <ClCompile Include="AI\Private\BehaviorTreeTestScript.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\RandomNode.cpp" />
     <ClCompile Include="Core\Private\Containers\Array.cpp" />
