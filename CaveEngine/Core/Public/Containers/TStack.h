@@ -8,8 +8,9 @@
 #include "CoreTypes.h"
 
 // #include "Containers/Array.h"
-#include "Memory/Memory.h"
 #include "Memory/MemoryPool.h"
+
+import Memory;
 
 namespace cave
 {
