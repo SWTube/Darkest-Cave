@@ -168,9 +168,7 @@ namespace cave
 
 	void WindowsSprite::Render(ID3D11DeviceContext* context)
 	{
-		//
-		// Update variables for the first cube
-		//
+
 		float left = 0.0f;
 		float right = 0.0f;
 		float top = 0.0f;
@@ -196,6 +194,12 @@ namespace cave
 		mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), Float2(mTexture->GetEndUV().X, mTexture->GetEndUV().Y)));		// bottom right
 		mVertices[3] = std::move(VertexT(Float3( left, bottom, mPosition.Z), Float2(mTexture->GetStartUV().X, mTexture->GetEndUV().Y)));		// bottom left
 
+
+		//flipX 
+		//mVertices[0] = std::move(VertexT(Float3(left, top, mPosition.Z), Float2(mTexture->GetEndUV().X, mTexture->GetStartUV().Y)));		// top left
+		//mVertices[1] = std::move(VertexT(Float3(right, top, mPosition.Z), Float2(mTexture->GetStartUV().X, mTexture->GetStartUV().Y)));	// top right
+		//mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), Float2(mTexture->GetStartUV().X, mTexture->GetEndUV().Y)));		// bottom right
+		//mVertices[3] = std::move(VertexT(Float3(left, bottom, mPosition.Z), Float2(mTexture->GetEndUV().X, mTexture->GetEndUV().Y)));		// bottom left
 
 		HRESULT hResult = context->Map(mVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		if (FAILED(result)) {

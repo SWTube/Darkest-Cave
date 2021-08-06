@@ -69,6 +69,7 @@ namespace cave
 		// 모든 2D 렌더링을 시작하려면 Z 버퍼를 끕니다.
 		//mDeviceResources->TurnZBufferOff(); // 이거 없으면 안 그려짐...
 		mDeviceResources->TurnOnAlphaBlending();
+
 		// 3. Set Render Data ---------------------------------------------------------------------------------------------
 		for (Sprite* const object : mSprites)
 		{

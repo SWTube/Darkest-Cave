@@ -443,13 +443,13 @@ namespace cave
 
 		////
 
-			// 블렌드 상태 구조체를 초기화 합니다.
+		// 블렌드 상태 구조체를 초기화 합니다.
 		D3D11_BLEND_DESC blendStateDescription;
 		ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
-		blendStateDescription.AlphaToCoverageEnable = true;
+		//blendStateDescription.AlphaToCoverageEnable = true;
 		// 알파블렌드 값을 설정합니다.
 		blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
-		blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 		blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 		blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 		blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
@@ -645,7 +645,7 @@ namespace cave
 		// ���� layout ����, topology �ٲٴ°�, vertex buffer �ٲٴ°� rendering �Լ� �ȿ� ���� ��찡 ����
 		// vertex buffer�� pixel shader �� ���� �ʼ�
 		// Clear the back buffer 
-		mImmediateContext->ClearRenderTargetView(mRenderTargetView, DirectX::Colors::IndianRed); //DirectX::Colors::MidnightBlue
+		mImmediateContext->ClearRenderTargetView(mRenderTargetView, DirectX::Colors::Red); //DirectX::Colors::MidnightBlue
 
 		//
 		// Clear the depth buffer to 1.0 (max depth)

@@ -104,11 +104,10 @@ int main(int32_t argc, char** argv)
 	TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
-	//  RenderTest();
-	cave::TagPoolTest::Test();
-
-	_CrtDumpMemoryLeaks();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	  RenderTest();
+	//cave::TagPoolTest::Test();
+	//_CrtDumpMemoryLeaks();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 #endif
 
 	// Cleanup is handled in destructors.
@@ -238,11 +237,13 @@ void RenderTest()
 
 	cave::Renderer* renderer = main.GetRenderer();
 
-	renderer->AddSprite("orange_mushroom.png");
-
+	//renderer->AddSprite("orange_mushroom.png");
+	renderer->AddSprite("slime_hit.bmp");
+	renderer->SetSpritePosition(0, { 800.0f,450.0f });
+	renderer->SetSpriteSize(0, 630, 660);
 	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
-	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
-	renderer->SetSpritePosition(2, cave::Float2(500, 200));
+	//renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
+	//renderer->SetSpritePosition(2, cave::Float2(500, 200));
 	//renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
 	
 	if (result == cave::eResult::CAVE_OK)
@@ -254,7 +255,7 @@ void RenderTest()
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
 	// 	// Run the program.
-	// 	result = main.Run();
+	 	result = main.Run();
 	}
 
 	main.Destroy();
