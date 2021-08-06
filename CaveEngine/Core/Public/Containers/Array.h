@@ -10,10 +10,10 @@
 #include "Assertion/Assert.h"
 // include memory
 #include "CoreGlobals.h"
-#include "Memory/Memory.h"
 // include template
 #ifdef __WIN32__
 import IteratorType;
+import Memory;
 #else
 #include "Template/IteratorType.h"
 #endif

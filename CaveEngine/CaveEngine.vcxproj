@@ -29,26 +29,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <SpectreMitigation>false</SpectreMitigation>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <SpectreMitigation>false</SpectreMitigation>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -240,6 +242,7 @@
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
     <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
+    <ClInclude Include="Core\Public\Containers\Hash.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
     <ClInclude Include="Core\Public\Containers\TStack.h" />
     <ClInclude Include="Core\Public\Containers\Vertex.h" />
@@ -256,6 +259,7 @@
     <ClInclude Include="Core\Public\Math\Vector2.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
+    <ClInclude Include="Core\Public\Shapes\Quadrant.h" />
     <ClInclude Include="Core\Public\String\String.h" />
     <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
@@ -302,6 +306,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Containers\Array.cpp" />
+    <ClCompile Include="Core\Private\Containers\Hash.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
     <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
@@ -309,9 +314,19 @@
     <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
+    <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
+    <ClCompile Include="Core\Public\Containers\GraphNode.ixx" />
+    <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Matrix.ixx" />
+    <ClCompile Include="Core\Public\Containers\TreeNode.ixx" />
+    <ClCompile Include="Core\Public\Containers\Trie.ixx" />
+    <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
+    <ClCompile Include="Core\Public\Memory\Memory.ixx" />
+    <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx" />
+    <ClCompile Include="Core\Public\Shapes\Point.ixx" />
+    <ClCompile Include="Core\Public\Shapes\TempObject.ixx" />
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />

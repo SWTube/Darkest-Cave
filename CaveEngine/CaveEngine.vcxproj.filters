@@ -145,6 +145,39 @@
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
       <Filter>Source Files\Graphics\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Hash.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Hash.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Memory\DataBlock.ixx">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Memory\Memory.ixx">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Trie.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\Point.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Shapes\Quadrant.cpp">
+      <Filter>Source Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\TempObject.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\GraphNode.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -327,6 +360,12 @@
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h">
       <Filter>Header Files\ThirdParty\tictoc</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Hash.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Shapes\Quadrant.h">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -497,6 +536,12 @@
     </Filter>
     <Filter Include="Source Files\ThirdParty\tictoc">
       <UniqueIdentifier>{70a35b61-4a92-492e-b8f1-f1beade9fe3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Shapes">
+      <UniqueIdentifier>{a097aa5a-7064-42cf-bfa6-410b58283d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Shapes">
+      <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
