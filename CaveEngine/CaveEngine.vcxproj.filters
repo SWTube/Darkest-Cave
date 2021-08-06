@@ -69,9 +69,6 @@
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp">
       <Filter>Source Files\Core\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Thread\Thread.cpp">
-      <Filter>Source Files\Core\Thread</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\String\String.cpp">
       <Filter>Source Files\Core\String</Filter>
     </ClCompile>
@@ -285,6 +282,9 @@
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Private\Thread\Thread.cpp">
+      <Filter>Source Files\Core\Thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -378,9 +378,6 @@
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Device\Window.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Device\WindowsWindow.h">
