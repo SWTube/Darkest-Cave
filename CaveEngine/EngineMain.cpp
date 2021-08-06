@@ -21,9 +21,9 @@
 #include "Containers/TStack.h"
 #include "Engine.h"
 #include "Object/TagPool.h"
+#include "Shapes/Quadrant.h"
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
-#include "String/String.h"
 
 #if _DEBUG
 //#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -41,6 +41,8 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 #ifdef __WIN32__
 import Hash;
 import Log;
+import String;
+import Trie;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -109,6 +111,9 @@ int main(int32_t argc, char** argv)
 	// cave::TagPoolTest::Test();
 	cave::Hashable<>::Initialize();
 	cave::String hello = "hello";
+
+	cave::TrieTest::Main();
+	cave::QuadrantTest::Main();
 
 	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));

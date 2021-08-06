@@ -8,9 +8,10 @@ module;
 #include "CoreTypes.h"
 
 #include "CoreGlobals.h"
-#include "Memory/Memory.h"
 
 export module Hash;
+
+import Memory;
 
 namespace cave
 {

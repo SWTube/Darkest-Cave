@@ -9,9 +9,11 @@
 
 #include "CoreTypes.h"
 
+#include "Assertion/Assert.h"
 #include "Debug/Log.h"
-#include "Memory/DataBlock.h"
-#include "Memory/Memory.h"
+
+import DataBlock;
+import Memory;
 
 namespace cave
 {

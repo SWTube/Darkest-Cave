@@ -8,7 +8,8 @@
 #include "CoreTypes.h"
 
 #include "CoreGlobals.h"
-#include "Memory/Memory.h"
+
+import Memory;
 
 namespace cave
 {
