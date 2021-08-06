@@ -5,6 +5,9 @@
 
 #pragma once
 
+#ifdef __WIN32__
+import Memory;
+#else 
 #include <cstdlib>
 #include <cstring>
 
@@ -12,17 +15,16 @@
 
 #include "Assertion/Assert.h"
 
+//import std.core;
+
 namespace cave
 {
-
 	template <size_t N>
-	FORCEINLINE constexpr size_t GetSufficientCapacity(size_t length)
-	{
-		assert(length <= SIZE_MAX - 1ul - N);
+	FORCEINLINE constexpr size_t GetSufficientCapacity(size_t length);
+	FORCEINLINE constexpr size_t GetUpperPowerOfTwo(size_t number);
+	FORCEINLINE constexpr size_t GetExponent(size_t number);
+	FORCEINLINE constexpr size_t GetPowerOfTwo(size_t exponent);
 
-		return (length + 1ul + N - 1ul) - ((length + 1ul + N - 1ul) % N);
-	}
-	
 	class Memory final
 	{
 	public:
@@ -39,6 +41,57 @@ namespace cave
 		static void* Memmove(void* dest, const void* src, size_t count);
 	};
 
+	template <size_t N>
+	FORCEINLINE constexpr size_t GetSufficientCapacity(size_t length)
+	{
+		assert(length <= SIZE_MAX - 1ul - N);
+
+		return (length + 1ul + N - 1ul) - ((length + 1ul + N - 1ul) % N);
+	}
+
+	constexpr size_t GetUpperPowerOfTwo(size_t number)
+	{
+		if (number && !(number & (number - 1ul)))
+		{
+			return number;
+		}
+
+		size_t count = 0ul;
+		for (; number != 0ul; number >>= 1, ++count)
+		{
+		}
+
+		return 1ul << count;
+	}
+
+	constexpr size_t GetExponent(size_t number)
+	{
+		if (!number || (number & (number - 1)))
+		{
+			return 0ul;
+		}
+
+		size_t exponent = 0ul;
+		for (size_t i = 1ul; !(i & number); i <<= 1, ++exponent)
+		{
+		}
+
+		return exponent;
+	}
+
+	constexpr size_t GetPowerOfTwo(size_t exponent)
+	{
+		size_t result = 1ul;
+
+		for (size_t i = 0; i < exponent; ++i)
+		{
+			result <<= 1;
+		}
+
+		return result;
+	}
+
+	/*
 	FORCEINLINE uintptr_t AlignAddress(uintptr_t address, size_t align)
 	{
 		const size_t mask = align - 1;
@@ -53,4 +106,6 @@ namespace cave
 		const uintptr_t alignedAddress = AlignAddress(address, align);
 		return reinterpret_cast<T*>(alignedAddress);
 	}
+	*/
 } // namespace cave
+#endif

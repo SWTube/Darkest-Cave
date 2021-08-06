@@ -11,6 +11,8 @@
 #include "CoreTypes.h"
 #include "Object/Object.h"
 
+#include "CoreTypes.h"
+
 namespace cave
 {
 	class GameObject;

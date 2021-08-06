@@ -10,12 +10,13 @@ module;
 #include <iostream>
 #include <string>
 
+#include "Utils/Crt.h"
+
 #include <windows.h>
 
 #include "CoreTypes.h"
 
 #include "Assertion/Assert.h"
-#include "Utils/Crt.h"
 
 export module Log;
 
@@ -70,7 +71,7 @@ namespace cave
 			gCurrentVerbosity = verbosity;
 		}
 
-#if defined(__WIN32__)
+#ifdef __WIN32__
 		void Log(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const char* message);
 
 		export void Verbose(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const char* message)
@@ -94,7 +95,6 @@ namespace cave
 
 		export void DebugF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const char* message, ...)
 		{
-			OutputDebugStringA(gBuffer);
 			va_list vl;
 			va_start(vl, message);
 			vsnprintf(gBuffer, MAX_BUFFER, message, vl);
@@ -162,7 +162,7 @@ namespace cave
 		{
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
 			{
-				std::string buffer;
+				static std::string buffer;
 
 				switch (channel)
 				{
@@ -183,6 +183,9 @@ namespace cave
 					break;
 				case eLogChannel::CORE:
 					buffer = "Core/";
+					break;
+				case eLogChannel::CORE_MODULE:
+					buffer = "Core/Module/";
 					break;
 				case eLogChannel::CORE_UNIT_TEST:
 					buffer = "Core/UnitTest/";
@@ -218,7 +221,7 @@ namespace cave
 					buffer = "Core/Thread/";
 					break;
 				case eLogChannel::CORE_CONTAINER:
-					buffer = "Core/Container/";
+					buffer = "Core/Containers/";
 					break;
 				case eLogChannel::CORE_FILE_SYSTEM:
 					buffer = "Core/FileSystem/";
@@ -239,7 +242,7 @@ namespace cave
 				OutputDebugStringA(output);
 			}
 		}
-#elif defined(__UNIX__)
+#else
 		void Log(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, std::ostream& os, const char* message);
 
 		void Verbose(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, std::ostream& os, const char* message)

@@ -50,7 +50,7 @@
     </ClCompile>
     <ClCompile Include="Engine\Private\WindowsEngine.cpp">
       <Filter>Source Files\Engine</Filter>
-    </ClCompile>
+	</ClCompile>
     <ClCompile Include="Core\Public\Debug\Log.ixx">
       <Filter>Header Files\Core\Debug</Filter>
     </ClCompile>
@@ -68,12 +68,6 @@
     </ClCompile>
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp">
       <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Node.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Debug\Log.cpp">
-      <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files\Core\Thread</Filter>
@@ -108,12 +102,6 @@
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
-      <Filter>Source Files\Graphics\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
-      <Filter>Source Files\Graphics\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
@@ -124,6 +112,9 @@
       <Filter>Source Files\ThirdParty\tictoc</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Containers\Vertex.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Hash.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp">
@@ -158,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Hash.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
@@ -234,11 +228,14 @@
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\World\World.cpp">
-      <Filter>Source Files\Gameplay\World</Filter>
+    <ClCompile Include="Core\Public\Memory\DataBlock.ixx">
+      <Filter>Header Files\Core\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\World\Level.cpp">
-      <Filter>Source Files\Gameplay\World</Filter>
+    <ClCompile Include="Core\Public\Memory\Memory.ixx">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Trie.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Transform.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
@@ -252,20 +249,26 @@
     <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp">
       <Filter>Source Files\Gameplay\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\Point.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Shapes\Quadrant.cpp">
+      <Filter>Source Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\TempObject.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\GraphNode.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Public\Containers\Array.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Assertion\Assert.h">
-      <Filter>Header Files\Core\Assertion</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\Camera.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Core.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -404,6 +407,9 @@
     <ClInclude Include="Core\Public\Containers\Vertex.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Hash.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
       <Filter>Header Files\ResourceManager\Texture</Filter>
     </ClInclude>
@@ -484,6 +490,9 @@
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
+    <ClInclude Include="Core\Public\Shapes\Quadrant.h">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -643,6 +652,9 @@
     <Filter Include="Header Files\Gameplay\World">
       <UniqueIdentifier>{77713b56-0d16-4326-9587-110d2a0bdf10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Shapes">
+      <UniqueIdentifier>{a097aa5a-7064-42cf-bfa6-410b58283d20}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Gameplay\World">
       <UniqueIdentifier>{ea3a80c0-0244-48ad-8f00-24af5d3cd0da}</UniqueIdentifier>
     </Filter>
@@ -651,6 +663,9 @@
     </Filter>
     <Filter Include="Source Files\Gameplay\Game">
       <UniqueIdentifier>{83aaa7f9-b724-4c99-9ab4-1ccec13b627d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Shapes">
+      <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
