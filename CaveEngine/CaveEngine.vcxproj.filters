@@ -75,9 +75,6 @@
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Thread\Thread.cpp">
-      <Filter>Source Files\Core\Thread</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\String\String.cpp">
       <Filter>Source Files\Core\String</Filter>
     </ClCompile>
@@ -251,6 +248,9 @@
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp">
       <Filter>Source Files\Gameplay\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Thread\Thread.cpp">
+      <Filter>Source Files\Core\Thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
