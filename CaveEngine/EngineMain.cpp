@@ -105,7 +105,7 @@ int main(int32_t argc, char** argv)
 	DemoTest();
 	//RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	//TicTocTimer clock = tic();
+	TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
