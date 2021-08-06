@@ -9,6 +9,8 @@
 	Low level includes.
 ----------------------------------------------------------------------------*/
 
+#include "Utils/Crt.h"
+
 #include "CoreTypes.h"
 
 /*----------------------------------------------------------------------------
@@ -27,7 +29,6 @@
 #include "Debug/Log.h"
 //#include "Logging/LogVerbosity.h"
 //#include "Misc/OutputDevice.h"
-#include "Utils/Crt.h"
 //#include "HAL/PlatformCrt.h"
 //#include "HAL/PlatformMisc.h"
 #include "Assertion/Assert.h"

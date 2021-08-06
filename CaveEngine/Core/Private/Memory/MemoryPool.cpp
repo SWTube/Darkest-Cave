@@ -40,9 +40,11 @@ namespace cave
 		
 		// Initialize vector of predefined Data Blocks to preallocate memories
 		mDataBlocks = std::vector<DataBlock*>(GetExponent(mPoolSize));
-		for (size_t i = GetExponent(mMinBlockSize); i <= GetExponent(mMaxBlockSize); ++i)
+		size_t exponent = GetExponent(mMaxBlockSize);
+		for (size_t i = GetExponent(mMinBlockSize); i <= exponent; ++i)
 		{
 			// Initialize corresponding Data Block size of power of i
+			// SPECTRE MITIGATION
 			size_t powerOfTwo = GetPowerOfTwo(i);
 			mDataBlocks[i] = new DataBlock(powerOfTwo, minAllocateSize / powerOfTwo);
 			mMaxNumDataBlocks += minAllocateSize;
@@ -66,12 +68,12 @@ namespace cave
 		size_t memoryIndex = GetExponent(memorySize);
 
 		// Terminate if user requests memory larger than what pool can provide
-		if (memoryIndex >= mDataBlocks.size())
-		{
+		//if (memoryIndex >= mDataBlocks.size())
+		//{
 			//LOGEF(eLogChannel::CORE_MEMORY, "Request memory's index %ul must be greater than number of datablocks %u", memoryIndex, mDataBlocks.size());
-			assert(memoryIndex < mDataBlocks.size());
+		assert(memoryIndex < mDataBlocks.size());
 			// return nullptr;
-		}
+		//}
 		
 		// Create new type of Data Block if user requests bigger / smaller memory
 		if (mDataBlocks[memoryIndex] == nullptr)
@@ -161,11 +163,14 @@ namespace cave
 			DataBlock* dataBlock = mDataBlocks[i];
 			if (dataBlock == nullptr)
 			{
-				printf("DataBlock[%2lu] = %7lu / %2u / %u (bit/Memory::Free/allocated)\n", i, GetPowerOfTwo(i), 0u, 0u);
+				LOGDF(eLogChannel::CORE_MEMORY, "DataBlock[%2llu] = %7llu / %2u / %u (bit/Memory::Free/allocated)"
+					, static_cast<uint64_t>(i), static_cast<uint64_t>(GetPowerOfTwo(i)), 0u, 0u);
 			}
 			else
 			{
-				printf("DataBlock[%2lu] = %7lu / %2lu / %lu (bit/Memory::Free/allocated)\n", i, dataBlock->GetSize(), dataBlock->GetFreeSize(), dataBlock->GetAllocatedSize());
+				LOGDF(eLogChannel::CORE_MEMORY, "DataBlock[%2llu] = %7llu / %2llu / %llu (bit/Memory::Free/allocated)"
+					, static_cast<uint64_t>(i), static_cast<uint64_t>(dataBlock->GetSize())
+					, static_cast<uint64_t>(dataBlock->GetFreeSize()), static_cast<uint64_t>(dataBlock->GetAllocatedSize()));
 			}
 		}
 	}
@@ -222,4 +227,4 @@ namespace cave
 		}
 	}
 #endif
-} // namespace neople
+} // namespace cave
