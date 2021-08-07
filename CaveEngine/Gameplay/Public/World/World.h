@@ -34,17 +34,20 @@ namespace cave
 		void AddLevel(Level& level);
 		void AddLevels(std::vector<Level*>& levels);
 
+		void RemoveLevel(Level& level);
+		void RemoveLevel(const std::string& name);
+		void RemoveLevel(std::string& name);
+		void RemoveLevel(const char* name);
+		void RemoveLevels(std::vector<Level*>& levels);
+
 		void InitializeGameObjectsInWorld();
 		void UpdateGameObjectsInWorld();
 		void FixedUpdateGameObjectsInWorld();
 
-	private:
-		bool isLevelInWorld(Level& level);
+		bool IsLevelInWorld(Level& level);
 
 	private:
 		static std::unordered_set<std::string> mGlobalUniqueName;
-		std::unordered_map<uint32_t, Level*> mLevels;
-
-		Map* mMap = nullptr;
+		std::unordered_map<std::string, Level*> mLevels;
 	};
 }

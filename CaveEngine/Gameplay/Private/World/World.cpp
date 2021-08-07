@@ -14,12 +14,14 @@ namespace cave
 		: Object(name)
 	{
 		assert(IsValid() & (!mGlobalUniqueName.contains(name)));
+		mGlobalUniqueName.insert(name);
 	}
 
 	World::World(const char* name) 
 		: Object(name)
 	{
 		assert(IsValid() & (!mGlobalUniqueName.contains(name)));
+		mGlobalUniqueName.insert(name);
 	}
 
 	World::~World()
@@ -39,10 +41,10 @@ namespace cave
 	{
 		assert(IsValid() & level.IsValid());
 
-		mLevels.insert({ level.GetGUID(), &level });
+		mLevels.insert({ level.GetName(), &level });
 	}
 
-	 void World::AddLevels(std::vector<Level*>& levels)
+	void World::AddLevels(std::vector<Level*>& levels)
 	{
 		for (auto& level : levels)
 		{
@@ -50,15 +52,70 @@ namespace cave
 		}
 	}
 
-	 void World::InitializeGameObjectsInWorld()
-	 {
-		 assert(IsValid());
+	void World::RemoveLevel(Level& level)
+	{
+		assert(level.IsValid());
+		RemoveLevel(level.GetName());
+	}
 
-		 for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
-		 {
-			 assert(iter->second->IsValid());
-			 iter->second->InitializeGameObjectsInLevel();
-		 }
+	void World::RemoveLevel(const std::string& name)
+	{
+		assert(IsValid());
+
+		auto iter = mLevels.find(name);
+
+		if (iter != mLevels.end())
+		{
+			Level* tmp = iter->second;
+			mLevels.erase(iter);
+			delete tmp;
+		}
+	}
+
+	void World::RemoveLevel(std::string& name)
+	{
+		assert(IsValid());
+
+		auto iter = mLevels.find(name);
+
+		if (iter != mLevels.end())
+		{
+			Level* tmp = iter->second;
+			mLevels.erase(iter);
+			delete tmp;
+		}
+	}
+
+	void World::RemoveLevel(const char* name)
+	{
+		assert(IsValid());
+
+		auto iter = mLevels.find(name);
+
+		if (iter != mLevels.end())
+		{
+			Level* tmp = iter->second;
+			mLevels.erase(iter);
+			delete tmp;
+		}
+	}
+
+	void World::RemoveLevels(std::vector<Level*>& levels)
+	{
+		for (auto& level : levels)
+		{
+			RemoveLevel(*level);
+		}
+	}
+
+	void World::InitializeGameObjectsInWorld()
+	{
+		assert(IsValid());
+
+		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
+		{
+			iter->second->InitializeGameObjectsInLevel();
+		}
 	}
 
 	void World::UpdateGameObjectsInWorld()
@@ -67,7 +124,6 @@ namespace cave
 
 		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
 		{
-			assert(iter->second->IsValid());
 			iter->second->UpdateGameObjectsInLevel();
 		}
 	}
@@ -78,16 +134,15 @@ namespace cave
 
 		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
 		{
-			assert(iter->second->IsValid());
 			iter->second->FixedUpdateGameObjectsInLevel();
 		}
 	}
 
-	bool World::isLevelInWorld(Level& level)
+	bool World::IsLevelInWorld(Level& level)
 	{
 		assert(IsValid() & level.IsValid());
 
-		auto iter = mLevels.find(level.GetGUID());
+		auto iter = mLevels.find(level.GetName());
 
 		return iter != mLevels.end() ? true : false;
 	}
