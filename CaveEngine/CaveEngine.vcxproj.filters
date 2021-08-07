@@ -285,6 +285,9 @@
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files\Core\Thread</Filter>
     </ClCompile>
+    <ClCompile Include="Gameplay\Public\Game\GameTimer.ixx">
+      <Filter>Header Files\Gameplay\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">

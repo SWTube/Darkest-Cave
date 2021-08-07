@@ -75,6 +75,8 @@ namespace cave
 		msg.message = WM_NULL;
 		PeekMessage(&msg, nullptr, 0u, 0u, PM_NOREMOVE);
 
+		double elapsedTime = 0.0;
+
 		mGameInstance->Init();
 
 		while (WM_QUIT != msg.message)
@@ -89,21 +91,21 @@ namespace cave
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
-			else
+
+			elapsedTime += mGameInstance->GetElapsedFromLastUpdate();
+			while (elapsedTime > UPDATE_TIMESTEP)
 			{
 				mGameInstance->FixedUpdate();
-
-				mGameInstance->Update();
-
-				// Update the scene.
-				mRenderer->Update();
-
-				// Render frames during idle time (when no messages are waiting).
-				mRenderer->Render();
-
-				// Present the frame to the screen.
-				//mDeviceResources->Present();  mDeviceResources�� Present ��� �ϴ� ������.
+				elapsedTime -= UPDATE_TIMESTEP;
 			}
+
+			mGameInstance->Update();
+
+			// Render frames during idle time (when no messages are waiting).
+			mRenderer->Render();
+
+			// Present the frame to the screen.
+			//mDeviceResources->Present();  mDeviceResources�� Present ��� �ϴ� ������.
 		}
 
 		return eResult::CAVE_OK;

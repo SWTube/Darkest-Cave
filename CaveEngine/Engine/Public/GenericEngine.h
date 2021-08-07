@@ -10,6 +10,8 @@
 #include "Renderer/Renderer.h"
 #include "Game/GameInstance.h"
 
+#define UPDATE_TIMESTEP (0.002)
+
 namespace cave
 {
 	class GenericEngine
