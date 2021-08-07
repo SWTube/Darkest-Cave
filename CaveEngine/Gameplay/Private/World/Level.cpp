@@ -75,6 +75,36 @@ namespace cave
 		}
 	}
 
+	void Level::RemoveGameObject(std::string& name)
+	{
+		assert(IsValid());
+		auto iter = mAllGameObjects.find(name);
+		if (iter != mAllGameObjects.end())
+		{
+			mGameObjectsToRemove.push_back(iter->second);
+		}
+	}
+
+	void Level::RemoveGameObject(const std::string& name)
+	{
+		assert(IsValid());
+		auto iter = mAllGameObjects.find(name);
+		if (iter != mAllGameObjects.end())
+		{
+			mGameObjectsToRemove.push_back(iter->second);
+		}
+	}
+
+	void Level::RemoveGameObject(const char* name)
+	{
+		assert(IsValid());
+		auto iter = mAllGameObjects.find(name);
+		if (iter != mAllGameObjects.end())
+		{
+			mGameObjectsToRemove.push_back(iter->second);
+		}
+	}
+
 	void Level::RemoveGameObject(GameObject& gameObject)
 	{
 		assert(IsValid() & gameObject.IsValid());
@@ -105,32 +135,6 @@ namespace cave
 		auto iter = mAllGameObjects.find(name);
 
 		return iter != mAllGameObjects.end() ? iter->second : nullptr;
-	}
-
-	std::vector<GameObject*>&& Level::FindGameObjectsByName(std::string& name)
-	{
-		assert(IsValid());
-		std::vector<GameObject*> result;
-		auto range = mAllGameObjects.equal_range(name);
-		for (; range.first != range.second; ++range.first)
-		{
-			result.push_back(range.first->second);
-		}
-
-		return std::move(result);
-	}
-
-	std::vector<GameObject*>&& Level::FindGameObjectsByName(const char* name)
-	{
-		assert(IsValid() && (name != nullptr));
-		std::vector<GameObject*> result;
-		auto range = mAllGameObjects.equal_range(name);
-		for (; range.first != range.second; ++range.first)
-		{
-			result.push_back(range.first->second);
-		}
-
-		return std::move(result);
 	}
 
 	GameObject* Level::FindGameObjectByTag(std::string& name)
@@ -220,18 +224,27 @@ namespace cave
 		destroyGameObjects();
 	}
 
+	bool Level::IsGameObjectInLevel(GameObject& gameObject)
+	{
+		assert(IsValid() & gameObject.IsValid());
+
+		auto iter = mAllGameObjects.find(gameObject.GetName());
+
+		return iter != mAllGameObjects.end() ? true : false;
+	}
+
 	void Level::addActiveGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & isGameObjectInLevel(gameObject));
+		assert(IsGameObjectInLevel(gameObject));
 
-		mActiveGameObjects.insert({ gameObject.GetGUID(), &gameObject });
+		mActiveGameObjects.insert({ gameObject.GetName(), &gameObject });
 	}
 
 	void Level::removeActiveGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & isGameObjectInLevel(gameObject));
+		assert(IsGameObjectInLevel(gameObject));
 
-		auto iter = mActiveGameObjects.find(gameObject.GetGUID());
+		auto iter = mActiveGameObjects.find(gameObject.GetName());
 		
 		if (iter != mActiveGameObjects.end())
 		{
@@ -241,14 +254,14 @@ namespace cave
 
 	void Level::addTagGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & isGameObjectInLevel(gameObject));
+		assert(IsGameObjectInLevel(gameObject));
 
 		mTaggedGameObjects.insert({ gameObject.GetTag(), &gameObject });
 	}
 
 	void Level::removeTaggedGameObject(GameObject& gameObject)
 	{
-		assert(IsValid() & gameObject.IsValid() & isGameObjectInLevel(gameObject));
+		assert(IsGameObjectInLevel(gameObject));
 
 		auto range = mTaggedGameObjects.equal_range(gameObject.GetTag());
 		for (; range.first != range.second; ++range.first)
@@ -278,35 +291,16 @@ namespace cave
 			removeActiveGameObject(*gameObject);
 			removeTaggedGameObject(*gameObject);
 
-			auto range = mAllGameObjects.equal_range(gameObject->GetName());
-			for (; range.first != range.second; ++range.first)
+			auto iter = mAllGameObjects.find(gameObject->GetName());
+			
+			if (iter != mAllGameObjects.end())
 			{
-				if (range.first->second == gameObject)
-				{
-					mAllGameObjects.erase(range.first);
-					delete gameObject;
-					break;
-				}
+				mAllGameObjects.erase(iter);
+				delete gameObject;
 			}
 		}
 
 		mGameObjectsToRemove.clear();
-	}
-
-	bool Level::isGameObjectInLevel(GameObject& gameObject)
-	{
-		assert(IsValid() & gameObject.IsValid());
-
-		auto range = mAllGameObjects.equal_range(gameObject.GetName());
-		for (; range.first != range.second; ++range.first)
-		{
-			if (range.first->second == &gameObject)
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 #ifdef CAVE_BUILD_DEBUG

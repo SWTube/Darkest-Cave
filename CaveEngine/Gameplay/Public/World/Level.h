@@ -34,13 +34,14 @@ namespace cave
 		void AddGameObject(GameObject& gameObject);
 		void AddGameObjects(std::vector<GameObject*>& gameObjects);
 
+		void RemoveGameObject(std::string& name);
+		void RemoveGameObject(const std::string& name);
+		void RemoveGameObject(const char* name);
 		void RemoveGameObject(GameObject& gameObject);
 		void RemoveGameObjects(std::vector<GameObject*>& gameObjects);
 
 		GameObject* FindGameObjectByName(std::string& name);
 		GameObject* FindGameObjectByName(const char* name);
-		std::vector<GameObject*>&& FindGameObjectsByName(std::string& name);
-		std::vector<GameObject*>&& FindGameObjectsByName(const char* name);
 
 		GameObject* FindGameObjectByTag(std::string& tag);
 		GameObject* FindGameObjectByTag(const char* tag);
@@ -51,6 +52,8 @@ namespace cave
 		void UpdateGameObjectsInLevel();
 		void FixedUpdateGameObjectsInLevel();
 
+		bool IsGameObjectInLevel(GameObject& gameObject);
+
 	private:
 		void addActiveGameObject(GameObject& gameObject);
 		void removeActiveGameObject(GameObject& gameObject);
@@ -60,11 +63,9 @@ namespace cave
 
 		void destroyGameObjects();
 
-		bool isGameObjectInLevel(GameObject& gameObject);
-
 	private:
-		std::unordered_multimap<std::string, GameObject*> mAllGameObjects;
-		std::unordered_multimap<uint32_t, GameObject*> mActiveGameObjects;
+		std::unordered_map<std::string, GameObject*> mAllGameObjects;
+		std::unordered_map<std::string, GameObject*> mActiveGameObjects;
 		std::unordered_multimap<Tag*, GameObject*> mTaggedGameObjects;
 
 		std::vector<GameObject*> mGameObjectsToRemove;
