@@ -6,6 +6,8 @@
 
 #include <unordered_map>
 
+import GameTimer;
+
 namespace cave
 {
 	class World;
@@ -30,11 +32,13 @@ namespace cave
 		void AddWorld(World& world);
 		void RemoveWorld(World& world);
 
-	private:
-		bool isWorldInGameInstance(World& world);
+		bool IsWorldInGameInstance(World& world);
+
+		double GetElapsedFromLastUpdate();
 
 	private:
-		std::unordered_map<uint32_t, World*> mWorlds;
-		WorldMap* mWorldMap;
+		std::unordered_map<std::string, World*> mWorlds;
+		
+		GameTimer& mGameTimer;
 	};
 }

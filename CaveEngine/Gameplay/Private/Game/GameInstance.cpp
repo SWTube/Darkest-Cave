@@ -10,33 +10,20 @@
 namespace cave
 {
 	GameInstance::GameInstance()
-		: mWorldMap(nullptr)
+		: mGameTimer(GameTimer::Instance())
 	{
 		TagPool::Init();
 	}
 
 	GameInstance::~GameInstance()
 	{
-		if (mWorldMap != nullptr)
-		{
-			delete mWorldMap;
-		}
-
-		for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
-		{
-			World* world = iter->second;
-			assert(world != nullptr);
-			iter->second = nullptr;
-			delete world;
-		}
-
-		mWorlds.clear();
-
-		TagPool::ShutDown();
+		Shutdown();
 	}
 
 	void GameInstance::Init()
 	{
+		mGameTimer.Init();
+
 		for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
 		{
 			iter->second->InitializeGameObjectsInWorld();
@@ -61,19 +48,29 @@ namespace cave
 
 	void GameInstance::Shutdown()
 	{
+		for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
+		{
+			World* world = iter->second;
+			assert(world != nullptr);
+			iter->second = nullptr;
+			delete world;
+		}
+
+		mWorlds.clear();
+
 		TagPool::ShutDown();
 	}
 
 	void GameInstance::AddWorld(World& world)
 	{
 		assert(world.IsValid());
-		mWorlds.insert({ world.GetGUID(), &world });
+		mWorlds.insert({ world.GetName(), &world });
 	}
 
 	void GameInstance::RemoveWorld(World& world)
 	{
 		assert(world.IsValid());
-		auto iter = mWorlds.find(world.GetGUID());
+		auto iter = mWorlds.find(world.GetName());
 		if (iter != mWorlds.end())
 		{
 			World* tmp = iter->second;
@@ -82,10 +79,15 @@ namespace cave
 		}
 	}
 
-	bool GameInstance::isWorldInGameInstance(World& world)
+	bool GameInstance::IsWorldInGameInstance(World& world)
 	{
 		assert(world.IsValid());
 
-		return mWorlds.find(world.GetGUID()) != mWorlds.end();
+		return mWorlds.find(world.GetName()) != mWorlds.end();
+	}
+
+	double GameInstance::GetElapsedFromLastUpdate()
+	{
+		return mGameTimer.GetElapsedFromLastUpdate();
 	}
 }
