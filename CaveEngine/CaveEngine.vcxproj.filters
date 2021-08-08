@@ -330,6 +330,9 @@
     <ClCompile Include="AI\Private\BehaviorTreeScriptTest2.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\ActionNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Containers\Array.h">

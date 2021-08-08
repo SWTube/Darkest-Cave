@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/ActionNode.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     ActionNode::ActionNode()
@@ -32,4 +33,5 @@ namespace cave
     {
         delete this;
     }
-}
+} // namespace cave
+#endif

@@ -313,6 +313,7 @@
     <ClCompile Include="AI\Private\BehaviorTreeScriptTest2.cpp" />
     <ClCompile Include="AI\Private\BehaviorTreeTestScript.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\RandomNode.cpp" />
+    <ClCompile Include="AI\Public\BehaviorTree\ActionNode.ixx" />
     <ClCompile Include="Core\Private\Containers\Array.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp" />

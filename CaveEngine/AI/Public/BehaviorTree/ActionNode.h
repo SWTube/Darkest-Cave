@@ -4,6 +4,9 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import ActionNode;
+#else
 #include <vector>
 #include "BehaviorTreeNode.h"
 
@@ -27,3 +30,4 @@ namespace cave
         std::function<bool(GameObject&)> mNodeFunction;
     };
 }
+#endif
