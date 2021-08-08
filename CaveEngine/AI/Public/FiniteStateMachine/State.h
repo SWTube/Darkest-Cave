@@ -18,15 +18,15 @@ namespace cave
 		State(std::string stateName, char trigger, int Animation);
 		virtual ~State();
 		void LinkState(State* state);
-		void setAnimation(int animation);
-		void setCurrentState();
-		void cancelCurrentState();
-		State* searchNewCurrentState(char trigger);
-		void updateState(State* newCurrentState);
-		std::string getStateName();
-		char getTrigger();
-		void setBool(bool boolState);
-		int showAnimation();
+		void SetAnimation(int animation);
+		void SetCurrentState();
+		void CancelCurrentState();
+		State* SearchNewCurrentState(char trigger);
+		void UpdateState(State* newCurrentState);
+		std::string GetStateName();
+		char GetTrigger();
+		void SetBool(bool boolState);
+		int ShowAnimation();
 		
 	private:
 		int mAnimation;

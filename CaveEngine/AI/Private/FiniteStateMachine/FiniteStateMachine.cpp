@@ -25,22 +25,22 @@ namespace cave
 	{
 		// delete
 	}
-	void FiniteStateMachine::addState(State* state)
+	void FiniteStateMachine::AddState(State* state)
 	{
 		mNode.push_back(state);
-		mCheckList.push_back(std::pair<std::string, bool>(state->getStateName(), false));
+		mCheckList.push_back(std::pair<std::string, bool>(state->GetStateName(), false));
 	}
-	void FiniteStateMachine::updateCurrentState(char trigger)
+	void FiniteStateMachine::UpdateCurrentState(char trigger)
 	{
-		State* newCurrentState = mCurrentState->searchNewCurrentState(trigger);
-		if (newCurrentState == nullptr)
+		State* nextState = mCurrentState->SearchNewCurrentState(trigger);
+		if (nextState == nullptr)
 		{
 			return;
 		}
-		mCurrentState->updateState(newCurrentState);
-		mCurrentState = newCurrentState;
+		mCurrentState->UpdateState(nextState);
+		mCurrentState = nextState;
 	}
-	State* FiniteStateMachine::returnCurrentState()
+	State* FiniteStateMachine::ReturnCurrentState()
 	{
 		return mCurrentState;
 	}

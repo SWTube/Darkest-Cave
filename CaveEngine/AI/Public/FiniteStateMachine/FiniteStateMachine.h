@@ -18,9 +18,9 @@ namespace cave
 		FiniteStateMachine();
 		FiniteStateMachine(State* currentState);
 		virtual ~FiniteStateMachine();
-		void addState(State* state);
-		void updateCurrentState(char trigger);
-		State* returnCurrentState();
+		void AddState(State* state);
+		void UpdateCurrentState(char trigger);
+		State* ReturnCurrentState();
 
 	private:
 		State* mCurrentState;

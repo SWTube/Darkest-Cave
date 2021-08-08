@@ -47,51 +47,51 @@ namespace cave
 		mNeighborState.push_back(state);
 		state->mNeighborState.push_back(this);
 	}
-	void State::setAnimation(int animation)
+	void State::SetAnimation(int animation)
 	{
 		mAnimation = animation;
 	}
-	void State::setCurrentState()
+	void State::SetCurrentState()
 	{
 		mIsCurrent = true;
 	}
-	void State::cancelCurrentState()
+	void State::CancelCurrentState()
 	{
 		mIsCurrent = false;
 	}
-	State* State::searchNewCurrentState(char trigger)
+	State* State::SearchNewCurrentState(char trigger)
 	{
 		for (int i = 0; i < mNeighborState.size(); ++i)
 		{
-			if (mNeighborState[i]->getTrigger() == trigger)
+			if (mNeighborState[i]->GetTrigger() == trigger)
 			{
 				return mNeighborState[i];
 			}
 		}
 		return nullptr;
 	}
-	void State::updateState(State* newCurrentState)
+	void State::UpdateState(State* newCurrentState)
 	{
 		if (newCurrentState == nullptr)
 		{
 			return;
 		}
 		mIsCurrent = false;
-		newCurrentState->setBool(true);
+		newCurrentState->SetBool(true);
 	}
-	std::string State::getStateName() 
+	std::string State::GetStateName() 
 	{
 		return mStateName;
 	}
-	char State::getTrigger()
+	char State::GetTrigger()
 	{
 		return mTrigger;
 	}
-	void State::setBool(bool boolState)
+	void State::SetBool(bool boolState)
 	{
 		mIsCurrent = boolState;
 	}
-	int State::showAnimation()
+	int State::ShowAnimation()
 	{
 		return mAnimation;
 	}
