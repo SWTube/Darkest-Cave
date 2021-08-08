@@ -26,9 +26,9 @@
 	#define FORCEINLINE __forceinline
 
 	#ifdef CORE_EXPORTS
-	#define CORE_API __declspec(dllexport)
+		#define CORE_API __declspec(dllexport)
 	#else
-	//#define CORE_API __declspec(dllimport)
+		#define CORE_API __declspec(dllimport)
 	#endif
 #endif
 

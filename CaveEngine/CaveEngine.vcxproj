@@ -29,26 +29,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <SpectreMitigation>false</SpectreMitigation>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <SpectreMitigation>false</SpectreMitigation>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -90,12 +92,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;$(ProjectDir)\ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
       <PreprocessToFile>false</PreprocessToFile>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,7 +106,7 @@
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalLibraryDirectories>$(SolutionDir)\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
@@ -129,19 +132,20 @@
       <PreprocessorDefinitions>WIN32;PROJECT_DIR=R"($(SolutionDir))";CAPACITY_INCREASE_MODE_DOUBLE=0;CAPACITY_INCREASE_MODE_SUFFICIENT=1;CAPACITY_INCREASE_MODE=CAPACITY_INCREASE_MODE_DOUBLE;CAVE_BUILD_DEBUG=0;CAVE_BUILD_DEVELOPMENT=0;CAVE_BUILD_TEST=0;CAVE_BUILD_RELEASE=1;__WIN32__;CAVE_BUILD_RELEASE;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;$(ProjectDir)\ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -166,16 +170,17 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <OpenMPSupport>false</OpenMPSupport>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;$(ProjectDir)\ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
@@ -207,11 +212,12 @@
       <PreprocessorDefinitions>WIN32;PROJECT_DIR=R"($(SolutionDir))";CAPACITY_INCREASE_MODE_DOUBLE=0;CAPACITY_INCREASE_MODE_SUFFICIENT=1;CAPACITY_INCREASE_MODE=CAPACITY_INCREASE_MODE_DOUBLE;CAVE_BUILD_DEBUG=0;CAVE_BUILD_DEVELOPMENT=0;CAVE_BUILD_TEST=0;CAVE_BUILD_RELEASE=1;CAVE_BUILD_RELEASE;__WIN32__;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\AI\Public;$(ProjectDir)\Audio\Public;$(ProjectDir)\Core\Public;$(ProjectDir)\Engine\Public;$(ProjectDir)\Gameplay\Public;$(ProjectDir)\Graphics\Public;$(ProjectDir)\HID\Public;$(ProjectDir)\Physics\Public;$(ProjectDir)\ProfilingDebugging\Public;$(ProjectDir)\ResourceManager\Public;$(ProjectDir)\ThirdParty\glfw\Public;$(ProjectDir)\ThirdParty\gl3w\Public;$(ProjectDir)\ThirdParty\lodepng\Public;$(ProjectDir)\ThirdParty\glm;$(ProjectDir)\ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(ProjectDir)Graphics\GraphicsApiPch.h</PrecompiledHeaderFile>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -219,7 +225,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -250,6 +256,7 @@
     <ClInclude Include="AI\Public\BehaviorTree\WhileDecorator.h" />
     <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
+    <ClInclude Include="Core\Public\Containers\Hash.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
     <ClInclude Include="Core\Public\Containers\TStack.h" />
     <ClInclude Include="Core\Public\Containers\Vertex.h" />
@@ -265,6 +272,7 @@
     <ClInclude Include="Core\Public\Memory\DataBlock.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
+    <ClInclude Include="Core\Public\Shapes\Quadrant.h" />
     <ClInclude Include="Core\Public\String\String.h" />
     <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
@@ -284,7 +292,6 @@
     <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\GenericWindow.h" />
     <ClInclude Include="Graphics\Public\Device\Window.h" />
-    <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h" />
     <ClInclude Include="Graphics\Public\Device\WindowsWindow.h" />
     <ClInclude Include="Gameplay\Public\Object\Script.h" />
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
@@ -325,6 +332,7 @@
     <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\Sequencer.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\WhileDecorator.cpp" />
+    <ClCompile Include="Core\Private\Containers\Hash.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
     <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
@@ -332,9 +340,19 @@
     <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
     <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
+    <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
+    <ClCompile Include="Core\Public\Containers\GraphNode.ixx" />
+    <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Matrix.ixx" />
+    <ClCompile Include="Core\Public\Containers\TreeNode.ixx" />
+    <ClCompile Include="Core\Public\Containers\Trie.ixx" />
+    <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
+    <ClCompile Include="Core\Public\Memory\Memory.ixx" />
+    <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx" />
+    <ClCompile Include="Core\Public\Shapes\Point.ixx" />
+    <ClCompile Include="Core\Public\Shapes\TempObject.ixx" />
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
@@ -352,12 +370,12 @@
     <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp" />
+    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp" />
     <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp" />
-    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />

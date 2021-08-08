@@ -20,6 +20,7 @@
 
 #include "Containers/TStack.h"
 #include "Engine.h"
+#include "Shapes/Quadrant.h"
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
 #include "String/String.h"
@@ -40,8 +41,11 @@ void DemoTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
-#if defined(__WIN32__)
+#ifdef __WIN32__
+import Hash;
 import Log;
+import String;
+import Trie;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -53,9 +57,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	CoInitialize(0);
 	// Enable run-time memory check for debug builds.
-#if defined(CAVE_BUILD_DEBUG)
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
+	#if defined(CAVE_BUILD_DEBUG)
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	#endif
 
 #else
 int main(int32_t argc, char** argv)
@@ -104,10 +108,22 @@ int main(int32_t argc, char** argv)
 	DemoTest();
 	//RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	//TicTocTimer clock = tic();
+	TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
+	cave::Hashable<>::Initialize();
+	cave::String hello = "hello";
+
+	cave::TrieTest::Main();
+	cave::QuadrantTest::Main();
+
+	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	// _CrtDumpMemoryLeaks();
+
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// cave::StackTest::Test<int>();
 #endif

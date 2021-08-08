@@ -4,7 +4,8 @@
  */
 
 #include "Containers/Node.h"
-#include "Memory/Memory.h"
+
+import Memory;
 
 namespace cave
 {

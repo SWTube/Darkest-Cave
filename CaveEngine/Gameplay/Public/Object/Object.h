@@ -21,7 +21,7 @@ namespace cave
 		virtual ~Object();
 
 		FORCEINLINE uint32_t GetGUID() const;
-		FORCEINLINE bool IsValid() const;
+		FORCEINLINE virtual bool IsValid() const;
 
 		FORCEINLINE const std::string& GetName() const;
 

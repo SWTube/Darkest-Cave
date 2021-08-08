@@ -69,12 +69,6 @@
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp">
       <Filter>Source Files\Core\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Node.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Debug\Log.cpp">
-      <Filter>Source Files\Core\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files\Core\Thread</Filter>
     </ClCompile>
@@ -108,12 +102,6 @@
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
-      <Filter>Source Files\Graphics\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
-      <Filter>Source Files\Graphics\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
@@ -124,6 +112,9 @@
       <Filter>Source Files\ThirdParty\tictoc</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Containers\Vertex.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Hash.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp">
@@ -158,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Hash.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
@@ -234,11 +228,14 @@
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\World\World.cpp">
-      <Filter>Source Files\Gameplay\World</Filter>
+    <ClCompile Include="Core\Public\Memory\DataBlock.ixx">
+      <Filter>Header Files\Core\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\World\Level.cpp">
-      <Filter>Source Files\Gameplay\World</Filter>
+    <ClCompile Include="Core\Public\Memory\Memory.ixx">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Trie.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Gameplay\Private\Object\Transform.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
@@ -252,6 +249,42 @@
     <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp">
       <Filter>Source Files\Gameplay\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\Point.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Shapes\Quadrant.cpp">
+      <Filter>Source Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Shapes\TempObject.ixx">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\GraphNode.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\World\World.cpp">
+      <Filter>Source Files\Gameplay\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\World\Level.cpp">
+      <Filter>Source Files\Gameplay\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
+      <Filter>Source Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
+      <Filter>Source Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Node.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Debug\Log.cpp">
+      <Filter>Source Files\Core\Debug</Filter>
+    </ClCompile>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -263,51 +296,6 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{1574bd97-bb90-457c-a02d-0c323e5174ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Containers">
-      <UniqueIdentifier>{eaaab97b-69d2-4253-af58-87c2ed5857ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Debug">
-      <UniqueIdentifier>{b39b8a72-de13-49b5-af01-05e92a0f960a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Memory">
-      <UniqueIdentifier>{e74c87e9-e7a8-4ea5-bf34-0bb67079e8c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics">
-      <UniqueIdentifier>{598e2617-0f3d-494b-8df8-c1f29cc95968}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{253d7982-db18-46a0-ba47-bbc06a025463}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Containers">
-      <UniqueIdentifier>{7cf09ef5-2cfc-4c96-b9b5-9ae2d6fa0256}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Memory">
-      <UniqueIdentifier>{c56f1321-69bd-4e88-b487-f116792a5f4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Debug">
-      <UniqueIdentifier>{d738b192-16d7-4120-bfa4-017f8a40dba7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics">
-      <UniqueIdentifier>{357a963d-3c2f-4bfc-9064-c74c1d123ecd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics\Renderer">
-      <UniqueIdentifier>{dd057c74-8c4c-4573-9d0e-ea9c8daae624}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics\Renderer">
-      <UniqueIdentifier>{799c705f-1638-4d91-9e46-7f4494c96585}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics\Test">
-      <UniqueIdentifier>{f3eb281e-3b3b-478a-b5ec-802180f63120}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics\Test">
-      <UniqueIdentifier>{cc742b2b-c8a5-4d54-a9c8-1671ae2b0b27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{adca7f36-2313-4244-84d9-1f5647390e80}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\AI">
       <UniqueIdentifier>{32dd064d-81c6-4e11-aabd-8e688a77b5b9}</UniqueIdentifier>
@@ -335,18 +323,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Public\Containers\Array.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Assertion\Assert.h">
-      <Filter>Header Files\Core\Assertion</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\Camera.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Core.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -419,9 +395,6 @@
     <ClInclude Include="Graphics\Public\Device\DeviceResources.h">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Shader\GenericShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
@@ -483,6 +456,9 @@
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\Vertex.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Hash.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
@@ -625,6 +601,18 @@
     <ClInclude Include="Gameplay\Public\Game\GameInstance.h">
       <Filter>Header Files\Gameplay\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\Camera.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Array.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Assertion\Assert.h">
+      <Filter>Header Files\Core\Assertion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Memory\Memory.cpp">
@@ -645,6 +633,9 @@
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
+    <ClInclude Include="Core\Public\Shapes\Quadrant.h">
+      <Filter>Header Files\Core\Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -804,6 +795,9 @@
     <Filter Include="Header Files\Gameplay\World">
       <UniqueIdentifier>{77713b56-0d16-4326-9587-110d2a0bdf10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Shapes">
+      <UniqueIdentifier>{a097aa5a-7064-42cf-bfa6-410b58283d20}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Gameplay\World">
       <UniqueIdentifier>{ea3a80c0-0244-48ad-8f00-24af5d3cd0da}</UniqueIdentifier>
     </Filter>
@@ -812,6 +806,9 @@
     </Filter>
     <Filter Include="Source Files\Gameplay\Game">
       <UniqueIdentifier>{83aaa7f9-b724-4c99-9ab4-1ccec13b627d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Shapes">
+      <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

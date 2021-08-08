@@ -9,12 +9,12 @@
 import String;
 #else
 #include <iostream>
+#include "Utils/Crt.h"
 
 #include "CoreTypes.h"
 #include "CoreGlobals.h"
 #include "Memory/Memory.h"
 #include "Memory/MemoryPool.h"
-#include "Utils/Crt.h"
 
 namespace cave
 {
