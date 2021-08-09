@@ -19,7 +19,7 @@ namespace cave
 		Script() = delete;
 		Script(std::string& name);
 		Script(const char* name);
-		Script(const Script& other) = delete;
+		Script(const Script& other);
 		Script(Script&& other) = delete;
 
 		virtual ~Script();
@@ -52,6 +52,9 @@ namespace cave
 		virtual void Update(GameObject& gameObject) override;
 
 		uint32_t GetTextureIndex() const;
+
+		void SetSpeed(float speed);
+		void SetSpriteIndex(uint32_t index);
 
 	private:
 		uint32_t mSpriteIndex;

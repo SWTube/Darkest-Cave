@@ -288,37 +288,55 @@ void DemoTest()
 	cave::Renderer* renderer = main.GetRenderer();
 
 											// index
-	renderer->AddSprite("lapland.png");		// 0 sprite
-	renderer->AddTexture("lapland_2.png");	// 1 texture
-	renderer->AddSprite("amiya.png");		// 1 sprite, 2 texture
-	renderer->AddTexture("amiya_2.png");	// 3 texture
-	renderer->AddSprite("texas.png");		// 2 sprite, 4 texture
-	renderer->AddTexture("texas_2.png");	// 5 texture
+	//renderer->AddSprite("lapland.png");		// 0 sprite
+	//renderer->AddTexture("lapland_2.png");	// 1 texture
+	//renderer->AddSprite("amiya.png");		// 1 sprite, 2 texture
+	//renderer->AddTexture("amiya_2.png");	// 3 texture
+	//renderer->AddSprite("texas.png");		// 2 sprite, 4 texture
+	//renderer->AddTexture("texas_2.png");	// 5 texture
 
-	renderer->SetSpritePosition(0, { 0.f, 0.f });
+	/*renderer->SetSpritePosition(0, { 0.f, 0.f });
 	renderer->SetSpritePosition(1, { 0.f, 0.f });
-	renderer->SetSpritePosition(2, { 0.f, 0.f });
+	renderer->SetSpritePosition(2, { 0.f, 0.f });*/
 
 	cave::World* world = new cave::World("World_1");
 
 	cave::Level* level = new cave::Level("Level_1");
 
-	cave::GameObject* gameObject = new cave::GameObject("lapland");
-	cave::GameObject* gameObject2 = new cave::GameObject("amiya");
+	float speed = 2.f;
 
-	cave::TestScript* move = new cave::TestScript("Move", 0, 0, 0.03f);
-	cave::TestScript* move2 = new cave::TestScript("Move2", 1, 2, 0.01f);
+	cave::GameObject* gameObject = new cave::GameObject("lapland");
+	cave::TestScript* move = new cave::TestScript("Move", 0, 0, speed);
+	renderer->AddSprite("lapland.png");
+
+	gameObject->SetRenderer(*main.GetRenderer());
+	gameObject->AddScript(*move);
+	level->AddGameObject(*gameObject);
+
+	for (size_t i = 1; i < 1000; ++i)
+	{
+		cave::GameObject* gO = new cave::GameObject(*gameObject);
+		renderer->AddSprite("lapland.png");
+		gO->SetRenderer(*main.GetRenderer());
+		cave::TestScript* testScript = new cave::TestScript(*move);
+		testScript->SetSpriteIndex(i);
+		speed -= 0.002f;
+		testScript->SetSpeed(speed);
+		gO->AddScript(*testScript);
+		level->AddGameObject(*gO);
+		std::string name = "lapland" + std::to_string(i + 1);
+		std::string sc = "Move" + std::to_string(i + 1);
+		assert(level->FindGameObjectByName(name) != nullptr);
+		assert(gO->FindScriptByName(sc) != nullptr);
+	}
+
+	renderer->AddTexture("lapland_2.png");
 
 	cave::GameInstance* gameInstance = main.GetGameInstance();
 	
-	gameObject->SetRenderer(*main.GetRenderer());
-	gameObject->AddScript(*move);
-	gameObject2->SetRenderer(*main.GetRenderer());
-	gameObject2->AddScript(*move2);
-	level->AddGameObject(*gameObject);
-	level->AddGameObject(*gameObject2);
 	world->AddLevel(*level);
 	gameInstance->AddWorld(*world);
+
 
 
 	if (result == cave::eResult::CAVE_OK)

@@ -31,6 +31,14 @@ namespace cave
 		mGlobalUniqueName.insert(name);
 	}
 
+	Script::Script(const Script& other)
+		: Object(other)
+	{
+		std::string name = other.GetName() + std::to_string(other.getDuplicatedNum());
+		assert(!mGlobalUniqueName.contains(name));
+		mGlobalUniqueName.insert(name);
+	}
+
 	Script::~Script()
 	{
 	}
@@ -57,7 +65,7 @@ namespace cave
 		: Script(name)
 		, mSpriteIndex(spriteIndex)
 		, mTextureIndex(textureIndex)
-		, mNextTextureIndex(mTextureIndex + 1)
+		, mNextTextureIndex(1000)
 		, mSpeed(speed)
 	{
 		
@@ -92,9 +100,19 @@ namespace cave
 	
 	}
 
+	void TestScript::SetSpriteIndex(uint32_t index)
+	{
+		mSpriteIndex = index;
+	}
+
 	uint32_t TestScript::GetTextureIndex() const
 	{
 		return mTextureIndex;
+	}
+
+	void TestScript::SetSpeed(float speed)
+	{
+		mSpeed = speed;
 	}
 #endif //CAVE_BUILD_DEBUG
 }
