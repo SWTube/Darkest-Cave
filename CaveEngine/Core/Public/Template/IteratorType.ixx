@@ -52,4 +52,10 @@ export namespace cave
 
 		a[n];
 	};
+
+	template<class IteratorType, class ElementType>
+	concept IteratorInputAble = InputIterator<IteratorType> && requires(IteratorType iterator, ElementType element)
+	{
+		element = *iterator;
+	};
 }

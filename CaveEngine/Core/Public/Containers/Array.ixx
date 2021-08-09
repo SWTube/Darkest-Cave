@@ -166,7 +166,7 @@ export namespace cave
         constexpr bool operator==(const Array& other) const;
         constexpr bool operator!=(const Array& other) const;
 
-
+        constexpr static size_t DEFAULT_CAPACITY = 8u;
 
     private:
         MemoryPool* mPool;
@@ -285,12 +285,16 @@ export namespace cave
     template<class ElementType>
     constexpr const ElementType& ArrayConstIterator<ElementType>::operator*() const
     {
+        assert(mContainer != nullptr);
+
         return (*mContainer)[mIndex];
     }
 
     template<class ElementType>
     constexpr const ElementType& ArrayConstIterator<ElementType>::operator[](size_t offset) const
     {
+        assert(mContainer != nullptr);
+
         return (*mContainer)[mIndex + offset];
     }
 
@@ -460,8 +464,8 @@ export namespace cave
     constexpr Array<ElementType>::Array(MemoryPool& pool) noexcept
         : mPool(&pool)
         , mSize(0)
-        , mCapacity(0)
-        , mData(nullptr)
+        , mCapacity(DEFAULT_CAPACITY)
+        , mData(reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType)* mCapacity)))
     { }
 
     template<class ElementType>
@@ -513,11 +517,10 @@ export namespace cave
         : mPool(&pool)
         , mSize(other.mSize)
         , mCapacity(other.mCapacity)
-        , mData(nullptr)
+        , mData(reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType)* mCapacity)))
     {
-        if (mCapacity > 0)
+        if (mSize > 0)
         {
-            mData = reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType) * mCapacity));
             Memory::Memcpy(mData, other.mData, sizeof(ElementType) * mSize);
         }
     }
@@ -544,7 +547,7 @@ export namespace cave
 
         mSize = count;
         mCapacity = count;
-        mData = reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType) * count));
+        mData = reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType) * mCapacity));
 
         size_t i = 0;
         for (auto iterator = initialzerList.begin(); iterator != initialzerList.end(); ++iterator, ++i)
@@ -582,12 +585,20 @@ export namespace cave
     {
         if (this != &other)
         {
+            size_t tempCapacity = mCapacity;
+            size_t tempSize = mSize;
+            ElementType* tempData = mData;
+            MemoryPool* tempPool = mPool;
+
             mCapacity = other.mCapacity;
             mSize = other.mSize;
             mData = other.mData;
-            other.mCapacity = 0;
-            other.mSize = 0;
-            other.mData = nullptr;
+            mPool = other.mPool;
+
+            other.mCapacity = tempCapacity;
+            other.mSize = tempSize;
+            other.mData = tempData;
+            other.mPool = tempPool;
         }
 
         return *this;
@@ -676,10 +687,6 @@ export namespace cave
 
         size_t newMaxSize = mCapacity;
 
-        if (newMaxSize == 0)
-        {
-            newMaxSize = 1;
-        }
         if (mSize + 1 > newMaxSize)
         {
             newMaxSize <<= 1;
@@ -705,10 +712,6 @@ export namespace cave
 
         size_t newMaxSize = mCapacity;
 
-        if (newMaxSize == 0)
-        {
-            newMaxSize = 1;
-        }
         while (mSize + count > newMaxSize)
         {
             newMaxSize <<= 1;
@@ -743,10 +746,6 @@ export namespace cave
 
         for (IteratorType iterator = first; iterator != last; ++iterator, ++count);
 
-        if (newMaxSize == 0)
-        {
-            newMaxSize = 1;
-        }
         while (mSize + count > newMaxSize)
         {
             newMaxSize <<= 1;
@@ -793,7 +792,7 @@ export namespace cave
         assert(last.mIndex < mSize);
         assert(first <= last);
 
-        for (Iterator iterator = first; iterator != last; ++iterator, ++count);
+        for (auto iterator = first; iterator != last; ++iterator, ++count);
 
         Memory::Memmove(mData + index, mData + index + count, sizeof(ElementType) * (mSize - index - count));
 
@@ -805,7 +804,17 @@ export namespace cave
     template<class ElementType>
     constexpr void Array<ElementType>::InsertBack(const ElementType& element)
     {
-        Insert(GetEndIterator(), element);
+        size_t newMaxSize = mCapacity;
+
+        if (mSize + 1 > newMaxSize)
+        {
+            newMaxSize <<= 1;
+        }
+
+        SetCapacity(newMaxSize);
+
+        mData[mSize] = element;
+        mSize++;
     }
 
     template<class ElementType>
