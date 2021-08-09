@@ -178,6 +178,9 @@
     <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx">
+      <Filter>Header Files\Core\KeyboardInput</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -366,6 +369,9 @@
     <ClInclude Include="Core\Public\Shapes\Quadrant.h">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h">
+      <Filter>Header Files\Core\KeyboardInput</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -542,6 +548,9 @@
     </Filter>
     <Filter Include="Source Files\Core\Shapes">
       <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\KeyboardInput">
+      <UniqueIdentifier>{8b16aa60-7040-4797-8b91-69daedd00bc9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
