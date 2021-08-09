@@ -66,6 +66,8 @@ export namespace cave
     class ArrayIterator : public ArrayConstIterator<ElementType>
     {
     public:
+        friend class Array<ElementType>;
+
         using Base = ArrayConstIterator<ElementType>;
 
         constexpr ArrayIterator();
