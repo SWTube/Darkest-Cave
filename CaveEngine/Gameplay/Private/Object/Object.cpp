@@ -8,17 +8,10 @@ namespace cave
 {
 	uint32_t Object::mNextGUID = 1;
 
-	Object::Object()
-		: mName()
-	{
-		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
-		mGUID = mNextGUID;
-		assert(IsValid());
-		++mNextGUID;
-	}
-
 	Object::Object(std::string& name)
-		: mName(name)
+		: mDuplicatedTarget(nullptr)
+		, mDuplicatedNum(1)
+		, mName(name)
 	{
 		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
@@ -27,7 +20,9 @@ namespace cave
 	}
 
 	Object::Object(const char* name)
-		: mName(name)
+		: mDuplicatedTarget(nullptr)
+		, mDuplicatedNum(1)
+		, mName(name)
 	{
 		assert((name != nullptr) & (mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
@@ -36,19 +31,17 @@ namespace cave
 	}
 
 	Object::Object(const Object& other)
-		: mName(other.GetName())
+		: mDuplicatedNum(1)
 	{
 		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
-		assert(GetGUID() != other.GetGUID());
-		++mNextGUID;
-	}
-
-	Object::Object(Object&& other) noexcept
-		: mName(other.GetName())
-	{
-		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
-		mGUID = mNextGUID;
+		Object* iter = &const_cast<Object&>(other);
+		while (iter->mDuplicatedTarget != nullptr)
+		{
+			iter = iter->mDuplicatedTarget;
+		}
+		mDuplicatedTarget = iter;
+		mName = other.mName + std::to_string(++(mDuplicatedTarget->mDuplicatedNum));
 		assert(GetGUID() != other.GetGUID());
 		++mNextGUID;
 	}
@@ -56,6 +49,12 @@ namespace cave
 	Object::~Object()
 	{
 		assert(IsValid());
+		if (IsDuplicated())
+		{
+			--(mDuplicatedTarget->mDuplicatedNum);
+			mDuplicatedTarget = nullptr;
+		}
+
 		mGUID = 0;
 	}
 
@@ -71,5 +70,10 @@ namespace cave
 		assert(GetGUID() != other.GetGUID());
 
 		return *this;
+	}
+
+	uint32_t Object::getDuplicatedNum() const
+	{
+		return mDuplicatedNum;
 	}
 }
