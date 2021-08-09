@@ -5,12 +5,14 @@
 
 #pragma once
 
+#define UPDATE_TIMESTEP (0.002)
+
 #include "CoreTypes.h"
 #include "Device/DeviceResources.h"
 #include "Renderer/Renderer.h"
 #include "Game/GameInstance.h"
 
-#define UPDATE_TIMESTEP (0.002)
+import EngineTimer;
 
 namespace cave
 {
@@ -33,7 +35,8 @@ namespace cave
 		MemoryPool* mPool = nullptr;
 		Renderer* mRenderer = nullptr;
 		Window* mWindow = nullptr;
-
+		EngineTimer* mTimer = nullptr;
+	
 		GameInstance* mGameInstance = nullptr;
 
 		static const wchar_t* msWindowClassName;

@@ -331,12 +331,12 @@
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
+    <ClCompile Include="Engine\Public\EngineTimer.ixx" />
     <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp" />
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Transform.cpp" />
     <ClCompile Include="Gameplay\Private\World\Level.cpp" />
     <ClCompile Include="Gameplay\Private\World\World.cpp" />
-    <ClCompile Include="Gameplay\Public\Game\GameTimer.ixx" />
     <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\GenericDeviceResources.cpp" />
     <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp" />

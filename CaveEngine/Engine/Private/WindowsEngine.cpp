@@ -21,6 +21,9 @@ namespace cave
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
 		new(mRenderer) Renderer();
 
+		mTimer = reinterpret_cast<EngineTimer*>(mPool->Allocate(sizeof(EngineTimer)));
+		new(mTimer) EngineTimer();
+
 		mGameInstance = reinterpret_cast<GameInstance*>(mPool->Allocate(sizeof(GameInstance)));
 		new(mGameInstance) GameInstance();
 
@@ -44,6 +47,11 @@ namespace cave
 		if (mWindow != nullptr)
 		{
 			mPool->Deallocate(mWindow, sizeof(Window));
+		}
+
+		if (mTimer != nullptr)
+		{
+			mPool->Deallocate(mTimer, sizeof(EngineTimer));
 		}
 
 		if (mGameInstance != nullptr)
@@ -78,6 +86,7 @@ namespace cave
 		double elapsedTime = 0.0;
 
 		mGameInstance->Init();
+		mTimer->Init();
 
 		while (WM_QUIT != msg.message)
 		{
@@ -92,7 +101,7 @@ namespace cave
 				DispatchMessage(&msg);
 			}
 
-			elapsedTime += mGameInstance->GetElapsedFromLastUpdate();
+			elapsedTime += mTimer->GetElapsedFromLastUpdate();
 			while (elapsedTime > UPDATE_TIMESTEP)
 			{
 				mGameInstance->FixedUpdate();
