@@ -21,7 +21,7 @@ namespace cave
 	public:
 		friend class GameObject;
 
-		Level();
+		Level() = delete;
 		Level(std::string& name);
 		Level(const char* name);
 		Level(const Level&) = delete;

@@ -17,13 +17,6 @@
 
 namespace cave
 {
-	Level::Level()
-		: Object("Level")
-		, mOwner(nullptr)
-	{
-
-	}
-
 	Level::Level(std::string& name) 
 		: Object(name)
 		, mOwner(nullptr)
@@ -64,7 +57,7 @@ namespace cave
 		{
 			addActiveGameObject(gameObject);
 		}
-		gameObject.setLevel(*this);
+		gameObject.SetLevel(*this);
 	}
 
 	void Level::AddGameObjects(std::vector<GameObject*>& gameObjects)
