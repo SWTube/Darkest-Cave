@@ -6,12 +6,11 @@
 
 #include "CoreTypes.h"
 #include "Assertion/Assert.h"
-#include "Object/Object.h"
 #include "Containers/Vertex.h"
 
 namespace cave
 {
-	class Transform final : public Object
+	class Transform final
 	{
 	public:
 		Transform();
@@ -34,19 +33,16 @@ namespace cave
 
 	FORCEINLINE Float2* Transform::GetPosition()
 	{
-		assert(IsValid());
 		return &mPosition;
 	}
 
 	FORCEINLINE Float2* Transform::GetRotation()
 	{
-		assert(IsValid());
 		return &mRotation;
 	}
 
 	FORCEINLINE Float2* Transform::GetScale()
 	{
-		assert(IsValid());
 		return &mScale;
 	}
 #ifdef CAVE_BUILD_DEBUG

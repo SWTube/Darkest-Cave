@@ -16,8 +16,7 @@
 namespace cave
 {
 	Transform::Transform()
-		: Object()
-		, mPosition()
+		: mPosition()
 		, mRotation()
 		, mScale()
 	{
@@ -25,8 +24,7 @@ namespace cave
 	}
 
 	Transform::Transform(const Transform& other)
-		: Object(other)
-		, mPosition(other.mPosition)
+		: mPosition(other.mPosition)
 		, mRotation(other.mRotation)
 		, mScale(other.mScale)
 	{
@@ -34,8 +32,7 @@ namespace cave
 	}
 
 	Transform::Transform(Transform&& other) noexcept
-		: Object(std::move(other))
-		, mPosition(std::move(other.mPosition))
+		: mPosition(std::move(other.mPosition))
 		, mRotation(std::move(other.mRotation))
 		, mScale(std::move(other.mScale))
 	{
@@ -49,7 +46,6 @@ namespace cave
 
 	Transform& Transform::operator=(const Transform& other)
 	{
-		Object::operator=(other);
 		mPosition = other.mPosition;
 		mRotation = other.mRotation;
 		mScale = other.mScale;
@@ -59,7 +55,6 @@ namespace cave
 
 	Transform& Transform::operator=(Transform&& other) noexcept
 	{
-		Object::operator=(std::move(other));
 		mPosition = std::move(other.mPosition);
 		mRotation = std::move(other.mRotation);
 		mScale = std::move(other.mScale);
