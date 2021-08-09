@@ -10,7 +10,6 @@
 namespace cave
 {
 	GameInstance::GameInstance()
-		: mGameTimer(GameTimer::Instance())
 	{
 		TagPool::Init();
 	}
@@ -22,8 +21,6 @@ namespace cave
 
 	void GameInstance::Init()
 	{
-		mGameTimer.Init();
-
 		for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
 		{
 			iter->second->InitializeGameObjectsInWorld();
@@ -84,10 +81,5 @@ namespace cave
 		assert(world.IsValid());
 
 		return mWorlds.find(world.GetName()) != mWorlds.end();
-	}
-
-	double GameInstance::GetElapsedFromLastUpdate()
-	{
-		return mGameTimer.GetElapsedFromLastUpdate();
 	}
 }
