@@ -6,11 +6,12 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_set>
+#include <unordered_map>
 
 #include "Engine.h"
-#include "Object/Object.h"
 #include "Assertion/Assert.h"
+#include "Object/Object.h"
 
 namespace cave
 {
@@ -25,7 +26,7 @@ namespace cave
 	public:
 		friend class Level;
 
-		GameObject();
+		GameObject() = delete;
 		GameObject(std::string& name);
 		GameObject(const char* name);
 		GameObject(std::string& name, std::string& tag);
@@ -35,11 +36,10 @@ namespace cave
 		GameObject(const char* name, const char* tag);
 		GameObject(const char* name, Tag& tag);
 		GameObject(const GameObject& gameObject);
-		GameObject(GameObject&& gameObject) noexcept;
 
 		virtual ~GameObject();
-		GameObject& operator=(const GameObject& other) = delete;
-		GameObject& operator=(GameObject&& other) = delete;
+		GameObject& operator=(const GameObject& other);
+		GameObject& operator=(GameObject&& other) noexcept;
 	
 		void InitializeScripts();
 		void UpdateScripts();
@@ -72,14 +72,14 @@ namespace cave
 		void SetPhysicsBody(PhysicsBody& physicsBody);
 		FORCEINLINE PhysicsBody* GetPhysicsBody() const;
 		
+		void SetLevel(Level& level);
 		FORCEINLINE Level* GetLevel() const;
 
 		void RemoveGameObjectInLevel();
 
 	private:
-		void setLevel(Level& level);
+		static std::unordered_set<std::string> mGlobalUniqueNames;
 
-	private:
 		/*Active indicates the game object was active or deactive.
 		  Gameloop updates active game object for defalut option.*/
 		bool mbActive = false;
@@ -88,7 +88,7 @@ namespace cave
 		  Default value is 0. If value > 0, game object draw later.*/
 		uint8_t mLayer;
 
-		std::map<std::string, Script*> mScripts;
+		std::unordered_map<std::string, Script*> mScripts;
 		Tag* mTag;
 
 		Transform* mTransform;

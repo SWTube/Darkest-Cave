@@ -18,19 +18,7 @@
 
 namespace cave
 {
-	GameObject::GameObject()
-		: Object()
-		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
-		, mTag(TagPool::FindTagByName("None"))
-		, mTransform(new Transform())
-		, mRenderer(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
-	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
-	}
+	std::unordered_set<std::string> GameObject::mGlobalUniqueNames;
 
 	GameObject::GameObject(std::string& name)
 		: Object(name)
@@ -43,7 +31,8 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::GameObject(const char* name)
@@ -57,7 +46,8 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::GameObject(std::string& name, std::string& tag)
@@ -71,7 +61,8 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::GameObject(std::string& name, const char* tag)
@@ -85,7 +76,8 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::GameObject(std::string& name, Tag& tag)
@@ -99,7 +91,8 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::GameObject(const char* name, std::string& tag)
@@ -113,7 +106,8 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::GameObject(const char* name, const char* tag)
@@ -127,7 +121,8 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::GameObject(const char* name, Tag& tag)
@@ -141,41 +136,25 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::GameObject(const GameObject& other)
 		: Object(other)
 		, mbActive(other.IsActive())
 		, mLayer(other.GetLayer())
-		, mScripts(other.mScripts)
+		, mScripts()
 		, mTag(other.GetTag())
 		, mTransform(new Transform())
 		, mRenderer(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(other.GetLevel())
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
-	}
+		std::string name = other.GetName() + std::to_string(other.getDuplicatedNum());
 
-	GameObject::GameObject(GameObject&& other) noexcept
-		: Object(std::move(other))
-		, mbActive(other.IsActive())
-		, mLayer(other.GetLayer())
-		, mScripts(std::move(other.mScripts))
-		, mTag(other.GetTag())
-		, mTransform(other.GetTransform())
-		, mRenderer(other.GetRenderer())
-		, mPhysicsBody(other.GetPhysicsBody())
-		, mLevel(other.GetLevel())
-	{
-		other.mTag = nullptr;
-		other.mTransform = nullptr;
-		other.mRenderer = nullptr;
-		other.mPhysicsBody = nullptr;
-		other.RemoveGameObjectInLevel();
-
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
+		mGlobalUniqueNames.insert(name);
 	}
 
 	GameObject::~GameObject()
@@ -185,6 +164,7 @@ namespace cave
 		{
 			delete mTransform;
 		}
+
 		for (auto& iter : mScripts)
 		{
 			Script* script = iter.second;
@@ -193,6 +173,16 @@ namespace cave
 			delete script;
 		}
 		mScripts.clear();
+	}
+
+	GameObject& GameObject::operator=(const GameObject& other)
+	{
+		return *this;
+	}
+
+	GameObject& GameObject::operator=(GameObject&& other) noexcept
+	{
+		return *this;
 	}
 
 	void GameObject::InitializeScripts()
@@ -208,20 +198,20 @@ namespace cave
 	void GameObject::UpdateScripts()
 	{
 		assert(IsValid());
-		for (auto& script : mScripts)
+		for (auto iter = mScripts.begin(); iter != mScripts.end(); ++iter)
 		{
-			assert(script.second->IsValid());
-			script.second->Update(*this);
+			assert(iter->second->IsValid());
+			iter->second->Update(*this);
 		}
 	}
 
 	void GameObject::FixedUpdateScripts()
 	{
 		assert(IsValid());
-		for (auto& script : mScripts)
+		for (auto iter = mScripts.begin(); iter != mScripts.end(); ++iter)
 		{
-			assert(script.second->IsValid());
-			script.second->FixedUpdate(*this);
+			assert(iter->second->IsValid());
+			iter->second->FixedUpdate(*this);
 		}
 	}
 
@@ -345,7 +335,7 @@ namespace cave
 		mPhysicsBody = &physicsBody;
 	}
 
-	void GameObject::setLevel(Level& level)
+	void GameObject::SetLevel(Level& level)
 	{
 		assert(IsValid() & level.IsValid());
 		mLevel = &level;
