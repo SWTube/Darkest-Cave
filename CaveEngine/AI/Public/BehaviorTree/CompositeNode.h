@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import CompositeNode;
+#else
+
 #include <vector>
 #include "BehaviorTreeNode.h"
 
@@ -32,3 +36,5 @@ namespace cave
         uint32_t mChildrenCount = 0;
     };
 }
+
+#endif

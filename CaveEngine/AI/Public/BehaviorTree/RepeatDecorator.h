@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import RepeatDecorator;
+#else
+
 #include <vector>
 #include "Decorator.h"
 
@@ -33,3 +37,5 @@ namespace cave
         uint32_t mRepeatCount;
     };
 }
+
+#endif

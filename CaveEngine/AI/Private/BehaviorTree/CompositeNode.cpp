@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/CompositeNode.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     CompositeNode::CompositeNode()
@@ -56,3 +57,5 @@ namespace cave
         delete this;
     }
 }
+
+#endif

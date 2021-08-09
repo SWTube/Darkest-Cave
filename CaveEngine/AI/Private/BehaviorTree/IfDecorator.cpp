@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/IfDecorator.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     IfDecorator::IfDecorator()
@@ -32,3 +33,5 @@ namespace cave
         mCondition = condition;
     }
 }
+
+#endif

@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/RandomNode.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     RandomNode::RandomNode()
@@ -29,3 +30,4 @@ namespace cave
         mMaxRandomCount = maxRandomCount;
     }
 }
+#endif

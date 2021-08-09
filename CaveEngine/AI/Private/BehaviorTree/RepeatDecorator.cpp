@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/RepeatDecorator.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     RepeatDecorator::RepeatDecorator()
@@ -31,3 +32,5 @@ namespace cave
         mRepeatCount = repeatCount;
     }
 }
+
+#endif

@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/Decorator.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     Decorator::Decorator()
@@ -41,3 +42,5 @@ namespace cave
         delete this;
     }
 }
+
+#endif

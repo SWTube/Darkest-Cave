@@ -321,6 +321,16 @@
     <ClCompile Include="AI\Private\BehaviorTreeTestScript.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\RandomNode.cpp" />
     <ClCompile Include="AI\Public\BehaviorTree\ActionNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\BehaviorTreeNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\CompositeNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\Decorator.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\IfDecorator.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\RandomNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\RepeatDecorator.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\RootNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\Selector.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\Sequencer.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\WhileDecorator.ixx" />
     <ClCompile Include="Core\Private\Containers\Array.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp" />
     <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp" />

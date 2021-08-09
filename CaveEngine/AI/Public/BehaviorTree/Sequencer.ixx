@@ -2,23 +2,37 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-#pragma once
-
-#ifdef __WIN32__
-import Sequencer;
-#else
+module;
 
 #include <vector>
-#include "CompositeNode.h"
 
-namespace cave
+#include "BehaviorTreeNode.h"
+#include "CompositeNode.h"
+#include "Object/GameObject.h"
+
+export module Sequencer;
+
+export namespace cave
 {
     class Sequencer : public CompositeNode
     {
     public:
-        Sequencer();
-        Sequencer(const char*);
-        virtual ~Sequencer();
+        Sequencer()
+        {
+            SetNodeName("");
+            SetParentNode(NULL);
+            SetTreeDepth(0);
+        }
+        Sequencer(const char* nodeName)
+        {
+            SetNodeName(nodeName);
+            SetParentNode(NULL);
+            SetTreeDepth(0);
+        }
+        ~Sequencer()
+        {
+
+        }
 
         virtual bool Run(GameObject& gameObject) override {
             for (const auto& child : GetChildren()) {
@@ -29,7 +43,6 @@ namespace cave
             return true;
         }
     private:
-
     };
+
 }
-#endif

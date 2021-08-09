@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/Sequencer.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     Sequencer::Sequencer()
@@ -23,3 +24,4 @@ namespace cave
         
     }
 }
+#endif

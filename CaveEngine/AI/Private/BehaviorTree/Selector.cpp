@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/Selector.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     Selector::Selector()
@@ -23,3 +24,5 @@ namespace cave
         
     }
 }
+
+#endif

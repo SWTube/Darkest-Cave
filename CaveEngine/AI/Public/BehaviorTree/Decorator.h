@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import Decorator;
+#else
+
 #include "BehaviorTreeNode.h"
 
 namespace cave
@@ -25,3 +29,5 @@ namespace cave
         BehaviorTreeNode* mChild;
     };
 }
+
+#endif

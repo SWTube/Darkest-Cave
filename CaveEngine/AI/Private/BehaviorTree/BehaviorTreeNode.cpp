@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/BehaviorTreeNode.h"
 
+#ifdef __UNIX__
 namespace cave
 {
 	BehaviorTreeNode::BehaviorTreeNode()
@@ -47,3 +48,4 @@ namespace cave
 		delete this;
 	}
 }
+#endif

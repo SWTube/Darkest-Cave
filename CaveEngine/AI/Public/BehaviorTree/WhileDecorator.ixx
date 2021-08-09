@@ -7,56 +7,52 @@ module;
 #include <functional>
 #include <vector>
 
-#include "BehaviorTreeNode.h"
+#include "Decorator.h"
 #include "Object/GameObject.h"
 
-export module ActionNode;
+export module WhileDecorator;
 
 export namespace cave
 {
-    class ActionNode : public BehaviorTreeNode
+    class WhileDecorator : public Decorator
     {
     public:
-        ActionNode()
+        WhileDecorator()
         {
             SetNodeName("");
             SetParentNode(NULL);
             SetTreeDepth(0);
-            SetNodeFunction(NULL);
+            SetChild(NULL);
+            SetCondition(NULL);
         }
-
-        ActionNode(const char* nodeName, std::function<bool(GameObject&)> nodeFunction)
+        WhileDecorator(const char* nodeName, std::function<bool(GameObject&)> condition)
         {
             SetNodeName(nodeName);
             SetParentNode(NULL);
             SetTreeDepth(0);
-            SetNodeFunction(nodeFunction);
+            SetChild(NULL);
+            SetCondition(condition);
         }
-
-        ~ActionNode()
+        ~WhileDecorator()
         {
 
         }
 
         virtual bool Run(GameObject& gameObject) override
         {
-            return mNodeFunction(gameObject);
+            while (mCondition)
+            {
+                GetChild()->Run(gameObject);
+            }
+            return true;
         }
 
-        void SetNodeFunction(std::function<bool(GameObject&)> nodeFunction)
+        void SetCondition(std::function<bool(GameObject&)> condition)
         {
-            mNodeFunction = nodeFunction;
+            mCondition = condition;
         }
-
-        virtual void Clear() override
-        {
-            delete this;
-        }
-
     private:
-        std::function<bool(GameObject&)> mNodeFunction;
-
-    
+        std::function<bool(GameObject&)> mCondition;
     };
 
 }

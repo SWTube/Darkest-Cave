@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/WhileDecorator.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     WhileDecorator::WhileDecorator()
@@ -30,5 +31,6 @@ namespace cave
     {
         mCondition = condition;
     }
-
 }
+#endif
+

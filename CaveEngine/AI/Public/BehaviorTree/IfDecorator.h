@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import IfDecorator;
+#else
+
 #include <vector>
 #include "Decorator.h"
 
@@ -30,3 +34,5 @@ namespace cave
         std::function<bool(GameObject&)> mCondition;
     };
 }
+
+#endif

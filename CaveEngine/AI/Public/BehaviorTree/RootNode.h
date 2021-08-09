@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import RootNode;
+#else
+
 #include <vector>
 #include "Sequencer.h"
 
@@ -18,3 +22,4 @@ namespace cave
     private:
     };
 }
+#endif

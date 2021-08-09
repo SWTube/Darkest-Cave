@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import BehaviorTreeNode;
+#else
+
 #include <iostream>
 #include <functional>
 #include "Object/GameObject.h"
@@ -37,3 +41,4 @@ namespace cave
             uint32_t mTreeDepth = 0;
     };
 }
+#endif

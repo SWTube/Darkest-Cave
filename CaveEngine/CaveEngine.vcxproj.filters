@@ -321,6 +321,36 @@
     <ClCompile Include="AI\Public\BehaviorTree\ActionNode.ixx">
       <Filter>Header Files\AI\BehaviorTree</Filter>
     </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\BehaviorTreeNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\CompositeNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\Decorator.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\IfDecorator.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\RandomNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\RepeatDecorator.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\RootNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\Selector.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\Sequencer.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\WhileDecorator.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -414,9 +444,6 @@
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Device\Window.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Device\WindowsWindow.h">
