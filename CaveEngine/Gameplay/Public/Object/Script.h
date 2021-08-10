@@ -9,10 +9,11 @@
 
 #include "CoreTypes.h"
 #include "Object/Object.h"
-#include "Object/GameObject.h"
 
 namespace cave
 {	
+	class GameObject;
+
 	class Script : public Object
     {
     public:

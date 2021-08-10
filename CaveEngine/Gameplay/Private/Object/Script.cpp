@@ -11,6 +11,7 @@
 
 #include "Assertion/Assert.h"
 #include "Object/Script.h"
+#include "Object/GameObject.h"
 #include "Object/Transform.h"
 
 namespace cave
@@ -65,7 +66,7 @@ namespace cave
 		: Script(name)
 		, mSpriteIndex(spriteIndex)
 		, mTextureIndex(textureIndex)
-		, mNextTextureIndex(1000)
+		, mNextTextureIndex(100)
 		, mSpeed(speed)
 	{
 		
@@ -83,6 +84,20 @@ namespace cave
 
 	void TestScript::FixedUpdate(GameObject& gameObject)
 	{
+		/*gameObject.GetTransform()->GetPosition()->X += mSpeed;
+		if (gameObject.GetTransform()->GetPosition()->X > 250.f)
+		{
+			gameObject.GetRenderer()->SetSpriteTexture(mSpriteIndex, mNextTextureIndex);
+		}
+		gameObject.GetRenderer()->SetSpritePosition(mSpriteIndex, *(gameObject.GetTransform()->GetPosition()));
+		if (gameObject.GetTransform()->GetPosition()->X > 400.f)
+		{
+			gameObject.RemoveGameObjectInLevel();
+		}*/
+	}
+
+	void TestScript::Update(GameObject& gameObject)
+	{
 		gameObject.GetTransform()->GetPosition()->X += mSpeed;
 		if (gameObject.GetTransform()->GetPosition()->X > 250.f)
 		{
@@ -93,11 +108,6 @@ namespace cave
 		{
 			gameObject.RemoveGameObjectInLevel();
 		}
-	}
-
-	void TestScript::Update(GameObject& gameObject)
-	{
-	
 	}
 
 	void TestScript::SetSpriteIndex(uint32_t index)

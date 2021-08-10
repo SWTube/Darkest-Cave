@@ -200,6 +200,7 @@ namespace cave
 
 		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
 		{
+			assert((iter->second)->IsValid());
 			(iter->second)->UpdateScripts();
 		}
 		destroyGameObjects();
