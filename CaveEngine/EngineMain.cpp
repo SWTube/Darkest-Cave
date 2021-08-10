@@ -19,7 +19,6 @@
 #include "CoreMinimal.h"
 
 #include "Containers/TStack.h"
-#include "Engine.h"
 #include "Shapes/Quadrant.h"
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
@@ -28,6 +27,8 @@
 #include "World/World.h"
 #include "Object/GameObject.h"
 #include "Object/Script.h"
+
+import Engine;
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
@@ -245,12 +246,12 @@ void RenderTest()
 	// Begin initialization.
 
 	// Instantiate the window manager class.
-	cave::Engine main;
+	cave::Engine* main = cave::Engine::Instance();
 	// Create a window.
-	cave::eResult result = main.Init(1600u, 900u);
+	cave::eResult result = main->Init(1600u, 900u);
 
 
-	cave::Renderer* renderer = main.GetRenderer();
+	cave::Renderer* renderer = main->GetRenderer();
 
 	renderer->AddSprite("orange_mushroom.png");
 
@@ -269,10 +270,10 @@ void RenderTest()
 		//renderer->CreateWindowSizeDependentResources();
 
 		// Run the program.
-		result = main.Run();
+		result = main->Run();
 	}
 
-	main.Destroy();
+	main->Destroy();
 }
 
 void DemoTest()
@@ -281,11 +282,11 @@ void DemoTest()
 	// Begin initialization.
 
 	// Instantiate the window manager class.
-	cave::Engine main;
+	cave::Engine* main = cave::Engine::Instance();
 	// Create a window.
-	cave::eResult result = main.Init(1600u, 900u);
+	cave::eResult result = main->Init(1600u, 900u);
 
-	cave::Renderer* renderer = main.GetRenderer();
+	cave::Renderer* renderer = main->GetRenderer();
 
 											// index
 	//renderer->AddSprite("lapland.png");		// 0 sprite
@@ -309,7 +310,7 @@ void DemoTest()
 	cave::TestScript* move = new cave::TestScript("Move", 0, 0, speed);
 	renderer->AddSprite("lapland.png");
 
-	gameObject->SetRenderer(*main.GetRenderer());
+	gameObject->SetRenderer(*main->GetRenderer());
 	gameObject->AddScript(*move);
 	level->AddGameObject(*gameObject);
 
@@ -317,7 +318,7 @@ void DemoTest()
 	{
 		cave::GameObject* gO = new cave::GameObject(*gameObject);
 		renderer->AddSprite("lapland.png");
-		gO->SetRenderer(*main.GetRenderer());
+		gO->SetRenderer(*main->GetRenderer());
 		cave::TestScript* testScript = new cave::TestScript(*move);
 		testScript->SetSpriteIndex(i);
 		speed -= 0.002f;
@@ -332,7 +333,7 @@ void DemoTest()
 
 	renderer->AddTexture("lapland_2.png");
 
-	cave::GameInstance* gameInstance = main.GetGameInstance();
+	cave::GameInstance* gameInstance = main->GetGameInstance();
 	
 	world->AddLevel(*level);
 	gameInstance->AddWorld(*world);
@@ -349,8 +350,8 @@ void DemoTest()
 		//renderer->CreateWindowSizeDependentResources();
 
 		// Run the program.
-		result = main.Run();
+		result = main->Run();
 	}
 
-	main.Destroy();
+	//main->Destroy();
 }

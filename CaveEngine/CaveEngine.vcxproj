@@ -263,10 +263,6 @@
     <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
     <ClInclude Include="Core\Public\Utils\Defines.h" />
-    <ClInclude Include="Engine\Public\Engine.h" />
-    <ClInclude Include="Engine\Public\GenericEngine.h" />
-    <ClInclude Include="Engine\Public\UnixEngine.h" />
-    <ClInclude Include="Engine\Public\WindowsEngine.h" />
     <ClInclude Include="Gameplay\Public\Game\GameInstance.h" />
     <ClInclude Include="Gameplay\Public\Object\Object.h" />
     <ClInclude Include="Gameplay\Public\Object\Player.h" />
@@ -329,8 +325,7 @@
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
     <ClCompile Include="EngineMain.cpp" />
-    <ClCompile Include="Engine\Private\GenericEngine.cpp" />
-    <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
+    <ClCompile Include="Engine\Public\Engine.ixx" />
     <ClCompile Include="Engine\Public\EngineTimer.ixx" />
     <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp" />
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />

@@ -42,14 +42,8 @@
     <ClCompile Include="EngineMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Private\GenericEngine.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Public\Template\IteratorType.ixx">
       <Filter>Header Files\Core\Template</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Private\WindowsEngine.cpp">
-      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Debug\Log.ixx">
       <Filter>Header Files\Core\Debug</Filter>
@@ -288,6 +282,9 @@
     <ClCompile Include="Engine\Public\EngineTimer.ixx">
       <Filter>Header Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Public\Engine.ixx">
+      <Filter>Header Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -308,23 +305,11 @@
     <ClInclude Include="Core\Public\CoreTypes.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Public\Engine.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Public\GenericEngine.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Public\UnixEngine.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Public\WindowsEngine.h">
-      <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Utils\Crt.h">
       <Filter>Header Files\Core\Utils</Filter>
