@@ -5,16 +5,13 @@
 
 module;
 
-// include assertion macros
-#include "Assertion/Assert.h"
-// include memory
 #include "CoreGlobals.h"
-#include "Memory/Memory.h"
 #include "Memory/MemoryPool.h"
 
 export module Array;
 
 import IteratorType;
+import Memory;
 
 export namespace cave
 {
@@ -93,7 +90,7 @@ export namespace cave
     };
 
     template<class ElementType>
-    class Array
+    class Array final
     {
     public:
         using ConstIterator = ArrayConstIterator<ElementType>;
@@ -108,7 +105,7 @@ export namespace cave
         constexpr Array(const Array& other, MemoryPool& pool = gCoreMemoryPool);
         constexpr Array(Array&& other, MemoryPool& pool = gCoreMemoryPool) noexcept;
         constexpr Array(const std::initializer_list<ElementType>& initialzerList, MemoryPool& pool = gCoreMemoryPool);
-        virtual ~Array();
+        ~Array();
 
         constexpr Array& operator=(const Array& other);
         constexpr Array& operator=(Array&& other);
@@ -171,7 +168,7 @@ export namespace cave
         constexpr static size_t DEFAULT_CAPACITY = 8u;
 
     private:
-        MemoryPool* mPool;
+        MemoryPool& mPool;
         size_t mSize;
         size_t mCapacity;
         ElementType* mData;
@@ -464,18 +461,18 @@ export namespace cave
 
     template<class ElementType>
     constexpr Array<ElementType>::Array(MemoryPool& pool) noexcept
-        : mPool(&pool)
+        : mPool(pool)
         , mSize(0)
         , mCapacity(DEFAULT_CAPACITY)
-        , mData(reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType)* mCapacity)))
+        , mData(reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType)* mCapacity)))
     { }
 
     template<class ElementType>
     constexpr Array<ElementType>::Array(size_t count, const ElementType& value, MemoryPool& pool)
-        : mPool(&pool)
+        : mPool(pool)
         , mSize(count)
         , mCapacity(mSize)
-        , mData(reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType)* mCapacity)))
+        , mData(reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType)* mCapacity)))
     {
         for (size_t i = 0; i < count; ++i)
         {
@@ -485,17 +482,17 @@ export namespace cave
 
     template<class ElementType>
     constexpr Array<ElementType>::Array(size_t count, MemoryPool& pool)
-        : mPool(&pool)
+        : mPool(pool)
         , mSize(0)
         , mCapacity(count)
-        , mData(reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType)* mCapacity)))
+        , mData(reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType)* mCapacity)))
     { }
 
     template<class ElementType>
     template<class IteratorType>
     requires IteratorInputAble<IteratorType, ElementType>
         constexpr Array<ElementType>::Array(IteratorType first, IteratorType last, MemoryPool& pool)
-        : mPool(&pool)
+        : mPool(pool)
     {
         //GetIteratorDIstance(first, last)
 
@@ -504,8 +501,7 @@ export namespace cave
 
         mSize = count;
         mCapacity = count;
-        mData = reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType) * count));
-        new(mData) ElementType[count];
+        mData = reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType) * count));
 
         size_t i = 0;
         for (IteratorType iterator = first; iterator != last; ++iterator, ++i)
@@ -516,10 +512,10 @@ export namespace cave
 
     template<class ElementType>
     constexpr Array<ElementType>::Array(const Array& other, MemoryPool& pool)
-        : mPool(&pool)
+        : mPool(pool)
         , mSize(other.mSize)
         , mCapacity(other.mCapacity)
-        , mData(reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType)* mCapacity)))
+        , mData(reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType)* mCapacity)))
     {
         if (mSize > 0)
         {
@@ -529,7 +525,7 @@ export namespace cave
 
     template<class ElementType>
     constexpr Array<ElementType>::Array(Array&& other, MemoryPool& pool) noexcept
-        : mPool(&pool)
+        : mPool(pool)
         , mSize(other.mSize)
         , mCapacity(other.mCapacity)
         , mData(other.mData)
@@ -541,7 +537,7 @@ export namespace cave
 
     template<class ElementType>
     constexpr Array<ElementType>::Array(const  std::initializer_list<ElementType>& initialzerList, MemoryPool& pool)
-        : mPool(&pool)
+        : mPool(pool)
     {
 
         size_t count = 0;
@@ -549,7 +545,7 @@ export namespace cave
 
         mSize = count;
         mCapacity = count;
-        mData = reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType) * mCapacity));
+        mData = reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType) * mCapacity));
 
         size_t i = 0;
         for (auto iterator = initialzerList.begin(); iterator != initialzerList.end(); ++iterator, ++i)
@@ -563,7 +559,7 @@ export namespace cave
     {
         if (mData != nullptr)
         {
-            mPool->Deallocate(mData, mCapacity * sizeof(ElementType));
+            mPool.Deallocate(mData, mCapacity * sizeof(ElementType));
         }
     }
 
@@ -632,12 +628,12 @@ export namespace cave
 
         if (capacity > mCapacity)
         {
-            ElementType* temp = reinterpret_cast<ElementType*>(mPool->Allocate(sizeof(ElementType) * capacity));
+            ElementType* temp = reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType) * capacity));
 
             if (mData != nullptr)
             {
                 Memory::Memcpy(temp, mData, mSize * sizeof(ElementType));
-                mPool->Deallocate(mData, mCapacity * sizeof(ElementType));
+                mPool.Deallocate(mData, mCapacity * sizeof(ElementType));
             }
 
             mData = temp;
@@ -846,7 +842,7 @@ export namespace cave
     template<class ElementType>
     constexpr size_t Array<ElementType>::GetMaxSize() const
     {
-        return mPool->GetFreeMemorySize() / sizeof(ElementType);
+        return mPool.GetFreeMemorySize() / sizeof(ElementType);
     }
 
     template<class ElementType>
