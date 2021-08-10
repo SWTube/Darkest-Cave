@@ -1,6 +1,7 @@
 module;
 
-#include "tictoc.h"
+#include <Windows.h>
+
 #include "Assertion/Assert.h"
 
 export module EngineTimer;
@@ -10,7 +11,8 @@ namespace cave
 	export class EngineTimer final
 	{
 	public:
-		EngineTimer();
+		friend class Engine;
+
 		EngineTimer(const EngineTimer&) = delete;
 		EngineTimer(EngineTimer&&) = delete;
 
@@ -19,16 +21,26 @@ namespace cave
 		EngineTimer& operator=(EngineTimer&&) = delete;
 
 		void Init();
-		double GetElapsedFromLastUpdate();
+		void Update();
+		float GetElapsedTimestepFromLastUpdate();
+		float GetInterpolationTimestep();
 
 	private:
-		TicTocTimer mTimer;
+		EngineTimer();
+
+	private:
+		LARGE_INTEGER mTimer;
+		LARGE_INTEGER mTimestep;
+
+		uint64_t mLastUpdateTime;
+		uint64_t mCurrentUpdateTime;
 	};
 
 	EngineTimer::EngineTimer()
-		: mTimer(tic())
+		: mLastUpdateTime(0.f)
+		, mCurrentUpdateTime(0.f)
 	{
-
+		QueryPerformanceFrequency(&mTimer);
 	}
 
 	EngineTimer::~EngineTimer()
@@ -38,11 +50,26 @@ namespace cave
 
 	void EngineTimer::Init()
 	{
-		toc(&mTimer);
+		QueryPerformanceCounter(&mTimestep);
+		mCurrentUpdateTime = mTimestep.QuadPart;
 	}
 
-	double EngineTimer::GetElapsedFromLastUpdate()
+	void EngineTimer::Update()
 	{
-		return toc(&mTimer);
+		QueryPerformanceCounter(&mTimestep);
+		mLastUpdateTime = mCurrentUpdateTime;
+		mCurrentUpdateTime = mTimestep.QuadPart;
+	}
+
+	float EngineTimer::GetElapsedTimestepFromLastUpdate()
+	{
+		return (mCurrentUpdateTime - mLastUpdateTime) / static_cast<float>(mTimer.QuadPart);
+	}
+
+	float EngineTimer::GetInterpolationTimestep()
+	{
+		QueryPerformanceCounter(&mTimestep);
+		
+		return (mTimestep.QuadPart - mCurrentUpdateTime) / static_cast<float>(mTimer.QuadPart);
 	}
 }
