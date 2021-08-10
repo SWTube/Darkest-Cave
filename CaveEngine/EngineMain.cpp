@@ -18,7 +18,6 @@
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
 
-#include "Containers/Array.h"
 #include "Containers/TStack.h"
 #include "Engine.h"
 #include "Object/TagPool.h"
@@ -40,6 +39,7 @@ void RenderTest();
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
 #ifdef __WIN32__
+import Array;
 import Hash;
 import Log;
 import Math;
@@ -115,11 +115,11 @@ int main(int32_t argc, char** argv)
 	cave::TrieTest::Main();
 	cave::QuadrantTest::Main();
 
-	cave::TArray<uint32_t> cache0;
-	cache0.Resize(21u, 0u);
+	cave::Array<uint32_t> cache0;
+	cache0.SetSize(21u, 0u);
 
-	cave::TArray<uint32_t> cache1;
-	cache1.Resize(21u, 0u);
+	cave::Array<uint32_t> cache1;
+	cache1.SetSize(21u, 0u);
 
 	double averageElapsedTime0 = 0.0f;
 	double averageElapsedTime1 = 0.0f;

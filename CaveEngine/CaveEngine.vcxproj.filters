@@ -172,17 +172,14 @@
     <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Algorithms\Minimax.ixx">
-      <Filter>Header Files\Core\Algorithms</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Public\Math\Math.ixx">
-      <Filter>Header Files\Core\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Public\Containers\LinkedList.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Containers\Array.ixx">
       <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Math\Math.ixx">
+      <Filter>Header Files\Core\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -545,9 +542,6 @@
     </Filter>
     <Filter Include="Source Files\Core\Shapes">
       <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Algorithms">
-      <UniqueIdentifier>{aec66050-ae36-46eb-b649-ca4d30706e43}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

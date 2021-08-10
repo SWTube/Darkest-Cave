@@ -8,6 +8,7 @@
 #include "CoreTypes.h"
 
 // #include "Containers/Array.h"
+#include "CoreGlobals.h"
 #include "Memory/MemoryPool.h"
 
 import Memory;
