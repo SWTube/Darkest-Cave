@@ -115,14 +115,32 @@ int main(int32_t argc, char** argv)
 	cave::TrieTest::Main();
 	cave::QuadrantTest::Main();
 
-	cave::TArray<uint32_t> cache;
+	cave::TArray<uint32_t> cache0;
+	cache0.Resize(21u, 0u);
 
+	cave::TArray<uint32_t> cache1;
+	cache1.Resize(21u, 0u);
+
+	double averageElapsedTime0 = 0.0f;
+	double averageElapsedTime1 = 0.0f;
 	for (uint32_t i = 1; i < 20; ++i)
 	{
 		clock = tic();
-		LOGDF(cave::eLogChannel::CORE_TIMER, "Fibonacci number of %u: %u", i, cave::Math::GetFibonacciNumber(i, cache));
-		LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Fibonacci number by top-down %u: %u", i, cave::Math::GetFibonacciNumber(i, cache0));
+		double elapsedTime0 = toc(&clock);
+		averageElapsedTime0 += elapsedTime0;
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", elapsedTime0);
+
+
+		clock = tic();
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Fibonacci number by bottom-up %u: %u", i, cave::Math::GetFibonacciNumberRecursive(i, cache1));
+		double elapsedTime1 = toc(&clock);
+		averageElapsedTime1 += elapsedTime1;
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", elapsedTime1);
 	}
+
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Total Elapsed time %f seconds.", averageElapsedTime0 / 19.0);
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Total Elapsed time %f seconds.", averageElapsedTime1 / 19.0);
 
 	// _CrtDumpMemoryLeaks();
 
