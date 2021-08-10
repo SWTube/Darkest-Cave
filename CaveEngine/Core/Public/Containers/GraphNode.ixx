@@ -5,13 +5,13 @@
 
 module;
 
-#include "Containers/Array.h"
 #include "Containers/TStack.h"
 #include "Debug/Log.h"
 
 export module GraphNode;
 
 import std.core;
+import Array;
 
 namespace cave
 {
@@ -25,10 +25,10 @@ namespace cave
 		constexpr static void SearchBreadthFirst(const GraphNode& node);
 
 		constexpr const T& GetData() const;
-		constexpr TArray<T>& GetNeightbors();
+		constexpr Array<T>& GetNeightbors();
 	private:
 		const T mData;
-		TArray<T> mNeightbors;
+		Array<T> mNeightbors;
 	};
 
 	template <typename T>
@@ -99,7 +99,7 @@ namespace cave
 	}
 
 	template <typename T>
-	constexpr TArray<T>& GraphNode<T>::GetNeightbors()
+	constexpr Array<T>& GraphNode<T>::GetNeightbors()
 	{
 		return mNeightbors;
 	}

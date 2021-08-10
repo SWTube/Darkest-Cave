@@ -34,14 +34,8 @@
     <ClCompile Include="Core\Public\String\String.ixx">
       <Filter>Header Files\Core\String</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\Matrix.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Public\Template\IteratorType.ixx">
       <Filter>Header Files\Core\Template</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Array.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Containers\Node.cpp">
       <Filter>Source Files\Core\Containers</Filter>
@@ -184,6 +178,12 @@
     <ClCompile Include="Core\Public\Math\Math.ixx">
       <Filter>Header Files\Core\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Containers\LinkedList.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Array.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -230,9 +230,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\Assertion\Assert.h">
       <Filter>Header Files\Core\Assertion</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Array.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
       <Filter>Header Files\Core\Containers</Filter>
