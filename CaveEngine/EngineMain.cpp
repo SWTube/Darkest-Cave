@@ -22,43 +22,81 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     cave::State* rightWalk = new cave::State("rightWalk", 'd', 1);
     cave::State* upWalk = new cave::State("upWalk", 'w', 2);
     cave::State* downWalk = new cave::State("downWalk", 's', -2);
-    cave::State* sleep = new cave::State("sleep", 'x', -100);
+    cave::State* sit = new cave::State("sit", 'c', -3);
+    cave::State* jump = new cave::State("jump", 'k', 123456789);
+    cave::State* doubleJump = new cave::State("doubleJump", 'K', 987654321);
+    cave::State* attack = new cave::State("attack", 'j', 1000000);
+    cave::State* leftDash = new cave::State("leftDash", 'A', -111);
+    cave::State* rightDash = new cave::State("rightDash", 'D', 111);
+    cave::State* downDash = new cave::State("downDash", 'W', 222);
+    cave::State* upDash = new cave::State("upDash", 'S', -222);
+
+    cave::FiniteStateMachine AI(idle);
+
+    AI.AddState(idle);
+    AI.AddState(leftWalk);
+    AI.AddState(rightWalk);
+    AI.AddState(upWalk);
+    AI.AddState(downWalk);
+    AI.AddState(sit);
+    AI.AddState(jump);
+    AI.AddState(doubleJump);
+    AI.AddState(attack);
+    AI.AddState(leftDash);
+    AI.AddState(rightDash);
+    AI.AddState(downDash);
+    AI.AddState(upDash);
 
     idle->LinkState(leftWalk);
     idle->LinkState(rightWalk);
     idle->LinkState(upWalk);
     idle->LinkState(downWalk);
-    idle->LinkState(sleep);
+    idle->LinkState(sit);
+    idle->LinkState(jump);
+    idle->LinkState(attack);
 
     leftWalk->LinkState(rightWalk);
     leftWalk->LinkState(upWalk);
     leftWalk->LinkState(downWalk);
+    leftWalk->LinkState(leftDash);
+    leftWalk->LinkState(jump);
+    leftWalk->LinkState(attack);
 
     rightWalk->LinkState(upWalk);
     rightWalk->LinkState(downWalk);
+    rightWalk->LinkState(rightDash);
+    rightWalk->LinkState(jump);
+    rightWalk->LinkState(attack);
 
     upWalk->LinkState(downWalk);
+    upWalk->LinkState(upDash);
+    upWalk->LinkState(jump);
+    upWalk->LinkState(attack);
 
-    cave::FiniteStateMachine SSW(idle);
+    downWalk->LinkState(downDash);
+    downWalk->LinkState(jump);
+    downWalk->LinkState(attack);
 
-    SSW.addState(idle);
-    SSW.addState(leftWalk);
-    SSW.addState(rightWalk);
-    SSW.addState(upWalk);
-    SSW.addState(downWalk);
-    SSW.addState(sleep);
+    jump->LinkState(attack);
+    jump->LinkState(idle);
 
-    char trig[11] = { 'a', 's', 'w', 's', 'd', 'w', 'a', 'd', 'x', '0', 'x' };
-    std::string output1;
-    int output2;
+    leftDash->LinkStateOneway(idle);
+    rightDash->LinkStateOneway(idle);
+    upDash->LinkStateOneway(idle);
+    downDash->LinkStateOneway(idle);
+    doubleJump->LinkStateOneway(idle);
+    jump->LinkStateOneway(doubleJump);
 
-    for (int i = 0; i < 11; ++i) 
+    char keyInput[24] = { 'a', 's', 'w', 's', 'd', 'w', 'a', 'd', 'x', '0', 'c', '0', 'j', 'k', '0', 'K', 'k', 'K', '0', 'A', 'a', 'A', 'c' };
+    std::string currentState;
+    int animationNumber;
+
+    for (int i = 0; i < 24; ++i) 
     {
-        SSW.updateCurrentState(trig[i]);
-        output1 = SSW.returnCurrentState()->getStateName();
-        output2 = SSW.returnCurrentState()->showAnimation();
+        AI.UpdateCurrentState(keyInput[i]);
+        currentState = AI.ReturnCurrentState()->GetStateName();
+        animationNumber = AI.ReturnCurrentState()->ShowAnimation();
     }
-
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);

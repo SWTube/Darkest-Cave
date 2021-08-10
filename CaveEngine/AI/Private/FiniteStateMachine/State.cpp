@@ -79,6 +79,10 @@ namespace cave
 		mIsCurrent = false;
 		newCurrentState->SetBool(true);
 	}
+	void State::LinkStateOneway(State* state)
+	{
+		mNeighborState.push_back(state);
+	}
 	std::string State::GetStateName() 
 	{
 		return mStateName;

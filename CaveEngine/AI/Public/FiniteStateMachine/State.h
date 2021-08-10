@@ -18,6 +18,7 @@ namespace cave
 		State(std::string stateName, char trigger, int Animation);
 		virtual ~State();
 		void LinkState(State* state);
+		void LinkStateOneway(State* state);
 		void SetAnimation(int animation);
 		void SetCurrentState();
 		void CancelCurrentState();
