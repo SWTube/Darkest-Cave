@@ -18,6 +18,7 @@
 #include "CoreGlobals.h"
 #include "CoreMinimal.h"
 
+#include "Containers/Array.h"
 #include "Containers/TStack.h"
 #include "Engine.h"
 #include "Object/TagPool.h"
@@ -41,6 +42,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 #ifdef __WIN32__
 import Hash;
 import Log;
+import Math;
 import String;
 import Trie;
 
@@ -109,15 +111,18 @@ int main(int32_t argc, char** argv)
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
 	// cave::TagPoolTest::Test();
-	cave::Hashable<>::Initialize();
-	cave::String hello = "hello";
 
 	cave::TrieTest::Main();
 	cave::QuadrantTest::Main();
 
-	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	cave::TArray<uint32_t> cache;
+
+	for (uint32_t i = 1; i < 20; ++i)
+	{
+		clock = tic();
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Fibonacci number of %u: %u", i, cave::Math::GetFibonacciNumber(i, cache));
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	}
 
 	// _CrtDumpMemoryLeaks();
 

@@ -47,6 +47,8 @@ namespace cave
 		static IMove msBestMove;
 	};
 
+	IMove Minimax::msBestMove = IMove();
+
 	int32_t Minimax::GetMax(uint32_t maxDepth, uint32_t depth, IBoard& currentBoard, const IPlayer& player, const IPlayer& opponent)
 	{
 		if (depth == 0)
