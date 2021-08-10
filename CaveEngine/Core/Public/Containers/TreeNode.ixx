@@ -5,13 +5,13 @@
 
 module;
 
-#include "Containers/Array.h"
 #include "Containers/TStack.h"
 #include "Debug/Log.h"
 
 export module TreeNode;
 
 import std.core;
+import Array;
 
 namespace cave
 {
@@ -25,10 +25,10 @@ namespace cave
 		constexpr static void SearchBreadthFirst(const TreeNode& node);
 
 		constexpr const T& GetData() const;
-		constexpr TArray<T>& GetChildren();
+		constexpr Array<T>& GetChildren();
 	private:
 		const T mData;
-		TArray<T> mChildren;
+		Array<T> mChildren;
 	};
 
 	template <typename T>
@@ -83,7 +83,7 @@ namespace cave
 	}
 
 	template <typename T>
-	constexpr TArray<T>& TreeNode<T>::GetChildren()
+	constexpr Array<T>& TreeNode<T>::GetChildren()
 	{
 		return mChildren;
 	}
