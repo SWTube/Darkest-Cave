@@ -9,7 +9,6 @@
 #include "Object/Tag.h"
 #endif //CAVE_BUILD_DEBUG
 
-#include "Engine.h"
 #include "Object/GameObject.h"
 #include "Object/TagPool.h"
 #include "Object/Script.h"
