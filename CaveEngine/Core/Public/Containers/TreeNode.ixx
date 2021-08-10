@@ -26,6 +26,7 @@ namespace cave
 
 		constexpr const T& GetData() const;
 		constexpr TArray<T>& GetChildren();
+		constexpr const TArray<T>& GetChildren() const;
 	private:
 		const T mData;
 		TArray<T> mChildren;
