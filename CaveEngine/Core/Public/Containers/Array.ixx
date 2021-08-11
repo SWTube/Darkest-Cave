@@ -102,7 +102,8 @@ export namespace cave
         template<class IteratorType>
         requires IteratorInputAble<IteratorType, ElementType>
         constexpr Array(IteratorType first, IteratorType last, MemoryPool& pool = gCoreMemoryPool);
-        constexpr Array(const Array& other, MemoryPool& pool = gCoreMemoryPool);
+        constexpr Array(const Array& other);
+        constexpr Array(const Array& other, MemoryPool& pool);
         constexpr Array(Array&& other, MemoryPool& pool = gCoreMemoryPool) noexcept;
         constexpr Array(const std::initializer_list<ElementType>& initialzerList, MemoryPool& pool = gCoreMemoryPool);
         ~Array();
@@ -508,6 +509,12 @@ export namespace cave
         {
             mData[i] = *iterator;
         }
+    }
+
+    template<class ElementType>
+    constexpr Array<ElementType>::Array(const Array& other)
+        : Array(other, gCoreMemoryPool)
+    {
     }
 
     template<class ElementType>

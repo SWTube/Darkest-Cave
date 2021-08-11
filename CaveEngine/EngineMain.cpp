@@ -15,10 +15,10 @@
 
 #include "tictoc.h"
 
-#include "CoreGlobals.h"
 #include "CoreMinimal.h"
 
 #include "Containers/TStack.h"
+#include "CoreGlobals.h"
 #include "Engine.h"
 #include "Object/TagPool.h"
 #include "Shapes/Quadrant.h"
@@ -41,6 +41,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 #ifdef __WIN32__
 import Array;
 import Hash;
+import Knapsack;
 import Log;
 import Math;
 import String;
@@ -114,6 +115,9 @@ int main(int32_t argc, char** argv)
 
 	cave::TrieTest::Main();
 	cave::QuadrantTest::Main();
+	clock = tic();
+	cave::KnapsackTest::Main();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	cave::Array<uint32_t> cache0;
 	cache0.SetSize(21u, 0u);

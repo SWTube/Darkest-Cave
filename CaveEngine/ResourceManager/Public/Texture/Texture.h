@@ -9,9 +9,11 @@
 
 #include "ResourceManagerApiPch.h"
 
-#include "CoreGlobals.h"
 #include "CoreTypes.h"
+
 #include "Containers/Vertex.h"
+#include "CoreGlobals.h"
+#include "Memory/MemoryPool.h"
 
 namespace cave
 {

@@ -6,9 +6,8 @@
 
 #include "CoreTypes.h"
 
-#include "CoreGlobals.h"
-
 #include "Assertion/Assert.h"
+#include "CoreGlobals.h"
 #include "Debug/Log.h"
 #include "Memory/MemoryPool.h"
 

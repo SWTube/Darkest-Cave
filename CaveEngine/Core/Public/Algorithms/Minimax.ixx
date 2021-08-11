@@ -6,10 +6,10 @@
 module;
 
 #include "CoreTypes.h"
-#include "Containers/Array.h"
 
 export module Minimax;
 
+import Array;
 import TreeNode;
 
 namespace cave
@@ -31,7 +31,7 @@ namespace cave
 	{
 	public:
 		virtual ~IPlayer() = default;
-		virtual TArray<IMove>& GetPossibleMoves(const IBoard& board) const = 0;
+		virtual Array<IMove>& GetPossibleMoves(const IBoard& board) const = 0;
 		virtual bool HasWon(const IBoard& board) const = 0;
 	};
 
@@ -58,7 +58,7 @@ namespace cave
 
 		int32_t max = -INT32_MAX;
 
-		TArray<IMove> moves = player.GetPossibleMoves(currentBoard);
+		Array<IMove> moves = player.GetPossibleMoves(currentBoard);
 
 		for (size_t i = 0; i < moves.GetSize(); ++i)
 		{
@@ -104,7 +104,7 @@ namespace cave
 
 		int32_t min = INT32_MAX;
 
-		TArray<IMove> moves = player.GetPossibleMoves(currentBoard);
+		Array<IMove> moves = player.GetPossibleMoves(currentBoard);
 
 		for (size_t i = 0; i < moves.GetSize(); ++i)
 		{
@@ -148,7 +148,7 @@ namespace cave
 			return currentBoard.Evaluate();
 		}
 
-		TArray<IMove> moves = player.GetPossibleMoves(currentBoard);
+		Array<IMove> moves = player.GetPossibleMoves(currentBoard);
 
 		for (size_t i = 0; i < moves.GetSize(); ++i)
 		{
@@ -203,7 +203,7 @@ namespace cave
 			return -currentBoard.Evaluate();
 		}
 
-		TArray<IMove> moves = player.GetPossibleMoves(currentBoard);
+		Array<IMove> moves = player.GetPossibleMoves(currentBoard);
 
 		for (size_t i = 0; i < moves.GetSize(); ++i)
 		{

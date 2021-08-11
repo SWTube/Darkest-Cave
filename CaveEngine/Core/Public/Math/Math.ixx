@@ -20,6 +20,7 @@ namespace cave
 	public:
 		static uint32_t GetFibonacciNumber(uint32_t number, Array<uint32_t>& cache);
 		static uint32_t GetFibonacciNumberRecursive(uint32_t number, Array<uint32_t>& cache);
+		static constexpr size_t GetMaxSizeType(size_t a, size_t b);
 	};
 
 	uint32_t Math::GetFibonacciNumber(uint32_t number, Array<uint32_t>& cache)
@@ -60,5 +61,10 @@ namespace cave
 		cache[number] = ret;
 
 		return ret;
+	}
+
+	constexpr size_t Math::GetMaxSizeType(size_t a, size_t b)
+	{
+		return (a > b) ? a : b;
 	}
 }
