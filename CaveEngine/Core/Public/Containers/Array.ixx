@@ -96,7 +96,8 @@ export namespace cave
         using ConstIterator = ArrayConstIterator<ElementType>;
         using Iterator = ArrayIterator<ElementType>;
 
-        constexpr explicit Array(MemoryPool& pool = gCoreMemoryPool) noexcept;
+        constexpr explicit Array() noexcept;
+        constexpr explicit Array(MemoryPool& pool) noexcept;
         constexpr Array(size_t count, const ElementType& value, MemoryPool& pool = gCoreMemoryPool);
         constexpr Array(size_t count, MemoryPool& pool = gCoreMemoryPool);
         template<class IteratorType>
@@ -104,7 +105,8 @@ export namespace cave
         constexpr Array(IteratorType first, IteratorType last, MemoryPool& pool = gCoreMemoryPool);
         constexpr Array(const Array& other);
         constexpr Array(const Array& other, MemoryPool& pool);
-        constexpr Array(Array&& other, MemoryPool& pool = gCoreMemoryPool) noexcept;
+        constexpr Array(Array&& other) noexcept;
+        constexpr Array(Array&& other, MemoryPool& pool) noexcept;
         constexpr Array(const std::initializer_list<ElementType>& initialzerList, MemoryPool& pool = gCoreMemoryPool);
         ~Array();
 
@@ -461,12 +463,22 @@ export namespace cave
     */
 
     template<class ElementType>
+    constexpr Array<ElementType>::Array() noexcept
+        : mPool(gCoreMemoryPool)
+        , mSize(0)
+        , mCapacity(DEFAULT_CAPACITY)
+        , mData(reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType)* mCapacity)))
+    {
+    }
+
+    template<class ElementType>
     constexpr Array<ElementType>::Array(MemoryPool& pool) noexcept
         : mPool(pool)
         , mSize(0)
         , mCapacity(DEFAULT_CAPACITY)
         , mData(reinterpret_cast<ElementType*>(mPool.Allocate(sizeof(ElementType)* mCapacity)))
-    { }
+    {
+    }
 
     template<class ElementType>
     constexpr Array<ElementType>::Array(size_t count, const ElementType& value, MemoryPool& pool)
@@ -528,6 +540,12 @@ export namespace cave
         {
             Memory::Memcpy(mData, other.mData, sizeof(ElementType) * mSize);
         }
+    }
+
+    template<class ElementType>
+    constexpr Array<ElementType>::Array(Array&& other) noexcept
+        : Array(std::move(other), other.mPool)
+    {
     }
 
     template<class ElementType>

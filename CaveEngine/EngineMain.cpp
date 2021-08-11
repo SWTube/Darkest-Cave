@@ -44,6 +44,7 @@ import Hash;
 import Knapsack;
 import Log;
 import Math;
+import Scheduler;
 import String;
 import Trie;
 
@@ -145,6 +146,10 @@ int main(int32_t argc, char** argv)
 
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Total Elapsed time %f seconds.", averageElapsedTime0 / 19.0);
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Total Elapsed time %f seconds.", averageElapsedTime1 / 19.0);
+
+	clock = tic();
+	cave::SchedulerTest::Main();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	// _CrtDumpMemoryLeaks();
 

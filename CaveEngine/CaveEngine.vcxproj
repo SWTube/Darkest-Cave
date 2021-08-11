@@ -317,6 +317,7 @@
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
     <ClCompile Include="Core\Public\Algorithms\Knapsack.ixx" />
     <ClCompile Include="Core\Public\Algorithms\Minimax.ixx" />
+    <ClCompile Include="Core\Public\Algorithms\Scheduler.ixx" />
     <ClCompile Include="Core\Public\Containers\GraphNode.ixx" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Array.ixx" />
