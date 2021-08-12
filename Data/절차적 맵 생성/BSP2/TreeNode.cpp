@@ -13,20 +13,23 @@ void TreeNode::setRoot(int** _map, int _height, int _width) {
 	this->info.points_x = 0;
 	this->info.points_y= 0;
 
-	// ÀÚ½Ä, ºÎ¸ğ ³ëµå ÃÊ±âÈ­
+	// ìì‹, ë¶€ëª¨ ë…¸ë“œ ì´ˆê¸°í™”
 	this->leftNode = NULL;
 	this->rightNode = NULL;
 	this->parentNode = NULL;
 
-	// ¹æ °³¼ö ÃÊ±âÈ­
+	// ë°© ê°œìˆ˜ ì´ˆê¸°í™”
 	numOfRoom = 1;
+
+	// ë°© ë²ˆí˜¸ í˜¸ê¸°í™”
+	this->info.num = 1;
 }
 
 void TreeNode::devide_col(int** _map) {
-	//±Õµî ºĞÆ÷ Á¤ÀÇ ¸Ê Å©±âÀÇ 30% ~ 70%
+	//ê· ë“± ë¶„í¬ ì •ì˜ ë§µ í¬ê¸°ì˜ 40% ~ 60%
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(this->info.width * 3 / 10, this->info.width * 7 / 10);
+	std::uniform_int_distribution<int> dis(this->info.width * 4 / 10, this->info.width * 6 / 10);
 
 	int _height = this->info.height;
 	int _width;
@@ -34,7 +37,7 @@ void TreeNode::devide_col(int** _map) {
 		_width = dis(gen);
 	} while (_width < minWidth || (this->info.width - _width + 1) < minWidth);
 
-	// ¿ŞÂÊ ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+	// ì™¼ìª½ ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
 	this->leftNode = new TreeNode;
 	this->leftNode->info.height = _height;
 	this->leftNode->info.width = _width;
@@ -42,8 +45,12 @@ void TreeNode::devide_col(int** _map) {
 	this->leftNode->info.points_y = this->info.points_y;
 	this->leftNode->parentNode = this;
 	this->leftNode->info.parent_devide_type = 0;
+	this->leftNode->info.num = this->info.num * 2;
 
-	// ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+	this->leftNode->leftNode = NULL;
+	this->leftNode->rightNode = NULL;
+
+	// ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
 	this->rightNode = new TreeNode;
 	this->rightNode->info.height = this->info.height;
 	this->rightNode->info.width = this->info.width - _width + 1;
@@ -51,21 +58,25 @@ void TreeNode::devide_col(int** _map) {
 	this->rightNode->info.points_y = this->info.points_y;
 	this->rightNode->parentNode = this;
 	this->rightNode->info.parent_devide_type = 0;
+	this->rightNode->info.num = this->info.num * 2 + 1;
 
-	// °æ°è¼± ±ß±â
+	this->rightNode->leftNode = NULL;
+	this->rightNode->rightNode = NULL;
+
+	// ê²½ê³„ì„  ê¸‹ê¸°
 	for (int i = this->info.points_y + 1; i < this->info.points_y + this->info.height - 1; i++) {
 		_map[i][this->info.points_x + _width - 1] = 1;
 	}
 
-	// ¹æ°³¼ö Ãß°¡
+	// ë°©ê°œìˆ˜ ì¶”ê°€
 	numOfRoom++;
 }
 
 void TreeNode::devide_row(int** _map) {
-	//±Õµî ºĞÆ÷ Á¤ÀÇ ¸Ê Å©±âÀÇ 30% ~ 70%
+	//ê· ë“± ë¶„í¬ ì •ì˜ ë§µ í¬ê¸°ì˜ 40% ~ 60%
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(this->info.height * 3 / 10, this->info.height * 7 / 10);
+	std::uniform_int_distribution<int> dis(this->info.height * 4 / 10, this->info.height * 6 / 10);
 	
 	int _height;
 	do {
@@ -73,7 +84,7 @@ void TreeNode::devide_row(int** _map) {
 	} while (_height < minHeight || (this->info.height - _height) < minHeight);
 	int _width = this->info.width;
 
-	// ¿ŞÂÊ ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+	// ì™¼ìª½ ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
 	this->leftNode = new TreeNode;
 	this->leftNode->info.height = _height + 1;
 	this->leftNode->info.width = _width;
@@ -81,8 +92,12 @@ void TreeNode::devide_row(int** _map) {
 	this->leftNode->info.points_y = this->info.points_y;
 	this->leftNode->parentNode = this;
 	this->leftNode->info.parent_devide_type = 1;
+	this->leftNode->info.num = this->info.num * 2;
 
-	// ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+	this->leftNode->leftNode = NULL;
+	this->leftNode->rightNode = NULL;
+
+	// ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
 	this->rightNode = new TreeNode;
 	this->rightNode->info.height = this->info.height - _height;
 	this->rightNode->info.width = this->info.width;
@@ -90,13 +105,17 @@ void TreeNode::devide_row(int** _map) {
 	this->rightNode->info.points_y = this->info.points_y + _height;
 	this->rightNode->parentNode = this;
 	this->rightNode->info.parent_devide_type = 1;
+	this->rightNode->info.num = this->info.num * 2 + 1;
 
-	// °æ°è¼± ±ß±â
+	this->rightNode->leftNode = NULL;
+	this->rightNode->rightNode = NULL;
+
+	// ê²½ê³„ì„  ê¸‹ê¸°
 	for (int i = this->info.points_x; i < this->info.points_x + this->info.width; i++) {
 		_map[this->info.points_y + _height][i] = 1;
 	}
 
-	// ¹æ°³¼ö Ãß°¡
+	// ë°©ê°œìˆ˜ ì¶”ê°€
 	numOfRoom++;
 }
 
@@ -106,6 +125,40 @@ TreeNode* TreeNode::goRoot() {
 		location = location->parentNode;
 	}
 
+	return location;
+}
+
+TreeNode* TreeNode::goRoom(int _num) {
+	int __num = _num;
+	int check = 0;
+
+	while (__num != 1) {
+		__num /= 2;
+		check++;
+	}
+
+	int* loc = new int[check];
+
+	for (int i = 0; _num != 1; i++) {
+		if (_num % 2 == 0) {
+			loc[i] = 0;
+		}
+		else {
+			loc[i] = 1;
+		}
+		_num /= 2;
+	}
+
+	TreeNode* location = this->goRoot();
+
+	for (int i = check - 1; i >= 0; i--) {
+		if (loc[i] == 0) {
+			location = location->leftNode;
+		}
+		else {
+			location = location->rightNode;
+		}
+	}
 	return location;
 }
 
@@ -133,7 +186,7 @@ int TreeNode::getY() {
 }
 
 void TreeNode::allocateRoom(int** _map) {
-	// º®¿¡¼­ 1,2,3Ä­ ¶³¾îÁü
+	// ë²½ì—ì„œ 1,2,3ì¹¸ ë–¨ì–´ì§
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> dis(2,3);
@@ -154,12 +207,14 @@ void TreeNode::allocateRoom(int** _map) {
 			_map[i][j] = 2;
 		}
 	}
+
+	//_map[start_h][start_w] = this->info.num;
 }
 
 void TreeNode::connectRoom(int** _map, TreeNode* room1, TreeNode* room2) {
 	if (room1->parentNode == room2->parentNode) {
 		if (room1->info.parent_devide_type == 0) {
-			// °ãÄ¡´Â ºÎºĞ Ã£±â(YÁÂÇ¥)
+			// ê²¹ì¹˜ëŠ” ë¶€ë¶„ ì°¾ê¸°(Yì¢Œí‘œ)
 			int overlap_y_start;
 			int overlap_y_end;
 			for (int i = room2->info.room_points_y; i < room2->info.room_points_y + room2->info.room_height; i++) {
@@ -183,7 +238,7 @@ void TreeNode::connectRoom(int** _map, TreeNode* room1, TreeNode* room2) {
 			}
 		}
 		else {
-			// °ãÄ¡´Â ºÎºĞ Ã£±â(XÁÂÇ¥)
+			// ê²¹ì¹˜ëŠ” ë¶€ë¶„ ì°¾ê¸°(Xì¢Œí‘œ)
 			int overlap_x_start;
 			int overlap_x_end;
 			for (int i = room2->info.room_points_x; i < room2->info.room_points_x + room2->info.room_width; i++) {
@@ -208,12 +263,12 @@ void TreeNode::connectRoom(int** _map, TreeNode* room1, TreeNode* room2) {
 		}
 	}
 	else {
-		// ºÎ¸ğµéµµ ÀÌ¾î¾ß ÇÔ
+		// ë¶€ëª¨ë“¤ë„ ì´ì–´ì•¼ í•¨
 	}
 }
 
 void TreeNode::connectRoom_Y(int** _map, TreeNode* room1, TreeNode* room2) {
-	// °ãÄ¡´Â ºÎºĞ Ã£±â(XÁÂÇ¥)
+	// ê²¹ì¹˜ëŠ” ë¶€ë¶„ ì°¾ê¸°(Xì¢Œí‘œ)
 	int overlap_x_start;
 	int overlap_x_end;
 	for (int i = room2->info.room_points_x; i < room2->info.room_points_x + room2->info.room_width; i++) {
@@ -238,7 +293,7 @@ void TreeNode::connectRoom_Y(int** _map, TreeNode* room1, TreeNode* room2) {
 }
 
 void TreeNode::connectRoom_X(int** _map, TreeNode* room1, TreeNode* room2) {
-	// °ãÄ¡´Â ºÎºĞ Ã£±â(YÁÂÇ¥)
+	// ê²¹ì¹˜ëŠ” ë¶€ë¶„ ì°¾ê¸°(Yì¢Œí‘œ)
 	int overlap_y_start;
 	int overlap_y_end;
 	for (int i = room2->info.room_points_y; i < room2->info.room_points_y + room2->info.room_height; i++) {
@@ -263,50 +318,59 @@ void TreeNode::connectRoom_X(int** _map, TreeNode* room1, TreeNode* room2) {
 }
 
 void TreeNode::devide(int** _map, int _numOfRoom) {
-	if (this->info.parent_devide_type == 0) {
-		this->devide_row(_map);
-	}
-	else {
-		this->devide_col(_map);
+	int i = 1;
+	while (numOfRoom < _numOfRoom) {
+		TreeNode* location = this->goRoom(i);
+		if (location->info.parent_devide_type == 0) {
+			location->devide_row(_map);
+		}
+		else {
+			location->devide_col(_map);
+		}
+		i++;
 	}
 
-	if (numOfRoom < _numOfRoom / 2) {
-		this->leftNode->devide(_map, _numOfRoom);
-	}
-	else {
-		if (numOfRoom < _numOfRoom) {
-			this->goRoot()->rightNode->devide(_map, _numOfRoom);
+	for (int i = numOfRoom; i < 2 * numOfRoom; i++) {
+		TreeNode* location = this->goRoom(i);
+		if (location->leftNode == NULL || location->rightNode == NULL) {
+			location->allocateRoom(_map);
 		}
+	}
+
+	for (int i = numOfRoom; i < 2 * numOfRoom - 1; i++) {
+		TreeNode* location1 = this->goRoom(i);
+		TreeNode* location2 = this->goRoom(i + 1);
+		this->connectRoom(_map, location1, location2);
 	}
 }
 
-// °¢ ¹æÀÇ Á¤º¸ ÇÁ¸°Æ®
+// ê° ë°©ì˜ ì •ë³´ í”„ë¦°íŠ¸
 void TreeNode::printInfo() {
-	std::cout << "¹æ ³ôÀÌ: " << this->info.height << std::endl;
-	std::cout << "¹æ ±æÀÌ: " << this->info.width << std::endl;
-	std::cout << "¹æ xÁÂÇ¥: " << this->info.points_x << std::endl;
-	std::cout << "¹æ yÁÂÇ¥: " << this->info.points_y << std::endl;
+	std::cout << "ë°© ë†’ì´: " << this->info.height << std::endl;
+	std::cout << "ë°© ê¸¸ì´: " << this->info.width << std::endl;
+	std::cout << "ë°© xì¢Œí‘œ: " << this->info.points_x << std::endl;
+	std::cout << "ë°© yì¢Œí‘œ: " << this->info.points_y << std::endl;
 	/*
 	if (this->leftNode != NULL) {
-		std::cout << "¿ŞÂÊ ÀÚ½Ä ¹æ ³ôÀÌ: " << this->leftNode->info.height << std::endl;
-		std::cout << "¿ŞÂÊ ÀÚ½Ä ¹æ ±æÀÌ: " << this->leftNode->info.width << std::endl;
-		std::cout << "¿ŞÂÊ ÀÚ½Ä ¹æ xÁÂÇ¥: " << this->leftNode->info.points_x << std::endl;
-		std::cout << "¿ŞÂÊ ÀÚ½Ä ¹æ yÁÂÇ¥: " << this->leftNode->info.points_y << std::endl;
+		std::cout << "ì™¼ìª½ ìì‹ ë°© ë†’ì´: " << this->leftNode->info.height << std::endl;
+		std::cout << "ì™¼ìª½ ìì‹ ë°© ê¸¸ì´: " << this->leftNode->info.width << std::endl;
+		std::cout << "ì™¼ìª½ ìì‹ ë°© xì¢Œí‘œ: " << this->leftNode->info.points_x << std::endl;
+		std::cout << "ì™¼ìª½ ìì‹ ë°© yì¢Œí‘œ: " << this->leftNode->info.points_y << std::endl;
 	}
 	
 	if (this->rightNode != NULL) {
-		std::cout << "¿À¸¥ÂÊ ÀÚ½Ä ¹æ ³ôÀÌ: " << this->rightNode->info.height << std::endl;
-		std::cout << "¿À¸¥ÂÊ ÀÚ½Ä ¹æ ±æÀÌ: " << this->rightNode->info.width << std::endl;
-		std::cout << "¿À¸¥ÂÊ ÀÚ½Ä ¹æ xÁÂÇ¥: " << this->rightNode->info.points_x << std::endl;
-		std::cout << "¿À¸¥ÂÊ ÀÚ½Ä ¹æ yÁÂÇ¥: " << this->rightNode->info.points_y << std::endl;
+		std::cout << "ì˜¤ë¥¸ìª½ ìì‹ ë°© ë†’ì´: " << this->rightNode->info.height << std::endl;
+		std::cout << "ì˜¤ë¥¸ìª½ ìì‹ ë°© ê¸¸ì´: " << this->rightNode->info.width << std::endl;
+		std::cout << "ì˜¤ë¥¸ìª½ ìì‹ ë°© xì¢Œí‘œ: " << this->rightNode->info.points_x << std::endl;
+		std::cout << "ì˜¤ë¥¸ìª½ ìì‹ ë°© yì¢Œí‘œ: " << this->rightNode->info.points_y << std::endl;
 	}
 	*/
 }
 
-// °¢ ÇÒ´çµÈ ¹æÀÇ Á¤º¸ ÇÁ¸°Æ®
+// ê° í• ë‹¹ëœ ë°©ì˜ ì •ë³´ í”„ë¦°íŠ¸
 void TreeNode::printRoomInfo() {
-	std::cout << "ÇÒ´çµÈ ¹æ ³ôÀÌ: " << this->info.room_height << std::endl;
-	std::cout << "ÇÒ´çµÈ ¹æ ±æÀÌ: " << this->info.room_width << std::endl;
-	std::cout << "ÇÒ´çµÈ ¹æ xÁÂÇ¥: " << this->info.room_points_x << std::endl;
-	std::cout << "ÇÒ´çµÈ ¹æ yÁÂÇ¥: " << this->info.room_points_y << std::endl;
+	std::cout << "í• ë‹¹ëœ ë°© ë†’ì´: " << this->info.room_height << std::endl;
+	std::cout << "í• ë‹¹ëœ ë°© ê¸¸ì´: " << this->info.room_width << std::endl;
+	std::cout << "í• ë‹¹ëœ ë°© xì¢Œí‘œ: " << this->info.room_points_x << std::endl;
+	std::cout << "í• ë‹¹ëœ ë°© yì¢Œí‘œ: " << this->info.room_points_y << std::endl;
 }
