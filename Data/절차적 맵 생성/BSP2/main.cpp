@@ -3,11 +3,11 @@
 #include "TreeNode.h"
 
 int main() {
-	// ¿¸√º ∏  ≈©±‚
-	int maxHeight = 40;
-	int maxWidth = 150;
+	// Ï†ÑÏ≤¥ Îßµ ÌÅ¨Í∏∞
+	int maxHeight = 70;
+	int maxWidth = 165;
 
-	// √ ±‚ ∏  º≥¡§
+	// Ï¥àÍ∏∞ Îßµ ÏÑ§Ï†ï
 	int** map = new int*[maxHeight];
 	for (int i = 0; i < maxHeight; i++) {
 		map[i] = new int[maxWidth];
@@ -22,14 +22,14 @@ int main() {
 		map[maxHeight - 1][j] = 1;
 	}
 
-	// BSP ∆Æ∏Æ √ ±‚»≠
+	// BSP Ìä∏Î¶¨ Ï¥àÍ∏∞Ìôî
 	TreeNode root;
 	root.setRoot(map, maxHeight, maxWidth);
 
-	//root.devide(map, 9);
+	root.devide(map, 64);
 
-	
-	// ∏  ¡¶¿€
+	/*
+	// Îßµ Ï†úÏûë
 	root.devide_col(map);
 	root.goLeftNode()->devide_row(map);
 	root.goRightNode()->devide_row(map);
@@ -59,6 +59,7 @@ int main() {
 	root.connectRoom_Y(map, root.goRightNode()->goLeftNode()->goLeftNode(), root.goRightNode()->goRightNode()->goLeftNode());
 	root.connectRoom_X(map, root.goRightNode()->goRightNode()->goLeftNode(), root.goRightNode()->goRightNode()->goRightNode()->goLeftNode());
 	root.connectRoom_X(map, root.goLeftNode()->goLeftNode()->goRightNode(), root.goRightNode()->goLeftNode()->goLeftNode());
+	*/
 
 	/*
 	root.goLeftNode()->goLeftNode()->goLeftNode()->printInfo();
@@ -70,10 +71,11 @@ int main() {
 	root.goRightNode()->goRightNode()->goLeftNode()->printInfo();
 	root.goRightNode()->goRightNode()->goRightNode()->printInfo();
 	*/
-	// ∏  «¡∏∞∆Æ
+	// Îßµ ÌîÑÎ¶∞Ìä∏
+	
 	for (int i = 0; i < maxHeight; i++) {
 		for (int j = 0; j < maxWidth; j++) {
-			if (map[i][j] == 2 || map[i][j] == 3) {
+			if (map[i][j] == 1 || map[i][j] == 2 || map[i][j] == 3) {
 				std::cout << map[i][j];
 			}
 			else {
@@ -83,8 +85,7 @@ int main() {
 		std::cout << std::endl;
 	}
 
-
-	// ∏  ∏≈∏∏Æ ªË¡¶
+	// Îßµ Îß§Î™®Î¶¨ ÏÇ≠Ï†ú
 	for (int i = 0; i < maxHeight; i++) {
 		delete map[i];
 	}
