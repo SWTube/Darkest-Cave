@@ -88,7 +88,7 @@
     <ClCompile>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;PROJECT_DIR=R"($(SolutionDir))";CAPACITY_INCREASE_MODE_DOUBLE=0;CAPACITY_INCREASE_MODE_SUFFICIENT=1;CAPACITY_INCREASE_MODE=CAPACITY_INCREASE_MODE_DOUBLE;__WIN32__;CAVE_BUILD_DEBUG=1;CAVE_BUILD_DEVELOPMENT=0;CAVE_BUILD_TEST=0;CAVE_BUILD_RELEASE=0;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;PROJECT_DIR=R"($(SolutionDir))";CAPACITY_INCREASE_MODE_DOUBLE=0;CAPACITY_INCREASE_MODE_SUFFICIENT=1;CAPACITY_INCREASE_MODE=CAPACITY_INCREASE_MODE_DOUBLE;__WIN32__;CAVE_BUILD_DEBUG=1;CAVE_BUILD_DEVELOPMENT=0;CAVE_BUILD_TEST=0;CAVE_BUILD_RELEASE=0;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -103,10 +103,11 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;OpenAL32.lib;sndfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\dark\CaveEngine\Audio\Public\lib\Win32;D:\dark\CaveEngine\Audio\Public\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
@@ -144,7 +145,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;sndfile.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
@@ -239,6 +240,51 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Audio\Public\AL\al.h" />
+    <ClInclude Include="Audio\Public\AL\alc.h" />
+    <ClInclude Include="Audio\Public\AL\alext.h" />
+    <ClInclude Include="Audio\Public\AL\efx-creative.h" />
+    <ClInclude Include="Audio\Public\AL\efx-presets.h" />
+    <ClInclude Include="Audio\Public\AL\efx.h" />
+    <ClInclude Include="Audio\Public\efx\al.h" />
+    <ClInclude Include="Audio\Public\efx\alc.h" />
+    <ClInclude Include="Audio\Public\efx\aldlist.h" />
+    <ClInclude Include="Audio\Public\efx\CaveSound.h" />
+    <ClInclude Include="Audio\Public\efx\CWaves.h" />
+    <ClInclude Include="Audio\Public\efx\efx-creative.h" />
+    <ClInclude Include="Audio\Public\efx\EFX-Util.h" />
+    <ClInclude Include="Audio\Public\efx\efx.h" />
+    <ClInclude Include="Audio\Public\efx\Framework.h" />
+    <ClInclude Include="Audio\Public\efx\LoadOAL.h" />
+    <ClInclude Include="Audio\Public\efx\sndfile.h" />
+    <ClInclude Include="Audio\Public\efx\sndfile.hh" />
+    <ClInclude Include="Audio\Public\efx\xram.h" />
+    <ClInclude Include="Audio\Public\FLAC++\all.h" />
+    <ClInclude Include="Audio\Public\FLAC++\decoder.h" />
+    <ClInclude Include="Audio\Public\FLAC++\encoder.h" />
+    <ClInclude Include="Audio\Public\FLAC++\export.h" />
+    <ClInclude Include="Audio\Public\FLAC++\metadata.h" />
+    <ClInclude Include="Audio\Public\FLAC\all.h" />
+    <ClInclude Include="Audio\Public\FLAC\assert.h" />
+    <ClInclude Include="Audio\Public\FLAC\callback.h" />
+    <ClInclude Include="Audio\Public\FLAC\export.h" />
+    <ClInclude Include="Audio\Public\FLAC\format.h" />
+    <ClInclude Include="Audio\Public\FLAC\metadata.h" />
+    <ClInclude Include="Audio\Public\FLAC\ordinals.h" />
+    <ClInclude Include="Audio\Public\FLAC\stream_decoder.h" />
+    <ClInclude Include="Audio\Public\FLAC\stream_encoder.h" />
+    <ClInclude Include="Audio\Public\ogg\config_types.h" />
+    <ClInclude Include="Audio\Public\ogg\ogg.h" />
+    <ClInclude Include="Audio\Public\ogg\os_types.h" />
+    <ClInclude Include="Audio\Public\opus\opus.h" />
+    <ClInclude Include="Audio\Public\opus\opus_custom.h" />
+    <ClInclude Include="Audio\Public\opus\opus_defines.h" />
+    <ClInclude Include="Audio\Public\opus\opus_multistream.h" />
+    <ClInclude Include="Audio\Public\opus\opus_projection.h" />
+    <ClInclude Include="Audio\Public\opus\opus_types.h" />
+    <ClInclude Include="Audio\Public\vorbis\codec.h" />
+    <ClInclude Include="Audio\Public\vorbis\vorbisenc.h" />
+    <ClInclude Include="Audio\Public\vorbis\vorbisfile.h" />
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
     <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
@@ -305,6 +351,11 @@
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\Private\aldlist.cpp" />
+    <ClCompile Include="Audio\Private\CaveSound.cpp" />
+    <ClCompile Include="Audio\Private\CWaves.cpp" />
+    <ClCompile Include="Audio\Private\Framework.cpp" />
+    <ClCompile Include="Audio\Private\LoadOAL.cpp" />
     <ClCompile Include="Core\Private\Containers\Array.cpp" />
     <ClCompile Include="Core\Private\Containers\Hash.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />

@@ -178,6 +178,21 @@
     <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Audio\Private\aldlist.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\Private\CaveSound.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\Private\CWaves.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\Private\Framework.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\Private\LoadOAL.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -366,6 +381,141 @@
     <ClInclude Include="Core\Public\Shapes\Quadrant.h">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="Audio\Public\AL\al.h">
+      <Filter>Header Files\Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\AL\alc.h">
+      <Filter>Header Files\Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\AL\alext.h">
+      <Filter>Header Files\Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\AL\efx.h">
+      <Filter>Header Files\Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\AL\efx-creative.h">
+      <Filter>Header Files\Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\AL\efx-presets.h">
+      <Filter>Header Files\Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\all.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\assert.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\callback.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\export.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\format.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\metadata.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\ordinals.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\stream_decoder.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC\stream_encoder.h">
+      <Filter>Header Files\Audio\FLAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC++\all.h">
+      <Filter>Header Files\Audio\FLAC++</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC++\decoder.h">
+      <Filter>Header Files\Audio\FLAC++</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC++\encoder.h">
+      <Filter>Header Files\Audio\FLAC++</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC++\export.h">
+      <Filter>Header Files\Audio\FLAC++</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\FLAC++\metadata.h">
+      <Filter>Header Files\Audio\FLAC++</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\al.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\alc.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\aldlist.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\CaveSound.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\CWaves.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\efx.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\efx-creative.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\EFX-Util.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\Framework.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\LoadOAL.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\sndfile.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\sndfile.hh">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\efx\xram.h">
+      <Filter>Header Files\Audio\efx</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\vorbis\codec.h">
+      <Filter>Header Files\Audio\vorbis</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\vorbis\vorbisenc.h">
+      <Filter>Header Files\Audio\vorbis</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\vorbis\vorbisfile.h">
+      <Filter>Header Files\Audio\vorbis</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\opus\opus.h">
+      <Filter>Header Files\Audio\opus</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\opus\opus_custom.h">
+      <Filter>Header Files\Audio\opus</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\opus\opus_defines.h">
+      <Filter>Header Files\Audio\opus</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\opus\opus_multistream.h">
+      <Filter>Header Files\Audio\opus</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\opus\opus_projection.h">
+      <Filter>Header Files\Audio\opus</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\opus\opus_types.h">
+      <Filter>Header Files\Audio\opus</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\ogg\config_types.h">
+      <Filter>Header Files\Audio\ogg</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\ogg\ogg.h">
+      <Filter>Header Files\Audio\ogg</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Public\ogg\os_types.h">
+      <Filter>Header Files\Audio\ogg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -542,6 +692,33 @@
     </Filter>
     <Filter Include="Source Files\Core\Shapes">
       <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{3b1276a0-40c2-4102-a5bf-001969f30d57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio">
+      <UniqueIdentifier>{8fa969ab-fc5b-46f8-a2d7-9d0b8f091191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio\AL">
+      <UniqueIdentifier>{63643eea-5caf-42ca-8556-aa64964e3eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio\FLAC">
+      <UniqueIdentifier>{da18e050-cbce-448b-85fb-f8dac4c11ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio\FLAC++">
+      <UniqueIdentifier>{65d12fd4-31f9-4faf-91e3-98ca22279b12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio\ogg">
+      <UniqueIdentifier>{8579d823-58a0-4ebb-be18-411d3ca8c944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio\opus">
+      <UniqueIdentifier>{4da4bb5f-c61a-4e93-bc00-ab3cd89b3c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio\vorbis">
+      <UniqueIdentifier>{a29b8028-63d9-4053-ab35-ea9772016d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio\efx">
+      <UniqueIdentifier>{061c8be3-08bb-4e13-8f28-f966c15221d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

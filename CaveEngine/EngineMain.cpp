@@ -3,6 +3,7 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
+
 #include <chrono>
 #include <crtdbg.h>
 #include <cstdlib>
@@ -24,7 +25,7 @@
 #include "Shapes/Quadrant.h"
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
-
+#include "Audio/Public/efx/CaveSound.h"
 #if _DEBUG
 //#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 //#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
@@ -35,6 +36,7 @@ void MemoryTest1(cave::MemoryPool& pool);
 template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool);
 void RenderTest();
+void SoundTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
@@ -102,9 +104,11 @@ int main(int32_t argc, char** argv)
 		}
 	}
 #endif
-
+	
+	
 #ifdef CAVE_BUILD_DEBUG
-	TicTocTimer clock = tic();
+	SoundTest();
+	/*TicTocTimer clock = tic();
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
@@ -120,13 +124,24 @@ int main(int32_t argc, char** argv)
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	// _CrtDumpMemoryLeaks();
-
+	*/
 #endif
 
 	// Cleanup is handled in destructors.
     return 0;
 }
-
+void SoundTest()
+{
+	CaveSound cavesound;
+	cavesound.SoundInitialize();
+	cavesound.SoundExtension();
+	cavesound.SetListenerPos();
+	cavesound.AddSound("Footsteps.wav");
+	cavesound.SoundToSource("Footsteps.wav");
+	cavesound.SoundPlay();
+	std::cout << "play wav" << std::endl;
+	Sleep(5000);
+}
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool)
 {

@@ -4,7 +4,6 @@
  */
 
 #pragma once
-
 #if !defined(WIN32)
 	#include "CaveEngineConfig.h"
 #else
