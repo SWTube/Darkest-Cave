@@ -1,55 +1,154 @@
-﻿/*!
- * Copyright (c) 2021 SWTube. All rights reserved.
- * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
- */
+﻿module;
 
-#include "Debug/Log.h"
-#include "Shader/WindowsShader.h"
+#include <filesystem>
 
-#ifdef __WIN32__
+#include "GraphicsApiPch.h"
+
+#include "CoreGlobals.h"
+#include "CoreTypes.h"
+#include "Memory/MemoryPool.h"
+#include "Sprite/Sprite.h"
+
+export module Shader;
+
 namespace cave
 {
-	WindowsShader::WindowsShader(const std::filesystem::path& shaderFilePath, MemoryPool& pool)
-		: GenericShader(shaderFilePath, pool)
+	export class Shader final
 	{
+		struct MatrixBufferType
+		{
+			DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+			DirectX::XMMATRIX view = DirectX::XMMatrixIdentity();
+			DirectX::XMMATRIX projection = DirectX::XMMatrixIdentity();
+		};
+
+	public:
+		Shader() = delete;
+		Shader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool);
+		Shader(const std::filesystem::path& shaderFilePath, MemoryPool& pool);
+		Shader(const Shader&) = delete;
+		Shader(Shader&& other);
+		Shader& operator=(const Shader&) = delete;
+		Shader& operator=(Shader&& other);
+		virtual ~Shader();
+		constexpr MemoryPool* GetMemoryPool() const;
+
+		eResult Compile(ID3D11Device* device);
+		void Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture);
+
+		void Destroy();
+
+	private:
+		eResult compileShaderFromFile(const wchar_t* fileName, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut);
+		
+		MemoryPool* mPool = nullptr;
+		std::filesystem::path mShaderFilePath = PROJECT_DIR;
+		std::filesystem::path mVertexShaderFilePath = PROJECT_DIR;
+		std::filesystem::path mFragmentShaderFilePath = PROJECT_DIR;
+		
+		ID3D11Buffer* mBuffer = nullptr;
+		ID3D11VertexShader* mVertexShader = nullptr;
+		ID3D11PixelShader* mPixelShader = nullptr;
+		ID3D11InputLayout* mInputLayout = nullptr;
+		ID3D11SamplerState* mSamplerLinear = nullptr;
+
+	};
+
+	Shader::Shader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool)
+		: mPool(&pool)
+	{
+		mVertexShaderFilePath /= "CaveEngine\\Graphics\\Shader";
+		mFragmentShaderFilePath /= "CaveEngine\\Graphics\\Shader";
+		mVertexShaderFilePath /= vertexShaderFilePath;
+		mFragmentShaderFilePath /= fragmentShaderFilePath;
 	}
 
-	WindowsShader::WindowsShader(const std::filesystem::path& vertexShaderFilePath, const std::filesystem::path& fragmentShaderFilePath, MemoryPool& pool)
-		: GenericShader(vertexShaderFilePath, fragmentShaderFilePath, pool)
+	Shader::Shader(const std::filesystem::path& shaderFilePath, MemoryPool& pool)
+		: mPool(&pool)
 	{
+		mShaderFilePath /= "CaveEngine\\Graphics\\Shader";
+		mShaderFilePath /= shaderFilePath;
 	}
 
-	WindowsShader::WindowsShader(WindowsShader&& other)
-		: GenericShader(std::move(other))
+	Shader::Shader(Shader&& other)
+		: mPool(other.mPool)
+		, mShaderFilePath(std::move(other.mShaderFilePath))
+		, mVertexShaderFilePath(std::move(other.mVertexShaderFilePath))
+		, mFragmentShaderFilePath(std::move(other.mFragmentShaderFilePath))
 		, mVertexShader(other.mVertexShader)
 		, mPixelShader(other.mPixelShader)
 	{
+		other.mPool = nullptr;
 	}
 
-	WindowsShader& WindowsShader::operator=(WindowsShader&& other)
+	Shader::~Shader()
+	{
+		Destroy();
+	}
+
+	constexpr MemoryPool* Shader::GetMemoryPool() const
+	{
+		return mPool;
+	}
+
+	Shader& Shader::operator=(Shader&& other)
 	{
 		if (this != &other)
 		{
-			GenericShader::operator=(std::move(other));
+			mPool = other.mPool;
+			mShaderFilePath = std::move(other.mShaderFilePath);
+			mVertexShaderFilePath = std::move(other.mVertexShaderFilePath);
+			mFragmentShaderFilePath = std::move(other.mFragmentShaderFilePath);
+
 			mVertexShader = other.mVertexShader;
 			mPixelShader = other.mPixelShader;
 
 			other.mVertexShader->Release();
 			other.mPixelShader->Release();
-			
+
 			other.mVertexShader = nullptr;
 			other.mPixelShader = nullptr;
+
+			other.mPool = nullptr;
 		}
 
 		return *this;
 	}
-
-	WindowsShader::~WindowsShader()
+	void Shader::Destroy()
 	{
-		Destroy();
+
+		if (mSamplerLinear != nullptr)
+		{
+			mSamplerLinear->Release();
+			mSamplerLinear = nullptr;
+		}
+
+		if (mInputLayout != nullptr)
+		{
+			mInputLayout->Release();
+			mInputLayout = nullptr;
+		}
+
+		if (mVertexShader != nullptr)
+		{
+			mVertexShader->Release();
+			mVertexShader = nullptr;
+		}
+
+		if (mPixelShader != nullptr)
+		{
+			mPixelShader->Release();
+			mPixelShader = nullptr;
+		}
+
+		mPool = nullptr;
+		mShaderFilePath.clear();
+		mVertexShaderFilePath.clear();
+		mFragmentShaderFilePath.clear();
+
 	}
 
-	eResult WindowsShader::Compile(ID3D11Device* device)
+	eResult Shader::Compile(ID3D11Device* device)
 	{
 		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
 		//std::filesystem::path shaderPath = PROJECT_DIR;
@@ -183,11 +282,11 @@ namespace cave
 	}
 
 
-	void WindowsShader::Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
+	void Shader::Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
 	{
 		// 상수 버퍼의 내용을 쓸 수 있도록 잠급니다.
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		if(FAILED(context->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		if (FAILED(context->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
 		{
 			return;// return false;
 		}
@@ -208,8 +307,9 @@ namespace cave
 
 		// 마지막으로 정점 셰이더의 상수 버퍼를 바뀐 값으로 바꿉니다.
 		context->VSSetConstantBuffers(bufferNumber, 1, &mBuffer);
-		context->PSSetShaderResources(0, 1, &texture);
 
+		//텍스쳐 세팅.
+		context->PSSetShaderResources(0, 1, &texture);
 
 		context->IASetInputLayout(mInputLayout);
 
@@ -221,41 +321,14 @@ namespace cave
 		context->DrawIndexed(indexCount, 0, 0);
 	}
 
-	void WindowsShader::Destroy()
-	{
-		if (mSamplerLinear != nullptr)
-		{
-			mSamplerLinear->Release();
-			mSamplerLinear = nullptr;
-		}
 
-		if (mInputLayout != nullptr)
-		{
-			mInputLayout->Release();
-			mInputLayout = nullptr;
-		}
-
-		if (mVertexShader != nullptr)
-		{
-			mVertexShader->Release();
-			mVertexShader = nullptr;
-		}
-
-		if (mPixelShader != nullptr)
-		{
-			mPixelShader->Release();
-			mPixelShader = nullptr;
-		}		
-
-		GenericShader::Destroy();
-	}
 
 	//--------------------------------------------------------------------------------------
 	// Helper for compiling shaders with D3DCompile
 	//
 	// With VS 11, we could load up prebuilt .cso files instead...
 	//--------------------------------------------------------------------------------------
-	eResult WindowsShader::compileShaderFromFile(const wchar_t* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+	eResult Shader::compileShaderFromFile(const wchar_t* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 	{
 		// szFileName ���� �̸�
 		// szEntryPoint �� ������ � �Լ� �������ҰŴ�
@@ -264,6 +337,7 @@ namespace cave
 
 		// ������ �ɼ�
 		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+
 #ifdef CAVE_BUILD_DEBUG
 		// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
 		// Setting this flag improves the shader debugging experience, but still allows 
@@ -276,22 +350,8 @@ namespace cave
 		dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-		// ID3DBlob �ؽ�Ʈ ������ ���𰡸� ������ ��. ���̴� ������ �� ���� �ֳ�...?
-		// �̸� ���̴� ������ �صΰ� ��Ÿ�ӿ� ���̴� ���̳ʸ��� �ٷ� Blob�� �������� ������ ���� ����� �� ����
-		// ��κ��� ��� ���̴��� �ɼǿ� ���� ������ �ٸ��� �ؾ��� ���� ����
-		// �̷� �� ifdef�� ������ ��ÿ� �־��༭ �ٸ��� ���� ����
 		ID3DBlob* pErrorBlob = nullptr;
 
-		// GLUTó�� D3DX��� ���� ���̺귯���� ����. 12���� �����
-		// MS�� ��� ���� 11���� D3DX ���� ����
-		// d3dx���� prod �������� ���־� 12 ������ �� ����
-		// ���� �ι�° �Ű������� PDefines�ε� ���⿡ ifdef�� �ش��ϴ� �� �� �־���� �� ����
-		// ���̴� ������ ���Ƶ� ������ �� def�� ���� �ٸ� ���̳ʸ� �� ����
-		// �Ź� ������ �ٽ��ϸ� �������ϱ� ���̴� ĳ�� ���
-		// �� ������ �� ���̴� ������ ���� ������, ���� ���̴� ĳ�ö� ���ؼ�, 
-		// ������ / ���빰 �ٲ������ �������ؼ� ���̳ʸ��� ĳ�� �ʿ� ����
-		// ���̴� ĳ�� ���̳ʸ��κ��� ���̴� ����
-		// ���� ���� ������ �׳� ĳ�ÿ��� �ٷ� �о ����
 		hResult = D3DCompileFromFile(szFileName, nullptr, nullptr, szEntryPoint, szShaderModel,
 			dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
 		if (FAILED(hResult))
@@ -310,5 +370,5 @@ namespace cave
 
 		return eResult::CAVE_OK;
 	}
+
 }
-#endif

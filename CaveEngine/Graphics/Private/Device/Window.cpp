@@ -1,21 +1,14 @@
-/*!
- * Copyright (c) 2021 SWTube. All rights reserved.
- * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
- */
+#include "Device/Window.h"
 
-#include "CoreTypes.h"
-#include "Debug/Log.h"
+namespace cave {
 
-#include "Device/WindowsWindow.h"
-
-#ifdef __WIN32__
-namespace cave
-{
-	WindowsWindow::WindowsWindow(uint32_t width, uint32_t height, const wchar_t* title, HINSTANCE hInstance, LRESULT(CALLBACK* windowProc)(HWND, uint32_t, WPARAM, LPARAM))
-		: GenericWindow(width, height, title)
+	Window::Window(uint32_t width, uint32_t height, const wchar_t* title, HINSTANCE hInstance, LRESULT(CALLBACK* windowProc)(HWND, uint32_t, WPARAM, LPARAM))
+		: mWidth(width)
+		, mHeight(height)
+		, mTitle(title)
 	{
 		// Window resources are dealt with here.
-    
+
 		if (hInstance == nullptr)
 		{
 			hInstance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
@@ -24,7 +17,7 @@ namespace cave
 		// HICON hIcon = nullptr;
 		// wchar_t szExePath[MAX_PATH];
 		// GetModuleFileName(nullptr, szExePath, MAX_PATH);
-		
+
 		// // If the icon is NULL, then use the first one found in the exe
 		// if(hIcon == NULL)
 		// {
@@ -47,10 +40,10 @@ namespace cave
 		wndClass.lpszClassName = mTitle;
 		wndClass.hIconSm = LoadIcon(wndClass.hInstance, reinterpret_cast<LPCTSTR>(107));
 
-		if(!RegisterClassEx(&wndClass))
+		if (!RegisterClassEx(&wndClass))
 		{
 			DWORD dwError = GetLastError();
-			if(dwError != ERROR_CLASS_ALREADY_EXISTS)
+			if (dwError != ERROR_CLASS_ALREADY_EXISTS)
 			{
 				assert(HRESULT_FROM_WIN32(dwError) == S_OK);
 			}
@@ -67,7 +60,7 @@ namespace cave
 		// This example uses a non-resizable 640 by 480 viewport for simplicity.
 		uint32_t defaultWidth = width;
 		uint32_t defaultHeight = height;
-		SetRect(&mRect, 0, 0, defaultWidth, defaultHeight);        
+		SetRect(&mRect, 0, 0, defaultWidth, defaultHeight);
 		AdjustWindowRect(
 			&mRect,
 			WS_OVERLAPPEDWINDOW,
@@ -93,14 +86,27 @@ namespace cave
 			assert(HRESULT_FROM_WIN32(dwError) == S_OK);
 		}
 	}
+	uint32_t Window::GetWidth() const
+	{
+		return mWidth;
+	}
 
-	HWND WindowsWindow::GetWindow()
+	uint32_t Window::GetHeight() const
+	{
+		return mHeight;
+	}
+
+	void Window::Resize(uint32_t width, uint32_t height)
+	{
+
+	}
+
+
+	HWND Window::GetWindow()
 	{
 		return mWindow;
 	}
 
-	void WindowsWindow::Resize(uint32_t width, uint32_t height)
-	{
-	}
-} // namespace cave
-#endif
+
+
+}

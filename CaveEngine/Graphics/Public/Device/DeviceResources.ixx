@@ -1,24 +1,163 @@
-/*!
+﻿/*!
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Device/WindowsDeviceResources.h"
 
-#ifdef __WIN32__
+module;
+
+
+#include "GraphicsApiPch.h"
+
+#include "CoreTypes.h"
+#include "Memory/MemoryPool.h"
+
+export module DeviceResources;
+
+export import Window;
+
 namespace cave
 {
-	WindowsDeviceResources::WindowsDeviceResources(MemoryPool& pool)
-		: GenericDeviceResources(pool)
+	export class DeviceResources final
+	{
+	public:
+		DeviceResources(MemoryPool& pool);
+		constexpr DeviceResources(const DeviceResources&) = default;
+		DeviceResources& operator=(const DeviceResources&) = default;
+		virtual ~DeviceResources();
+
+		eResult Init(Window* window);
+		eResult CreateWindowResources(Window* window);
+		eResult CreateDeviceResources();
+		void Destroy();
+
+		int32_t ConfigureBackBuffer();
+		int32_t ReleaseBackBuffer();
+		int32_t GoFullScreen();
+		int32_t GoWindowed();
+
+		float GetAspectRatio();
+
+		uint32_t GetWidth() const;
+		uint32_t GetHeight() const;
+
+		D3D_DRIVER_TYPE GetDriverType() const;
+
+		constexpr MemoryPool* GetMemoryPool();
+		constexpr Window* GetWindow();
+
+		constexpr virtual DirectX::XMMATRIX& GetProjectionMatrix();
+		constexpr virtual DirectX::XMMATRIX& GetWorldMatrix();
+		constexpr virtual DirectX::XMMATRIX& GetOrthoMatrix();
+
+		virtual void GetVideoCardInfo(char* cardName, int& memory);
+
+		ID3D11Device* GetDevice();
+		ID3D11DeviceContext* GetDeviceContext();
+		ID3D11RenderTargetView* GetRenderTarget();
+		ID3D11DepthStencilView* GetDepthStencil();
+
+		virtual void TurnZBufferOn();
+		virtual void TurnZBufferOff();
+
+		void TurnOnAlphaBlending();
+		void TurnOffAlphaBlending();
+
+		virtual void RenderStart();
+		virtual void RenderEnd();
+
+	private:
+		MemoryPool* mPool = nullptr;
+		Window* mWindow = nullptr;
+		bool mbVsyncEnabled = false;
+		int32_t mVideoCardMemory = 0;
+		char mVideoCardDescription[128] = { '\0', };
+
+		DirectX::XMMATRIX mProjection = DirectX::XMMatrixIdentity();
+		DirectX::XMMATRIX mWorld = DirectX::XMMatrixIdentity();
+		DirectX::XMMATRIX mOrtho = DirectX::XMMatrixIdentity();
+
+		HINSTANCE	mInstance = nullptr;
+
+		//-----------------------------------------------------------------------------
+		// Direct3D device
+		//-----------------------------------------------------------------------------
+		ID3D11Device* mD3dDevice = nullptr;
+		ID3D11Device1* mD3dDevice1 = nullptr;
+		ID3D11DeviceContext* mImmediateContext = nullptr; // immediate context
+		ID3D11DeviceContext1* mImmediateContext1 = nullptr;
+		IDXGISwapChain* mSwapChain = nullptr;
+		IDXGISwapChain1* mSwapChain1 = nullptr;
+
+
+		//-----------------------------------------------------------------------------
+		// DXGI swap chain device resources
+		//-----------------------------------------------------------------------------
+		ID3D11Texture2D* mBackBuffer = nullptr;
+		ID3D11RenderTargetView* mRenderTargetView = nullptr;
+
+
+		//-----------------------------------------------------------------------------
+		// Direct3D device resources for the depth stencil
+		//-----------------------------------------------------------------------------
+		ID3D11Texture2D* mDepthStencil = nullptr;
+		ID3D11DepthStencilState* mDepthStencilState = nullptr;
+		ID3D11DepthStencilState* mDepthDisabledStencilState = nullptr;
+		ID3D11DepthStencilView* mDepthStencilView = nullptr;
+		ID3D11RasterizerState* mRasterizerState = nullptr;
+
+		//-----------------------------------------------------------------------------
+		// alpha blend
+		//-----------------------------------------------------------------------------
+		ID3D11BlendState* mAlphaEnableBlendingState = nullptr;
+		ID3D11BlendState* mAlphaDisableBlendingState = nullptr;
+
+		//-----------------------------------------------------------------------------
+		// Direct3D device metadata and device resource metadata
+		//-----------------------------------------------------------------------------
+		D3D_FEATURE_LEVEL       mFeatureLevel = D3D_FEATURE_LEVEL_11_0;
+		D3D11_TEXTURE2D_DESC    mBackBufferDesc;
+		D3D11_VIEWPORT          mViewport;
+		D3D_DRIVER_TYPE			mDriverType = D3D_DRIVER_TYPE_NULL;
+
+	};
+
+	constexpr DirectX::XMMATRIX& DeviceResources::GetProjectionMatrix()
+	{
+		return mProjection;
+	}
+
+	constexpr DirectX::XMMATRIX& DeviceResources::GetWorldMatrix()
+	{
+		return mWorld;
+	}
+
+	constexpr DirectX::XMMATRIX& DeviceResources::GetOrthoMatrix()
+	{
+		return mOrtho;
+	}
+
+	constexpr MemoryPool* DeviceResources::GetMemoryPool()
+	{
+		return mPool;
+	}
+
+	constexpr Window* DeviceResources::GetWindow()
+	{
+		return mWindow;
+	}
+
+	DeviceResources::DeviceResources(MemoryPool& pool)
+		: mPool(&pool)
 	{
 	}
 
-	WindowsDeviceResources::~WindowsDeviceResources()
+	DeviceResources::~DeviceResources()
 	{
 		Destroy();
 	}
 
-	eResult WindowsDeviceResources::Init(Window* window)
+	eResult DeviceResources::Init(Window* window)
 	{
 		eResult result = CreateDeviceResources();
 		if (result != eResult::CAVE_OK)
@@ -35,7 +174,7 @@ namespace cave
 		return result;
 	}
 
-	eResult WindowsDeviceResources::CreateDeviceResources()
+	eResult DeviceResources::CreateDeviceResources()
 	{
 		int32_t result = S_OK;
 
@@ -50,7 +189,7 @@ namespace cave
 			D3D_DRIVER_TYPE_WARP,
 			D3D_DRIVER_TYPE_REFERENCE,
 		};
-		uint32_t numDriverTypes = ARRAYSIZE( driverTypes );
+		uint32_t numDriverTypes = ARRAYSIZE(driverTypes);
 
 		D3D_FEATURE_LEVEL featureLevels[] =
 		{
@@ -59,9 +198,9 @@ namespace cave
 			D3D_FEATURE_LEVEL_10_1,
 			D3D_FEATURE_LEVEL_10_0,
 		};
-		uint32_t numFeatureLevels = ARRAYSIZE( featureLevels );
+		uint32_t numFeatureLevels = ARRAYSIZE(featureLevels);
 
-		for(uint32_t driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
+		for (uint32_t driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
 		{
 			mDriverType = driverTypes[driverTypeIndex];
 
@@ -86,7 +225,7 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	eResult WindowsDeviceResources::CreateWindowResources(Window* window)
+	eResult DeviceResources::CreateWindowResources(Window* window)
 	{
 		assert(window != nullptr);
 		HWND hWindow = window->GetWindow();
@@ -201,15 +340,15 @@ namespace cave
 
 		// Create swap chain
 		IDXGIFactory2* dxgiFactory2 = nullptr;
-		result = dxgiFactory->QueryInterface( __uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
+		result = dxgiFactory->QueryInterface(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
 
-		if ( dxgiFactory2 )
+		if (dxgiFactory2)
 		{
 			// DirectX 11.1 or later
-			result = mD3dDevice->QueryInterface( __uuidof(ID3D11Device1), reinterpret_cast<void**>(&mD3dDevice1));
+			result = mD3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&mD3dDevice1));
 			if (SUCCEEDED(result))
 			{
-				static_cast<void>(mImmediateContext->QueryInterface( __uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&mImmediateContext1) ));
+				static_cast<void>(mImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&mImmediateContext1)));
 			}
 
 			DXGI_SWAP_CHAIN_DESC1 sd = {};
@@ -224,7 +363,7 @@ namespace cave
 			result = dxgiFactory2->CreateSwapChainForHwnd(mD3dDevice, hWindow, &sd, nullptr, nullptr, &mSwapChain1);
 			if (SUCCEEDED(result))
 			{
-				result = mSwapChain1->QueryInterface( __uuidof(IDXGISwapChain), reinterpret_cast<void**>(&mSwapChain) );
+				result = mSwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&mSwapChain));
 			}
 
 			dxgiFactory2->Release();
@@ -259,7 +398,7 @@ namespace cave
 			sd.SampleDesc.Quality = 0;	// vendor-specific flag
 			//sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 			// // 출력된 다음 백버퍼를 비우도록 지정합니다
-			 sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+			sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 			if (window->IsFullScreen())
 			{
 				sd.Windowed = FALSE;
@@ -269,7 +408,7 @@ namespace cave
 				sd.Windowed = TRUE;
 			}
 
-			result = dxgiFactory->CreateSwapChain( mD3dDevice, &sd, &mSwapChain );
+			result = dxgiFactory->CreateSwapChain(mD3dDevice, &sd, &mSwapChain);
 		}
 
 		dxgiFactory->Release();
@@ -284,7 +423,7 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	int32_t WindowsDeviceResources::ConfigureBackBuffer()
+	int32_t DeviceResources::ConfigureBackBuffer()
 	{
 		int32_t result = S_OK;
 
@@ -297,7 +436,7 @@ namespace cave
 		mBackBuffer->GetDesc(&mBackBufferDesc);
 
 		result = mD3dDevice->CreateRenderTargetView(mBackBuffer, nullptr, &mRenderTargetView);
-		if(FAILED(result))
+		if (FAILED(result))
 		{
 			return result;
 		}
@@ -439,7 +578,7 @@ namespace cave
 		{
 			return false;
 		}
-		
+
 
 		////
 
@@ -477,7 +616,7 @@ namespace cave
 		return result;
 	}
 
-	int32_t WindowsDeviceResources::ReleaseBackBuffer()
+	int32_t DeviceResources::ReleaseBackBuffer()
 	{
 		int32_t result = S_OK;
 
@@ -540,7 +679,7 @@ namespace cave
 		return result;
 	}
 
-	int32_t WindowsDeviceResources::GoFullScreen()
+	int32_t DeviceResources::GoFullScreen()
 	{
 		int32_t result = S_OK;
 
@@ -569,8 +708,8 @@ namespace cave
 
 		return result;
 	}
-	
-	int32_t WindowsDeviceResources::GoWindowed()
+
+	int32_t DeviceResources::GoWindowed()
 	{
 		int32_t result = S_OK;
 
@@ -600,52 +739,52 @@ namespace cave
 		return result;
 	}
 
-	float WindowsDeviceResources::GetAspectRatio()
+	float DeviceResources::GetAspectRatio()
 	{
 		return static_cast<float>(mBackBufferDesc.Width) / static_cast<float>(mBackBufferDesc.Height);
 	}
 
-	uint32_t WindowsDeviceResources::GetWidth() const
+	uint32_t DeviceResources::GetWidth() const
 	{
 		return mBackBufferDesc.Width;
 	}
 
-	uint32_t WindowsDeviceResources::GetHeight() const
+	uint32_t DeviceResources::GetHeight() const
 	{
 		return mBackBufferDesc.Height;
 	}
 
-	ID3D11Device* WindowsDeviceResources::GetDevice()
+	ID3D11Device* DeviceResources::GetDevice()
 	{
 		return mD3dDevice;
 	}
-	
-	ID3D11DeviceContext* WindowsDeviceResources::GetDeviceContext()
+
+	ID3D11DeviceContext* DeviceResources::GetDeviceContext()
 	{
 		return mImmediateContext;
 	}
 
-	ID3D11RenderTargetView* WindowsDeviceResources::GetRenderTarget()
+	ID3D11RenderTargetView* DeviceResources::GetRenderTarget()
 	{
 		return mRenderTargetView;
 	}
 
-	ID3D11DepthStencilView* WindowsDeviceResources::GetDepthStencil()
+	ID3D11DepthStencilView* DeviceResources::GetDepthStencil()
 	{
 		return mDepthStencilView;
 	}
 
-	D3D_DRIVER_TYPE WindowsDeviceResources::GetDriverType() const
+	D3D_DRIVER_TYPE DeviceResources::GetDriverType() const
 	{
 		return mDriverType;
 	}
 
-	void WindowsDeviceResources::RenderStart()
+	void DeviceResources::RenderStart()
 	{
 		// ���� layout ����, topology �ٲٴ°�, vertex buffer �ٲٴ°� rendering �Լ� �ȿ� ���� ��찡 ����
 		// vertex buffer�� pixel shader �� ���� �ʼ�
 		// Clear the back buffer 
-		mImmediateContext->ClearRenderTargetView(mRenderTargetView, DirectX::Colors::Red); //DirectX::Colors::MidnightBlue
+		mImmediateContext->ClearRenderTargetView(mRenderTargetView, DirectX::Colors::CadetBlue); //DirectX::Colors::MidnightBlue
 
 		//
 		// Clear the depth buffer to 1.0 (max depth)
@@ -653,7 +792,7 @@ namespace cave
 		mImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	}
 
-	void WindowsDeviceResources::RenderEnd()
+	void DeviceResources::RenderEnd()
 	{
 		if (mbVsyncEnabled)
 		{
@@ -665,7 +804,7 @@ namespace cave
 		}
 	}
 
-	void WindowsDeviceResources::Destroy()
+	void DeviceResources::Destroy()
 	{
 		if (mSwapChain != nullptr)
 		{
@@ -729,7 +868,7 @@ namespace cave
 			mRenderTargetView->Release();
 			mRenderTargetView = nullptr;
 		}
-	
+
 
 		if (mImmediateContext1 != nullptr)
 		{
@@ -768,36 +907,36 @@ namespace cave
 		}
 	}
 
-	void WindowsDeviceResources::GetVideoCardInfo(char* cardName, int& memory)
+	void DeviceResources::GetVideoCardInfo(char* cardName, int& memory)
 	{
 		strcpy_s(cardName, 128, mVideoCardDescription);
 		memory = mVideoCardMemory;
 	}
 
 
-	void WindowsDeviceResources::TurnZBufferOn()
+	void DeviceResources::TurnZBufferOn()
 	{
 		mImmediateContext->OMSetDepthStencilState(mDepthStencilState, 1);
 	}
 
 
-	void WindowsDeviceResources::TurnZBufferOff()
+	void DeviceResources::TurnZBufferOff()
 	{
 		mImmediateContext->OMSetDepthStencilState(mDepthDisabledStencilState, 1);
 	}
-	void WindowsDeviceResources::TurnOnAlphaBlending()
+	void DeviceResources::TurnOnAlphaBlending()
 	{
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 		// 알파 블렌딩을 켭니다.
 		mImmediateContext->OMSetBlendState(mAlphaEnableBlendingState, blendFactor, 0xffffffff);
 	}
-	void WindowsDeviceResources::TurnOffAlphaBlending()
+
+	void DeviceResources::TurnOffAlphaBlending()
 	{
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 		// 알파 블렌딩을 켭니다.
 		mImmediateContext->OMSetBlendState(mAlphaDisableBlendingState, blendFactor, 0xffffffff);
 	}
-} // namespace cave
-#endif
+} //namespace cave
