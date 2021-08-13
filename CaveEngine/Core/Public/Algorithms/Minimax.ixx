@@ -10,7 +10,7 @@ module;
 export module Minimax;
 
 import Array;
-import TreeNode;
+import Tree;
 
 namespace cave
 {

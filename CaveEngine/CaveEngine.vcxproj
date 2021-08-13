@@ -323,7 +323,7 @@
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Array.ixx" />
     <ClCompile Include="Core\Public\Containers\LinkedList.ixx" />
-    <ClCompile Include="Core\Public\Containers\TreeNode.ixx" />
+    <ClCompile Include="Core\Public\Containers\Tree.ixx" />
     <ClCompile Include="Core\Public\Containers\Trie.ixx" />
     <ClCompile Include="Core\Public\Math\Math.ixx" />
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
