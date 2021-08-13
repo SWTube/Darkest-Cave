@@ -40,6 +40,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
 #ifdef __WIN32__
 import Array;
+import Graph;
 import Hash;
 import Huffman;
 import Knapsack;
@@ -154,6 +155,10 @@ int main(int32_t argc, char** argv)
 
 	clock = tic();
 	cave::HuffmanTest::Main();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	clock = tic();
+	cave::GraphTest::Main();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	// _CrtDumpMemoryLeaks();
@@ -283,7 +288,6 @@ void RenderTest()
 	cave::Engine main;
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
-
 
 	cave::Renderer* renderer = main.GetRenderer();
 
