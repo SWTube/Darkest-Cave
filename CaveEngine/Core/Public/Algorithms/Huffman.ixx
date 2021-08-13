@@ -47,7 +47,7 @@ namespace cave
 
 		static HuffmanNode* CreateHuffmanTreeMalloc(const String& message, MemoryPool& pool);
 		static String EncodeMessage(const std::unordered_map<char, String>& charToBits, const String& message);
-		static std::pair<std::unordered_map<char, String>, std::unordered_map<String, char>> GetHuffmanTable(const HuffmanNode* const tree);
+		static std::unordered_map<char, String> GetHuffmanTable(const HuffmanNode* const tree);
 	private:
 		static void quicksortCharacterCount(Array<std::pair<char, size_t>>& outCharacterCount);
 		static void quicksortCharacterCountRecursive(Array<std::pair<char, size_t>>& outCharacterCount, size_t leftIndex, size_t rightIndex);
@@ -55,7 +55,7 @@ namespace cave
 		static void destroyTreeRecursive(HuffmanNode* node, MemoryPool& pool);
 		static constexpr void addNodeRecursive(HuffmanNode* root, HuffmanNode* node);
 
-		static void getHuffmanTableRecursive(const HuffmanNode* const tree, std::unordered_map<char, String>& outCharToBits, std::unordered_map<String, char>& outBitsToChar, String& code);
+		static void getHuffmanTableRecursive(const HuffmanNode* const tree, std::unordered_map<char, String>& outTable, String& code);
 
 		size_t mFrequency = 0u;
 		char mCharacter = '\0';
@@ -265,15 +265,13 @@ namespace cave
 		return std::move(encodedMessage);
 	}
 
-	std::pair<std::unordered_map<char, String>, std::unordered_map<String, char>> HuffmanNode::GetHuffmanTable(const HuffmanNode* const tree)
+	std::unordered_map<char, String> HuffmanNode::GetHuffmanTable(const HuffmanNode* const tree)
 	{
 		std::unordered_map<char, String> charToBits;
-		std::unordered_map<String, char> bitsToChar;
 		if (tree->IsLeaf())
 		{
 			String code("0");
 			charToBits.insert_or_assign(tree->mCharacter, code);
-			bitsToChar.insert_or_assign(code, tree->mCharacter);
 		}
 		else
 		{
@@ -282,38 +280,37 @@ namespace cave
 			if (tree->mLeft != nullptr)
 			{
 				code.PushBack('0');
-				getHuffmanTableRecursive(tree->mLeft, charToBits, bitsToChar, code);
+				getHuffmanTableRecursive(tree->mLeft, charToBits, code);
 			}
 
 			if (tree->mRight != nullptr)
 			{
 				code.PushBack('1');
-				getHuffmanTableRecursive(tree->mRight, charToBits, bitsToChar, code);
+				getHuffmanTableRecursive(tree->mRight, charToBits, code);
 			}
 		}
 
-		return std::pair<std::unordered_map<char, String>, std::unordered_map<String, char>>(std::move(charToBits), std::move(bitsToChar));
+		return charToBits;
 	}
 
-	void HuffmanNode::getHuffmanTableRecursive(const HuffmanNode* const tree, std::unordered_map<char, String>& outCharToBits, std::unordered_map<String, char>& outBitsToChar, String& code)
+	void HuffmanNode::getHuffmanTableRecursive(const HuffmanNode* const tree, std::unordered_map<char, String>& outCharToBits, String& code)
 	{
 		if (tree->IsLeaf())
 		{
 			outCharToBits.insert_or_assign(tree->mCharacter, code);
-			outBitsToChar.insert_or_assign(code, tree->mCharacter);
 		}
 		else
 		{
 			if (tree->mLeft != nullptr)
 			{
 				code.PushBack('0');
-				getHuffmanTableRecursive(tree->mLeft, outCharToBits, outBitsToChar, code);
+				getHuffmanTableRecursive(tree->mLeft, outCharToBits, code);
 			}
 
 			if (tree->mRight != nullptr)
 			{
 				code.PushBack('1');
-				getHuffmanTableRecursive(tree->mRight, outCharToBits, outBitsToChar, code);
+				getHuffmanTableRecursive(tree->mRight, outCharToBits, code);
 			}
 		}
 
