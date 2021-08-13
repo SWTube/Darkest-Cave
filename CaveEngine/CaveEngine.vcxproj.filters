@@ -190,6 +190,9 @@
     <ClCompile Include="Core\Public\Algorithms\Scheduler.ixx">
       <Filter>Header Files\Core\Algorithms</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Algorithms\Huffman.ixx">
+      <Filter>Header Files\Core\Algorithms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">

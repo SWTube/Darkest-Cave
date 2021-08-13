@@ -247,7 +247,7 @@ export namespace cave
 			assert(s != nullptr);
 
 			// Allocate Memory
-			mLength = Strlen(s);
+			mLength = Strlen(s) - 1;
 			mCapacity = GetSufficientCapacity<ALIGNED_BYTE>(mLength);
 			mString = static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char)));
 

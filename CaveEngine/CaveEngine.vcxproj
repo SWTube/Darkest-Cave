@@ -315,6 +315,7 @@
     <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
+    <ClCompile Include="Core\Public\Algorithms\Huffman.ixx" />
     <ClCompile Include="Core\Public\Algorithms\Knapsack.ixx" />
     <ClCompile Include="Core\Public\Algorithms\Minimax.ixx" />
     <ClCompile Include="Core\Public\Algorithms\Scheduler.ixx" />
