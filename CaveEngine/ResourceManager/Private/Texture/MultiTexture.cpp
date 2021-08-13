@@ -19,7 +19,7 @@ namespace cave {
 		mHeight *= mUVPerFrame.Y;
 	}
 
-	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t row, uint32_t column, uint32_t frameCount, Padding padding, eTextureFormat textureFormat, MemoryPool& pool)
+	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t row, uint32_t column, uint32_t frameCount, eTextureFormat textureFormat, MemoryPool& pool)
 		:Texture(device, filePath, textureFormat, pool)
 		,mFrame(0)
 		,mFrameCount(frameCount)
@@ -27,7 +27,7 @@ namespace cave {
 		,mRow(row)
 		,mColumn(column)
 	{
-		mUVPerFrame = Float2(1.0f / static_cast<float>(row), 1.0f/ static_cast<float>(column));
+		mUVPerFrame = Float2(1.0f / static_cast<float>(column), 1.0f/ static_cast<float>(row));
 		mEndUV = mUVPerFrame;
 		mWidth *= mUVPerFrame.X;
 		mHeight *= mUVPerFrame.Y;

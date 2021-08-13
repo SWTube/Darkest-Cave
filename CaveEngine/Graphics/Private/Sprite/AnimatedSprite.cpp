@@ -3,7 +3,7 @@
 namespace cave {
 
 	AnimatedSprite::AnimatedSprite(std::string name, Animation* animation, MemoryPool* pool) :
-		WindowsSprite(animation->texture)
+		Sprite(animation->texture)
 		,mPool(pool)
 		,mState(name)
 	{
@@ -11,7 +11,7 @@ namespace cave {
 	}
 
 	AnimatedSprite::AnimatedSprite(std::string name, MultiTexture* texture, uint32_t frame, const float duration,bool isLoof, MemoryPool* pool) :
-		WindowsSprite(texture)
+		Sprite(texture)
 		,mPool(pool)
 		,mState(name)
 	{
@@ -22,7 +22,7 @@ namespace cave {
 	}
 
 	AnimatedSprite::AnimatedSprite(const AnimatedSprite& other)
-		:WindowsSprite(other),
+		:Sprite(other),
 		mPool(other.mPool),
 		mbIsPlaying(other.mbIsPlaying),
 		mState(other.mState)
@@ -42,7 +42,7 @@ namespace cave {
 
 	void AnimatedSprite::Destroy()
 	{
-		WindowsSprite::Destroy();
+		Sprite::Destroy();
 
 		for(auto it = mAnimations.begin(); it != mAnimations.end();)
 		{

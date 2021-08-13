@@ -9,7 +9,7 @@
 #include <ppltasks.h>
 
 #include "Debug/Log.h"
-import DdsTextureLoader;
+
 
 namespace cave
 {
@@ -33,6 +33,8 @@ namespace cave
 			return eResult::CAVE_OUT_OF_MEMORY;
 		}
 		mCamera->SetPosition(0.0f, 0.0f, -100.f);
+		//set TextureManager device.
+		TextureManager::GetInstance().SetDevice(mDeviceResources->GetDevice());
 		// set color shader
 		// set texture shader
 		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
@@ -74,8 +76,7 @@ namespace cave
 		for (Sprite* const object : mSprites)
 		{
 			object->Render(mDeviceResources->GetDeviceContext());
-
-			mShader->Render(context, object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, mTextures[object->GetTextureIndex()]->GetTexture());
+			mShader->Render(context, object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, object->GetTexture()->GetTexture());
 		}
 
 		mDeviceResources->TurnOffAlphaBlending();

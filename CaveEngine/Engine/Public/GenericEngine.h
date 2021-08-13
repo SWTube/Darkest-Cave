@@ -6,9 +6,10 @@
 #pragma once
 
 #include "CoreTypes.h"
-#include "Device/DeviceResources.h"
+//#include "Device/DeviceResources.h"
 #include "Renderer/Renderer.h"
 
+import DeviceResources;
 namespace cave
 {
 	class GenericEngine

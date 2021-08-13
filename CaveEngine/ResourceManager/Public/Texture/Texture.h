@@ -47,9 +47,6 @@ namespace cave
 		constexpr Float2 GetStartUV() const;
 		constexpr Float2 GetEndUV() const;
 	protected:
-
-		//void LoadFromPngData(ID3D11Device* device, ID3D11DeviceContext* deviceContext, unsigned char* pngData);
-
 		typedef struct TexturePointer
 		{
 			uint32_t ReferenceCount = 0u;

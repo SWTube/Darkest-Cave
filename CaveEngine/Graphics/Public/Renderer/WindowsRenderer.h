@@ -4,11 +4,10 @@
  */
 
 #include "CoreTypes.h"
-#include "Device/DeviceResources.h"
 #include "Renderer/GenericRenderer.h"
 
 #ifdef __WIN32__
-import DdsTextureLoader;
+import DeviceResources;
 
 namespace cave
 {

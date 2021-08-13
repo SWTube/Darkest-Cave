@@ -6,6 +6,7 @@
 #include "WindowsEngine.h"
 
 #ifdef __WIN32__
+
 namespace cave
 {
 	HINSTANCE	WindowsEngine::msInstance = nullptr;
@@ -22,16 +23,6 @@ namespace cave
 		new(mRenderer) Renderer();
 
 		mRenderer->Init(mWindow);
-		//mRenderer->CreateDeviceDependentResources();
-
-		//// We have a window, so initialize window size-dependent resources.
-		//mDeviceResources->CreateWindowResources(mWindow);
-		//if (result != eResult::CAVE_OK)
-		//{
-		//	return result;
-		//}
-
-		//mRenderer->CreateWindowSizeDependentResources();
 		
 		return result;
 	}

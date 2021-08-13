@@ -97,30 +97,6 @@
     <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
       <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp">
-      <Filter>Source Files\Graphics\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp">
-      <Filter>Source Files\Graphics\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\GenericDeviceResources.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
-      <Filter>Source Files\Graphics\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
@@ -130,20 +106,11 @@
     <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
       <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp">
       <Filter>Source Files\ThirdParty\lodepng</Filter>
     </ClCompile>
     <ClCompile Include="ThirdParty\tictoc\src\tictoc.c">
       <Filter>Source Files\ThirdParty\tictoc</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
-      <Filter>Source Files\Graphics\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Containers\Hash.cpp">
       <Filter>Source Files\Core\Containers</Filter>
@@ -178,6 +145,16 @@
     <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager\Public\Texture\TextureManager.ixx" />
+    <ClCompile Include="Graphics\Private\Device\Window.cpp" />
+    <ClCompile Include="Graphics\Public\Shader\Shader.ixx" />
+    <ClCompile Include="Graphics\Public\Device\Window.ixx" />
+    <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
+    <ClCompile Include="Graphics\Public\Renderer\Camera.ixx" />
+    <ClCompile Include="Graphics\Private\Sprite\Sprite.cpp" />
+    <ClCompile Include="ResourceManager\Public\Texture\Texture.ixx" />
+    <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />
+    <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -212,9 +189,6 @@
     </ClInclude>
     <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h">
       <Filter>Header Files\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Public\UnixEngine.h">
-      <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Public\WindowsEngine.h">
       <Filter>Header Files\Engine</Filter>
@@ -300,39 +274,6 @@
     <ClInclude Include="Engine\Public\GenericEngine.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\DeviceResources.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\WindowsWindow.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\Window.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\GenericWindow.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Shader\GenericShader.h">
-      <Filter>Header Files\Graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Shader\Shader.h">
-      <Filter>Header Files\Graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">
-      <Filter>Header Files\Graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\GenericSprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
@@ -348,12 +289,6 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
-      <Filter>Header Files\ResourceManager\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager\Public\Texture\Texture.h">
-      <Filter>Header Files\ResourceManager\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
       <Filter>Header Files\ThirdParty\lodepng</Filter>
     </ClInclude>
@@ -366,6 +301,8 @@
     <ClInclude Include="Core\Public\Shapes\Quadrant.h">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\Window.h" />
+    <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">

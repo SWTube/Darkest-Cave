@@ -22,16 +22,6 @@ namespace cave
 
 	void GenericRenderer::Destroy()
 	{
-		while (!mTextures.empty())
-		{
-			Texture* texture = mTextures.back();
-			texture->~Texture();
-			mPool->Deallocate(texture, sizeof(Sprite));
-			texture = nullptr;
-			mTextures.pop_back();
-		}
-		mTextures.clear();
-		// std::vector<Texture*>().swap(mTextures);
 
 		while (!mSprites.empty())
 		{
@@ -78,37 +68,17 @@ namespace cave
 		return mDeviceResources;
 	}
 
-	eResult GenericRenderer::AddSprite(Sprite&& object)
-	{
-		Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
-		new(newSprite) Sprite(std::move(object));
-		newSprite->SetTextureIndex(mTextures[0u],0u);
-		eResult result = newSprite->Init(mDeviceResources->GetDevice(),mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
-
-		if (result != eResult::CAVE_OK)
-		{
-			return result;
-		}
-		newSprite->SetZIndex(mSprites.size());
-		mSprites.push_back(newSprite);
-
-		return result;
-	}
 
 	eResult GenericRenderer::AddSprite(const std::filesystem::path& filePath)
 	{
-		//새 텍스쳐 생성
-		Texture* newTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
-		new(newTexture) cave::Texture(mDeviceResources->GetDevice(),filePath);
-		//newTexture->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext());
-		mTextures.push_back(newTexture);
 
+		Texture* newTexture = TextureManager::GetInstance().AddTexture(filePath);
 		//새 스프라이트 생성
 		cave::Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
 		new(newSprite) cave::Sprite(newTexture);
 
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
-		newSprite->SetTextureIndex(mTextures.back(),mTextures.size() - 1);
+		newSprite->SetTextureIndex(newTexture, 0);
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
 		newSprite->SetPosition(200, 200); // temp
 		newSprite->SetZIndex(mSprites.size());
@@ -119,14 +89,15 @@ namespace cave
 
 	eResult GenericRenderer::AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t frame, float duration, bool isLoof)
 	{
-		MultiTexture* newTexture = reinterpret_cast<MultiTexture*>(mPool->Allocate(sizeof(MultiTexture)));
-		new(newTexture) cave::MultiTexture(mDeviceResources->GetDevice(), filePath, frame);
-		mTextures.push_back(newTexture);
+
+		MultiTexture* newTexture = TextureManager::GetInstance().AddMultiTexture(filePath,frame,1,frame);
 		cave::AnimatedSprite* newSprite = reinterpret_cast<AnimatedSprite*>(mPool->Allocate(sizeof(AnimatedSprite)));
 		new(newSprite) cave::AnimatedSprite(animationName,newTexture,frame,duration,isLoof,mPool);
 
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
-		newSprite->SetTextureIndex(mTextures.back(), mTextures.size() - 1);
+		
+		//temp setting
+		newSprite->SetTextureIndex(newTexture, 0);
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
 		newSprite->SetPosition(300, 200); // temp
 		newSprite->SetZIndex(mSprites.size());
@@ -136,14 +107,14 @@ namespace cave
 
 	eResult GenericRenderer::AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t row, uint32_t column, uint32_t frame, float duration, bool isLoof)
 	{
-		MultiTexture* newTexture = reinterpret_cast<MultiTexture*>(mPool->Allocate(sizeof(MultiTexture)));
-		new(newTexture) cave::MultiTexture(mDeviceResources->GetDevice(), filePath,row,column,frame);
-		mTextures.push_back(newTexture);
+		MultiTexture* newTexture = TextureManager::GetInstance().AddMultiTexture(filePath, frame, row, column);
 		cave::AnimatedSprite* newSprite = reinterpret_cast<AnimatedSprite*>(mPool->Allocate(sizeof(AnimatedSprite)));
 		new(newSprite) cave::AnimatedSprite(animationName, newTexture, frame, duration, isLoof, mPool);
 
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
-		newSprite->SetTextureIndex(mTextures.back(), mTextures.size() - 1);
+
+		//temp setting
+		newSprite->SetTextureIndex(newTexture, 0);
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
 		newSprite->SetPosition(300, 200); // temp
 		newSprite->SetZIndex(mSprites.size());
@@ -152,24 +123,7 @@ namespace cave
 		return result;
 	}
 
-	eResult GenericRenderer::AddTexture(Texture&& texture)
-	{
-		Texture* newTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
-		new(newTexture) Texture(std::move(texture));
-
-		mTextures.push_back(newTexture);
-
-		return eResult::CAVE_OK;
-	}
-
-	eResult GenericRenderer::AddTexture(const std::filesystem::path& filePath)
-	{
-		Texture* newTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
-		new(newTexture) cave::Texture(mDeviceResources->GetDevice(), filePath);
-		mTextures.push_back(newTexture);
-		return eResult::CAVE_OK;
-	}
-
+	
 	eResult GenericRenderer::RemoveSprite(uint32_t index)
 	{
 		assert(index < mSprites.size());
@@ -182,24 +136,6 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	eResult GenericRenderer::RemoveTexture(uint32_t index)
-	{
-		assert(index < mTextures.size());
-
-		Texture* texture = mTextures[index];
-		texture->Destroy();
-		mPool->Deallocate(texture, sizeof(Texture));
-		mTextures.erase(mTextures.begin() + index);
-
-		return eResult::CAVE_OK;
-	}
-
-	void GenericRenderer::SetSpriteTexture(uint32_t index, uint32_t textureIndex)
-	{
-		assert(index < mSprites.size());
-
-		mSprites[index]->SetTextureIndex(mTextures[textureIndex],textureIndex);
-	}
 
 	uint32_t GenericRenderer::GetSpriteTextureIndex(uint32_t index) const
 	{
