@@ -10,6 +10,7 @@
 #include "CoreTypes.h"
 //#include "Device/DeviceResources.h"
 //#include "Renderer/Camera.h"
+#include "Containers/Vertex.h"
 #include "Sprite/Sprite.h"
 #include "Sprite/AnimatedSprite.h"
 
@@ -17,6 +18,7 @@ import DeviceResources;
 import Camera;
 import Shader;
 import TextureManager;
+import BufferManager;
 
 namespace cave
 {
@@ -37,15 +39,13 @@ namespace cave
     	virtual void Render() = 0;
 		virtual void Destroy();
 
+		virtual eResult AddSprite(Sprite* sprite);
 		virtual eResult AddSprite(const std::filesystem::path& filePath);
 		virtual eResult AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t frame, float duration, bool isLoof);
-		virtual eResult AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t row , uint32_t column, uint32_t frame, float duration, bool isLoof);
-
+		virtual eResult AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t row, uint32_t column, uint32_t frame, float duration, bool isLoof);
 
 		virtual eResult RemoveSprite(uint32_t index);
 
-
-		virtual uint32_t GetSpriteTextureIndex(uint32_t index) const;
 		virtual void SetSpriteSize(uint32_t index, uint32_t width, uint32_t height);
 		virtual void SetSpritePosition(uint32_t index, Float2 position);
 		virtual void SetSpriteZIndex(uint32_t index, uint32_t z);
@@ -65,6 +65,7 @@ namespace cave
 		DirectX::XMMATRIX mProjection;
 
 		DeviceResources* mDeviceResources = nullptr;
+		BufferManager* mBufferManager = nullptr;
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 

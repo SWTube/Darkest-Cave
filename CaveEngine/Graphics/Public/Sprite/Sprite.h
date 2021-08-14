@@ -12,6 +12,7 @@
 //#include "Texture/MultiTexture.h"
 
 //import Texture;
+import TextureManager;
 import MultiTexture;
 
 namespace cave
@@ -43,16 +44,17 @@ namespace cave
 		constexpr float GetPositionY() const;
 		constexpr Float2 GetPosition() const;
 
-		constexpr uint32_t GetTextureIndex();
+		VertexT* GetVertices();
+
 		constexpr uint32_t GetWidth() const;
 		constexpr uint32_t GetHeight() const;
 		constexpr void GetSize(uint32_t& outWidth, uint32_t& outHeight) const;
 		constexpr void SetSize(uint32_t width, uint32_t height);
-		virtual void SetTexture(const Texture& texture);
-		void SetTextureIndex(Texture* texture, uint32_t index);
+		constexpr void SetTexture(Texture* texture);
+		
 
 	protected:
-		eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context);
+		//eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context);
 		static constexpr uint32_t VERTICES_COUNT = 4u;
 		static constexpr uint32_t INDICES_COUNT = 6u;
 
@@ -70,17 +72,6 @@ namespace cave
 			2, 3, 0,
 		};
 
-		typedef struct ConstantBuffer
-		{
-			DirectX::XMMATRIX mWorld;
-		} ConstantBuffer;
-
-		// Assert that the constant buffer remains 16-byte aligned.
-		static_assert((sizeof(ConstantBuffer) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
-
-		DirectX::XMMATRIX mWorld = DirectX::XMMatrixIdentity();
-
-		uint32_t mTextureIndex = 0u;
 		Texture* mTexture = nullptr;
 
 		uint32_t mWidth = 0u;
@@ -95,8 +86,7 @@ namespace cave
 
 		ID3D11Buffer* mVertexBuffer = nullptr;
 		ID3D11Buffer* mIndexBuffer = nullptr;
-		ID3D11InputLayout* mVertexLayout = nullptr;
-		ID3D11ShaderResourceView* mTextureRv = nullptr;
+
 	};
 
 	constexpr uint32_t Sprite::GetIndicesCount() const
@@ -168,11 +158,6 @@ namespace cave
 		return Float2(mPosition.X, mPosition.Y);
 	}
 
-	constexpr uint32_t Sprite::GetTextureIndex()
-	{
-		return mTextureIndex;
-	}
-
 	constexpr uint32_t Sprite::GetWidth() const
 	{
 		return mWidth;
@@ -195,4 +180,10 @@ namespace cave
 		mHeight = height;
 		mbNeedsUpdate = true;
 	}
+
+	constexpr void Sprite::SetTexture(Texture* texture)
+	{
+		mTexture = texture;
+	}
+
 } // namespace cave

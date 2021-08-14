@@ -155,6 +155,7 @@
     <ClCompile Include="ResourceManager\Public\Texture\Texture.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
+    <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">

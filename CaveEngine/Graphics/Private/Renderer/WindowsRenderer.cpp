@@ -33,8 +33,14 @@ namespace cave
 			return eResult::CAVE_OUT_OF_MEMORY;
 		}
 		mCamera->SetPosition(0.0f, 0.0f, -100.f);
+		
 		//set TextureManager device.
 		TextureManager::GetInstance().SetDevice(mDeviceResources->GetDevice());
+
+		mBufferManager = reinterpret_cast<BufferManager*>(mPool->Allocate(sizeof(BufferManager)));
+		new(mBufferManager) BufferManager();
+		mBufferManager->Init(mDeviceResources, 1000);
+
 		// set color shader
 		// set texture shader
 		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
@@ -72,12 +78,27 @@ namespace cave
 		//mDeviceResources->TurnZBufferOff(); // 이거 없으면 안 그려짐...
 		mDeviceResources->TurnOnAlphaBlending();
 
+		std::vector<VertexT> vertexData;
 		// 3. Set Render Data ---------------------------------------------------------------------------------------------
 		for (Sprite* const object : mSprites)
 		{
 			object->Render(mDeviceResources->GetDeviceContext());
-			mShader->Render(context, object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, object->GetTexture()->GetTexture());
+			VertexT* vertices = object->GetVertices();
+			for (unsigned int i = 0; i < 4; i++) {
+				
+				vertexData.push_back(vertices[i]);
+			}
+
 		}
+
+		mBufferManager->UpdateVertexBuffer(vertexData.data(), mSprites.size());
+		int count = 0;
+		for (Sprite* const object : mSprites)
+		{
+			mShader->Render(context, object->GetIndicesCount(), count * object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, object->GetTexture()->GetTexture());
+			count++;
+		}
+
 
 		mDeviceResources->TurnOffAlphaBlending();
 		//mDeviceResources->TurnZBufferOn();

@@ -12,29 +12,19 @@ namespace cave
 	{
 		mWidth = mTexture->GetWidth();
 		mHeight = mTexture->GetHeight();
-		mTextureIndex = mTexture->GetIndex();
 	}
 
 
 	Sprite::Sprite(const Sprite& other)
-		: mWorld(other.mWorld)
-		, mTextureIndex(other.mTextureIndex)
-		, mWidth(other.mWidth)
+		: mWidth(other.mWidth)
 		, mHeight(other.mHeight)
 		, mPosition(other.mPosition)
 	{
 		mTexture = other.mTexture;
-		/*if (other.mTexture != nullptr)
-		{
-			mTexture = reinterpret_cast<Texture*>(mPool->Allocate(sizeof(Texture)));
-			new(mTexture) Texture(*other.mTexture);
-		}*/
 	}
 
 	Sprite::Sprite(Sprite&& other)
-		: mWorld(other.mWorld)
-		, mTextureIndex(other.mTextureIndex)
-		, mTexture(other.mTexture)
+		: mTexture(other.mTexture)
 		, mPosition(other.mPosition)
 		, mWidth(other.mWidth)
 		, mHeight(other.mHeight)
@@ -46,9 +36,6 @@ namespace cave
 	{
 		if (this != &other)
 		{
-			mWorld = other.mWorld;
-			mTextureIndex = other.mTextureIndex;
-
 			//mTexture->~Texture();
 			//if (other.mTexture != nullptr)
 			//{
@@ -73,9 +60,6 @@ namespace cave
 	{
 		if (this != &other)
 		{
-			mWorld = other.mWorld;
-			mTextureIndex = other.mTextureIndex;
-
 			mTexture = other.mTexture;
 
 			mPosition = other.mPosition;
@@ -101,9 +85,11 @@ namespace cave
 		mPreviousPosition = Float3(-1.0f, -1.0f, 1.0f);
 		//mPosition = Float3(0.0f, 0.0f, 1.0f);
 
-		eResult result = initializeBuffers(device, context);
+		//eResult result = initializeBuffers(device, context);
 
-		return result;
+		//return result;
+
+		return eResult::CAVE_OK;
 	}
 
 	void Sprite::Destroy()
@@ -112,12 +98,6 @@ namespace cave
 		{
 			mTexture->~Texture(); //
 			mTexture = nullptr;
-		}
-
-		if (mTextureRv != nullptr)
-		{
-			mTextureRv->Release();
-			mTextureRv = nullptr;
 		}
 		if (mVertexBuffer != nullptr)
 		{
@@ -129,91 +109,73 @@ namespace cave
 			mIndexBuffer->Release();
 			mIndexBuffer = nullptr;
 		}
-		if (mVertexLayout != nullptr)
-		{
-			mVertexLayout->Release();
-			mVertexLayout = nullptr;
-		}
+
 
 	}
 	void Sprite::Update()
 	{
 	}
 
-	void Sprite::SetTexture(const Texture& texture)
-	{
-		if (mTexture != nullptr)
-		{
-			mTexture->~Texture();
-			mTexture = nullptr;
-		}
-		*mTexture = texture;
-	}
-	void Sprite::SetTextureIndex(Texture* texture, uint32_t index)
-	{
-		mWidth = texture->GetWidth();
-		mHeight = texture->GetHeight();
-		mTexture = texture;
-		mTextureIndex = index;
+
+	VertexT* Sprite::GetVertices() {
+		return mVertices;
 	}
 
-	eResult Sprite::initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context)
-	{
-		assert(device != nullptr && context != nullptr);
+	//eResult Sprite::initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context)
+	//{
+	//	assert(device != nullptr && context != nullptr);
 
-		int32_t result = S_OK;
+	//	int32_t result = S_OK;
 
-		// create static vertex buffer
-	// 정적 정점 버퍼의 구조체를 설정합니다.
-		D3D11_BUFFER_DESC vertexBufferDesc;
-		vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		vertexBufferDesc.ByteWidth = sizeof(VertexT) * VERTICES_COUNT;
-		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		vertexBufferDesc.MiscFlags = 0;
-		vertexBufferDesc.StructureByteStride = 0;
+	//	// create static vertex buffer
+	//// 정적 정점 버퍼의 구조체를 설정합니다.
+	//	D3D11_BUFFER_DESC vertexBufferDesc;
+	//	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	//	vertexBufferDesc.ByteWidth = sizeof(VertexT) * VERTICES_COUNT;
+	//	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	//	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	//	vertexBufferDesc.MiscFlags = 0;
+	//	vertexBufferDesc.StructureByteStride = 0;
 
-		// subresource 구조에 정점 데이터에 대한 포인터를 제공합니다.
-		D3D11_SUBRESOURCE_DATA vertexData;
-		vertexData.pSysMem = mVertices;
-		vertexData.SysMemPitch = 0;
-		vertexData.SysMemSlicePitch = 0;
-		result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &mVertexBuffer);
-		if (FAILED(result))
-		{
-			return eResult::CAVE_FAIL;
-		}
+	//	// subresource 구조에 정점 데이터에 대한 포인터를 제공합니다.
+	//	D3D11_SUBRESOURCE_DATA vertexData;
+	//	vertexData.pSysMem = mVertices;
+	//	vertexData.SysMemPitch = 0;
+	//	vertexData.SysMemSlicePitch = 0;
+	//	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &mVertexBuffer);
+
+	//	if (FAILED(result))
+	//	{
+	//		return eResult::CAVE_FAIL;
+	//	}
 
 
-		// 정적 인덱스 버퍼의 구조체를 설정합니다.
-		D3D11_BUFFER_DESC indexBufferDesc;
-		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		indexBufferDesc.ByteWidth = sizeof(WORD) * INDICES_COUNT;
-		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		indexBufferDesc.CPUAccessFlags = 0;
-		indexBufferDesc.MiscFlags = 0;
-		indexBufferDesc.StructureByteStride = 0;
+	//	// 정적 인덱스 버퍼의 구조체를 설정합니다.
+	//	D3D11_BUFFER_DESC indexBufferDesc;
+	//	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	//	indexBufferDesc.ByteWidth = sizeof(WORD) * INDICES_COUNT;
+	//	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	//	indexBufferDesc.CPUAccessFlags = 0;
+	//	indexBufferDesc.MiscFlags = 0;
+	//	indexBufferDesc.StructureByteStride = 0;
 
-		// 인덱스 데이터를 가리키는 보조 리소스 구조체를 작성합니다.
-		D3D11_SUBRESOURCE_DATA indexData;
-		indexData.pSysMem = INDICES;
-		indexData.SysMemPitch = 0;
-		indexData.SysMemSlicePitch = 0;
+	//	// 인덱스 데이터를 가리키는 보조 리소스 구조체를 작성합니다.
+	//	D3D11_SUBRESOURCE_DATA indexData;
+	//	indexData.pSysMem = INDICES;
+	//	indexData.SysMemPitch = 0;
+	//	indexData.SysMemSlicePitch = 0;
 
-		result = device->CreateBuffer(&indexBufferDesc, &indexData, &mIndexBuffer);
-		if (FAILED(result))
-		{
-			return eResult::CAVE_FAIL;
-		}
+	//	result = device->CreateBuffer(&indexBufferDesc, &indexData, &mIndexBuffer);
+	//	if (FAILED(result))
+	//	{
+	//		return eResult::CAVE_FAIL;
+	//	}
 
-		mWorld = DirectX::XMMatrixIdentity();
-
-		return eResult::CAVE_OK;
-	}
+	//	return eResult::CAVE_OK;
+	//}
 
 	void Sprite::Render(ID3D11DeviceContext* context)
 	{
-
 		float left = 0.0f;
 		float right = 0.0f;
 		float top = 0.0f;
@@ -246,26 +208,28 @@ namespace cave
 		//mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), Float2(mTexture->GetStartUV().X, mTexture->GetEndUV().Y)));		// bottom right
 		//mVertices[3] = std::move(VertexT(Float3(left, bottom, mPosition.Z), Float2(mTexture->GetEndUV().X, mTexture->GetEndUV().Y)));		// bottom left
 
-		HRESULT hResult = context->Map(mVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-		if (FAILED(result)) {
-			return;
-		}
-		verticesPtr = reinterpret_cast<VertexT*>(mappedResource.pData);
+		//HRESULT hResult = context->Map(mVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		//if (FAILED(result)) {
+		//	return;
+		//}
+		//verticesPtr = reinterpret_cast<VertexT*>(mappedResource.pData);
 
-		memcpy(verticesPtr, reinterpret_cast<void*>(mVertices), (sizeof(VertexT) * VERTICES_COUNT));
+		//memcpy(verticesPtr, reinterpret_cast<void*>(mVertices), (sizeof(VertexT) * VERTICES_COUNT));
 
-		context->Unmap(mVertexBuffer, 0);
+		//context->Unmap(mVertexBuffer, 0);
 
-		// ���� context�� �����ֱ�
-		// Set vertex buffer
-		uint32_t stride = sizeof(VertexT);
-		uint32_t offset = 0;
-		context->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
+		//// ���� context�� �����ֱ�
+		//// Set vertex buffer
+		//uint32_t stride = sizeof(VertexT);
+		//uint32_t offset = 0;
+		//context->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
-		// Set index buffer
-		context->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R16_UINT, 0); // WORD -> 16
+		//// Set index buffer
+		//context->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R16_UINT, 0); // WORD -> 16
 
-		// Set primitive topology
-		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		//// Set primitive topology
+		//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
+
+
 } // namespace cave

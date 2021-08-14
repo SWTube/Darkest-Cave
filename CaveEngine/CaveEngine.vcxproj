@@ -330,6 +330,7 @@
     <ClCompile Include="Graphics\Private\Sprite\Sprite.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp" />
+    <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
     <ClCompile Include="Graphics\Public\Device\Window.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Camera.ixx" />

@@ -54,6 +54,13 @@ namespace cave
 			mDeviceResources = nullptr;
 		}
 
+		if (mBufferManager != nullptr) 
+		{
+			mBufferManager->~BufferManager();
+			mPool->Deallocate(mBufferManager, sizeof(BufferManager));
+			mBufferManager = nullptr;
+		}
+
 		if (mPool != nullptr)
 		{
 			mPool->~MemoryPool();
@@ -67,7 +74,14 @@ namespace cave
 	{
 		return mDeviceResources;
 	}
+	eResult GenericRenderer::AddSprite(Sprite* sprite) 
+	{
+		if (sprite == nullptr) return eResult::CAVE_FAIL;
 
+		mSprites.push_back(sprite);
+		
+		return eResult::CAVE_OK;
+	}
 
 	eResult GenericRenderer::AddSprite(const std::filesystem::path& filePath)
 	{
@@ -78,7 +92,7 @@ namespace cave
 		new(newSprite) cave::Sprite(newTexture);
 
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
-		newSprite->SetTextureIndex(newTexture, 0);
+		
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
 		newSprite->SetPosition(200, 200); // temp
 		newSprite->SetZIndex(mSprites.size());
@@ -97,7 +111,6 @@ namespace cave
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 		
 		//temp setting
-		newSprite->SetTextureIndex(newTexture, 0);
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
 		newSprite->SetPosition(300, 200); // temp
 		newSprite->SetZIndex(mSprites.size());
@@ -114,7 +127,6 @@ namespace cave
 		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 
 		//temp setting
-		newSprite->SetTextureIndex(newTexture, 0);
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
 		newSprite->SetPosition(300, 200); // temp
 		newSprite->SetZIndex(mSprites.size());
@@ -134,14 +146,6 @@ namespace cave
 		mSprites.erase(mSprites.begin() + index);
 
 		return eResult::CAVE_OK;
-	}
-
-
-	uint32_t GenericRenderer::GetSpriteTextureIndex(uint32_t index) const
-	{
-		assert(index < mSprites.size());
-
-		return mSprites[index]->GetTextureIndex();
 	}
 
 	void GenericRenderer::SetSpriteSize(uint32_t index, uint32_t width, uint32_t height)

@@ -34,7 +34,7 @@ namespace cave
 		constexpr MemoryPool* GetMemoryPool() const;
 
 		eResult Compile(ID3D11Device* device);
-		void Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture);
+		void Render(ID3D11DeviceContext* context, uint32_t indexCount, uint32_t startIndex, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture);
 
 		void Destroy();
 
@@ -282,7 +282,7 @@ namespace cave
 	}
 
 
-	void Shader::Render(ID3D11DeviceContext* context, uint32_t indexCount, const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
+	void Shader::Render(ID3D11DeviceContext* context, uint32_t indexCount,uint32_t startIndex , const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
 	{
 		// 상수 버퍼의 내용을 쓸 수 있도록 잠급니다.
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -318,7 +318,7 @@ namespace cave
 
 		context->PSSetSamplers(0, 1, &mSamplerLinear);
 
-		context->DrawIndexed(indexCount, 0, 0);
+		context->DrawIndexed(indexCount, startIndex, 0);
 	}
 
 
