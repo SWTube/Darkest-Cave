@@ -7,7 +7,7 @@
 #include "Renderer/Renderer.h"
 #include "Game/GameInstance.h"
 
-import EngineTimer;
+import Timer;
 
 export module Engine;
 
@@ -46,7 +46,7 @@ namespace cave
 		MemoryPool* mPool = nullptr;
 		Renderer* mRenderer = nullptr;
 		Window* mWindow = nullptr;
-		EngineTimer* mTimer = nullptr;
+		Timer* mTimer = nullptr;
 
 		GameInstance* mGameInstance = nullptr;
 
@@ -82,8 +82,8 @@ namespace cave
 
 		if (mTimer != nullptr)
 		{
-			mTimer->~EngineTimer();
-			mPool->Deallocate(mTimer, sizeof(EngineTimer));
+			mTimer->~Timer();
+			mPool->Deallocate(mTimer, sizeof(Timer));
 			mTimer = nullptr;
 		}
 
@@ -157,8 +157,8 @@ namespace cave
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
 		new(mRenderer) Renderer();
 
-		mTimer = reinterpret_cast<EngineTimer*>(mPool->Allocate(sizeof(EngineTimer)));
-		new(mTimer) EngineTimer();
+		mTimer = reinterpret_cast<Timer*>(mPool->Allocate(sizeof(Timer)));
+		new(mTimer) Timer();
 
 		mGameInstance = reinterpret_cast<GameInstance*>(mPool->Allocate(sizeof(GameInstance)));
 		new(mGameInstance) GameInstance();
@@ -187,7 +187,7 @@ namespace cave
 
 		if (mTimer != nullptr)
 		{
-			mPool->Deallocate(mTimer, sizeof(EngineTimer));
+			mPool->Deallocate(mTimer, sizeof(Timer));
 		}
 
 		if (mGameInstance != nullptr)

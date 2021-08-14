@@ -324,9 +324,9 @@
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
+    <ClCompile Include="Core\Public\Timer\Timer.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Public\Engine.ixx" />
-    <ClCompile Include="Engine\Public\EngineTimer.ixx" />
     <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp" />
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Transform.cpp" />

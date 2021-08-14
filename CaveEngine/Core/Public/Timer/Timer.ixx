@@ -4,21 +4,21 @@ module;
 
 #include "Assertion/Assert.h"
 
-export module EngineTimer;
+export module Timer;
 
 namespace cave
 {
-	export class EngineTimer final
+	export class Timer final
 	{
 	public:
 		friend class Engine;
 
-		EngineTimer(const EngineTimer&) = delete;
-		EngineTimer(EngineTimer&&) = delete;
+		Timer(const Timer&) = delete;
+		Timer(Timer&&) = delete;
 
-		~EngineTimer();
-		EngineTimer& operator=(const EngineTimer&) = delete;
-		EngineTimer& operator=(EngineTimer&&) = delete;
+		~Timer();
+		Timer& operator=(const Timer&) = delete;
+		Timer& operator=(Timer&&) = delete;
 
 		void Init();
 		void Update();
@@ -26,7 +26,7 @@ namespace cave
 		float GetInterpolationTimestep();
 
 	private:
-		EngineTimer();
+		Timer();
 
 	private:
 		LARGE_INTEGER mTimer;
@@ -36,37 +36,37 @@ namespace cave
 		uint64_t mCurrentUpdateTime;
 	};
 
-	EngineTimer::EngineTimer()
+	Timer::Timer()
 		: mLastUpdateTime(0.f)
 		, mCurrentUpdateTime(0.f)
 	{
 		QueryPerformanceFrequency(&mTimer);
 	}
 
-	EngineTimer::~EngineTimer()
+	Timer::~Timer()
 	{
 		
 	}
 
-	void EngineTimer::Init()
+	void Timer::Init()
 	{
 		QueryPerformanceCounter(&mTimestep);
 		mCurrentUpdateTime = mTimestep.QuadPart;
 	}
 
-	void EngineTimer::Update()
+	void Timer::Update()
 	{
 		QueryPerformanceCounter(&mTimestep);
 		mLastUpdateTime = mCurrentUpdateTime;
 		mCurrentUpdateTime = mTimestep.QuadPart;
 	}
 
-	float EngineTimer::GetElapsedTimestepFromLastUpdate()
+	float Timer::GetElapsedTimestepFromLastUpdate()
 	{
 		return (mCurrentUpdateTime - mLastUpdateTime) / static_cast<float>(mTimer.QuadPart);
 	}
 
-	float EngineTimer::GetInterpolationTimestep()
+	float Timer::GetInterpolationTimestep()
 	{
 		QueryPerformanceCounter(&mTimestep);
 		

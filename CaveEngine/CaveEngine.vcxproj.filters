@@ -279,11 +279,11 @@
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files\Core\Thread</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Public\EngineTimer.ixx">
-      <Filter>Header Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Public\Engine.ixx">
       <Filter>Header Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Timer\Timer.ixx">
+      <Filter>Header Files\Core\Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -678,6 +678,9 @@
     </Filter>
     <Filter Include="Source Files\Core\Shapes">
       <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Timer">
+      <UniqueIdentifier>{764038da-56ba-49e4-8835-3d59fea9ade4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
