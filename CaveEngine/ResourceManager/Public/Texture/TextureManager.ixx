@@ -5,6 +5,7 @@ module;
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
 #include "Texture/Texture.h"
+#include "Debug/Log.h"
 //#include "Texture/MultiTexture.h"
 
 export module TextureManager;
@@ -52,6 +53,11 @@ namespace cave
 
 	Texture* TextureManager::AddTexture(const std::filesystem::path& filename)
 	{
+		if (mTextures.contains(filename.generic_string())) {
+			LOGEF(eLogChannel::GRAPHICS, "%s file already exist.", filename.string().c_str());
+			return nullptr;
+		}
+
 		Texture* newTexture = reinterpret_cast<Texture*>(gCoreMemoryPool.Allocate(sizeof(Texture)));
 		new(newTexture) cave::Texture(mDevice, filename);
 		mTextures[filename.generic_string()] = newTexture;
@@ -61,6 +67,11 @@ namespace cave
 
 	MultiTexture* TextureManager::AddMultiTexture(const std::filesystem::path& filename, uint32_t frame, uint32_t row, uint32_t column)
 	{
+		if (mTextures.contains(filename.generic_string())) {
+			LOGEF(eLogChannel::GRAPHICS, "%s file already exist.", filename.string().c_str());
+			return nullptr;
+		}
+
 		MultiTexture* newTexture = reinterpret_cast<MultiTexture*>(gCoreMemoryPool.Allocate(sizeof(MultiTexture)));
 		new(newTexture) cave::MultiTexture(mDevice, filename,row,column,frame);
 		mTextures[filename.generic_string()] = newTexture;

@@ -250,15 +250,17 @@ void RenderTest()
 	
 	cave::Renderer* renderer = main.GetRenderer();
 
+	for (int i = 0; i < 1000; i++) {
+		renderer->AddSprite("orange_mushroom.png");
+	}
 
-	renderer->AddSprite("orange_mushroom.png");
-
+	//renderer->AddSprite("orange_mushroom.png");
 	//cave::Sprite* newSprite = reinterpret_cast<cave::Sprite*>(gCoreMemory.Allocate(sizeof(cave::Sprite)));
 	//new(newSprite) cave::Sprite(cave::TextureManager::GetInstance.GetTexture("orange_mushroom.png"));
 
-	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
-	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
-	//renderer->SetSpritePosition(2, cave::Float2(500, 200));
+	//renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
+	//renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
+	//renderer->SetSpritePosition(1, cave::Float2(500, 200));
 	//renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
 
 	if (result == cave::eResult::CAVE_OK)

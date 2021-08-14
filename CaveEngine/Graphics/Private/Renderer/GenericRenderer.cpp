@@ -85,8 +85,12 @@ namespace cave
 
 	eResult GenericRenderer::AddSprite(const std::filesystem::path& filePath)
 	{
+		Texture* newTexture = TextureManager::GetInstance().GetTexture(filePath.generic_string());
+		if (newTexture == nullptr) 
+		{
+			newTexture = TextureManager::GetInstance().AddTexture(filePath);
+		}
 
-		Texture* newTexture = TextureManager::GetInstance().AddTexture(filePath);
 		//새 스프라이트 생성
 		cave::Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
 		new(newSprite) cave::Sprite(newTexture);
@@ -103,8 +107,11 @@ namespace cave
 
 	eResult GenericRenderer::AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t frame, float duration, bool isLoof)
 	{
+		MultiTexture* newTexture = reinterpret_cast<MultiTexture*>(TextureManager::GetInstance().GetTexture(filePath.generic_string()));
+		if (newTexture == nullptr) {
+			newTexture = TextureManager::GetInstance().AddMultiTexture(filePath, frame, 1, frame);
+		}
 
-		MultiTexture* newTexture = TextureManager::GetInstance().AddMultiTexture(filePath,frame,1,frame);
 		cave::AnimatedSprite* newSprite = reinterpret_cast<AnimatedSprite*>(mPool->Allocate(sizeof(AnimatedSprite)));
 		new(newSprite) cave::AnimatedSprite(animationName,newTexture,frame,duration,isLoof,mPool);
 
@@ -120,7 +127,11 @@ namespace cave
 
 	eResult GenericRenderer::AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t row, uint32_t column, uint32_t frame, float duration, bool isLoof)
 	{
-		MultiTexture* newTexture = TextureManager::GetInstance().AddMultiTexture(filePath, frame, row, column);
+		MultiTexture* newTexture = reinterpret_cast<MultiTexture*>(TextureManager::GetInstance().GetTexture(filePath.generic_string()));
+		if (newTexture == nullptr) {
+			MultiTexture* newTexture = TextureManager::GetInstance().AddMultiTexture(filePath, frame, row, column);
+		}
+
 		cave::AnimatedSprite* newSprite = reinterpret_cast<AnimatedSprite*>(mPool->Allocate(sizeof(AnimatedSprite)));
 		new(newSprite) cave::AnimatedSprite(animationName, newTexture, frame, duration, isLoof, mPool);
 

@@ -56,6 +56,7 @@ namespace cave
 		MSG  msg;
 		msg.message = WM_NULL;
 		PeekMessage(&msg, nullptr, 0u, 0u, PM_NOREMOVE);
+		float test = 0.0f;
 		while (WM_QUIT != msg.message)
 		{
 			// Process window events.
@@ -73,6 +74,10 @@ namespace cave
 				// Update the scene.
 				mRenderer->Update();
 
+				for (int i = 0; i < 1000; i++) {
+					mRenderer->SetSpritePosition(i, cave::Float2(10+ i*test, 300));
+				}
+				test += 0.01f;
 				// Render frames during idle time (when no messages are waiting).
 				mRenderer->Render();
 

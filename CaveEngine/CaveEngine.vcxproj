@@ -334,6 +334,7 @@
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
     <ClCompile Include="Graphics\Public\Device\Window.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Camera.ixx" />
+    <ClCompile Include="Graphics\Public\Renderer\Renderable.ixx" />
     <ClCompile Include="Graphics\Public\Shader\Shader.ixx" />
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />

@@ -42,7 +42,7 @@ namespace cave {
 		//vertex buffer pool 持失.
 		D3D11_BUFFER_DESC vertexBufferDesc;
 		vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		vertexBufferDesc.ByteWidth = sizeof(VertexT) * mPoolSize;
+		vertexBufferDesc.ByteWidth = sizeof(VertexT) * mPoolSize * 4;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		vertexBufferDesc.MiscFlags = 0;
@@ -57,7 +57,7 @@ namespace cave {
 		//index buffer pool 持失.
 		D3D11_BUFFER_DESC indexBufferDesc;
 		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		indexBufferDesc.ByteWidth = sizeof(WORD) * mPoolSize;
+		indexBufferDesc.ByteWidth = sizeof(WORD) * mPoolSize * 6;
 		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		indexBufferDesc.CPUAccessFlags = 0;
 		indexBufferDesc.MiscFlags = 0;
