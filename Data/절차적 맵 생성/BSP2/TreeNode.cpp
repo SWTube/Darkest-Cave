@@ -189,7 +189,7 @@ void TreeNode::allocateRoom(int** _map) {
 	// 벽에서 1,2,3칸 떨어짐
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(2,3);
+	std::uniform_int_distribution<int> dis(0,3);
 
 	int start_h = this->info.points_y + dis(gen);
 	int end_h = this->info.points_y + this->info.height - dis(gen);
@@ -202,12 +202,25 @@ void TreeNode::allocateRoom(int** _map) {
 	this->info.room_height = end_h - start_h;
 	this->info.room_width = end_w - start_w;
 
-	for (int i = start_h; i < end_h; i++) {
-		for (int j = start_w; j < end_w; j++) {
-			_map[i][j] = 2;
+	std::uniform_int_distribution<int> dis2(1, 10);
+	if (dis2(gen) == 1 || dis2(gen) == 2 || dis2(gen) == 3) {
+		for (int i = start_h; i < end_h; i++) {
+			for (int j = start_w; j < end_w; j++) {
+				_map[i][j] = 4;
+			}
 		}
 	}
-
+	else {
+		for (int i = start_h; i < end_h; i++) {
+			for (int j = start_w; j < end_w; j++) {
+				if(dis2(gen) == 1)
+					_map[i][j] = 4;
+				else
+					_map[i][j] = 2;
+			}
+		}
+	}
+	
 	//_map[start_h][start_w] = this->info.num;
 }
 
@@ -264,6 +277,49 @@ void TreeNode::connectRoom(int** _map, TreeNode* room1, TreeNode* room2) {
 	}
 	else {
 		// 부모들도 이어야 함
+
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> dis(1, 4);
+		// 2개의 방의 통로 유형은 총 4가지로 규정
+		
+		int x1, x2, y1, y2, w1, w2, h1, h2;
+
+		if (room1->info.room_points_x <= room2->info.room_points_x) {
+			if (room1->info.room_points_y <= room2->info.room_points_y) { // 1, 3 분면에 위치한 경우
+				x1 = room1->info.room_points_x;
+				x2 = room2->info.room_points_x;
+				y1 = room1->info.room_points_y;
+				y2 = room2->info.room_points_y;
+				w1 = room1->info.room_width;
+				w2 = room2->info.room_width;
+				h1 = room1->info.room_height;
+				h2 = room2->info.room_height;
+
+				if (dis(gen) == 1) { // 위쪽, 왼쪽
+
+				}
+				else if (dis(gen) == 2) { // 위쪽, 아래쪽
+
+				}
+				else if (dis(gen) == 3) { // 오른쪽, 왼쪽
+
+				}
+				else if (dis(gen) == 4) { // 오른쪽, 아래쪽
+
+				}
+			}
+			else { // 2, 4 분면에 위치한 경우
+				x1 = room1->info.room_points_x;
+				x2 = room2->info.room_points_x;
+				y1 = room1->info.room_points_y;
+				y2 = room2->info.room_points_y;
+				w1 = room1->info.room_width;
+				w2 = room2->info.room_width;
+				h1 = room1->info.room_height;
+				h2 = room2->info.room_height;
+			}
+		}
 	}
 }
 
@@ -337,11 +393,13 @@ void TreeNode::devide(int** _map, int _numOfRoom) {
 		}
 	}
 
+	/*
 	for (int i = numOfRoom; i < 2 * numOfRoom - 1; i++) {
 		TreeNode* location1 = this->goRoom(i);
 		TreeNode* location2 = this->goRoom(i + 1);
 		this->connectRoom(_map, location1, location2);
 	}
+	*/
 }
 
 // 각 방의 정보 프린트
