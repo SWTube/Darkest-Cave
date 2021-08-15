@@ -15,4 +15,5 @@
 ![image](https://user-images.githubusercontent.com/37788658/127624893-4ac5cb9c-6b1c-444b-bdb8-6f7548ffe5fc.png)
 ![image](https://user-images.githubusercontent.com/37788658/129198350-5e2e41a5-61eb-4100-bbbb-5af4a8c5105b.png)
 아래쪽은 함수를 일일이 사용한 것이 아닌 하나의 함수로 맵을 생성한 모습. 다만 Leaf 노드들끼리 연결하는 함수까지는 만들었으나 그 위의 부모 노드끼리 연결하는 함수를 만들어야 
+![image](https://user-images.githubusercontent.com/37788658/129476793-b6ce72d1-c1c2-4244-bba3-edf879ab343c.png)
 
