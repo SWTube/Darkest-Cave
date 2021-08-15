@@ -8,7 +8,7 @@
 
 #include "CoreTypes.h"
 #include "Containers/Vertex.h"
-#include "Texture/Texture.h"
+//#include "Texture/Texture.h"
 //#include "Texture/MultiTexture.h"
 
 //import Texture;
@@ -20,14 +20,14 @@ namespace cave
 	class Sprite
 	{
 	public:
-		Sprite() = delete;
+		Sprite() = default;
 		Sprite(Texture* texture);
 		Sprite(const Sprite& other);
 		Sprite(Sprite&& other);
 		virtual ~Sprite();
 		Sprite& operator=(const Sprite& other);
 		Sprite& operator=(Sprite&& other);
-		eResult Init(ID3D11Device* device, ID3D11DeviceContext* context, uint32_t screenWidth, uint32_t screenHeight);
+		//eResult Init(ID3D11Device* device, ID3D11DeviceContext* context, uint32_t screenWidth, uint32_t screenHeight);
 
 		virtual void Destroy();
 		virtual void Update();
@@ -51,7 +51,10 @@ namespace cave
 		constexpr void GetSize(uint32_t& outWidth, uint32_t& outHeight) const;
 		constexpr void SetSize(uint32_t width, uint32_t height);
 		constexpr void SetTexture(Texture* texture);
-		
+	
+	public:
+		static uint32_t mScreenWidth;
+		static uint32_t mScreenHeight;
 
 	protected:
 		//eResult initializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context);
@@ -66,7 +69,6 @@ namespace cave
 		};
 
 
-		//D3D11 WARNING: ID3D11DeviceContext::DrawIndexed: Index buffer has not enough space! [ EXECUTION WARNING #359: DEVICE_DRAW_INDEX_BUFFER_TOO_SMALL]
 		static constexpr WORD INDICES[INDICES_COUNT] = {
 			0, 1, 2,
 			2, 3, 0,
@@ -76,18 +78,18 @@ namespace cave
 
 		uint32_t mWidth = 0u;
 		uint32_t mHeight = 0u;
-		uint32_t mScreenWidth = 0u;
-		uint32_t mScreenHeight = 0u;
 
-		Float3 mPosition;
-		Float3 mPreviousPosition;
+
+		Float3 mPosition = Float3(0, 0, 0);
+		Float3 mPreviousPosition = Float3(-1, -1, -1);
 
 		bool mbNeedsUpdate = false;
 
-		ID3D11Buffer* mVertexBuffer = nullptr;
-		ID3D11Buffer* mIndexBuffer = nullptr;
+		//ID3D11Buffer* mVertexBuffer = nullptr;
+		//ID3D11Buffer* mIndexBuffer = nullptr;
 
 	};
+
 
 	constexpr uint32_t Sprite::GetIndicesCount() const
 	{

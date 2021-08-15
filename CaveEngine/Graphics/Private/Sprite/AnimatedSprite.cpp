@@ -1,5 +1,5 @@
 #include "Sprite\AnimatedSprite.h"
-#include <iostream>
+
 namespace cave {
 
 	AnimatedSprite::AnimatedSprite(std::string name, Animation* animation, MemoryPool* pool) :

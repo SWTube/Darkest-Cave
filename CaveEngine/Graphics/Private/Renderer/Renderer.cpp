@@ -3,25 +3,71 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Renderer/WindowsRenderer.h"
-
-#ifdef __WIN32__
-#include <ppltasks.h>
-
-#include "Debug/Log.h"
-
+#include "Renderer/Renderer.h"
 
 namespace cave
 {
-	//--------------------------------------------------------------------------------------
-	// Destroy Renderer
-	//--------------------------------------------------------------------------------------
-	WindowsRenderer::~WindowsRenderer()
+
+	Renderer::Renderer()
+		: mPool(reinterpret_cast<MemoryPool*>(gCoreMemoryPool.Allocate(sizeof(MemoryPool))))
+		, mFrameCount(0u)
+	{
+		new(mPool) MemoryPool(RENDERER_MEMORY_SIZE);
+	}
+
+	Renderer::~Renderer()
 	{
 		Destroy();
 	}
 
-	eResult WindowsRenderer::Init(Window* window)
+	void Renderer::Destroy()
+	{
+
+		if (mShader != nullptr)
+		{
+			mShader->~Shader();
+			mPool->Deallocate(mShader, sizeof(Shader));
+			mShader = nullptr;
+		}
+
+		if (mCamera != nullptr)
+		{
+			mCamera->~Camera();
+			mPool->Deallocate(mCamera, sizeof(Camera));
+			mCamera = nullptr;
+		}
+
+		if (mDeviceResources != nullptr)
+		{
+			mDeviceResources->~DeviceResources();
+			mPool->Deallocate(mDeviceResources, sizeof(DeviceResources));
+			mDeviceResources = nullptr;
+		}
+
+		if (mBufferManager != nullptr)
+		{
+			mBufferManager->~BufferManager();
+			mPool->Deallocate(mBufferManager, sizeof(BufferManager));
+			mBufferManager = nullptr;
+		}
+
+		if (mPool != nullptr)
+		{
+			mPool->~MemoryPool();
+			gCoreMemoryPool.Deallocate(mPool, sizeof(MemoryPool));
+			mPool = nullptr;
+		}
+
+	}
+
+	DeviceResources* Renderer::GetDeviceResources() const
+	{
+		return mDeviceResources;
+	}
+
+
+
+	eResult Renderer::Init(Window* window)
 	{
 		CreateDeviceDependentResources();
 		CreateWindowSizeDependentResources(window);
@@ -33,7 +79,7 @@ namespace cave
 			return eResult::CAVE_OUT_OF_MEMORY;
 		}
 		mCamera->SetPosition(0.0f, 0.0f, -100.f);
-		
+
 		//set TextureManager device.
 		TextureManager::GetInstance().SetDevice(mDeviceResources->GetDevice());
 
@@ -55,18 +101,11 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
-	//--------------------------------------------------------------------------------------
-	// Destroy Renderer
-	//--------------------------------------------------------------------------------------
-	void WindowsRenderer::Destroy()
-	{
-		GenericRenderer::Destroy();
-	}
 
 	//--------------------------------------------------------------------------------------
 	// Render a frame
 	//--------------------------------------------------------------------------------------
-	void WindowsRenderer::Render()
+	void Renderer::Render()
 	{
 		ID3D11DeviceContext* context = mDeviceResources->GetDeviceContext();
 
@@ -79,29 +118,32 @@ namespace cave
 		//DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
 		DirectX::XMMATRIX& ortho = mDeviceResources->GetOrthoMatrix();
 
-		// ëª¨ë“  2D ë Œë”ë§ì„ ì‹œìž‘í•˜ë ¤ë©´ Z ë²„í¼ë¥¼ ë•ë‹ˆë‹¤.
-		//mDeviceResources->TurnZBufferOff(); // ì´ê±° ì—†ìœ¼ë©´ ì•ˆ ê·¸ë ¤ì§...
+		// ¸ðµç 2D ·»´õ¸µÀ» ½ÃÀÛÇÏ·Á¸é Z ¹öÆÛ¸¦ ²ü´Ï´Ù.
+		//mDeviceResources->TurnZBufferOff(); // ÀÌ°Å ¾øÀ¸¸é ¾È ±×·ÁÁü...
 		mDeviceResources->TurnOnAlphaBlending();
 
 		std::vector<VertexT> vertexData;
+		std::vector<Sprite*> sprites = RenderQueue::GetInstance().GetRenderQueue();
 		// 3. Set Render Data ---------------------------------------------------------------------------------------------
-		for (Sprite* const object : mSprites)
+		for (Sprite* const object : sprites)
 		{
 			object->Render(mDeviceResources->GetDeviceContext());
 			VertexT* vertices = object->GetVertices();
 			for (unsigned int i = 0; i < 4; i++) {
-				
+
 				vertexData.push_back(vertices[i]);
 			}
 
 		}
 
-		mBufferManager->UpdateVertexBuffer(vertexData.data(), mSprites.size());
+		mBufferManager->UpdateVertexBuffer(vertexData.data(), sprites.size());
 
 		int count = 0;
-		for (Sprite* const object : mSprites)
+		for (Sprite* const object : sprites)
 		{
-			mShader->Render(context, object->GetIndicesCount(), count * object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, object->GetTexture()->GetTexture());
+			Texture* tex = object->GetTexture();
+			if(tex != nullptr) // ³ªÁß¿¡ texture°¡ nullptrÀÌ¿©µµ »öÀ» ÀÔÇô¼­ ±×·ÁÁÖ°Ô ±¸ÇöÇÏ°í ½ÍÀ½.
+				mShader->Render(context, object->GetIndicesCount(), count * object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, tex->GetTexture());
 			count++;
 		}
 
@@ -111,10 +153,10 @@ namespace cave
 		// Present the frame to the screen.
 		mDeviceResources->RenderEnd();
 
-	
+
 	}
 
-	eResult WindowsRenderer::CreateDeviceDependentResources()
+	eResult Renderer::CreateDeviceDependentResources()
 	{
 		// Instantiate the device manager class.
 		mDeviceResources = reinterpret_cast<DeviceResources*>(mPool->Allocate(sizeof(DeviceResources)));
@@ -129,16 +171,16 @@ namespace cave
 		return result;
 	}
 
-	eResult WindowsRenderer::CreateWindowSizeDependentResources(Window* window)
+	eResult Renderer::CreateWindowSizeDependentResources(Window* window)
 	{
 		// We have a window, so initialize window size-dependent resources.
 
 		return 	mDeviceResources->CreateWindowResources(window);
 	}
 
-	void WindowsRenderer::Update()
+	void Renderer::Update()
 	{
-		for (Sprite* const object : mSprites)
+		for (Sprite* const object : RenderQueue::GetInstance().GetRenderQueue())
 		{
 			object->Update();
 		}
@@ -151,9 +193,9 @@ namespace cave
 	}
 
 
-	bool WindowsRenderer::WindowShouldClose()
+	bool Renderer::WindowShouldClose()
 	{
 		return false;
 	}
+
 }
-#endif

@@ -77,20 +77,20 @@ namespace cave
 		Destroy();
 	}
 
-	eResult Sprite::Init(ID3D11Device* device, ID3D11DeviceContext* context, uint32_t screenWidth, uint32_t screenHeight)
-	{
-		mScreenWidth = screenWidth;
-		mScreenHeight = screenHeight;
+	//eResult Sprite::Init(ID3D11Device* device, ID3D11DeviceContext* context, uint32_t screenWidth, uint32_t screenHeight)
+	//{
+	//	mScreenWidth = screenWidth;
+	//	mScreenHeight = screenHeight;
 
-		mPreviousPosition = Float3(-1.0f, -1.0f, 1.0f);
-		//mPosition = Float3(0.0f, 0.0f, 1.0f);
+	//	mPreviousPosition = Float3(-1.0f, -1.0f, 1.0f);
+	//	//mPosition = Float3(0.0f, 0.0f, 1.0f);
 
-		//eResult result = initializeBuffers(device, context);
+	//	//eResult result = initializeBuffers(device, context);
 
-		//return result;
+	//	//return result;
 
-		return eResult::CAVE_OK;
-	}
+	//	return eResult::CAVE_OK;
+	//}
 
 	void Sprite::Destroy()
 	{
@@ -99,16 +99,17 @@ namespace cave
 			mTexture->~Texture(); //
 			mTexture = nullptr;
 		}
-		if (mVertexBuffer != nullptr)
-		{
-			mVertexBuffer->Release();
-			mVertexBuffer = nullptr;
-		}
-		if (mIndexBuffer != nullptr)
-		{
-			mIndexBuffer->Release();
-			mIndexBuffer = nullptr;
-		}
+
+		//if (mVertexBuffer != nullptr)
+		//{
+		//	mVertexBuffer->Release();
+		//	mVertexBuffer = nullptr;
+		//}
+		//if (mIndexBuffer != nullptr)
+		//{
+		//	mIndexBuffer->Release();
+		//	mIndexBuffer = nullptr;
+		//}
 
 
 	}
@@ -232,4 +233,6 @@ namespace cave
 	}
 
 
+	uint32_t Sprite::mScreenWidth = 0u;
+	uint32_t Sprite::mScreenHeight = 0u;
 } // namespace cave

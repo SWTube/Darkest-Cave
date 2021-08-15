@@ -1,8 +1,18 @@
 module;
-#include "Texture/Texture.h"
+#include <filesystem>
+
+#include "ResourceManagerApiPch.h"
+
+#include "CoreGlobals.h"
+#include "CoreTypes.h"
+#include "Containers/Vertex.h"
+
+//#include "Texture/Texture.h"
 export module MultiTexture;
 
-//import Texture;
+import Texture;
+import DdsTextureLoader;
+import WicTextureLoader;
 
 namespace cave
 {

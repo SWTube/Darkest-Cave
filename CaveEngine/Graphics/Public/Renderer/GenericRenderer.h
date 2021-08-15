@@ -4,21 +4,26 @@
  */
 
 #pragma once
-
+#include <string>
 #include "GraphicsApiPch.h"
 
 #include "CoreTypes.h"
 //#include "Device/DeviceResources.h"
 //#include "Renderer/Camera.h"
 #include "Containers/Vertex.h"
-#include "Sprite/Sprite.h"
-#include "Sprite/AnimatedSprite.h"
+//#include "Texture/Texture.h"
+//#include "Sprite/Sprite.h"
+//include "Sprite/AnimatedSprite.h"
+
 
 import DeviceResources;
 import Camera;
 import Shader;
 import TextureManager;
+import Texture;
 import BufferManager;
+import Sprite;
+import AnimatedSprite;
 
 namespace cave
 {

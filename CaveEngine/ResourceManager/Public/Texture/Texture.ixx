@@ -11,8 +11,9 @@ module;
 
 export module Texture;
 
-export import DdsTextureLoader;
-export import WicTextureLoader;
+//export import std.filesystem;
+import DdsTextureLoader;
+import WicTextureLoader;
 
 namespace cave
 {

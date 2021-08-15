@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <string>
 
+//import Sprite;
+
 namespace cave {
 	struct Animation {
 		MultiTexture* texture;

@@ -4,29 +4,29 @@ module;
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Texture/Texture.h"
+//#include "Texture/Texture.h"
 #include "Debug/Log.h"
 //#include "Texture/MultiTexture.h"
 
 export module TextureManager;
 
-//import Texture;
-import MultiTexture;
+export import Texture;
+export import MultiTexture;
 
 namespace cave
 {
 	export class TextureManager final
 	{
 	public:
-		static TextureManager& GetInstance() {
+		static TextureManager& GetInstance() 
+		{
 			static TextureManager msInstance;
 			return msInstance;
 		}
 		Texture* AddTexture(const std::filesystem::path& filename);
 		MultiTexture* AddMultiTexture(const std::filesystem::path& filename, uint32_t frame, uint32_t row, uint32_t column);
 		Texture* GetTexture(const std::string& key);
-		void RemoveTexture(Texture* texture);
-		void RemoveTextureForKey(const std::string& key);
+		void RemoveTexture(const std::string& key);
 		void SetDevice(ID3D11Device* device);
 
 	private:
@@ -88,13 +88,16 @@ namespace cave
 		return nullptr;
 	}
 
-	void TextureManager::RemoveTexture(Texture* texture)
+	void TextureManager::RemoveTexture(const std::string& key)
 	{
+		if (mTextures.contains(key))
+		{
+			mTextures[key]->~Texture();
+			gCoreMemoryPool.Deallocate(mTextures[key], sizeof(Texture));
+			mTextures[key] = nullptr;
+			mTextures.erase(key);
+		}
 
-	}
-
-	void TextureManager::RemoveTextureForKey(const std::string& key)
-	{
 	}
 
 	void TextureManager::SetDevice(ID3D11Device* device)

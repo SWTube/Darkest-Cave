@@ -22,7 +22,7 @@
 #include "Engine.h"
 #include "Object/TagPool.h"
 #include "Shapes/Quadrant.h"
-#include "Sprite/Sprite.h"
+//#include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
 
 #if _DEBUG
@@ -44,6 +44,9 @@ import Log;
 import String;
 import Trie;
 import TextureManager;
+import Renderable;
+
+//import Sprite;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -250,14 +253,17 @@ void RenderTest()
 	
 	cave::Renderer* renderer = main.GetRenderer();
 
-	for (int i = 0; i < 1000; i++) {
-		renderer->AddSprite("orange_mushroom.png");
-	}
+	cave::Renderable o1;
+	o1.SetTexture(cave::TextureManager::GetInstance().AddTexture("orange_mushroom.png"));
+	//o1.SetFlipX(true);
+	//o1.SetFlipY(true);
+	o1.Render();
+	
 
+	//renderer->AddSprite("orange_mushroom.png");
 	//renderer->AddSprite("orange_mushroom.png");
 	//cave::Sprite* newSprite = reinterpret_cast<cave::Sprite*>(gCoreMemory.Allocate(sizeof(cave::Sprite)));
 	//new(newSprite) cave::Sprite(cave::TextureManager::GetInstance.GetTexture("orange_mushroom.png"));
-
 	//renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
 	//renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
 	//renderer->SetSpritePosition(1, cave::Float2(500, 200));

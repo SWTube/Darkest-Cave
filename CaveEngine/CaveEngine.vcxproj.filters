@@ -94,18 +94,6 @@
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
-      <Filter>Source Files\Graphics\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp">
       <Filter>Source Files\ThirdParty\lodepng</Filter>
     </ClCompile>
@@ -151,12 +139,14 @@
     <ClCompile Include="Graphics\Public\Device\Window.ixx" />
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Camera.ixx" />
-    <ClCompile Include="Graphics\Private\Sprite\Sprite.cpp" />
     <ClCompile Include="ResourceManager\Public\Texture\Texture.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />
-    <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
     <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Renderable.ixx" />
+    <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx" />
+    <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
+    <ClCompile Include="Graphics\Public\Renderer\RenderQueue.ixx" />
+    <ClCompile Include="Graphics\Public\Renderer\Renderer.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -267,26 +257,8 @@
     <ClInclude Include="Gameplay\Public\Tmp\Transform.h">
       <Filter>Header Files\Gameplay\Tmp</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\Camera.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Public\GenericEngine.h">
       <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\Sprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\Renderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
@@ -304,7 +276,6 @@
       <Filter>Header Files\Core\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Device\Window.h" />
-    <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">

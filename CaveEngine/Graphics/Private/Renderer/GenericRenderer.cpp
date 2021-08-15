@@ -95,14 +95,14 @@ namespace cave
 		cave::Sprite* newSprite = reinterpret_cast<Sprite*>(mPool->Allocate(sizeof(Sprite)));
 		new(newSprite) cave::Sprite(newTexture);
 
-		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+		//eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 		
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
-		newSprite->SetPosition(200, 200); // temp
+		//newSprite->SetPosition(200, 200); // temp
 		newSprite->SetZIndex(mSprites.size());
 		mSprites.push_back(newSprite);
 
-		return result;
+		return eResult::CAVE_OK;
 	}
 
 	eResult GenericRenderer::AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t frame, float duration, bool isLoof)
@@ -115,14 +115,15 @@ namespace cave
 		cave::AnimatedSprite* newSprite = reinterpret_cast<AnimatedSprite*>(mPool->Allocate(sizeof(AnimatedSprite)));
 		new(newSprite) cave::AnimatedSprite(animationName,newTexture,frame,duration,isLoof,mPool);
 
-		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+		//eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 		
 		//temp setting
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
 		newSprite->SetPosition(300, 200); // temp
 		newSprite->SetZIndex(mSprites.size());
 		mSprites.push_back(newSprite);
-		return result;
+
+		return eResult::CAVE_OK;
 	}
 
 	eResult GenericRenderer::AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t row, uint32_t column, uint32_t frame, float duration, bool isLoof)
@@ -135,7 +136,7 @@ namespace cave
 		cave::AnimatedSprite* newSprite = reinterpret_cast<AnimatedSprite*>(mPool->Allocate(sizeof(AnimatedSprite)));
 		new(newSprite) cave::AnimatedSprite(animationName, newTexture, frame, duration, isLoof, mPool);
 
-		eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+		//eResult result = newSprite->Init(mDeviceResources->GetDevice(), mDeviceResources->GetDeviceContext(), mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 
 		//temp setting
 		newSprite->SetSize(newTexture->GetWidth(), newTexture->GetHeight());
@@ -143,7 +144,7 @@ namespace cave
 		newSprite->SetZIndex(mSprites.size());
 		mSprites.push_back(newSprite);
 
-		return result;
+		return eResult::CAVE_OK;
 	}
 
 	
