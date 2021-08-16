@@ -87,15 +87,21 @@ export namespace cave
 		using ConstIterator = LinkedListConstIterator<ElementType>;
 		using Iterator = LinkedListIterator<ElementType>;
 
-		constexpr LinkedList(MemoryPool& pool = gCoreMemoryPool);
-		constexpr LinkedList(size_t count, const ElementType& element, MemoryPool& pool = gCoreMemoryPool);
+		constexpr LinkedList();
+		constexpr LinkedList(MemoryPool& pool);
+		constexpr LinkedList(size_t count, const ElementType& element);
+		constexpr LinkedList(size_t count, const ElementType& element, MemoryPool& pool);
 		template<class IteratorType>
 		requires IteratorInputAble<IteratorType, ElementType>
-		constexpr LinkedList(IteratorType first, IteratorType last, MemoryPool& pool = gCoreMemoryPool);
+		constexpr LinkedList(IteratorType first, IteratorType last);
+		template<class IteratorType>
+		requires IteratorInputAble<IteratorType, ElementType>
+		constexpr LinkedList(IteratorType first, IteratorType last, MemoryPool& pool);
 		constexpr LinkedList(const LinkedList& other);
 		constexpr LinkedList(const LinkedList& other, MemoryPool& pool);
 		constexpr LinkedList(LinkedList&& other);
-		constexpr LinkedList(std::initializer_list<ElementType> init, MemoryPool& pool = gCoreMemoryPool);
+		constexpr LinkedList(std::initializer_list<ElementType> init);
+		constexpr LinkedList(std::initializer_list<ElementType> init, MemoryPool& pool);
 
 		constexpr LinkedList& operator=(const LinkedList& other);
 		constexpr LinkedList& operator=(LinkedList&& other);
@@ -145,7 +151,7 @@ export namespace cave
 		constexpr void Swap(LinkedList& other);
 
 	private:
-		MemoryPool& mPool;
+		MemoryPool* mPool;
 		LinkedListNode<ElementType>* mHead;
 		LinkedListNode<ElementType>* mTail;
 		size_t mSize;
@@ -324,10 +330,15 @@ export namespace cave
 	*/
 
 	template<class ElementType>
+	constexpr LinkedList<ElementType>::LinkedList()
+		: LinkedList(gCoreMemoryPool)
+	{ }
+
+	template<class ElementType>
 	constexpr LinkedList<ElementType>::LinkedList(MemoryPool& pool)
-		: mPool(pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
+		: mPool(&pool)
+		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
 		, mSize(0)
 	{
 		mHead->mNext = mTail;
@@ -338,10 +349,15 @@ export namespace cave
 	}
 
 	template<class ElementType>
+	constexpr LinkedList<ElementType>::LinkedList(size_t count, const ElementType& element)
+		: LinkedList(count, element, gCoreMemoryPool)
+	{ }
+
+	template<class ElementType>
 	constexpr LinkedList<ElementType>::LinkedList(size_t count, const ElementType& element, MemoryPool& pool)
-		: mPool(pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
+		: mPool(&pool)
+		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
 		, mSize(count)
 	{
 		mHead->mPrev = nullptr;
@@ -351,7 +367,7 @@ export namespace cave
 
 		for (size_t i = 0; i < count; ++i)
 		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 
 			newNode->mElement = element;
 
@@ -368,10 +384,17 @@ export namespace cave
 	template<class ElementType>
 	template<class IteratorType>
 	requires IteratorInputAble<IteratorType, ElementType>
+	constexpr LinkedList<ElementType>::LinkedList(IteratorType first, IteratorType last)
+		: LinkedList(first, last, gCoreMemoryPool)
+	{ }
+
+	template<class ElementType>
+	template<class IteratorType>
+	requires IteratorInputAble<IteratorType, ElementType>
 	constexpr LinkedList<ElementType>::LinkedList(IteratorType first, IteratorType last, MemoryPool& pool)
-		: mPool(pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
+		: mPool(&pool)
+		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
 		, mSize(0)
 	{
 		mHead->mPrev = nullptr;
@@ -381,7 +404,7 @@ export namespace cave
 
 		for (auto iterator = first; iterator != last; ++iterator)
 		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 
 			newNode->mElement = *iterator;
 
@@ -399,40 +422,14 @@ export namespace cave
 
 	template<class ElementType>
 	constexpr LinkedList<ElementType>::LinkedList(const LinkedList& other)
-		: mPool(other.mPool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mSize(other.mSize)
-	{
-		mHead->mPrev = nullptr;
-		mTail->mNext = nullptr;
-
-		LinkedListNode<ElementType>* otherNode = other.mHead;
-		LinkedListNode<ElementType>* prevNode = mHead;
-
-		while (otherNode->mNext != other.mTail)
-		{
-			otherNode = otherNode->mNext;
-
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
-
-			newNode->mElement = otherNode->mElement;
-
-			newNode->mPrev = prevNode;
-			prevNode->mNext = newNode;
-
-			prevNode = newNode;
-		}
-
-		mTail->mPrev = prevNode;
-		prevNode->mNext = mTail;
-	}
+		: LinkedList(other, gCoreMemoryPool)
+	{ }
 
 	template<class ElementType>
 	constexpr LinkedList<ElementType>::LinkedList(const LinkedList& other, MemoryPool& pool)
-		: mPool(pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
+		: mPool(&pool)
+		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
 		, mSize(other.mSize)
 	{
 		mHead->mPrev = nullptr;
@@ -445,7 +442,7 @@ export namespace cave
 		{
 			otherNode = otherNode->mNext;
 
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 			
 			newNode->mElement = otherNode->mElement;
 
@@ -462,8 +459,8 @@ export namespace cave
 	template<class ElementType>
 	constexpr LinkedList<ElementType>::LinkedList(LinkedList&& other)
 		: mPool(other.mPool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
 		, mSize(other.mSize)
 	{
 		mHead->mNext = other.mHead->mNext;
@@ -477,10 +474,15 @@ export namespace cave
 	}
 
 	template<class ElementType>
+	constexpr LinkedList<ElementType>::LinkedList(std::initializer_list<ElementType> init)
+		: LinkedList(init, gCoreMemoryPool)
+	{ }
+
+	template<class ElementType>
 	constexpr LinkedList<ElementType>::LinkedList(std::initializer_list<ElementType> init, MemoryPool& pool)
-		: mPool(pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>))))
+		: mPool(&pool)
+		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
 		, mSize(0)
 	{
 		mHead->mPrev = nullptr;
@@ -490,7 +492,7 @@ export namespace cave
 
 		for (auto iterator = init.begin(); iterator != init.end(); ++iterator)
 		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 			
 			newNode->mElement = *iterator;
 
@@ -530,7 +532,7 @@ export namespace cave
 
 				while (setElementNode != mTail)
 				{
-					mPool.Deallocate(setElementNode, sizeof(LinkedListNode<ElementType>));
+					mPool->Deallocate(setElementNode, sizeof(LinkedListNode<ElementType>));
 					setElementNode = setElementNode->mNext;
 				}
 
@@ -543,7 +545,7 @@ export namespace cave
 				{
 					getElementNode = getElementNode->mNext;
 
-					LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+					LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 
 					newNode->mElement = getElementNode->mElement;
 
@@ -595,10 +597,10 @@ export namespace cave
 		{
 			tempNode = mHead;
 			mHead = mHead->mNext;
-			mPool.Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+			mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
 		}
 
-		mPool.Deallocate(mTail, sizeof(LinkedListNode<ElementType>));
+		mPool->Deallocate(mTail, sizeof(LinkedListNode<ElementType>));
 	}
 
 	template<class ElementType>
@@ -648,7 +650,7 @@ export namespace cave
 	template<class ElementType>
 	constexpr size_t LinkedList<ElementType>::GetMaxSize() const
 	{
-		return mPool.GetFreeMemorySize() / sizeof(ElementType);
+		return mPool->GetFreeMemorySize() / sizeof(ElementType);
 	}
 
 	template<class ElementType>
@@ -695,7 +697,7 @@ export namespace cave
 			LinkedListNode<ElementType>* tempNode = mHead->mNext;
 			mHead->mNext = mHead->mNext->mNext;
 
-			mPool.Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+			mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
 		}
 
 		mSize = 0;
@@ -709,7 +711,7 @@ export namespace cave
 		assert(position.mNode != mHead);
 
 		LinkedListNode<ElementType>* positionNode = position.mNode;
-		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 		
 		newNode->mElement = element;
 
@@ -739,7 +741,7 @@ export namespace cave
 
 		for (size_t i = 0; i < count; ++i)
 		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 			
 			newNode->mElement = element;
 
@@ -774,7 +776,7 @@ export namespace cave
 
 		for (auto iterator = first; iterator != last; ++iterator)
 		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 			
 			newNode->mElement = *iterator;
 
@@ -803,7 +805,7 @@ export namespace cave
 		position.mNode->mNext->mPrev = position.mNode->mPrev;
 		position.mNode->mPrev->mNext = position.mNode->mNext;
 
-		mPool.Deallocate(position.mNode, sizeof(LinkedListNode<ElementType>));
+		mPool->Deallocate(position.mNode, sizeof(LinkedListNode<ElementType>));
 		--mSize;
 		
 		return returnIterator;
@@ -826,7 +828,7 @@ export namespace cave
 			LinkedListNode<ElementType>* tempNode = deleteNode;
 			deleteNode = deleteNode->mNext;
 
-			mPool.Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+			mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
 
 			--mSize;
 		}
@@ -837,7 +839,7 @@ export namespace cave
 	template<class ElementType>
 	constexpr void LinkedList<ElementType>::InsertFront(const ElementType& element)
 	{
-		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 		
 		newNode->mElement = element;
 
@@ -853,7 +855,7 @@ export namespace cave
 	template<class ElementType>
 	constexpr void LinkedList<ElementType>::InsertBack(const ElementType& element)
 	{
-		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool.Allocate(sizeof(LinkedListNode<ElementType>)));
+		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
 		
 		newNode->mElement = element;
 
@@ -876,7 +878,7 @@ export namespace cave
 		mHead->mNext->mNext->mPrev = mHead;
 		mHead->mNext = mHead->mNext->mNext;
 
-		mPool.Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+		mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
 
 		--mSize;
 	}
@@ -891,7 +893,7 @@ export namespace cave
 		mTail->mPrev->mPrev->mNext = mTail;
 		mTail->mPrev = mTail->mPrev->mPrev;
 
-		mPool.Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+		mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
 
 		--mSize;
 	}
