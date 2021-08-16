@@ -176,31 +176,40 @@ namespace cave
 		DirectX::XMMATRIX& ortho = mDeviceResources->GetOrthoMatrix();
 
 		// 모든 2D 렌더링을 시작하려면 Z 버퍼를 끕니다.
-		//mDeviceResources->TurnZBufferOff(); // 이거 없으면 안 그려짐...
+		//mDeviceResources->TurnZBufferOff(); 
 		mDeviceResources->TurnOnAlphaBlending();
 
+		//std::vector<VertexT> vertexData;
+		//std::vector<Sprite*> sprites = RenderQueue::GetInstance().GetRenderQueue();
+		//// 3. Set Render Data ---------------------------------------------------------------------------------------------
+		//for (Sprite* const object : sprites)
+		//{
+		//	object->Render(mDeviceResources->GetDeviceContext());
+		//	VertexT* vertices = object->GetVertices();
+		//	for (unsigned int i = 0; i < 4; i++) {
+
+		//		vertexData.push_back(vertices[i]);
+		//	}
+
+		//}
 		std::vector<VertexT> vertexData;
-		std::vector<Sprite*> sprites = RenderQueue::GetInstance().GetRenderQueue();
-		// 3. Set Render Data ---------------------------------------------------------------------------------------------
-		for (Sprite* const object : sprites)
+		std::vector<RenderCommand> commands = RenderQueue::GetInstance().GetRenderQueue();
+		for (RenderCommand command : commands) 
 		{
-			object->Render(mDeviceResources->GetDeviceContext());
-			VertexT* vertices = object->GetVertices();
-			for (unsigned int i = 0; i < 4; i++) {
-
-				vertexData.push_back(vertices[i]);
+			for (unsigned int i = 0; i < 4; i++) 
+			{
+				vertexData.push_back(command.vertexData[i]);
 			}
-
 		}
 
-		mBufferManager->UpdateVertexBuffer(vertexData.data(), sprites.size());
+		mBufferManager->UpdateVertexBuffer(vertexData.data(), commands.size());
 
 		int count = 0;
-		for (Sprite* const object : sprites)
+		for (RenderCommand command : commands)
 		{
-			Texture* tex = object->GetTexture();
+			Texture* tex = command.texture;
 			if (tex != nullptr) // 나중에 texture가 nullptr이여도 색을 입혀서 그려주게 구현하고 싶음.
-				mShader->Render(context, object->GetIndicesCount(), count * object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, tex->GetTexture());
+				mShader->Render(context, 6, count * 6, worldMatrix, viewMatrix, ortho, tex->GetTexture());
 			count++;
 		}
 
@@ -210,6 +219,7 @@ namespace cave
 		// Present the frame to the screen.
 		mDeviceResources->RenderEnd();
 
+		RenderQueue::GetInstance().ClearRenderQueue();
 
 	}
 
@@ -237,10 +247,10 @@ namespace cave
 
 	void Renderer::Update()
 	{
-		for (Sprite* const object : RenderQueue::GetInstance().GetRenderQueue())
-		{
-			object->Update();
-		}
+		//for (Sprite* const object : RenderQueue::GetInstance().GetRenderQueue())
+		//{
+		//	object->Update();
+		//}
 
 		++mFrameCount;
 		if (mFrameCount == UINT32_MAX)

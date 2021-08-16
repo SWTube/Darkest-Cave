@@ -9,6 +9,7 @@ module;
 #include "GraphicsApiPch.h"
 
 #include "CoreTypes.h"
+#include "CoreGlobals.h"
 #include "Containers/Vertex.h"
 //#include "Texture/Texture.h"
 
@@ -57,21 +58,26 @@ namespace cave {
 
 	};
 
-	export class AnimatedSprite : public Sprite {
+	export class AnimatedSprite : public Sprite 
+	{
 	public:
 		AnimatedSprite() = delete;
 		AnimatedSprite(std::string name, Animation* animation, MemoryPool* pool);
+		AnimatedSprite(std::string name, const std::filesystem::path& filename, uint32_t frame, float duration, bool isLoof);
 		AnimatedSprite(std::string name, MultiTexture* texture, uint32_t frame, const float duration, bool isLoof, MemoryPool* pool);
 		AnimatedSprite(const AnimatedSprite& other);
 
 		virtual ~AnimatedSprite();
 
 		void Destroy() override;
-		void Update() override;
+
 
 	public:
 		void AddAniamtion(std::string name, Animation* animation);
 		void SetState(std::string state);
+	
+	protected:
+		void update() override;
 
 	private:
 		MemoryPool* mPool = nullptr;
@@ -100,6 +106,20 @@ namespace cave {
 		Animation* newAnim = reinterpret_cast<Animation*>(mPool->Allocate(sizeof(Animation)));
 		new(newAnim) Animation(texture, frame, duration, isLoof);
 		AddAniamtion(name, newAnim);
+	}
+
+	//나중에 고쳐야해!!
+	AnimatedSprite::AnimatedSprite(std::string name, const std::filesystem::path& filename, uint32_t frame, float duration, bool isLoof)
+		:mState(name)
+	{
+		mTexture = TextureManager::GetInstance().GetTexture(filename.generic_string());
+		if (mTexture == nullptr) mTexture = TextureManager::GetInstance().AddMultiTexture(filename,frame,1,frame);
+		SetTexture(mTexture);
+		mbIsPlaying = true;
+		Animation* newAnim = reinterpret_cast<Animation*>(gCoreMemoryPool.Allocate(sizeof(Animation)));
+		new(newAnim) Animation(reinterpret_cast<MultiTexture*>(mTexture), frame, duration, isLoof);
+		AddAniamtion(name, newAnim);
+
 	}
 
 	AnimatedSprite::AnimatedSprite(const AnimatedSprite& other)
@@ -137,7 +157,7 @@ namespace cave {
 
 	}
 
-	void AnimatedSprite::Update()
+	void AnimatedSprite::update()
 	{
 		if (!mbIsPlaying) return;
 

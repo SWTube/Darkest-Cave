@@ -11,10 +11,20 @@ module;
 #include "Containers/Vertex.h"
 export module RenderQueue;
 
-import Sprite;
+import TextureManager;
 
 namespace cave 
 {
+	export struct RenderCommand 
+	{
+		VertexT* vertexData = nullptr;
+		//WORD* indexData = nullptr;
+		Texture* texture = nullptr;
+		uint32_t zIndex = 0u;
+		uint32_t bufferKey = 0u;
+	};
+
+
 	export class RenderQueue final
 	{
 	public:
@@ -24,29 +34,34 @@ namespace cave
 			return instance;
 		}
 
-		void AddSprite(Sprite* sprite);
-		std::vector<Sprite*> GetRenderQueue();
-
+		void AddRenderCommand(RenderCommand RenderCommand);
+		std::vector<RenderCommand> GetRenderQueue();
+		void ClearRenderQueue();
 	private:
 		RenderQueue() = default;
 		RenderQueue(const RenderQueue& other) = delete;
 		RenderQueue& operator=(const RenderQueue& other) = delete;
 		~RenderQueue();
 
-		std::vector<Sprite*> mSprites;
+		std::vector<RenderCommand> mRenderCommands;
 	};
 
 	RenderQueue::~RenderQueue()
 	{
-		mSprites.clear();
+		mRenderCommands.clear();
 	}
-	void RenderQueue::AddSprite(Sprite* sprite)
+	void RenderQueue::AddRenderCommand(RenderCommand RenderCommand)
 	{
-		mSprites.push_back(sprite);
+		mRenderCommands.push_back(RenderCommand);
 	}
 	
-	std::vector<Sprite*> RenderQueue::GetRenderQueue()
+	std::vector<RenderCommand> RenderQueue::GetRenderQueue()
 	{
-		return mSprites;
+		return mRenderCommands;
+	}
+	
+	void RenderQueue::ClearRenderQueue()
+	{
+		mRenderCommands.clear();
 	}
 }

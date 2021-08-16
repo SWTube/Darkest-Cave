@@ -12,16 +12,14 @@ module;
 //#include "Texture/Texture.h"
 
 export module Renderable;
-import Texture;
-import MultiTexture;
-import RenderQueue;
-import Sprite;
+export import RenderQueue;
+
 
 namespace cave {
 	export class Renderable
 	{
 	public:
-		Renderable();
+		Renderable(/*gameObject owner*/);
 		Renderable(const Renderable& other) = delete;
 		Renderable(Renderable&& other) = delete;
 		Renderable& operator=(const Renderable& other) = delete;
@@ -29,23 +27,20 @@ namespace cave {
 
 		virtual ~Renderable();
 		
-		void Destroy();
+		virtual void Destroy();
 		void Render(/*gameObject owner*/);
-		void SetTexture(Texture* texture);
-		void SetTextureWithFilePath(const std::filesystem::path& filePath);
-		constexpr void SetFlipX(bool flip);
-		constexpr void SetFlipY(bool flip);
 
-	private:
-		void createSprite();
-		Sprite* mSprite = nullptr;
-		
+	protected:
+		virtual void update() = 0;
+		virtual RenderCommand makeRenderCommand() = 0;
+
+	protected:
 
 	};
 
 	Renderable::Renderable()
 	{
-		createSprite();
+
 	}
 
 	Renderable::~Renderable() 
@@ -55,8 +50,7 @@ namespace cave {
 
 	void Renderable::Destroy()
 	{
-		mSprite->~Sprite();
-		gCoreMemoryPool.Deallocate(mSprite,sizeof(Sprite));
+
 	}
 
 	void Renderable::Render(/*gameObject owner*/)
@@ -64,45 +58,12 @@ namespace cave {
 		/*
 		* gameObject 이용해서 위치정보 얻어오기.
 		*/
+		update();
 
-
-		if (mSprite != nullptr) 
-		{
-			RenderQueue::GetInstance().AddSprite(mSprite);
-		}
-
+		RenderCommand command = makeRenderCommand(/*gameObject owner*/);
+	
+		RenderQueue::GetInstance().AddRenderCommand(command);
+		
 	}
 
-	void Renderable::SetTexture(Texture* texture) 
-	{
-		mSprite->SetTexture(texture);
-	}
-
-	void Renderable::SetTextureWithFilePath(const std::filesystem::path& filePath) 
-	{
-		mSprite->SetTextureWithFilePath(filePath);
-	}
-
-	constexpr void Renderable::SetFlipX(bool flip)
-	{
-		if (mSprite != nullptr) 
-		{
-			mSprite->SetFlipX(flip);
-		}
-	}
-
-	constexpr void Renderable::SetFlipY(bool flip)
-	{
-		if (mSprite != nullptr)
-		{
-			mSprite->SetFlipY(flip);
-		}
-	}
-
-	void Renderable::createSprite()
-	{
-		mSprite = reinterpret_cast<Sprite*>(gCoreMemoryPool.Allocate(sizeof(Sprite)));
-		new(mSprite) cave::Sprite();
-		mSprite->SetPosition(400,400);
-	}
 }

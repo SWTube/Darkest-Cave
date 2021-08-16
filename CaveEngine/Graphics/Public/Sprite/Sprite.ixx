@@ -9,12 +9,12 @@ module;
 #include "Containers/Vertex.h"
 //#include "Texture/Texture.h"
 export module Sprite;
-
+import Renderable;
 import TextureManager;
 
 namespace cave
 {
-	export class Sprite
+	export class Sprite : public Renderable
 	{
 	public:
 		Sprite() = default;
@@ -25,9 +25,7 @@ namespace cave
 		Sprite& operator=(const Sprite& other);
 		Sprite& operator=(Sprite&& other);
 
-		virtual void Destroy();
-		virtual void Update();
-		virtual void Render(ID3D11DeviceContext* context);
+		virtual void Destroy() override;
 
 		constexpr uint32_t GetIndicesCount() const;
 		constexpr Texture* GetTexture() const;
@@ -54,7 +52,10 @@ namespace cave
 		void SetTextureWithFilePath(const std::filesystem::path& filePath);
 
 	protected:
+		virtual void update() override;
+		RenderCommand makeRenderCommand();
 
+	protected:
 		static uint32_t mScreenWidth;
 		static uint32_t mScreenHeight;
 
@@ -80,13 +81,13 @@ namespace cave
 		uint32_t mWidth = 0u;
 		uint32_t mHeight = 0u;
 
+		uint32_t mZIndex = 0u;
 
 		Float3 mPosition = Float3(0, 0, 0);
 		Float3 mPreviousPosition = Float3(-1, -1, -1);
 
 		bool mFlipX = false;
 		bool mFlipY = false;
-		bool mbNeedsUpdate = false;
 	};
 	
 	uint32_t Sprite::mScreenWidth = 0u;
@@ -130,6 +131,7 @@ namespace cave
 
 	inline constexpr void Sprite::SetZIndex(const uint32_t z)
 	{
+		mZIndex = z;
 		mPosition.Z = 1.0f - static_cast<float>(z) * 0.01f;
 	}
 
@@ -189,7 +191,6 @@ namespace cave
 	{
 		mWidth = width;
 		mHeight = height;
-		mbNeedsUpdate = true;
 	}
 
 	void Sprite::SetTexture(Texture* texture)
@@ -202,6 +203,10 @@ namespace cave
 	void Sprite::SetTextureWithFilePath(const std::filesystem::path& filePath)
 	{
 		mTexture = TextureManager::GetInstance().GetTexture(filePath.generic_string());
+		if (mTexture == nullptr)
+		{
+			mTexture = TextureManager::GetInstance().AddTexture(filePath);
+		}
 		mWidth = mTexture->GetWidth();
 		mHeight = mTexture->GetHeight();
 	}
@@ -276,16 +281,17 @@ namespace cave
 			mTexture = nullptr;
 		}
 	}
-	void Sprite::Update()
+	void Sprite::update()
 	{
 	}
 
 
-	VertexT* Sprite::GetVertices() {
+	VertexT* Sprite::GetVertices() 
+	{
 		return mVertices;
 	}
 
-	void Sprite::Render(ID3D11DeviceContext* context)
+	RenderCommand Sprite::makeRenderCommand()
 	{
 		float left = 0.0f;
 		float right = 0.0f;
@@ -294,11 +300,6 @@ namespace cave
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		VertexT* verticesPtr = nullptr;
 		eResult result = eResult::CAVE_OK;
-
-		if (!mbNeedsUpdate && (mPosition == mPreviousPosition))
-		{
-			return;
-		}
 
 		mPreviousPosition = mPosition;
 
@@ -330,14 +331,14 @@ namespace cave
 		mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), endCoord));		// bottom right
 		mVertices[3] = std::move(VertexT(Float3(left, bottom, mPosition.Z), Float2(startCoord.X, endCoord.Y)));		// bottom left
 
-
-		//flipX 
-		//mVertices[0] = std::move(VertexT(Float3(left, top, mPosition.Z), Float2(mTexture->GetEndUV().X, mTexture->GetStartUV().Y)));		// top left
-		//mVertices[1] = std::move(VertexT(Float3(right, top, mPosition.Z), Float2(mTexture->GetStartUV().X, mTexture->GetStartUV().Y)));	// top right
-		//mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), Float2(mTexture->GetStartUV().X, mTexture->GetEndUV().Y)));		// bottom right
-		//mVertices[3] = std::move(VertexT(Float3(left, bottom, mPosition.Z), Float2(mTexture->GetEndUV().X, mTexture->GetEndUV().Y)));		// bottom left
+		RenderCommand command
+		{
+			.vertexData = mVertices,
+			.texture = mTexture,
+			.zIndex = mZIndex,
+		};
+		return command;
 	}
-
 
 
 	constexpr void Sprite::SetFlipX(bool Flip)

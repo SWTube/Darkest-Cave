@@ -253,12 +253,6 @@ void RenderTest()
 	
 	cave::Renderer* renderer = main.GetRenderer();
 
-	cave::Renderable o1;
-	o1.SetTexture(cave::TextureManager::GetInstance().AddTexture("orange_mushroom.png"));
-	//o1.SetFlipX(true);
-	//o1.SetFlipY(true);
-	o1.Render();
-	
 
 	//renderer->AddSprite("orange_mushroom.png");
 	//renderer->AddSprite("orange_mushroom.png");

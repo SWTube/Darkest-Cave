@@ -5,6 +5,8 @@
 
 #include "WindowsEngine.h"
 
+import Sprite;
+import AnimatedSprite;
 #ifdef __WIN32__
 
 namespace cave
@@ -57,6 +59,12 @@ namespace cave
 		msg.message = WM_NULL;
 		PeekMessage(&msg, nullptr, 0u, 0u, PM_NOREMOVE);
 
+		Sprite s1;
+		s1.SetTextureWithFilePath("orange_mushroom.png");
+		s1.SetPosition({ 400,400 });
+		
+		AnimatedSprite as1("default", "spaceship.dds", 4, 3, true);
+		as1.SetPosition({ 700,200 });
 		while (WM_QUIT != msg.message)
 		{
 			// Process window events.
@@ -73,6 +81,8 @@ namespace cave
 			{
 				// Update the scene.
 				mRenderer->Update();
+				s1.Render();
+				as1.Render();
 				// Render frames during idle time (when no messages are waiting).
 				mRenderer->Render();
 
