@@ -181,6 +181,12 @@
     <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx">
       <Filter>Header Files\Core\KeyboardInput</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Containers\HashTable.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Pair.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
