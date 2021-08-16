@@ -5,13 +5,13 @@
 
 module;
 
-#include "Containers/TStack.h"
 #include "Debug/Log.h"
 
 export module TreeNode;
 
 import std.core;
 import Array;
+import Stack;
 
 namespace cave
 {
@@ -41,13 +41,13 @@ namespace cave
 	template <typename T>
 	constexpr void TreeNode<T>::SearchDepthFirst(const TreeNode& node)
 	{
-		TStack<const TreeNode&> stack;
+		Stack stack;
 
-		stack.Push(node);
+		stack.Push(&node);
 
 		while (!stack.IsEmpty())
 		{
-			const TreeNode& next = stack.GetTop();
+			const TreeNode& next = *reinterpret_cast<const TreeNode*>(stack.GetTop());
 			stack.Pop();
 
 			for (const TreeNode& child : mChildren)

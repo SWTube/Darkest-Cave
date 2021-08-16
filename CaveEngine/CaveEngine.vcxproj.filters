@@ -181,6 +181,9 @@
     <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx">
       <Filter>Header Files\Core\KeyboardInput</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Stack.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -235,9 +238,6 @@
       <Filter>Header Files\Core\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\Vertex.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\TStack.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\Node.h">

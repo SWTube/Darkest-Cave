@@ -5,13 +5,13 @@
 
 module;
 
-#include "Containers/TStack.h"
 #include "Debug/Log.h"
 
 export module GraphNode;
 
 import std.core;
 import Array;
+import Stack;
 
 namespace cave
 {
@@ -42,14 +42,14 @@ namespace cave
 	constexpr void GraphNode<T>::SearchDepthFirst(const GraphNode& node)
 	{
 		std::unordered_set<const GraphNode&> discovered;
-		TStack<const GraphNode&> stack;
+		Stack stack;
 
 		discovered.insert(node);
-		stack.Push(node);
+		stack.Push(&node);
 
 		while (!stack.IsEmpty())
 		{
-			const GraphNode& next = stack.GetTop();
+			const GraphNode& next = *reinterpret_cast<const GraphNode*>(stack.GetTop());
 			stack.Pop();
 
 			for (const GraphNode& child : mNeightbors)
