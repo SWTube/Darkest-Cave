@@ -254,6 +254,7 @@
     <ClInclude Include="Core\Public\Debug\Log.h">
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
+    <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h" />
     <ClInclude Include="Core\Public\Memory\DataBlock.h" />
     <ClInclude Include="Core\Public\Math\Vector2.h" />
     <ClInclude Include="Core\Public\Memory\Memory.h" />
@@ -321,6 +322,7 @@
     <ClCompile Include="Core\Public\Containers\LinkedList.ixx" />
     <ClCompile Include="Core\Public\Containers\TreeNode.ixx" />
     <ClCompile Include="Core\Public\Containers\Trie.ixx" />
+    <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx" />
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
     <ClCompile Include="Core\Public\Memory\Memory.ixx" />
     <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx" />
