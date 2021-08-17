@@ -86,6 +86,9 @@ namespace cave
 		Float3 mPosition = Float3(0, 0, 0);
 		Float3 mPreviousPosition = Float3(-1, -1, -1);
 
+		Float2 mStartTextureCoord = Float2(0.0f, 0.0f);
+		Float2 mEndTextureCoord = Float2(1.0f, 1.0f);
+
 		bool mFlipX = false;
 		bool mFlipY = false;
 	};
@@ -277,7 +280,7 @@ namespace cave
 	{
 		if (mTexture != nullptr)
 		{
-			mTexture->~Texture(); //
+			//mTexture->~Texture(); //
 			mTexture = nullptr;
 		}
 	}
@@ -308,28 +311,10 @@ namespace cave
 		top = static_cast<float>(mScreenHeight / 2) - mPosition.Y + static_cast<float>(mHeight) / 2.0f;
 		bottom = top - static_cast<float>(mHeight);
 
-		Float2 startCoord = { 0.0f,0.0f };
-		Float2 endCoord = { 1.0f,1.0f };
-		if (mTexture != nullptr) 
-		{
-			startCoord = mTexture->GetStartUV();
-			endCoord = mTexture->GetEndUV();
-		}
-		if (mFlipX) 
-		{
-			float temp = startCoord.X;
-			startCoord.X = endCoord.X;
-			endCoord.X = temp;
-		}
-		if (mFlipY) {
-			float temp = startCoord.Y;
-			startCoord.Y = endCoord.Y;
-			endCoord.Y = temp;
-		}
-		mVertices[0] = std::move(VertexT(Float3(left, top, mPosition.Z), startCoord));		// top left
-		mVertices[1] = std::move(VertexT(Float3(right, top, mPosition.Z), Float2(endCoord.X, startCoord.Y)));	// top right
-		mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), endCoord));		// bottom right
-		mVertices[3] = std::move(VertexT(Float3(left, bottom, mPosition.Z), Float2(startCoord.X, endCoord.Y)));		// bottom left
+		mVertices[0] = std::move(VertexT(Float3(left, top, mPosition.Z), mStartTextureCoord));		// top left
+		mVertices[1] = std::move(VertexT(Float3(right, top, mPosition.Z), Float2(mEndTextureCoord.X, mStartTextureCoord.Y)));	// top right
+		mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), mEndTextureCoord));		// bottom right
+		mVertices[3] = std::move(VertexT(Float3(left, bottom, mPosition.Z), Float2(mStartTextureCoord.X, mEndTextureCoord.Y)));		// bottom left
 
 		RenderCommand command
 		{

@@ -24,8 +24,8 @@ namespace cave
 	export class MultiTexture : public Texture {
 	public:
 		MultiTexture() = delete;
-		MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t frameCount, eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
-		MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t row, uint32_t column, uint32_t frameCount, eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
+		MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t column, eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
+		MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t column, uint32_t row, eTextureFormat textureFormat = eTextureFormat::RGBA, MemoryPool& pool = gCoreMemoryPool);
 		MultiTexture(const MultiTexture& other);
 		MultiTexture(MultiTexture&& other);
 		MultiTexture& operator=(const MultiTexture& other);
@@ -57,14 +57,14 @@ namespace cave
 	}
 
 	//가로로 쭉 이어진 스프라이트 시트라고 가정.
-	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t frameCount, eTextureFormat textureFormat, MemoryPool& pool)
+	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t column, eTextureFormat textureFormat, MemoryPool& pool)
 		:Texture(device, filePath, textureFormat, pool)
 	{
 		mFrame = 0;
-		mFrameCount = frameCount;
-		mColumn = frameCount;
+		mColumn = column;
 		mRow = 1;
-		mUVPerFrame = Float2(1.0f / static_cast<float>(frameCount), 1.0f);
+		mFrameCount = column;
+		mUVPerFrame = Float2(1.0f / static_cast<float>(mFrameCount), 1.0f);
 		mEndUV = mUVPerFrame;
 		mTotalWidth = mWidth;
 		mTotalHeight = mHeight;
@@ -72,10 +72,10 @@ namespace cave
 		mHeight *= mUVPerFrame.Y;
 	}
 
-	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t row, uint32_t column, uint32_t frameCount, eTextureFormat textureFormat, MemoryPool& pool)
+	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t column, uint32_t row, eTextureFormat textureFormat, MemoryPool& pool)
 		:Texture(device, filePath, textureFormat, pool)
 		, mFrame(0)
-		, mFrameCount(frameCount)
+		, mFrameCount(column*row)
 		, mRow(row)
 		, mColumn(column)
 	{
@@ -143,6 +143,7 @@ namespace cave
 
 	void MultiTexture::GetUVCoordsByFrame(uint32_t frame, Float2& startCoord, Float2& endCoord)
 	{
+
 		if (frame > mFrameCount) frame = mFrameCount;
 
 		float u = int(frame % (mColumn)) * mUVPerFrame.X;

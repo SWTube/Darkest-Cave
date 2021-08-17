@@ -27,8 +27,20 @@ namespace cave
 			static TextureManager msInstance;
 			return msInstance;
 		}
+		/*
+		* filename에 해당하는 texture를 생성한 후 반환.
+		* texture 생성에 실패하거나, 이미 해당 texture가 존재 시 nullptr 반환.
+		*/
 		Texture* AddTexture(const std::filesystem::path& filename);
-		MultiTexture* AddMultiTexture(const std::filesystem::path& filename, uint32_t frame, uint32_t row, uint32_t column);
+		/*
+		* filename에 해당하는 Multitexture를 생성한 후 반환.
+		* Multitexture 생성에 실패하거나, 이미 해당 texture가 존재 시 nullptr 반환.
+		*/
+		MultiTexture* AddMultiTexture(const std::filesystem::path& filename, uint32_t column, uint32_t row = 1);
+		
+		//있으면 바로 주고 없으면 만들어서 줌.
+		Texture* GetOrAddTexture(const std::filesystem::path& filename);
+		MultiTexture* GetOrAddMultiTexture(const std::filesystem::path& filename, uint32_t column, uint32_t row = 1);
 		Texture* GetTexture(const std::string& key);
 		void RemoveTexture(const std::string& key);
 		void SetDevice(ID3D11Device* device);
@@ -64,12 +76,20 @@ namespace cave
 
 		Texture* newTexture = reinterpret_cast<Texture*>(gCoreMemoryPool.Allocate(sizeof(Texture)));
 		new(newTexture) cave::Texture(mDevice, filename);
+
+		if(newTexture->GetTexture() == nullptr)
+		{
+			newTexture->~Texture();
+			gCoreMemoryPool.Deallocate(newTexture, sizeof(Texture));
+			return nullptr;
+		}
+
 		mTextures[filename.generic_string()] = newTexture;
 
 		return newTexture;
 	}
 
-	MultiTexture* TextureManager::AddMultiTexture(const std::filesystem::path& filename, uint32_t frame, uint32_t row, uint32_t column)
+	MultiTexture* TextureManager::AddMultiTexture(const std::filesystem::path& filename, uint32_t column, uint32_t row)
 	{
 		if (mTextures.contains(filename.generic_string())) {
 			LOGEF(eLogChannel::GRAPHICS, "%s file already exist.", filename.string().c_str());
@@ -77,7 +97,15 @@ namespace cave
 		}
 
 		MultiTexture* newTexture = reinterpret_cast<MultiTexture*>(gCoreMemoryPool.Allocate(sizeof(MultiTexture)));
-		new(newTexture) cave::MultiTexture(mDevice, filename,row,column,frame);
+		new(newTexture) cave::MultiTexture(mDevice, filename, column,row);
+
+		if (newTexture->GetTexture() == nullptr)
+		{
+			newTexture->~MultiTexture();
+			gCoreMemoryPool.Deallocate(newTexture, sizeof(Texture));
+			return nullptr;
+		}
+
 		mTextures[filename.generic_string()] = newTexture;
 
 		return newTexture;
@@ -92,6 +120,30 @@ namespace cave
 		return nullptr;
 	}
 
+	Texture* TextureManager::GetOrAddTexture(const std::filesystem::path& filename)
+	{
+		Texture* tex;
+		
+		if (mTextures.contains(filename.generic_string()))
+			tex = mTextures[filename.generic_string()];
+		else 
+			tex = AddTexture(filename);
+
+		return tex;
+		
+	}
+	MultiTexture* TextureManager::GetOrAddMultiTexture(const std::filesystem::path& filename, uint32_t column, uint32_t row)
+	{
+		MultiTexture* tex;
+
+		if (mTextures.contains(filename.generic_string()))
+			tex = reinterpret_cast<MultiTexture*>(mTextures[filename.generic_string()]);
+		else
+			tex = AddMultiTexture(filename, column, row);
+
+		return tex;
+	}
+
 	void TextureManager::RemoveTexture(const std::string& key)
 	{
 		if (mTextures.contains(key))
@@ -100,6 +152,10 @@ namespace cave
 			gCoreMemoryPool.Deallocate(mTextures[key], sizeof(Texture));
 			mTextures[key] = nullptr;
 			mTextures.erase(key);
+		}
+		else 
+		{
+			LOGEF(eLogChannel::GRAPHICS, "%s file does not exist.", key.c_str());
 		}
 
 	}

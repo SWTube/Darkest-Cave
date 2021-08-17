@@ -21,7 +21,6 @@ namespace cave
 		//WORD* indexData = nullptr;
 		Texture* texture = nullptr;
 		uint32_t zIndex = 0u;
-		uint32_t bufferKey = 0u;
 	};
 
 

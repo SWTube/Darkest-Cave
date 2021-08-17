@@ -15,7 +15,8 @@ export module Renderable;
 export import RenderQueue;
 
 
-namespace cave {
+namespace cave 
+{
 	export class Renderable
 	{
 	public:

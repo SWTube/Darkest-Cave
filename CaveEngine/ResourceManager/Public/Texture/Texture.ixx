@@ -53,6 +53,7 @@ namespace cave
 		constexpr Float2 GetStartUV() const;
 		constexpr Float2 GetEndUV() const;
 
+
 	protected:
 		typedef struct TexturePointer
 		{
