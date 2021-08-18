@@ -4,6 +4,8 @@
  */
 #include "FiniteStateMachine/State.h"
 
+#ifdef __UNIX__
+
 namespace cave
 {
 	State::State()
@@ -100,3 +102,4 @@ namespace cave
 		return mAnimation;
 	}
 }
+#endif

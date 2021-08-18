@@ -7,6 +7,8 @@
 #include <iostream>
 #include "FiniteStateMachine/FiniteStateMachine.h"
 
+#ifdef __UNIX__
+
 namespace cave
 {
 	FiniteStateMachine::FiniteStateMachine() 
@@ -45,3 +47,4 @@ namespace cave
 		return mCurrentState;
 	}
 }
+#endif

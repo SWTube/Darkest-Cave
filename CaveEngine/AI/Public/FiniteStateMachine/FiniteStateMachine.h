@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import FiniteStateMachine;
+#else
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -28,3 +32,4 @@ namespace cave
 		std::vector<std::pair<std::string, bool>> mCheckList;
 	};
 }
+#endif
