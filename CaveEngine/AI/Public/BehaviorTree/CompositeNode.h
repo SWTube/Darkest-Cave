@@ -4,12 +4,16 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import CompositeNode;
+#else
+
 #include <vector>
-#include "Node.h"
+#include "BehaviorTreeNode.h"
 
 namespace cave
 {
-    class CompositeNode: public Node
+    class CompositeNode: public BehaviorTreeNode
     {
     public:
         CompositeNode();
@@ -17,18 +21,20 @@ namespace cave
         ~CompositeNode();
 
         // Add child back or at position
-        void AddChild(Node*);
+        void AddChild(BehaviorTreeNode*);
         // return child node at given index
-        Node* GetChild(int) const;
+        BehaviorTreeNode* GetChild(uint32_t) const;
         // return children 
-        std::vector<Node*>& GetChildren();
+        std::vector<BehaviorTreeNode*>& GetChildren();
         // return children count
-        int GetChildrenCount() const;
+        uint32_t GetChildrenCount() const;
         // Clear node
         virtual void Clear() override;
 
     private:
-        std::vector<Node*> mChildren;
-        int mChildrenCount = 0;
+        std::vector<BehaviorTreeNode*> mChildren;
+        uint32_t mChildrenCount = 0;
     };
 }
+
+#endif

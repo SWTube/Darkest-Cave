@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/CompositeNode.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     CompositeNode::CompositeNode()
@@ -22,7 +23,7 @@ namespace cave
     {
         // delete[] mChildren;
     }
-    void CompositeNode::AddChild(Node* node)
+    void CompositeNode::AddChild(BehaviorTreeNode* node)
     {
         mChildren.push_back(node);
         mChildrenCount = mChildren.size();
@@ -31,17 +32,17 @@ namespace cave
         node->SetTreeDepth(this->GetTreeDepth() + 1);
     }
 
-    Node* CompositeNode::GetChild(int childNum) const
+    BehaviorTreeNode* CompositeNode::GetChild(uint32_t childNum) const
     {
         return mChildren[childNum];
     }
 
-    std::vector<Node*>& CompositeNode::GetChildren()
+    std::vector<BehaviorTreeNode*>& CompositeNode::GetChildren()
     {
         return mChildren;
     }
 
-    int CompositeNode::GetChildrenCount() const
+    uint32_t CompositeNode::GetChildrenCount() const
     {
         return mChildrenCount;
     }
@@ -56,3 +57,5 @@ namespace cave
         delete this;
     }
 }
+
+#endif

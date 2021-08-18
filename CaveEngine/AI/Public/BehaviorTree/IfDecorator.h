@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import IfDecorator;
+#else
+
 #include <vector>
 #include "Decorator.h"
 
@@ -13,19 +17,22 @@ namespace cave
     {
     public:
         IfDecorator();
-        IfDecorator(const char*, bool (*)());
+        IfDecorator(const char*, std::function<bool(GameObject&)>);
         ~IfDecorator();
 
-        virtual bool Run() override
+        virtual bool Run(GameObject& gameObject) override
         {
-            if (mCondition())
+            if (mCondition(gameObject))
             {
-                return GetChild()->Run();
+                return GetChild()->Run(gameObject);
             }
+            return true;
         }
 
-        void SetCondition(bool (*)());
+        void SetCondition(std::function<bool(GameObject&)>);
     private:
-        bool (*mCondition)();
+        std::function<bool(GameObject&)> mCondition;
     };
 }
+
+#endif

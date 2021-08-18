@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/ActionNode.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     ActionNode::ActionNode()
@@ -13,7 +14,7 @@ namespace cave
         SetTreeDepth(0);
         SetNodeFunction(NULL);
     }
-    ActionNode::ActionNode(const char* nodeName, void (*nodeFunction)())
+    ActionNode::ActionNode(const char* nodeName, std::function<bool(GameObject&)> nodeFunction)
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);
@@ -24,7 +25,7 @@ namespace cave
     {
 
     }
-    void ActionNode::SetNodeFunction(void (*nodeFunction)())
+    void ActionNode::SetNodeFunction(std::function<bool(GameObject&)> nodeFunction)
     {
         mNodeFunction = nodeFunction;
     }
@@ -32,4 +33,5 @@ namespace cave
     {
         delete this;
     }
-}
+} // namespace cave
+#endif

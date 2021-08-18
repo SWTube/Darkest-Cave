@@ -4,6 +4,9 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import Selector;
+#else
 #include <vector>
 #include "CompositeNode.h"
 
@@ -16,9 +19,9 @@ namespace cave
         Selector(const char*);
         ~Selector();
 
-        virtual bool Run() override {
+        virtual bool Run(GameObject& gameObject) override {
             for (const auto& child : GetChildren()) {
-                if (child->Run()) {
+                if (child->Run(gameObject)) {
                     return true;
                 }
             }
@@ -28,3 +31,5 @@ namespace cave
         
     };
 }
+
+#endif

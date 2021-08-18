@@ -4,7 +4,19 @@
  */
 #pragma once
 
-#include "BehaviorTree/Node.h"
+#ifdef __WIN32__
+import ActionNode;
+import BehaviorTreeNode;
+import CompositeNode;
+import RootNode;
+import Sequencer;
+import Selector;
+import IfDecorator;
+import WhileDecorator;
+import RepeatDecorator;
+import RandomNode;
+#else
+#include "BehaviorTree/BehaviorTreeNode.h"
 #include "BehaviorTree/CompositeNode.h"
 #include "BehaviorTree/RootNode.h"
 #include "BehaviorTree/ActionNode.h"
@@ -14,3 +26,5 @@
 #include "BehaviorTree/IfDecorator.h"
 #include "BehaviorTree/WhileDecorator.h"
 #include "BehaviorTree/RepeatDecorator.h"
+#include "BehaviorTree/RandomNode.h"
+#endif

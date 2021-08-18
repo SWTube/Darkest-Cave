@@ -2,126 +2,339 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-import Renderer;
 
-#include "Graphics.h"
-#include "FiniteStateMachine/FiniteStateMachine.h"
-#include "FiniteStateMachine/State.h"
+#include <chrono>
+#include <crtdbg.h>
+#include <cstdlib>
+#include <exception>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <random>
+#include <vector>
+
+#include "tictoc.h"
+
+#include "CoreGlobals.h"
+#include "CoreMinimal.h"
+
+#include "Containers/TStack.h"
+#include "Engine.h"
+#include "Shapes/Quadrant.h"
+#include "Sprite/Sprite.h"
+#include "Containers/Vertex.h"
+#include "String/String.h"
+#include "World/Level.h"
+#include "World/World.h"
+#include "Object/GameObject.h"
+#include "Object/Script.h"
+
+#include "BehaviorTreeScriptTest.h"
+#include "BehaviorTreeScriptTest2.h"
+
+template <size_t N>
+void MemoryTest1(cave::MemoryPool& pool);
+template <size_t N>
+void MemoryTest2(cave::MemoryPool& pool);
+void RenderTest();
+void DemoTest();
+
+constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
+
+#ifdef __WIN32__
+import Hash;
+import Log;
+import String;
+import Trie;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
-
-std::string output;
-
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-    cave::State* idle = new cave::State("idle", '0', 0);
-    cave::State* leftWalk = new cave::State("leftWalk", 'a', -1);
-    cave::State* rightWalk = new cave::State("rightWalk", 'd', 1);
-    cave::State* upWalk = new cave::State("upWalk", 'w', 2);
-    cave::State* downWalk = new cave::State("downWalk", 's', -2);
-    cave::State* sit = new cave::State("sit", 'c', -3);
-    cave::State* jump = new cave::State("jump", 'k', 123456789);
-    cave::State* doubleJump = new cave::State("doubleJump", 'K', 987654321);
-    cave::State* attack = new cave::State("attack", 'j', 1000000);
-    cave::State* leftDash = new cave::State("leftDash", 'A', -111);
-    cave::State* rightDash = new cave::State("rightDash", 'D', 111);
-    cave::State* downDash = new cave::State("downDash", 'W', 222);
-    cave::State* upDash = new cave::State("upDash", 'S', -222);
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+	CoInitialize(0);
+	// Enable run-time memory check for debug builds.
+	#if defined(CAVE_BUILD_DEBUG)
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	#endif
 
-    cave::FiniteStateMachine AI(idle);
+#else
+int main(int32_t argc, char** argv)
+{
+	uint32_t commandFlag = 0u;
+	constexpr uint32_t LOG_FLAG = 0x01;
+	for (int32_t currentArgIndex = 0; currentArgIndex < argc; ++currentArgIndex)
+	{
+		if (strcmp("-l", argv[currentArgIndex]) == 0)
+		{
+			commandFlag |= LOG_FLAG;
+		}
 
-    AI.AddState(idle);
-    AI.AddState(leftWalk);
-    AI.AddState(rightWalk);
-    AI.AddState(upWalk);
-    AI.AddState(downWalk);
-    AI.AddState(sit);
-    AI.AddState(jump);
-    AI.AddState(doubleJump);
-    AI.AddState(attack);
-    AI.AddState(leftDash);
-    AI.AddState(rightDash);
-    AI.AddState(downDash);
-    AI.AddState(upDash);
+		if (commandFlag & LOG_FLAG)
+		{
+			cave::eLogVerbosity verbosity = cave::eLogVerbosity::All;
+			switch (argv[currentArgIndex][0])
+			{
+			case 'V':
+				verbosity = cave::eLogVerbosity::Info;
+				break;
+			case 'D':
+				verbosity = cave::eLogVerbosity::Debug;
+				break;
+			case 'I':
+				verbosity = cave::eLogVerbosity::Info;
+				break;
+			case 'W':
+				verbosity = cave::eLogVerbosity::Warn;
+				break;
+			case 'E':
+				verbosity = cave::eLogVerbosity::Error;
+				break;
+			case 'A':
+				verbosity = cave::eLogVerbosity::Assert;
+				break;
+			default:
+				break;
+			}
 
-    idle->LinkState(leftWalk);
-    idle->LinkState(rightWalk);
-    idle->LinkState(upWalk);
-    idle->LinkState(downWalk);
-    idle->LinkState(sit);
-    idle->LinkState(jump);
-    idle->LinkState(attack);
+			cave::Log::SetVerbosity(verbosity);
+			commandFlag &= (~LOG_FLAG);
+		}
+	}
+#endif
+	DemoTest();
+	//RenderTest();
+#ifdef CAVE_BUILD_DEBUG
+	TicTocTimer clock = tic();
+	// cave::MemoryPoolTest::Test();
+	// cave::StackTest::Test<int>();
+	//  RenderTest();
+	cave::Hashable<>::Initialize();
+	cave::String hello = "hello";
 
-    leftWalk->LinkState(rightWalk);
-    leftWalk->LinkState(upWalk);
-    leftWalk->LinkState(downWalk);
-    leftWalk->LinkState(leftDash);
-    leftWalk->LinkState(jump);
-    leftWalk->LinkState(attack);
+	cave::TrieTest::Main();
+	cave::QuadrantTest::Main();
 
-    rightWalk->LinkState(upWalk);
-    rightWalk->LinkState(downWalk);
-    rightWalk->LinkState(rightDash);
-    rightWalk->LinkState(jump);
-    rightWalk->LinkState(attack);
+	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
-    upWalk->LinkState(downWalk);
-    upWalk->LinkState(upDash);
-    upWalk->LinkState(jump);
-    upWalk->LinkState(attack);
+	// _CrtDumpMemoryLeaks();
 
-    downWalk->LinkState(downDash);
-    downWalk->LinkState(jump);
-    downWalk->LinkState(attack);
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	// cave::StackTest::Test<int>();
+#endif
 
-    jump->LinkState(attack);
-    jump->LinkState(idle);
+	// Cleanup is handled in destructors.
+    return 0;
+}
 
-    leftDash->LinkStateOneway(idle);
-    rightDash->LinkStateOneway(idle);
-    upDash->LinkStateOneway(idle);
-    downDash->LinkStateOneway(idle);
-    doubleJump->LinkStateOneway(idle);
-    jump->LinkStateOneway(doubleJump);
+template <size_t N>
+void MemoryTest1(cave::MemoryPool& pool)
+{
+	double memoryPoolAllocSum = 0.0;
+	double memoryPoolDeallocSum = 0.0;
+	double mallocAllocSum = 0.0;
+	double freeDeallocSum = 0.0;
 
-    char keyInput[24] = { 'a', 's', 'w', 's', 'd', 'w', 'a', 'd', 'x', '0', 'c', '0', 'j', 'k', '0', 'K', 'k', 'K', '0', 'A', 'a', 'A', 'c' };
-    std::string currentState;
-    int animationNumber;
+	std::ofstream record;
+	record.open("memory_test.txt", std::ios::out);
 
-    for (int i = 0; i < 24; ++i) 
-    {
-        AI.UpdateCurrentState(keyInput[i]);
-        currentState = AI.ReturnCurrentState()->GetStateName();
-        animationNumber = AI.ReturnCurrentState()->ShowAnimation();
-    }
+	for (size_t i = 0; i < 1; ++i)
+	{
+		std::vector<void*> pointersByPool;
+		std::vector<size_t> sizes;
+		pointersByPool.reserve(N);
+		sizes.reserve(N);
 
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
+		for (size_t i = 0; i < N; ++i)
+		{
+			size_t size = rand() % 10000 + 10;
+			sizes.push_back(size);
+		}
 
-    if (FAILED(cave::Renderer::Init(hInstance, nCmdShow, L"CaveEngine", L"CaveEngineDemo")))
-    {
-        return 0;
-    }
+		auto startTimeRec0 = std::chrono::high_resolution_clock::now();
+		for (size_t i = 0; i < N; ++i)
+		{
+			pointersByPool.push_back(pool.Allocate(sizes[i]));
+		}
+		auto endTimeRec0 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsedTimeRec0 = endTimeRec0 - startTimeRec0;
+		memoryPoolAllocSum += elapsedTimeRec0.count() * 1000;
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec0.count() * 1000);
 
-    // Main message loop
-    MSG msg = {0};
-    while (WM_QUIT != msg.message)
-    {
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-        else
-        {
-            cave::Renderer::Render();
-        }
-    }
+		auto startTimeRec1 = std::chrono::high_resolution_clock::now();
+		for (size_t i = 0; i < N; ++i)
+		{
+			pool.Deallocate(pointersByPool.back(), sizes[sizes.size() - i - 1]);
+			pointersByPool.pop_back();
+		}
+		auto endTimeRec1 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsedTimeRec1 = endTimeRec1 - startTimeRec1;
+		memoryPoolDeallocSum += elapsedTimeRec1.count() * 1000;
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by MemoryPool took\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec1.count() * 1000);
 
-    cave::Renderer::Destroy();
+		std::vector<void*> pointersByNew;
+		pointersByNew.reserve(N);
 
-    return static_cast<int>(msg.wParam);
+		auto startTimeRec2 = std::chrono::high_resolution_clock::now();
+		for (size_t i = 0; i < N; ++i)
+		{
+			pointersByNew.push_back(cave::Memory::Malloc(sizes[i]));
+		}
+		auto endTimeRec2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsedTimeRec2 = endTimeRec2 - startTimeRec2;
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Allocation of\t%u by malloc took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec2.count() * 1000);
+		mallocAllocSum += elapsedTimeRec2.count() * 1000;
+
+		auto startTimeRec3 = std::chrono::high_resolution_clock::now();
+		for (size_t i = 0; i < N; ++i)
+		{
+			cave::Memory::Free(pointersByNew.back());
+			pointersByNew.pop_back();
+		}
+		auto endTimeRec3 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsedTimeRec3 = endTimeRec3 - startTimeRec3;
+		//LOGDF(cave::eLogChannel::CORE_MEMORY, record, "Deallocation of\t%u by free took\t\t%.12lf", MEMORY_POOL_SIZE, elapsedTimeRec3.count() * 1000);
+		freeDeallocSum += elapsedTimeRec3.count() * 1000;
+	}
+	LOGDF(cave::eLogChannel::CORE_MEMORY, "\n\tmemory pool alloc average: %lf\n\tmemory pool dealloc average: %lf\n\tmalloc alloc average: %lf\n\tfree dealloc average: %lf", memoryPoolAllocSum / 100.0, memoryPoolDeallocSum / 100.0, mallocAllocSum / 100.0, freeDeallocSum / 100.0);
+}
+
+template <size_t N>
+void MemoryTest2(cave::MemoryPool& pool)
+{
+		std::vector<void*> pointersByPool;
+		std::vector<size_t> sizes;
+		pointersByPool.reserve(N);
+		sizes.reserve(N);
+
+		pool.PrintPoolStatus();
+
+		for (size_t i = 0; i < N; ++i)
+		{
+			size_t size = 32;
+			sizes.push_back(size);
+		}
+
+		for (size_t i = 0; i < N; ++i)
+		{
+			pointersByPool.push_back(pool.Allocate(sizes[i]));
+		}
+
+		for (size_t i = 0; i < N; ++i)
+		{
+			if (i == 69)
+			{
+				pool.Deallocate(pointersByPool.back(), sizes.back());
+				pointersByPool.pop_back();
+			}
+			else
+			{
+				pool.Deallocate(pointersByPool.back(), sizes.back());
+				pointersByPool.pop_back();
+			}
+		}
+
+		pool.PrintPoolStatus();
+}
+
+void RenderTest()
+{
+	// Main message loop
+	// Begin initialization.
+
+	// Instantiate the window manager class.
+	cave::Engine main;
+	// Create a window.
+	cave::eResult result = main.Init(1600u, 900u);
+
+
+	cave::Renderer* renderer = main.GetRenderer();
+
+	renderer->AddSprite("orange_mushroom.png");
+
+	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
+	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
+	renderer->SetSpritePosition(2, cave::Float2(500, 200));
+	//renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
+	
+	if (result == cave::eResult::CAVE_OK)
+	{
+		//// Go full-screen.
+		//deviceResources->GoFullScreen();
+
+		//// Whoops! We resized the "window" when we went full-screen. Better
+		//// tell the renderer.
+		//renderer->CreateWindowSizeDependentResources();
+
+		// Run the program.
+		result = main.Run();
+	}
+
+	main.Destroy();
+}
+
+void DemoTest()
+{
+	// Main message loop
+	// Begin initialization.
+
+	// Instantiate the window manager class.
+	cave::Engine main;
+	// Create a window.
+	cave::eResult result = main.Init(1600u, 900u);
+
+	cave::Renderer* renderer = main.GetRenderer();
+
+											// index
+	renderer->AddSprite("mario.png");		// 0 sprite
+	renderer->AddTexture("mario_2.png");	// 1 texture
+	renderer->AddSprite("square.png");		// 1 sprite
+
+	renderer->SetSpritePosition(0, { 0.f, 0.f });
+	renderer->SetSpritePosition(1, { 0.f, 0.f });
+
+	cave::World* world = new cave::World("World_1");
+
+	cave::Level* level = new cave::Level("Level_1");
+
+	cave::GameObject* gameObject = new cave::GameObject("mario");
+	cave::GameObject* gameObject2 = new cave::GameObject("square");
+
+	cave::BehaviorTreeTestScript* bt = new cave::BehaviorTreeTestScript("BT_Test", 0, 0, 0.03f);
+	cave::BehaviorTreeTestScript2* bt2 = new cave::BehaviorTreeTestScript2("BT_Test2", 1, 0, 0.03f);
+
+	cave::GameInstance* gameInstance = main.GetGameInstance();
+	
+	gameObject->SetRenderer(*main.GetRenderer());
+	gameObject->AddScript(*bt);
+
+	gameObject2->SetRenderer(*main.GetRenderer());
+	gameObject2->AddScript(*bt2);
+
+	level->AddGameObject(*gameObject);
+	level->AddGameObject(*gameObject2);
+
+	world->AddLevel(*level) ;
+
+	gameInstance->AddWorld(*world);
+
+	if (result == cave::eResult::CAVE_OK)
+	{
+		//// Go full-screen.
+		//deviceResources->GoFullScreen();
+
+		//// Whoops! We resized the "window" when we went full-screen. Better
+		//// tell the renderer.
+		//renderer->CreateWindowSizeDependentResources();
+
+		// Run the program.
+		result = main.Run();
+	}
+
+	main.Destroy();
 }

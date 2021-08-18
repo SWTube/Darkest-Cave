@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import RepeatDecorator;
+#else
+
 #include <vector>
 #include "Decorator.h"
 
@@ -13,20 +17,25 @@ namespace cave
     {
     public:
         RepeatDecorator();
-        RepeatDecorator(const char*, int);
+        RepeatDecorator(const char*, uint32_t);
         ~RepeatDecorator();
 
-        virtual bool Run() override
+        virtual bool Run(GameObject& gameObject) override
         {
-            for(int i = 0; i < mRepeatCount; i++)
+            uint32_t i;
+            for(i = 0; i < mRepeatCount; i++)
             {
-                GetChild()->Run();
+                GetChild()->Run(gameObject);
             }
-            return true;
+            if(i == mRepeatCount)
+                return true;
+            return false;
         }
 
-        void SetCount(int);
+        void SetCount(uint32_t);
     private:
-        int mRepeatCount;
+        uint32_t mRepeatCount;
     };
 }
+
+#endif

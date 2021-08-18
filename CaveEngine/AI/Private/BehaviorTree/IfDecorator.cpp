@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/IfDecorator.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     IfDecorator::IfDecorator()
@@ -14,7 +15,7 @@ namespace cave
         SetChild(NULL);
         SetCondition(NULL);
     }
-    IfDecorator::IfDecorator(const char* nodeName, bool (*condition)())
+    IfDecorator::IfDecorator(const char* nodeName, std::function<bool(GameObject& gameObject)> condition)
     {
         SetNodeName(nodeName);
         SetParentNode(NULL);
@@ -27,8 +28,10 @@ namespace cave
 
     }
 
-    void IfDecorator::SetCondition(bool (*condition)())
+    void IfDecorator::SetCondition(std::function<bool(GameObject& gameObject)> condition)
     {
         mCondition = condition;
     }
 }
+
+#endif

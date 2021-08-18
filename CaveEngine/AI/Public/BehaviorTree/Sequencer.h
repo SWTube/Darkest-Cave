@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import Sequencer;
+#else
+
 #include <vector>
 #include "CompositeNode.h"
 
@@ -16,9 +20,9 @@ namespace cave
         Sequencer(const char*);
         virtual ~Sequencer();
 
-        virtual bool Run() override {
+        virtual bool Run(GameObject& gameObject) override {
             for (const auto& child : GetChildren()) {
-                if (!child->Run()) {
+                if (!child->Run(gameObject)) {
                     return false;
                 }
             }
@@ -28,3 +32,4 @@ namespace cave
 
     };
 }
+#endif

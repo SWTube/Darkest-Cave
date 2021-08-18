@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -175,15 +175,9 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\CaveEngine\Core\Private\Debug\LogManager.cpp" />
+    <ClCompile Include="..\CaveEngine\Core\Private\Debug\Log.cpp" />
     <ClCompile Include="..\CaveEngine\Core\Private\Memory\Allocator.cpp" />
     <ClCompile Include="..\CaveEngine\Core\Private\Memory\Memory.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\OpenGlTest.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Renderer\CaveApplication.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Renderer\CaveNode.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Renderer\CaveRenderer.cpp" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Renderer\Renderer.ixx" />
-    <ClCompile Include="..\CaveEngine\Graphics\Private\Test\DirectXTest.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -202,7 +196,7 @@
   <ItemGroup>
     <ClInclude Include="..\CaveEngine\Core\Public\Containers\Array.h" />
     <ClInclude Include="..\CaveEngine\Core\Public\Containers\ContainersFwd.h" />
-    <ClInclude Include="..\CaveEngine\Core\Public\Debug\LogManager.h" />
+    <ClInclude Include="..\CaveEngine\Core\Public\Debug\Log.h" />
     <ClInclude Include="..\CaveEngine\Core\Public\Memory\Allocator.h" />
     <ClInclude Include="..\CaveEngine\Core\Public\Memory\Memory.h" />
     <ClInclude Include="..\CaveEngine\Core\Public\Memory\MemoryPool.h" />

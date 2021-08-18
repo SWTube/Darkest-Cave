@@ -1,13 +1,14 @@
-/*!
+﻿/*!
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Core.h"
+#if !defined(__WIN32__)
+#include "Memory/Memory.h"
 
 namespace cave
 {
-	void* MemoryManager::Malloc(size_t size)
+	void* Memory::Malloc(size_t size)
 	{
 		// size:	number of bytes to allocate 
 
@@ -26,6 +27,49 @@ namespace cave
 
 		// return:	On success, returns the pointer to the beginning of newly allocated memory. To avoid a memory leak, the returned pointer must be deallocated with std::free() or std::realloc().
 					//On failure, returns a null pointer.
-		return nullptr;
+		return malloc(size);
+	}
+
+#if !defined(__WIN32__)
+	void* Memory::AlignedAlloc(size_t alignment, size_t size)
+	{
+		return aligned_alloc(alignment, size);
+	}
+#endif
+
+	void* Memory::Calloc(size_t num, size_t size)
+	{
+		return calloc(num, size);
+	}
+
+	void* Memory::Realloc(void* ptr, size_t newSize)
+	{
+		return realloc(ptr, newSize);
+	}
+
+	void Memory::Free(void* ptr)
+	{
+		free(ptr);
+	}
+
+	int32_t Memory::Memcmp(const void* lhs, const void* rhs, size_t count)
+	{
+		return memcmp(lhs, rhs, count);
+	}
+
+	void* Memory::Memset(void* dest, int32_t fill, size_t count)
+	{
+		return memset(dest, fill, count);
+	}
+
+	void* Memory::Memcpy(void* dest, const void* src, size_t count)
+	{
+		return memcpy(dest, src, count);
+	}
+
+	void* Memory::Memmove(void* dest, const void* src, size_t count)
+	{
+		return memmove(dest, src, count);
 	}
 } // namespace cave
+#endif

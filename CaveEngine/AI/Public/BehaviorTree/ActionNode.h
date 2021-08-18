@@ -4,27 +4,30 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import ActionNode;
+#else
 #include <vector>
-#include "Node.h"
+#include "BehaviorTreeNode.h"
 
 namespace cave
 {
-    class ActionNode : public Node
+    class ActionNode : public BehaviorTreeNode
     {
     public:
         ActionNode();
-        ActionNode(const char*, void (*)());
+        ActionNode(const char*, std::function<bool(GameObject&)>);
         ~ActionNode();
 
-        virtual bool Run() override
+        virtual bool Run(GameObject& gameObject) override
         {
-            mNodeFunction();
-            return true;
+            return mNodeFunction(gameObject);
         }
 
-        void SetNodeFunction(void (*)());
+        void SetNodeFunction(std::function<bool(GameObject&)>);
         virtual void Clear() override;
     private:
-        void (*mNodeFunction)();
+        std::function<bool(GameObject&)> mNodeFunction;
     };
 }
+#endif

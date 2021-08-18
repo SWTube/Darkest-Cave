@@ -4,6 +4,10 @@
  */
 #pragma once
 
+#ifdef __WIN32__
+import WhileDecorator;
+#else
+
 #include <vector>
 #include "Decorator.h"
 
@@ -13,20 +17,21 @@ namespace cave
     {
     public:
         WhileDecorator();
-        WhileDecorator(const char*, bool (*)());
+        WhileDecorator(const char*, std::function<bool(GameObject&)>);
         ~WhileDecorator();
 
-        virtual bool Run() override
+        virtual bool Run(GameObject& gameObject) override
         {
             while (mCondition)
             {
-                GetChild()->Run();
+                GetChild()->Run(gameObject);
             }
-            return false;
+            return true;
         }
 
-        void SetCondition(bool (*)());
+        void SetCondition(std::function<bool(GameObject&)>);
     private:
-        bool (*mCondition)();
+        std::function<bool(GameObject&)> mCondition;
     };
 }
+#endif

@@ -4,6 +4,7 @@
  */
 #include "BehaviorTree/RootNode.h"
 
+#ifdef __UNIX__
 namespace cave
 {
     RootNode::RootNode()
@@ -23,3 +24,5 @@ namespace cave
         
     }
 }
+
+#endif

@@ -9,6 +9,8 @@
 	Low level includes.
 ----------------------------------------------------------------------------*/
 
+#include "Utils/Crt.h"
+
 #include "CoreTypes.h"
 
 /*----------------------------------------------------------------------------
@@ -24,11 +26,12 @@
 ----------------------------------------------------------------------------*/
 
 //#include "Misc/VarArgs.h"
-#include "Debug/LogManager.h"
+#include "Debug/Log.h"
 //#include "Logging/LogVerbosity.h"
 //#include "Misc/OutputDevice.h"
 //#include "HAL/PlatformCrt.h"
 //#include "HAL/PlatformMisc.h"
+#include "Assertion/Assert.h"
 //#include "Misc/AssertionMacros.h"
 //#include "Templates/IsPointer.h"
 //#include "HAL/PlatformMemory.h"
@@ -36,6 +39,7 @@
 //#include "Misc/Exec.h"
 //#include "HAL/MemoryBase.h"
 //#include "HAL/UnrealMemory.h"
+#include "Memory/MemoryPool.h"
 //#include "Templates/IsArithmetic.h"
 //#include "Templates/AndOrNot.h"
 //#include "Templates/AreTypesEqual.h"
@@ -69,6 +73,7 @@
 //#include "GenericPlatform/GenericPlatformStricmp.h"
 //#include "GenericPlatform/GenericPlatformString.h"
 //#include "HAL/PlatformString.h"
+#include "String/String.h"
 //#include "Misc/CString.h"
 //#include "Misc/Crc.h"
 //#include "Math/UnrealMathUtility.h"
@@ -105,7 +110,6 @@
 //#include "Misc/ByteSwap.h"
 //#include "Containers/EnumAsByte.h"
 //#include "HAL/PlatformTLS.h"
-#include "CoreGlobals.h"
 //#include "Templates/SharedPointer.h"
 //#include "Internationalization/CulturePointer.h"
 //#include "UObject/WeakObjectPtrTemplates.h"
