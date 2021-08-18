@@ -43,6 +43,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
 #ifdef __WIN32__
 import Hash;
+import HashTable;
 import Log;
 import Stack;
 import String;
@@ -115,28 +116,39 @@ int main(int32_t argc, char** argv)
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
 	// cave::TagPoolTest::Test();
-	cave::Hashable<>::Initialize();
-	cave::String hello = "hello";
-
 	cave::TrieTest::Main();
 	cave::QuadrantTest::Main();
-	
+
 	// LOGDF(cave::eLogChannel::CORE, "Hello World! 0x%x", CAVE_BACKSPACE);
-	clock = tic();
-	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	clock = tic();
 	cave::StackTest::Main();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	clock = tic();
-	cave::StackTest::ComparisonOperator();
+	cave::HashTableTest::Main();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	cave::HashTable hashTable(sizeof(uint32_t));
+	uint32_t keys[256];
+	uint32_t values[256];
+	srand(time(nullptr));
+
+	double averageInsertionTime = 0.0;
+	for (uint32_t i = 0u; i < 256u; ++i)
+	{
+		keys[i] = i;
+		values[i] = static_cast<uint32_t>(rand());
+		clock = tic();
+		hashTable.Insert(&keys[i], &values[i]);
+		double insertionTime = toc(&clock);
+		LOGDF(cave::eLogChannel::CORE_TIMER, "%3u: HashTable Insert elapsed time %lf seconds.", i, insertionTime);
+		averageInsertionTime += insertionTime;
+	}
+	LOGDF(cave::eLogChannel::CORE_TIMER, "HashTable Insert average elapsed time %lf seconds.", averageInsertionTime / 256.0);
 	// _CrtDumpMemoryLeaks();
 
 #endif
-
 	// Cleanup is handled in destructors.
     return 0;
 }

@@ -139,9 +139,6 @@
     <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
       <Filter>Source Files\Graphics\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Hash.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Public\Containers\Hash.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
@@ -365,9 +362,6 @@
     </ClInclude>
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h">
       <Filter>Header Files\ThirdParty\tictoc</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Hash.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Shapes\Quadrant.h">
       <Filter>Header Files\Core\Shapes</Filter>

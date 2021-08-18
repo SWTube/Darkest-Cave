@@ -44,7 +44,7 @@ export namespace cave
 	 * 			[ContiguousContainer](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer)</a>
 	 *
 	 */
-	class String final : public Hashable<eHashId::DEFAULT_ID>
+	class String final
 	{
 		// Non-member functions
 		friend String operator+(const String& lhs, const String& rhs);
@@ -114,14 +114,12 @@ export namespace cave
 		 *
 		 */
 		String(MemoryPool& pool) noexcept
-			: Hashable()
-			, mPool(&pool)
+			: mPool(&pool)
 			, mLength(0ul)
 			, mCapacity(ALIGNED_BYTE)
 			, mString(static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char))))
 		{
 			Memory::Memset(mString, '\0', mCapacity);
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 		}
 
 		/**
@@ -134,15 +132,13 @@ export namespace cave
 		 *
 		 */
 		String(size_t count, char ch, MemoryPool& pool = gCoreMemoryPool)
-			: Hashable()
-			, mPool(&pool)
+			: mPool(&pool)
 			, mLength(count)
 			, mCapacity(GetSufficientCapacity<ALIGNED_BYTE>(mLength))
 			, mString(static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char))))
 		{
 			Memory::Memset(mString, ch, mLength);
 			Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 		}
 
 		/**
@@ -176,8 +172,7 @@ export namespace cave
 		 *
 		 */
 		String(const String& other, size_t pos, size_t count, MemoryPool& pool = gCoreMemoryPool)
-			: Hashable()
-			, mPool(&pool)
+			: mPool(&pool)
 			, mLength(count)
 			, mCapacity(other.mCapacity)
 			, mString(static_cast<char*>(mPool->Allocate(mCapacity * sizeof(char))))
@@ -193,7 +188,6 @@ export namespace cave
 			// Copy s to mString
 			strncpy_s(mString, mCapacity, &other.mString[pos], count);
 			Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 		}
 
 		/**
@@ -210,8 +204,7 @@ export namespace cave
 		 *
 		 */
 		String(const char* s, size_t count, MemoryPool& pool = gCoreMemoryPool)
-			: Hashable()
-			, mPool(&pool)
+			: mPool(&pool)
 		{
 			assert(s != nullptr);
 
@@ -227,7 +220,6 @@ export namespace cave
 			// Copy s to mString
 			strncpy_s(mString, mCapacity, s, count);
 			Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 		}
 
 		/**
@@ -242,8 +234,7 @@ export namespace cave
 		 *
 		 */
 		String(const char* s, MemoryPool& pool = gCoreMemoryPool)
-			: Hashable()
-			, mPool(&pool)
+			: mPool(&pool)
 		{
 			assert(s != nullptr);
 
@@ -255,8 +246,6 @@ export namespace cave
 			// Copy s to mString
 			strncpy_s(mString, mCapacity, s, mLength);
 			Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
-
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 		}
 
 		/**
@@ -269,8 +258,7 @@ export namespace cave
 		 *
 		 */
 		String(const char* first, const char* last, MemoryPool& pool = gCoreMemoryPool)
-			: Hashable()
-			, mPool(&pool)
+			: mPool(&pool)
 		{
 			assert(first != nullptr && last != nullptr);
 
@@ -285,8 +273,6 @@ export namespace cave
 
 			memcpy(mString, first, mLength);
 			Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
-
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 		}
 
 		/**
@@ -299,8 +285,7 @@ export namespace cave
 		 *
 		 */
 		String(const String& other)
-			: Hashable(other)
-			, mPool(other.mPool)
+			: mPool(other.mPool)
 			, mLength(other.mLength)
 			, mCapacity(other.mCapacity)
 		{
@@ -321,8 +306,7 @@ export namespace cave
 		 *
 		 */
 		String(const String& other, MemoryPool& pool)
-			: Hashable(other)
-			, mPool(&pool)
+			: mPool(&pool)
 			, mLength(other.mLength)
 			, mCapacity(other.mCapacity)
 		{
@@ -343,8 +327,7 @@ export namespace cave
 		 *
 		 */
 		String(String&& other) noexcept
-			: Hashable(std::move(other))
-			, mPool(other.mPool)
+			: mPool(other.mPool)
 			, mLength(other.mLength)
 			, mCapacity(other.mCapacity)
 			, mString(other.mString)
@@ -371,8 +354,7 @@ export namespace cave
 		 *
 		 */
 		String(String&& other, MemoryPool& pool)
-			: Hashable(std::move(other))
-			, mPool(&pool)
+			: mPool(&pool)
 			, mLength(other.mLength)
 			, mCapacity(other.mCapacity)
 			, mString(other.mString)
@@ -422,8 +404,6 @@ export namespace cave
 			{
 				assert(mString != str.mString && str.mString != nullptr);
 
-				Hashable::operator=(str);
-
 				if (mCapacity < str.mLength + 1)
 				{
 					mPool->Deallocate(mString, mCapacity * sizeof(char));
@@ -458,8 +438,6 @@ export namespace cave
 			if (this != &str)
 			{
 				assert(mString != str.mString && str.mString != nullptr);
-
-				Hashable::operator=(std::move(str));
 
 				if (mString != nullptr)
 				{
@@ -511,8 +489,6 @@ export namespace cave
 				Memory::Memset(mString, '\0', mLength);
 				strncpy_s(mString, mCapacity, s, sLength);
 				mLength = sLength;
-
-				Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 			}
 
 			return *this;
@@ -535,8 +511,6 @@ export namespace cave
 			mLength = 2ul;
 			Memory::Memset(&mString[1], '\0', mCapacity);
 			mString[0] = ch;
-
-			Hashable::setSize(mLength);
 
 			return *this;
 		}
@@ -791,7 +765,6 @@ export namespace cave
 				mPool->Deallocate(mString, mCapacity * sizeof(char));
 				mCapacity = fitCapacity;
 				mString = newString;
-				Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 			}
 		}
 
@@ -809,7 +782,6 @@ export namespace cave
 		{
 			Memory::Memset(mString, '\0', mLength);
 			mLength = 0ul;
-			Hashable::setSize(mLength);
 		}
 
 		/**
@@ -853,7 +825,6 @@ export namespace cave
 			mLength = mLength + count;
 
 			Memory::Memset(&mString[index], ch, count);
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 
 			return true;
 		}
@@ -919,7 +890,6 @@ export namespace cave
 			mLength = mLength + count;
 
 			strncpy_s(&mString[index], mCapacity - index, s, count);
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 
 			return true;
 		}
@@ -964,7 +934,6 @@ export namespace cave
 			mLength = mLength + str.mLength;
 
 			strncpy_s(&mString[index], mCapacity - index, str.mString, str.mLength);
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 
 			return true;
 		}
@@ -1011,7 +980,6 @@ export namespace cave
 			mLength = mLength + count;
 
 			strncpy_s(&mString[index], mCapacity - index, &str.mString[indexStr], count);
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 
 			return true;
 		}
@@ -1037,7 +1005,6 @@ export namespace cave
 				mString[index] = mString[index + count];
 			}
 			--mLength;
-			Hashable::setSize(mLength);
 
 			return true;
 		}
@@ -1080,7 +1047,6 @@ export namespace cave
 
 			mString[mLength] = ch;
 			++mLength;
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 		}
 
 		/**
@@ -1096,7 +1062,6 @@ export namespace cave
 			if (mLength > 0ul)
 			{
 				--mLength;
-				Hashable::setSize(mLength);
 			}
 		}
 
@@ -1646,7 +1611,6 @@ export namespace cave
 
 			mLength = mLength + count2 - count;
 			mString[mLength] = '\0';
-			Hashable::setSize(mLength);
 
 			return *this;
 		}
@@ -1697,7 +1661,6 @@ export namespace cave
 
 			mLength = mLength + count2 - count;
 			mString[mLength] = '\0';
-			Hashable::setSize(mLength);
 
 			return *this;
 		}
@@ -1759,7 +1722,6 @@ export namespace cave
 
 			mLength = mLength + count2 - count;
 			mString[mLength] = '\0';
-			Hashable::setSize(mLength);
 
 			return *this;
 		}
@@ -1839,7 +1801,6 @@ export namespace cave
 
 			mLength = newLength;
 			mString[mLength] = '\0';
-			Hashable::update(reinterpret_cast<uint8_t*>(mString), mLength);
 		}
 		/**
 		 *
