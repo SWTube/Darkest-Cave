@@ -7,7 +7,7 @@ module;
 
 #include "Debug/Log.h"
 
-export module TreeNode;
+export module Tree;
 
 import std.core;
 import Array;
@@ -26,6 +26,7 @@ namespace cave
 
 		constexpr const T& GetData() const;
 		constexpr Array<T>& GetChildren();
+		constexpr const Array<T>& GetChildren() const;
 	private:
 		const T mData;
 		Array<T> mChildren;
@@ -84,6 +85,12 @@ namespace cave
 
 	template <typename T>
 	constexpr Array<T>& TreeNode<T>::GetChildren()
+	{
+		return mChildren;
+	}
+
+	template <typename T>
+	constexpr const Array<T>& TreeNode<T>::GetChildren() const
 	{
 		return mChildren;
 	}

@@ -163,10 +163,10 @@
     <ClCompile Include="Core\Public\Shapes\TempObject.ixx">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\GraphNode.ixx">
+    <ClCompile Include="Core\Public\Containers\Graph.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
+    <ClCompile Include="Core\Public\Containers\Tree.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Containers\LinkedList.ixx">
@@ -180,6 +180,21 @@
     </ClCompile>
     <ClCompile Include="Core\Public\Containers\Stack.ixx">
       <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Math\Math.ixx">
+      <Filter>Header Files\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Algorithms\Minimax.ixx">
+      <Filter>Header Files\Core\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Algorithms\Knapsack.ixx">
+      <Filter>Header Files\Core\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Algorithms\Scheduler.ixx">
+      <Filter>Header Files\Core\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Algorithms\Huffman.ixx">
+      <Filter>Header Files\Core\Algorithms</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Containers\HashTable.ixx">
       <Filter>Header Files\Core\Containers</Filter>
@@ -548,6 +563,9 @@
     </Filter>
     <Filter Include="Header Files\Core\KeyboardInput">
       <UniqueIdentifier>{8b16aa60-7040-4797-8b91-69daedd00bc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Algorithms">
+      <UniqueIdentifier>{ed02c6ad-3d85-4cca-b1c7-16d924a0b79f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

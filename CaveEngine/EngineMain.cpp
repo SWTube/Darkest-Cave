@@ -42,9 +42,15 @@ void KeyboardTest();
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
 #ifdef __WIN32__
+import Array;
+import Graph;
 import Hash;
 import HashTable;
+import Huffman;
+import Knapsack;
 import Log;
+import Math;
+import Scheduler;
 import Stack;
 import String;
 import Trie;
@@ -116,9 +122,49 @@ int main(int32_t argc, char** argv)
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
 	// cave::TagPoolTest::Test();
-	cave::TrieTest::Main();
-	cave::QuadrantTest::Main();
 
+	cave::String hello = "hello";
+
+	clock = tic();
+	cave::KnapsackTest::Main();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	cave::Array<uint32_t> cache0;
+	cache0.SetSize(21u, 0u);
+
+	cave::Array<uint32_t> cache1;
+	cache1.SetSize(21u, 0u);
+
+	double averageElapsedTime0 = 0.0f;
+	double averageElapsedTime1 = 0.0f;
+	for (uint32_t i = 1; i < 20; ++i)
+	{
+		clock = tic();
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Fibonacci number by top-down %u: %u", i, cave::Math::GetFibonacciNumber(i, cache0));
+		double elapsedTime0 = toc(&clock);
+		averageElapsedTime0 += elapsedTime0;
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", elapsedTime0);
+
+
+		clock = tic();
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Fibonacci number by bottom-up %u: %u", i, cave::Math::GetFibonacciNumberRecursive(i, cache1));
+		double elapsedTime1 = toc(&clock);
+		averageElapsedTime1 += elapsedTime1;
+		LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", elapsedTime1);
+	}
+
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Total Elapsed time %f seconds.", averageElapsedTime0 / 19.0);
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Total Elapsed time %f seconds.", averageElapsedTime1 / 19.0);
+
+	clock = tic();
+	cave::SchedulerTest::Main();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	clock = tic();
+	cave::HuffmanTest::Main();
+	
+	cave::QuadrantTest::Main();
+	
 	// LOGDF(cave::eLogChannel::CORE, "Hello World! 0x%x", CAVE_BACKSPACE);
 
 	clock = tic();
@@ -127,8 +173,6 @@ int main(int32_t argc, char** argv)
 
 	clock = tic();
 	cave::HashTableTest::Main();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
-
 	cave::HashTable hashTable(sizeof(uint32_t));
 	uint32_t keys[256];
 	uint32_t values[256];
@@ -146,6 +190,15 @@ int main(int32_t argc, char** argv)
 		averageInsertionTime += insertionTime;
 	}
 	LOGDF(cave::eLogChannel::CORE_TIMER, "HashTable Insert average elapsed time %lf seconds.", averageInsertionTime / 256.0);
+	clock = tic();
+	cave::GraphTest::Main();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	clock = tic();
+	cave::StackTest::ComparisonOperator();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	cave::StackTest::ComparisonOperator();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// _CrtDumpMemoryLeaks();
 
 #endif
@@ -272,7 +325,6 @@ void RenderTest()
 	cave::Engine main;
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
-
 
 	cave::Renderer* renderer = main.GetRenderer();
 
