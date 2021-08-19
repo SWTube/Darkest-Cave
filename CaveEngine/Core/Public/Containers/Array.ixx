@@ -10,7 +10,7 @@ module;
 
 export module cave.Core.Containers.Array;
 
-import Memory;
+import cave.Core.Memory.Memory;
 
 export namespace cave
 {

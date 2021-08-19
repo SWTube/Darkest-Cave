@@ -240,12 +240,6 @@
     <ClInclude Include="Core\Public\Containers\Node.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Memory\DataBlock.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Memory\Memory.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Memory\MemoryPool.h">
       <Filter>Header Files\Core\Memory</Filter>
     </ClInclude>

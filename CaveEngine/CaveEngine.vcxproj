@@ -253,9 +253,7 @@
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
     <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h" />
-    <ClInclude Include="Core\Public\Memory\DataBlock.h" />
     <ClInclude Include="Core\Public\Math\Vector2.h" />
-    <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\Shapes\Quadrant.h" />
     <ClInclude Include="Core\Public\String\String.h" />

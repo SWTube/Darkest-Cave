@@ -9,7 +9,7 @@ module;
 
 export module cave.Core.Containers.Hash;
 
-import Memory;
+import cave.Core.Memory.Memory;
 
 namespace cave
 {

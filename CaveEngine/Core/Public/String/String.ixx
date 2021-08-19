@@ -14,7 +14,7 @@
 export module String;
 
 //import std.core;
-import Memory;
+import cave.Core.Memory.Memory;
 //import MemoryPool;
 
 export namespace cave

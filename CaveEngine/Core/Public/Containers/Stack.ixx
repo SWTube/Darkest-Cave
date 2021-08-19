@@ -12,7 +12,7 @@ module;
 
 export module cave.Core.Containers.Stack;
 
-import Memory;
+import cave.Core.Memory.Memory;
 
 
 namespace cave

@@ -16,7 +16,7 @@ export module cave.Core.Containers.HashTable;
 import cave.Core.Containers.Array;
 import cave.Core.Containers.Hash;
 import cave.Core.Containers.LinkedList;
-import Memory;
+import cave.Core.Memory.Memory;
 import cave.Core.Containers.Pair;
 
 namespace cave

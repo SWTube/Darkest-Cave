@@ -11,7 +11,7 @@ module;
 #include "CoreTypes.h"
 #include "Assertion/Assert.h"
 
-export module Memory;
+export module cave.Core.Memory.Memory;
 
 //import std.core;
 
