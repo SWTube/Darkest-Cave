@@ -5,7 +5,7 @@ module;
 
 #include "GraphicsApiPch.h"
 
-#include "CoreMinimal.h"
+#include "CoreTypes.h"
 #include "Assertion/Assert.h"
 
 #ifdef __clang__

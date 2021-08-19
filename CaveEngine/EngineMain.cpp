@@ -18,7 +18,6 @@
 #include "tictoc.h"
 
 #include "CoreGlobals.h"
-#include "CoreMinimal.h"
 
 #include "Engine.h"
 #include "Object/TagPool.h"
@@ -47,7 +46,7 @@ import cave.Core.Containers.Hash;
 import cave.Core.Containers.HashTable;
 import Math;
 import cave.Core.Containers.Stack;
-import String;
+import cave.Core.String;
 // import KeyboardInput;
 
 //--------------------------------------------------------------------------------------

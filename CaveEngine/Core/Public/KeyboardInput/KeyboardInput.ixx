@@ -10,10 +10,11 @@ module;
 
 #include "CoreTypes.h"
 
-#include "String/String.h"
 #include "KeyboardInput.h"
 
 export module KeyboardInput;
+
+import cave.Core.String;
 
 namespace cave
 {

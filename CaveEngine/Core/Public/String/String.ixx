@@ -11,7 +11,7 @@
 #include "Debug/Log.h"
 #include "Memory/MemoryPool.h"
 
-export module String;
+export module cave.Core.String;
 
 //import std.core;
 import cave.Core.Memory.Memory;

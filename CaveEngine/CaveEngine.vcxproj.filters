@@ -46,20 +46,11 @@
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Memory\DataBlock.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Memory\Memory.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp">
       <Filter>Source Files\Core\Memory</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files\Core\Thread</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\String\String.cpp">
-      <Filter>Source Files\Core\String</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx">
       <Filter>Header Files\ResourceManager\Texture</Filter>
@@ -183,19 +174,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Public\Core.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\CoreFwd.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\CoreGlobals.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\CoreMinimal.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\CorePch.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\CoreTypes.h">
@@ -245,9 +224,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\Debug\Log.h">
       <Filter>Header Files\Core\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\String\String.h">
-      <Filter>Header Files\Core\String</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Thread\Thread.h">
       <Filter>Header Files\Core\Thread</Filter>
@@ -461,9 +437,6 @@
     </Filter>
     <Filter Include="Source Files\Core\Memory">
       <UniqueIdentifier>{25a30f8f-03e7-47b3-9dab-4077172c118e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\String">
-      <UniqueIdentifier>{a9a6d69d-b235-46ae-91af-11c7b20a136c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Core\Thread">
       <UniqueIdentifier>{579bef00-4407-4288-8feb-1c161804c047}</UniqueIdentifier>
