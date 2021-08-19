@@ -14,7 +14,6 @@
 export module String;
 
 //import std.core;
-import Hash;
 import Memory;
 //import MemoryPool;
 

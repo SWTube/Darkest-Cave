@@ -10,7 +10,7 @@ module;
 #include "Debug/Log.h"
 #include "Memory/MemoryPool.h"
 
-export module Stack;
+export module cave.Core.Containers.Stack;
 
 import Memory;
 
@@ -64,6 +64,43 @@ namespace cave
 		size_t mSize = 0u;
 		size_t mCapacity = INITIAL_CAPACITY;
 		void** mData = nullptr;
+	};
+
+	export class ConstantStack final
+	{
+		// Non-member functions
+		friend constexpr bool operator==(const ConstantStack& lhs, const ConstantStack& rhs);
+		friend constexpr bool operator!=(const ConstantStack& lhs, const ConstantStack& rhs);
+	public:
+		ConstantStack();
+		ConstantStack(MemoryPool& pool);
+		ConstantStack(const ConstantStack& other);
+		ConstantStack(const ConstantStack& other, MemoryPool& pool);
+		ConstantStack(ConstantStack&& other);
+		ConstantStack(ConstantStack&& other, MemoryPool& pool);
+		~ConstantStack();
+		ConstantStack& operator=(const ConstantStack& other);
+		ConstantStack& operator=(ConstantStack&& other);
+
+		// Element Access
+		const void* GetTop() const;
+
+		// Capacity
+		[[nodiscard]] bool IsEmpty() const;
+		size_t GetSize() const;
+
+		// Modifiers
+		void Push(const void* value);
+		void Pop();
+
+		// Constants
+		static constexpr size_t INITIAL_CAPACITY = 8ul;
+		static constexpr size_t ALIGNED_BYTE = 16ul;
+	private:
+		MemoryPool* mPool = nullptr;
+		size_t mSize = 0u;
+		size_t mCapacity = INITIAL_CAPACITY;
+		const void** mData = nullptr;
 	};
 
 	/**
@@ -271,16 +308,6 @@ namespace cave
 	void* Stack::GetTop()
 	{
 		void* top = mData[mSize - 1ul];
-		void* topPtr = &mData[mSize - 1ul];
-
-		void* topBefore = mData[mSize - 2ul];
-		void* topBeforePtr = &mData[mSize - 2ul];
-
-		void* first = mData[0];
-		void* firstPtr = &mData[0];
-
-		void* second = mData[1];
-		void* secondPtr = &mData[1];
 
 		return top;
 	}
@@ -432,6 +459,345 @@ namespace cave
 		}
 
 		return Memory::Memcmp(lhs.mData, rhs.mData, sizeof(void*) * lhs.mSize) != 0;
+	}
+
+	/**
+	 *
+	 * @brief (1) Constructs the stack
+	 * @details Default constructor. Value-initializes the container.
+	 * 			@n@n
+	 * 			Complexity: constant
+	 *
+	 */
+	ConstantStack::ConstantStack()
+		: ConstantStack(gCoreMemoryPool)
+	{
+	}
+
+	/**
+	 *
+	 * @brief (2) Constructs the stack
+	 * @details Constructs the underlying container using pool as allocator.
+	 * 			@n@n
+	 * 			Complexity: constant
+	 * @param pool memory pool to use for all memory allocations of the underlying container
+	 *
+	 */
+	ConstantStack::ConstantStack(MemoryPool& pool)
+		: mPool(&pool)
+		, mData(reinterpret_cast<const void**>(mPool->Allocate(sizeof(const void*) * mCapacity)))
+	{
+	}
+
+	/**
+	 *
+	 * @brief (3) Constructs the stack
+	 * @details Copy constructor. The adaptor is copy-constructed with the contents of other.mData.
+	 * 			@n@n
+	 * 			Complexity: linear in size of other.mData
+	 * @param other another container adaptor to be used as source to initialize the underlying container
+	 *
+	 */
+
+	ConstantStack::ConstantStack(const ConstantStack& other)
+		: ConstantStack(other, *other.mPool)
+	{
+	}
+
+	/**
+	 *
+	 * @brief (4) Constructs the stack
+	 * @details Constructs the adaptor with the contents of other.mData and using pool as allocator.
+	 * 			@n@n
+	 * 			Complexity: linear in size of other.mData
+	 * @param pool memory pool to use for all memory allocations of the underlying container
+	 * @param other another container adaptor to be used as source to initialize the underlying container
+	 *
+	 */
+
+	ConstantStack::ConstantStack(const ConstantStack& other, MemoryPool& pool)
+		: mPool(&pool)
+		, mSize(other.mSize)
+		, mCapacity(other.mCapacity)
+		, mData(reinterpret_cast<const void**>(mPool->Allocate(sizeof(const void*)* mCapacity)))
+	{
+		Memory::Memcpy(mData, other.mData, sizeof(void*) * mSize);
+	}
+
+	/**
+	 *
+	 * @brief (5) Constructs the stack
+	 * @details Move constructor. The adaptor is constructed with std::move(other.mData)
+	 * 			@n@n
+	 * 			Complexity: constant
+	 * @param other another container adaptor to be used as source to initialize the underlying container
+	 *
+	 */
+
+	ConstantStack::ConstantStack(ConstantStack&& other)
+		: ConstantStack(std::move(other), *other.mPool)
+	{
+	}
+
+	/**
+	 *
+	 * @brief (6) Constructs the stack
+	 * @details Constructs the adaptor with the contents of other using move semantics while utilizing pool as allocator.
+	 * 			@n@n
+	 * 			Complexity: constant
+	 * @param pool memory pool to use for all memory allocations of the underlying container
+	 * @param other another container adaptor to be used as source to initialize the underlying container
+	 *
+	 */
+
+	ConstantStack::ConstantStack(ConstantStack&& other, MemoryPool& pool)
+		: mPool(&pool)
+		, mSize(other.mSize)
+		, mCapacity(other.mCapacity)
+		, mData(reinterpret_cast<const void**>(mPool->Allocate(sizeof(const void*)* mCapacity)))
+	{
+		Memory::Memcpy(mData, other.mData, sizeof(const void*) * mSize);
+		other.mPool->Deallocate(other.mData, sizeof(const void*) * other.mCapacity);
+		other.mPool = nullptr;
+		other.mSize = 0ul;
+		other.mCapacity = 0ul;
+		other.mData = nullptr;
+	}
+
+	/**
+	 *
+	 * @brief Destructs the stack.
+	 * @details The destructors of the elements are called and the used storage is deallocated. @n
+	 * 			Note, that if the elements are pointers, the pointed-to objects are not destroyed.
+	 * 			@n@n
+	 * 			Complexity: constant
+	 * @param pool memory pool to use for all memory allocations of the underlying container
+	 * @param other another container adaptor to be used as source to initialize the underlying container
+	 *
+	 */
+
+	ConstantStack::~ConstantStack()
+	{
+		for (size_t i = 0; i < mSize; ++i)
+		{
+			mData[i] = nullptr;
+		}
+
+		mPool->Deallocate(mData, sizeof(const void*) * mCapacity);
+		mSize = 0ul;
+		mCapacity = 0ul;
+		mPool = nullptr;
+	}
+
+	/**
+	 *
+	 * @brief (1) Assigns values to the container adaptor
+	 * @details Replaces the contents of the container adaptor with those of other. @n
+	 * 			Copy assignment operator. Replaces the contents with a copy of the contents of other. Effectively calls mData = other.mData;
+	 * 			@n@n
+	 * 			Complexity: equivalent to that of `operator=` of the underlying container
+	 * @param other another container adaptor to be used as source
+	 * @return *this
+	 *
+	 */
+
+	ConstantStack& ConstantStack::operator=(const ConstantStack& other)
+	{
+		if (this != &other)
+		{
+			if (mCapacity < other.mSize)
+			{
+				size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(other.mSize);
+				const void** newArray = reinterpret_cast<const void**>(mPool->Allocate(sizeof(const void*) * newCapacity));
+				mPool->Deallocate(mData, sizeof(const void*) * mCapacity);
+				mData = newArray;
+				mCapacity = newCapacity;
+			}
+
+			Memory::Memcpy(mData, other.mData, sizeof(const void*) * other.mSize);
+			mSize = other.mSize;
+		}
+
+		return *this;
+	}
+
+	/**
+	 *
+	 * @brief (2) Assigns values to the container adaptor
+	 * @details Replaces the contents of the container adaptor with those of other. @n
+	 * 			Move assignment operator. Replaces the contents with those of other using move semantics. Effectively calls mData = std::move(other.mData);
+	 * 			@n@n
+	 * 			Complexity: equivalent to that of `operator=` of the underlying container
+	 * @param other another container adaptor to be used as source
+	 * @return *this
+	 *
+	 */
+
+	ConstantStack& ConstantStack::operator=(ConstantStack&& other)
+	{
+		if (this != &other)
+		{
+			mPool->Deallocate(mData, sizeof(const void*) * mCapacity);
+
+			mSize = other.mSize;
+			mCapacity = other.mCapacity;
+			mData = other.mData;
+
+			other.mSize = 0ul;
+			other.mCapacity = 0ul;
+			other.mData = nullptr;
+		}
+
+		return *this;
+	}
+
+	/**
+	 *
+	 * @brief Accesses the top element
+	 * @details Returns reference to the top element in the stack. @n
+	 * 			This is the most recently pushed element. @n
+	 * 			This element will be removed on a call to Pop().
+	 * 			@n@n
+	 * 			Complexity: constant
+	 * @return Reference to the last element
+	 *
+	 */
+
+	const void* ConstantStack::GetTop() const
+	{
+		return mData[mSize - 1ul];
+	}
+
+	/**
+	 *
+	 * @brief Checks whether the underlying container is empty
+	 * @details Checks if the underlying container has no elements, i.e. whether c.IsEmpty().
+	 * 			@n@n
+	 * 			Complexity: constant
+	 * @return `true` if the underlying container is empty, `false` otherwise
+	 *
+	 */
+
+	[[nodiscard]] bool ConstantStack::IsEmpty() const
+	{
+		return mSize == 0ul;
+	}
+
+	/**
+	 *
+	 * @brief Returns the number of elements
+	 * @details Returns the number of elements in the underlying container, that is, c.GetSize().
+	 * 			@n@n
+	 * 			Complexity: constant
+	 * @return The number of elements in the container.
+	 *
+	 */
+
+	size_t ConstantStack::GetSize() const
+	{
+		return mSize;
+	}
+
+	/**
+	 *
+	 * @brief Inserts element at the top
+	 * @details Pushes the given element value to the top of the stack. @n
+	 * 			Effectively calls c.PushBack(value)
+	 * 			@n@n
+	 * 			Complexity: Equal to the complexity of Container::PushBack
+	 * @param value the value of the element to push
+	 *
+	 */
+
+	void ConstantStack::Push(const void* value)
+	{
+		if (mSize >= mCapacity)
+		{
+#if CAPACITY_INCREASE_MODE == CAPACITY_INCREASE_MODE_DOUBLE
+			size_t newCapacity = mCapacity * 2;
+#else
+			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(mSize + 1);
+#endif
+			const void** newArray = reinterpret_cast<const void**>(mPool->Allocate(sizeof(const void*) * newCapacity));
+			Memory::Memcpy(newArray, mData, sizeof(const void*) * mSize);
+			mPool->Deallocate(mData, sizeof(void*) * mCapacity);
+			mData = newArray;
+			mCapacity = newCapacity;
+		}
+
+		mData[mSize++] = value;
+	}
+
+	/**
+	 *
+	 * @brief Removes the top element
+	 * @details Removes the top element from the stack. @n
+	 * 			Effectively calls c.PopBack()
+	 * 			@n@n
+	 * 			Complexity: Equal to the complexity of Container::PopBack
+	 *
+	 */
+
+	void ConstantStack::Pop()
+	{
+		if (mSize > 0ul)
+		{
+			mData[mSize - 1] = nullptr;
+			--mSize;
+		}
+	}
+
+	/**
+	 *
+	 * @brief (1) Compares the values in the stack
+	 * @details Compares the contents of the underlying containers of two container adaptors. @n
+	 * 			The comparison is done by applying the corresponding operator to the underlying containers.
+	 * 			@n@n
+	 * 			Complexity: Linear in the size of the container
+	 * @param lhs container adaptors whose contents to compare
+	 * @param rhs container adaptors whose contents to compare
+	 * @return `true` if the corresponding comparison yields `true`, `false` otherwise
+	 *
+	 */
+
+	constexpr bool operator==(const ConstantStack& lhs, const ConstantStack& rhs)
+	{
+		if (lhs.mSize != rhs.mSize)
+		{
+			return false;
+		}
+
+		int result = Memory::Memcmp(lhs.mData, rhs.mData, sizeof(const void*) * lhs.mSize);
+		void* start0 = &lhs.mData[0];
+		void* end0 = &lhs.mData[lhs.mSize - 1];
+
+		void* start1 = &rhs.mData[0];
+		void* end1 = &rhs.mData[lhs.mSize - 1];
+
+		return result == 0;
+	}
+
+	/**
+	 *
+	 * @brief (2) Compares the values in the stack
+	 * @details Compares the contents of the underlying containers of two container adaptors. @n
+	 * 			The comparison is done by applying the corresponding operator to the underlying containers.
+	 * 			@n@n
+	 * 			Complexity: Linear in the size of the container
+	 * @param lhs container adaptors whose contents to compare
+	 * @param rhs container adaptors whose contents to compare
+	 * @return `true` if the corresponding comparison yields `true`, `false` otherwise
+	 *
+	 */
+
+	constexpr bool operator!=(const ConstantStack& lhs, const ConstantStack& rhs)
+	{
+		if (lhs.mSize != rhs.mSize)
+		{
+			return true;
+		}
+
+		return Memory::Memcmp(lhs.mData, rhs.mData, sizeof(const void*) * lhs.mSize) != 0;
 	}
 
 #ifdef CAVE_BUILD_DEBUG

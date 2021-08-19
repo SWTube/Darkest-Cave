@@ -5,7 +5,7 @@
 
 #include "CoreGlobals.h"
 
-import Hash;
+import cave.Core.Containers.Hash;
 
 namespace cave
 {

@@ -11,13 +11,13 @@ module;
 #include "CoreGlobals.h"
 #include "Memory/MemoryPool.h"
 
-export module HashTable;
+export module cave.Core.Containers.HashTable;
 
-import Array;
-import Hash;
-import LinkedList;
+import cave.Core.Containers.Array;
+import cave.Core.Containers.Hash;
+import cave.Core.Containers.LinkedList;
 import Memory;
-import Pair;
+import cave.Core.Containers.Pair;
 
 namespace cave
 {

@@ -9,22 +9,26 @@ module;
 
 #include "CoreTypes.h"
 
+#include "Assertion/Assert.h"
+
 export module Math;
 
-import Array;
+import cave.Core.Containers.Array;
 
 namespace cave
 {
 	export class Math
 	{
 	public:
-		static uint32_t GetFibonacciNumber(uint32_t number, Array<uint32_t>& cache);
-		static uint32_t GetFibonacciNumberRecursive(uint32_t number, Array<uint32_t>& cache);
+		static uint32_t GetFibonacciNumber(uint32_t number, uint32_t* cache, size_t size);
+		static uint32_t GetFibonacciNumberRecursive(uint32_t number, uint32_t* cache, size_t size);
 		static constexpr size_t GetMaxSizeType(size_t a, size_t b);
 	};
 
-	uint32_t Math::GetFibonacciNumber(uint32_t number, Array<uint32_t>& cache)
+	uint32_t Math::GetFibonacciNumber(uint32_t number, uint32_t* cache, size_t size)
 	{
+		assert(number <= size);
+
 		if (cache[0] != 0u)
 		{
 			cache[0] = 0u;
@@ -43,8 +47,10 @@ namespace cave
 		return cache[number];
 	}
 
-	uint32_t Math::GetFibonacciNumberRecursive(uint32_t number, Array<uint32_t>& cache)
+	uint32_t Math::GetFibonacciNumberRecursive(uint32_t number, uint32_t* cache, size_t size)
 	{
+		assert(number <= size);
+
 		if (number <= 1u)
 		{
 			return number;
@@ -55,8 +61,8 @@ namespace cave
 			return cache[number];
 		}
 
-		uint32_t ret = GetFibonacciNumberRecursive(number - 2u, cache) 
-			+ GetFibonacciNumberRecursive(number - 1u, cache);
+		uint32_t ret = GetFibonacciNumberRecursive(number - 2u, cache, size) 
+			+ GetFibonacciNumberRecursive(number - 1u, cache, size);
 
 		cache[number] = ret;
 

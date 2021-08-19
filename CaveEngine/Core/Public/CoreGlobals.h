@@ -9,7 +9,7 @@
 
 #include "Memory/MemoryPool.h"
 
-import Hash;
+import cave.Core.Containers.Hash;
 
 namespace cave
 {

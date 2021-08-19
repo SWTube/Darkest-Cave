@@ -7,7 +7,7 @@ module;
 
 #include "CoreTypes.h"
 
-export module Hash;
+export module cave.Core.Containers.Hash;
 
 import Memory;
 
