@@ -6,7 +6,7 @@
 #pragma once
 
 #ifdef __WIN32__
-	import Log;
+	import cave.Core.Debug.Log;
 #else
 	#include <cstdarg>
 	#include <iostream>

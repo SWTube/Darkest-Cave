@@ -18,7 +18,7 @@ module;
 
 #include "Assertion/Assert.h"
 
-export module Log;
+export module cave.Core.Debug.Log;
 
 namespace cave
 {
