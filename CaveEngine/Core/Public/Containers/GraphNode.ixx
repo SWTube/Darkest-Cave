@@ -5,101 +5,125 @@
 
 module;
 
+#include <queue>
+#include <unordered_set>
 #include "Debug/Log.h"
 
-export module GraphNode;
+export module cave.Core.Containers.GraphNode;
 
-import std.core;
-import Array;
-import Stack;
+import cave.Core.Containers.Array;
+import cave.Core.Containers.Stack;
 
 namespace cave
 {
-	export template <typename T>
-		class GraphNode final
+	export class GraphNode final
 	{
 	public:
-		constexpr explicit GraphNode(const T& data);
+		//constexpr explicit GraphNode(const void* data);
+		explicit GraphNode(const void* data);
 
-		constexpr static void SearchDepthFirst(const GraphNode& node);
-		constexpr static void SearchBreadthFirst(const GraphNode& node);
+		//constexpr static void SearchDepthFirst(const GraphNode& node);
+		static void SearchDepthFirst(const GraphNode* node);
+		//constexpr static void SearchBreadthFirst(const GraphNode& node);
+		static void SearchBreadthFirst(const GraphNode* node);
 
-		constexpr const T& GetData() const;
-		constexpr Array<T>& GetNeightbors();
+		constexpr const void* GetData() const;
+		constexpr Array& GetNeightbors();
 	private:
-		const T mData;
-		Array<T> mNeightbors;
+		const void* mData;
+		Array mNeightbors;
 	};
 
-	template <typename T>
-	constexpr GraphNode<T>::GraphNode(const T& data)
+	//constexpr GraphNode::GraphNode(const void* data)
+	GraphNode::GraphNode(const void* data)
 		: mData(data)
 		, mNeightbors()
 	{
 	}
-
-	template <typename T>
-	constexpr void GraphNode<T>::SearchDepthFirst(const GraphNode& node)
+	
+	//constexpr void GraphNode::SearchDepthFirst(const GraphNode& node)
+	void GraphNode::SearchDepthFirst(const GraphNode* node)
 	{
-		std::unordered_set<const GraphNode&> discovered;
-		Stack stack;
+		std::unordered_set<const GraphNode*> discovered;
+		ConstantStack stack;
 
 		discovered.insert(node);
-		stack.Push(&node);
+		stack.Push(node);
 
 		while (!stack.IsEmpty())
 		{
-			const GraphNode& next = *reinterpret_cast<const GraphNode*>(stack.GetTop());
+			const GraphNode* next = reinterpret_cast<const GraphNode*>(stack.GetTop());
 			stack.Pop();
 
-			for (const GraphNode& child : mNeightbors)
+			//for (const GraphNode& child : next.mNeightbors)
+			//{
+			//	if (discovered.contains(child))
+			//	{
+			//		continue;
+			//	}
+
+			//	discovered.insert(child);
+			//	stack.Push(child);
+			//}
+
+			for (auto iter = next->mNeightbors.GetBeginConstIterator(); iter != next->mNeightbors.GetEndConstIterator(); ++iter)
 			{
-				if (discovered.contains(child))
+				if (discovered.contains(reinterpret_cast<const GraphNode*>(*iter)))
 				{
 					continue;
 				}
 
-				discovered.insert(child);
-				stack.Push(child);
+				discovered.insert(reinterpret_cast<const GraphNode*>(*iter));
+				stack.Push(*iter);
 			}
 		}
 	}
 
-	template <typename T>
-	constexpr void GraphNode<T>::SearchBreadthFirst(const GraphNode& node)
+	//constexpr void GraphNode::SearchBreadthFirst(const GraphNode& node)
+	void GraphNode::SearchBreadthFirst(const GraphNode* node)
 	{
-		std::unordered_set<const GraphNode&> discovered;
-		std::queue<const GraphNode&> queue;
+		std::unordered_set<const GraphNode*> discovered;
+		std::queue<const GraphNode*> queue;
 
 		discovered.insert(node);
 		queue.push(node);
 
 		while (!queue.empty())
 		{
-			const GraphNode& next = queue.back();
+			const GraphNode* next = queue.back();
 			queue.pop();
 
-			for (const GraphNode& child : mNeightbors)
+			//for (const GraphNode& child : mNeightbors)
+			//{
+			//	if (discovered.contains(child))
+			//	{
+			//		continue;
+			//	}
+
+			//	discovered.insert(child);
+			//	queue.push(child);
+			//}
+
+			for (auto iter = next->mNeightbors.GetBeginConstIterator(); iter != next->mNeightbors.GetEndConstIterator(); ++iter)
 			{
-				if (discovered.contains(child))
+				if (discovered.contains(reinterpret_cast<const GraphNode*>(*iter)))
 				{
 					continue;
 				}
 
-				discovered.insert(child);
-				queue.push(child);
+				discovered.insert(reinterpret_cast<const GraphNode*>(*iter));
+				queue.push(reinterpret_cast<const GraphNode*>(*iter));
 			}
 		}
 	}
-
-	template <typename T>
-	constexpr const T& GraphNode<T>::GetData() const
+	
+	constexpr const void* GraphNode::GetData() const
 	{
 		return mData;
 	}
 
-	template <typename T>
-	constexpr Array<T>& GraphNode<T>::GetNeightbors()
+	
+	constexpr Array& GraphNode::GetNeightbors()
 	{
 		return mNeightbors;
 	}

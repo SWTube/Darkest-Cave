@@ -8,7 +8,7 @@ module;
 #include "CoreGlobals.h"
 #include "Memory/MemoryPool.h"
 
-export module Array;
+export module cave.Core.Containers.Array;
 
 import Memory;
 
@@ -22,7 +22,7 @@ export namespace cave
         friend class Array;
 
         constexpr ArrayConstIterator();
-        constexpr ArrayConstIterator(Array& container, size_t startIndex);
+        constexpr ArrayConstIterator(const Array& container, size_t startIndex);
         constexpr ArrayConstIterator(const ArrayConstIterator& other);
 
         constexpr ArrayConstIterator& operator=(const ArrayConstIterator& other);
@@ -52,7 +52,7 @@ export namespace cave
         constexpr bool operator>(const ArrayConstIterator& other) const;
 
     private:
-        Array* mContainer;
+        const Array* mContainer;
         size_t mIndex;
     };
 
@@ -146,14 +146,14 @@ export namespace cave
         constexpr Iterator begin();
         constexpr Iterator end();
 
-        ConstIterator cbegin();
-        ConstIterator cend();
+        ConstIterator cbegin() const;
+        ConstIterator cend() const;
 
         constexpr Iterator GetBeginIterator();
         constexpr Iterator GetEndIterator();
         
-        ConstIterator GetBeginConstIterator();
-        ConstIterator GetEndConstIterator();
+        ConstIterator GetBeginConstIterator() const;
+        ConstIterator GetEndConstIterator() const;
 
         constexpr bool operator==(const Array& other) const;
         constexpr bool operator!=(const Array& other) const;
@@ -178,7 +178,7 @@ export namespace cave
         , mIndex(0)
     { }
 
-    constexpr ArrayConstIterator::ArrayConstIterator(Array& container, size_t startIndex)
+    constexpr ArrayConstIterator::ArrayConstIterator(const Array& container, size_t startIndex)
         : mContainer(&container)
         , mIndex(startIndex)
     { }
@@ -763,12 +763,12 @@ export namespace cave
         return Iterator(*this, mSize);
     }
 
-    Array::ConstIterator Array::cbegin()
+    Array::ConstIterator Array::cbegin() const
     {
         return ConstIterator(*this, 0);
     }
 
-    Array::ConstIterator Array::cend()
+    Array::ConstIterator Array::cend() const
     {
         return ConstIterator(*this, mSize);
     }
@@ -783,12 +783,12 @@ export namespace cave
         return Iterator(*this, mSize);
     }
     
-    Array::ConstIterator Array::GetBeginConstIterator()
+    Array::ConstIterator Array::GetBeginConstIterator() const
     {
         return ConstIterator(*this, 0);
     }
 
-    Array::ConstIterator Array::GetEndConstIterator()
+    Array::ConstIterator Array::GetEndConstIterator() const
     {
         return ConstIterator(*this, mSize);
     }

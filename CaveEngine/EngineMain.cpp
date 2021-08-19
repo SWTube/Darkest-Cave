@@ -44,7 +44,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 #ifdef __WIN32__
 import Hash;
 import Log;
-import Stack;
+import cave.Core.Containers.Stack;
 import String;
 import Trie;
 // import KeyboardInput;
