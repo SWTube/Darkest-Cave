@@ -366,6 +366,9 @@
     <ClInclude Include="Core\Public\Shapes\Quadrant.h">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Public\Physics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -542,6 +545,12 @@
     </Filter>
     <Filter Include="Source Files\Core\Shapes">
       <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{1656c4c9-c68d-4925-aeb6-64efae13be5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{38d2121f-f0d7-4989-b19b-98eaa4e1b8c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
