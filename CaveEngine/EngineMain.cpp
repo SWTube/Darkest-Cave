@@ -11,19 +11,21 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include <tchar.h>
 #include <vector>
+#include <windows.h>
 
 #include "tictoc.h"
 
+#include "CoreGlobals.h"
 #include "CoreMinimal.h"
 
-#include "Containers/TStack.h"
-#include "CoreGlobals.h"
 #include "Engine.h"
 #include "Object/TagPool.h"
 #include "Shapes/Quadrant.h"
 #include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
+#include "KeyboardInput/KeyboardInput.h"
 
 #if _DEBUG
 //#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -35,6 +37,7 @@ void MemoryTest1(cave::MemoryPool& pool);
 template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool);
 void RenderTest();
+void KeyboardTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
@@ -47,8 +50,10 @@ import Knapsack;
 import Log;
 import Math;
 import Scheduler;
+import Stack;
 import String;
 import Trie;
+// import KeyboardInput;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -111,6 +116,7 @@ int main(int32_t argc, char** argv)
 
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
+	KeyboardTest();
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
@@ -155,12 +161,23 @@ int main(int32_t argc, char** argv)
 
 	clock = tic();
 	cave::HuffmanTest::Main();
+	
+	// LOGDF(cave::eLogChannel::CORE, "Hello World! 0x%x", CAVE_BACKSPACE);
+	clock = tic();
+	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	clock = tic();
+	cave::StackTest::Main();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	clock = tic();
 	cave::GraphTest::Main();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
+	clock = tic();
+	cave::StackTest::ComparisonOperator();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// _CrtDumpMemoryLeaks();
 
 #endif
@@ -311,4 +328,15 @@ void RenderTest()
 	}
 
 	main.Destroy();
+}
+
+void KeyboardTest()
+{
+	char ch = CAVE_BACKSPACE;
+
+	switch (ch)
+	{
+		case CAVE_BACKSPACE:
+			LOGD(cave::eLogChannel::CORE, "Key Code : 0x%x", cave::eKeyCode::CAVE_BACKSPACE);
+	}
 }
