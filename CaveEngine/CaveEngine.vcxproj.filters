@@ -151,9 +151,6 @@
     <ClCompile Include="Core\Public\Memory\Memory.ixx">
       <Filter>Header Files\Core\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\Trie.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClCompile>
@@ -166,12 +163,6 @@
     <ClCompile Include="Core\Public\Shapes\TempObject.ixx">
       <Filter>Header Files\Core\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\GraphNode.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Public\Containers\LinkedList.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
@@ -183,6 +174,9 @@
     </ClCompile>
     <ClCompile Include="Core\Public\Containers\Stack.ixx">
       <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Math\Math.ixx">
+      <Filter>Header Files\Core\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

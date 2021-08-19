@@ -8,7 +8,7 @@ module;
 #include "CoreGlobals.h"
 #include "Memory/MemoryPool.h"
 
-export module LinkedList;
+export module cave.Core.Containers.LinkedList;
 
 import IteratorType;
 import Memory;

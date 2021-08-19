@@ -42,11 +42,12 @@ void KeyboardTest();
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
 #ifdef __WIN32__
+import cave.Core.Containers.Array;
 import Hash;
 import Log;
+import Math;
 import cave.Core.Containers.Stack;
 import String;
-import Trie;
 // import KeyboardInput;
 
 //--------------------------------------------------------------------------------------
@@ -111,27 +112,9 @@ int main(int32_t argc, char** argv)
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
 	KeyboardTest();
-	// cave::MemoryPoolTest::Test();
-	// cave::StackTest::Test<int>();
-	//  RenderTest();
-	// cave::TagPoolTest::Test();
-	cave::Hashable<>::Initialize();
-	cave::String hello = "hello";
-
-	cave::TrieTest::Main();
-	cave::QuadrantTest::Main();
-	
-	// LOGDF(cave::eLogChannel::CORE, "Hello World! 0x%x", CAVE_BACKSPACE);
-	clock = tic();
-	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	clock = tic();
 	cave::StackTest::Main();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
-
-	clock = tic();
-	cave::StackTest::ComparisonOperator();
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 	// _CrtDumpMemoryLeaks();
 
@@ -260,7 +243,6 @@ void RenderTest()
 	cave::Engine main;
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
-
 
 	cave::Renderer* renderer = main.GetRenderer();
 
