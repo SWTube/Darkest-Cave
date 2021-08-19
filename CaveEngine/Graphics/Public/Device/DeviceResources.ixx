@@ -302,7 +302,7 @@ namespace cave
 					{
 						return eResult::CAVE_FAIL;
 					}
-					mPool->Deallocate(displayModeList, numModes * sizeof(displayModeList));
+					mPool->Deallocate(displayModeList, numModes * sizeof(DXGI_MODE_DESC/*displayModeList*/));
 					displayModeList = nullptr;
 
 					// 출력 어뎁터를 해제합니다
@@ -321,7 +321,7 @@ namespace cave
 		{
 			return eResult::CAVE_FAIL;
 		}
-
+		
 		DXGI_SWAP_CHAIN_DESC desc;
 		ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
 		desc.Windowed = TRUE;
@@ -418,6 +418,7 @@ namespace cave
 			return eResult::CAVE_FAIL;
 		}
 
+		
 		result = ConfigureBackBuffer();
 
 		return eResult::CAVE_OK;
@@ -626,17 +627,6 @@ namespace cave
 			mRenderTargetView->Release();
 			mRenderTargetView = nullptr;
 		}
-
-		if (mAlphaEnableBlendingState != nullptr) {
-			mAlphaEnableBlendingState->Release();
-			mAlphaDisableBlendingState = nullptr;
-		}
-
-		if (mAlphaDisableBlendingState != nullptr) {
-			mAlphaDisableBlendingState->Release();
-			mAlphaDisableBlendingState = nullptr;
-		}
-
 		// Release the back buffer itself:
 		if (mBackBuffer != nullptr)
 		{

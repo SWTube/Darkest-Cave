@@ -61,10 +61,9 @@ namespace cave
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 
-
-
-		Shader* mShader;
+		Shader* mShader = nullptr;
 	};
+
 	Renderer::Renderer()
 		: mPool(reinterpret_cast<MemoryPool*>(gCoreMemoryPool.Allocate(sizeof(MemoryPool))))
 		, mFrameCount(0u)
@@ -126,8 +125,10 @@ namespace cave
 
 	eResult Renderer::Init(Window* window)
 	{
+
 		CreateDeviceDependentResources();
 		CreateWindowSizeDependentResources(window);
+
 		// set camera
 		mCamera = reinterpret_cast<Camera*>(mPool->Allocate(sizeof(Camera)));
 		new(mCamera) Camera();
@@ -144,14 +145,11 @@ namespace cave
 		new(mBufferManager) BufferManager();
 		mBufferManager->Init(mDeviceResources, 1000);
 
-		// set color shader
-		// set texture shader
+		//// set color shader
+		//// set texture shader
 		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
 		new(mShader) cave::Shader(L"DirectXTest.fxh", *mPool);
 		mShader->Compile(mDeviceResources->GetDevice());
-
-		//Sprite::mScreenWidth = mDeviceResources->GetWidth();
-		//Sprite::mScreenHeight= mDeviceResources->GetHeight();
 
 		Sprite::SetScreenSize(mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 
