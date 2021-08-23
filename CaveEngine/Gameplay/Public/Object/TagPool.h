@@ -38,19 +38,8 @@ namespace cave
 
 		static bool IsValid();
 
-#ifdef CAVE_BUILD_DEBUG
-		static void PrintElement();
-#endif // CAVE_BULID_DEBUG
-
 	private:
 		static bool mbValid;
 		static std::unordered_map<std::string, Tag*> mTags;
 	};
-
-#ifdef CAVE_BUILD_DEBUG
-	namespace TagPoolTest
-	{
-		void Test();
-	}
-#endif
 }

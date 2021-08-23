@@ -19,25 +19,21 @@ namespace cave
 	std::unordered_set<std::string> Script::mGlobalUniqueName;
 
 	Script::Script(std::string& name)
-		: Object(name)
+		: Object(name, mGlobalUniqueName)
 	{
-		assert(!mGlobalUniqueName.contains(name));
-		mGlobalUniqueName.insert(name);
+
 	}
 
 	Script::Script(const char* name)
-		: Object(name)
+		: Object(name, mGlobalUniqueName)
 	{
-		assert(!mGlobalUniqueName.contains(name));
-		mGlobalUniqueName.insert(name);
+
 	}
 
 	Script::Script(const Script& other)
-		: Object(other)
+		: Object(other, mGlobalUniqueName)
 	{
-		std::string name = other.GetName() + std::to_string(other.getDuplicatedNum());
-		assert(!mGlobalUniqueName.contains(name));
-		mGlobalUniqueName.insert(name);
+	
 	}
 
 	Script::~Script()

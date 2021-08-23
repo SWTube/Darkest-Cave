@@ -5,11 +5,6 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
-#include <vector>
-
-#include "CoreTypes.h"
-#include "Object/Object.h"
 
 #include "CoreTypes.h"
 
@@ -17,7 +12,7 @@ namespace cave
 {
 	class GameObject;
 
-	class Tag final : public Object
+	class Tag final
 	{
 	public:
 		friend class TagPool;
@@ -38,5 +33,8 @@ namespace cave
 	private:
 		Tag(std::string& name);
 		Tag(const char* name);
+
+	private:
+		std::string mName;
 	};
 }

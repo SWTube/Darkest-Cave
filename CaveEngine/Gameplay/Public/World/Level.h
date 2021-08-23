@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_set>
 #include <unordered_map>
 
 #include "CoreTypes.h"
@@ -64,6 +65,8 @@ namespace cave
 		void destroyGameObjects();
 
 	private:
+		static std::unordered_set<std::string> mGlobalUniqueNames;
+
 		std::unordered_map<std::string, GameObject*> mAllGameObjects;
 		std::unordered_map<std::string, GameObject*> mActiveGameObjects;
 		std::unordered_multimap<Tag*, GameObject*> mTaggedGameObjects;

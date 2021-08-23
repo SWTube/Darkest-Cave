@@ -17,15 +17,17 @@
 
 namespace cave
 {
+	std::unordered_set<std::string> Level::mGlobalUniqueNames;
+
 	Level::Level(std::string& name) 
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mOwner(nullptr)
 	{
 
 	}
 
 	Level::Level(const char* name)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mOwner(nullptr)
 	{
 

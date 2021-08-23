@@ -20,7 +20,7 @@ namespace cave
 	std::unordered_set<std::string> GameObject::mGlobalUniqueNames;
 
 	GameObject::GameObject(std::string& name)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
 		, mLayer(0)
 		, mScripts()
@@ -30,12 +30,11 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::GameObject(const char* name)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
 		, mLayer(0)
 		, mScripts()
@@ -45,12 +44,11 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::GameObject(std::string& name, std::string& tag)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
 		, mLayer(0)
 		, mScripts()
@@ -60,12 +58,11 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::GameObject(std::string& name, const char* tag)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
 		, mLayer(0)
 		, mScripts()
@@ -75,12 +72,11 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::GameObject(std::string& name, Tag& tag)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
 		, mLayer(0)
 		, mScripts()
@@ -90,12 +86,11 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::GameObject(const char* name, std::string& tag)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
 		, mLayer(0)
 		, mScripts()
@@ -105,12 +100,11 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::GameObject(const char* name, const char* tag)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
 		, mLayer(0)
 		, mScripts()
@@ -120,12 +114,11 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::GameObject(const char* name, Tag& tag)
-		: Object(name)
+		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
 		, mLayer(0)
 		, mScripts()
@@ -135,12 +128,11 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::GameObject(const GameObject& other)
-		: Object(other)
+		: Object(other, mGlobalUniqueNames)
 		, mbActive(other.IsActive())
 		, mLayer(other.GetLayer())
 		, mScripts()
@@ -150,10 +142,7 @@ namespace cave
 		, mPhysicsBody(nullptr)
 		, mLevel(other.GetLevel())
 	{
-		std::string name = other.GetName() + std::to_string(other.getDuplicatedNum());
-
-		assert((mTag != nullptr) & (mTransform != nullptr) & (!mGlobalUniqueNames.contains(name)));
-		mGlobalUniqueNames.insert(name);
+		assert((mTag != nullptr) & (mTransform != nullptr));
 	}
 
 	GameObject::~GameObject()

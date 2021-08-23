@@ -8,29 +8,31 @@ namespace cave
 {
 	uint32_t Object::mNextGUID = 1;
 
-	Object::Object(std::string& name)
+	Object::Object(std::string& name, std::unordered_set<std::string>& nameList)
 		: mDuplicatedTarget(nullptr)
 		, mDuplicatedNum(1)
 		, mName(name)
 	{
 		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
+		assert(!nameList.contains(mName));
 		assert(IsValid());
 		++mNextGUID;
 	}
 
-	Object::Object(const char* name)
+	Object::Object(const char* name, std::unordered_set<std::string>& nameList)
 		: mDuplicatedTarget(nullptr)
 		, mDuplicatedNum(1)
 		, mName(name)
 	{
 		assert((name != nullptr) & (mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
 		mGUID = mNextGUID;
+		assert(!nameList.contains(mName));
 		assert(IsValid());
 		++mNextGUID;
 	}
 
-	Object::Object(const Object& other)
+	Object::Object(const Object& other, std::unordered_set<std::string>& nameList)
 		: mDuplicatedNum(1)
 	{
 		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
@@ -41,7 +43,11 @@ namespace cave
 			iter = iter->mDuplicatedTarget;
 		}
 		mDuplicatedTarget = iter;
-		mName = other.mName + std::to_string(++(mDuplicatedTarget->mDuplicatedNum));
+		do
+		{
+			mName = other.mName + std::to_string(++(mDuplicatedTarget->mDuplicatedNum));
+		} while (nameList.contains(mName));
+		nameList.insert(mName);
 		assert(GetGUID() != other.GetGUID());
 		++mNextGUID;
 	}

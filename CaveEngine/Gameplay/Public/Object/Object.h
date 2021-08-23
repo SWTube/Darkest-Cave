@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_set>
 
 #include "CoreTypes.h"
 #include "Assertion/Assert.h"
@@ -15,7 +16,8 @@ namespace cave
 	{
 	public:
 		Object() = delete;
-		Object(Object&& other)= delete;
+		Object(const Object&) = delete;
+		Object(Object&&) = delete;
 
 		virtual ~Object();
 
@@ -30,9 +32,9 @@ namespace cave
 		FORCEINLINE const std::string& GetName() const;
 
 	protected:
-		Object(std::string& name);
-		Object(const char* name);
-		Object(const Object& other);
+		Object(std::string& name, std::unordered_set<std::string>& nameList);
+		Object(const char* name, std::unordered_set<std::string>& nameList);
+		Object(const Object& other, std::unordered_set<std::string>& nameList);
 
 		Object& operator=(const Object& other);
 		Object& operator=(Object&& other) noexcept;

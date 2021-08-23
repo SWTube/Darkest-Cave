@@ -11,17 +11,15 @@ namespace cave
 	std::unordered_set<std::string> World::mGlobalUniqueName;
 
 	World::World(std::string& name) 
-		: Object(name)
+		: Object(name, mGlobalUniqueName)
 	{
-		assert(IsValid() & (!mGlobalUniqueName.contains(name)));
-		mGlobalUniqueName.insert(name);
+		assert(IsValid());
 	}
 
 	World::World(const char* name) 
-		: Object(name)
+		: Object(name, mGlobalUniqueName)
 	{
-		assert(IsValid() & (!mGlobalUniqueName.contains(name)));
-		mGlobalUniqueName.insert(name);
+		assert(IsValid());
 	}
 
 	World::~World()

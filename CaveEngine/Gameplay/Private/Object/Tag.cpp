@@ -11,51 +11,47 @@
 namespace cave
 {
 	Tag::Tag(std::string& name)
-		: Object(name)
+		: mName(name)
 	{
 
 	}
 
 	Tag::Tag(const char* name)
-		: Object(name)
+		: mName(name)
 	{
 
 	}
 
 	Tag::~Tag()
 	{
-		assert(IsValid());
+		
 	}
 
 	bool operator==(const Tag& lhs, std::string& rhs)
 	{
-		assert(lhs.IsValid());
 		Tag* tag = TagPool::FindTagByName(rhs);
 		assert(tag != nullptr);
-		return lhs == *tag;
+		return &lhs == tag;
 	}
 
 	bool operator==(const Tag& lhs, const char* name)
 	{
-		assert(lhs.IsValid());
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
-		return lhs == *tag;
+		return &lhs == tag;
 	}
 
 	bool operator!=(const Tag& lhs, std::string& name)
 	{
-		assert(lhs.IsValid());
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
-		return lhs != *tag;
+		return &lhs != tag;
 	}
 
 	bool operator!=(const Tag& lhs, const char* name)
 	{
-		assert(lhs.IsValid());
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
-		return lhs != *tag;
+		return &lhs != tag;
 	}
 }
