@@ -41,6 +41,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 #ifdef __WIN32__
 import Hash;
 import Log;
+import RandomNumberGenerator;
 import String;
 import Trie;
 
@@ -105,6 +106,7 @@ int main(int32_t argc, char** argv)
 
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
+
 	// cave::MemoryPoolTest::Test();
 	// cave::StackTest::Test<int>();
 	//  RenderTest();
@@ -114,6 +116,10 @@ int main(int32_t argc, char** argv)
 
 	cave::TrieTest::Main();
 	cave::QuadrantTest::Main();
+
+	//cave::RandomNumberGeneratorTest::Main();
+	//cave::SetRandomSeed(1234);
+	//cave::RandomNumberGeneratorTest::Main();
 
 	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
 	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
