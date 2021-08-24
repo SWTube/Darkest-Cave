@@ -147,6 +147,7 @@
     <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\RenderQueue.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Renderer.ixx" />
+    <ClCompile Include="Graphics\Public\UI\Text.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">

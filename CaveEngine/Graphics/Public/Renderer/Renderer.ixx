@@ -3,7 +3,7 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 module;
-
+#include <wchar.h>
 #include <string>
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
@@ -47,6 +47,9 @@ namespace cave
 		DeviceResources* GetDeviceResources() const;
 
 	private:
+		void drawText(TextCommand* command);
+
+	private:
 		static constexpr size_t RENDERER_MEMORY_SIZE = 1024ul * 1024ul * 10ul;
 		MemoryPool* mPool = nullptr;
 
@@ -61,6 +64,9 @@ namespace cave
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 
+		ID2D1SolidColorBrush* mBrush = nullptr;
+		IDWriteTextFormat* mTextFormat = nullptr;
+		
 		Shader* mShader = nullptr;
 	};
 
@@ -78,6 +84,11 @@ namespace cave
 
 	void Renderer::Destroy()
 	{
+		if (mBrush != nullptr)
+		{
+			mBrush->Release();
+			mBrush = nullptr;
+		}
 
 		if (mShader != nullptr)
 		{
@@ -153,6 +164,14 @@ namespace cave
 
 		Sprite::SetScreenSize(mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 
+		//mDeviceResources->GetDWFactory()->CreateTextFormat(
+		//	L"궁서체", 0, DWRITE_FONT_WEIGHT::DWRITE_FONT_WEIGHT_NORMAL,
+		//	DWRITE_FONT_STYLE::DWRITE_FONT_STYLE_NORMAL,
+		//	DWRITE_FONT_STRETCH::DWRITE_FONT_STRETCH_NORMAL,
+		//	45, L"ko", &mTextFormat);
+
+		mDeviceResources->GetD2DRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(0,0,0,1), &mBrush);
+		
 		return eResult::CAVE_OK;
 	}
 
@@ -190,34 +209,74 @@ namespace cave
 		//	}
 
 		//}
+		mDeviceResources->GetD2DRenderTarget()->BeginDraw();
 		std::vector<VertexT> vertexData;
-		std::vector<RenderCommand> commands = RenderQueue::GetInstance().GetRenderQueue();
-		for (RenderCommand command : commands) 
+		std::vector<RenderCommand*> commands = RenderQueue::GetInstance().GetRenderQueue();
+		for (RenderCommand* command : commands) 
 		{
-			for (unsigned int i = 0; i < 4; i++) 
+			if (command->type == RenderCommand::eType::SPRITE_COMMAND)
 			{
-				vertexData.push_back(command.vertexData[i]);
+				SpriteCommand* sc = reinterpret_cast<SpriteCommand*>(command);
+				for (unsigned int i = 0; i < 4; i++)
+				{
+					vertexData.push_back(sc->vertexData[i]);
+				}
 			}
+
 		}
 
-		mBufferManager->UpdateVertexBuffer(vertexData.data(), commands.size());
+		if(!vertexData.empty()) mBufferManager->UpdateVertexBuffer(vertexData.data(), commands.size());
 
 		int count = 0;
-		for (RenderCommand command : commands)
+		for (RenderCommand* command : commands)
 		{
-			Texture* tex = command.texture;
-			if (tex != nullptr) // 나중에 texture가 nullptr이여도 색을 입혀서 그려주게 구현하고 싶음.
-				mShader->Render(context, 6, count * 6, worldMatrix, viewMatrix, ortho, tex->GetTexture());
-			count++;
+			if (command->type == RenderCommand::eType::SPRITE_COMMAND)
+			{
+				SpriteCommand* sc = reinterpret_cast<SpriteCommand*>(command);
+				Texture* tex = sc->texture;
+				if (tex != nullptr) // 나중에 texture가 nullptr이여도 색을 입혀서 그려주게 구현하고 싶음.
+					mShader->Render(context, 6, count * 6, worldMatrix, viewMatrix, ortho, tex->GetTexture());
+				count++;
+			}
+			else if(command->type == RenderCommand::eType::TEXT_COMMAND)
+			{
+				drawText(reinterpret_cast<TextCommand*>(command));
+			}
+
 		}
-
-
+		
 		mDeviceResources->TurnOffAlphaBlending();
 		//mDeviceResources->TurnZBufferOn();
 		// Present the frame to the screen.
+		mDeviceResources->GetD2DRenderTarget()->EndDraw();
 		mDeviceResources->RenderEnd();
 
 		RenderQueue::GetInstance().ClearRenderQueue();
+
+	}
+
+	void Renderer::drawText(TextCommand* command)
+	{
+		IDWriteFactory* dwFactory = mDeviceResources->GetDWFactory();
+		ID2D1RenderTarget* renderTarget = mDeviceResources->GetD2DRenderTarget();
+
+		IDWriteTextLayout* layout;
+		//renderTarget->BeginDraw();
+		dwFactory->CreateTextFormat(
+			command->fontName, 0, DWRITE_FONT_WEIGHT::DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE::DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH::DWRITE_FONT_STRETCH_NORMAL,
+			command->fontSize, L"ko", &mTextFormat);
+
+		dwFactory->CreateTextLayout(command->content, wcslen(command->content), mTextFormat, 800, 500, &layout);
+		layout->SetFontSize(command->fontSize, { 0, wcslen(command->content) });
+		mBrush->SetColor(command->color);
+		renderTarget->DrawTextLayout(D2D1::Point2F(command->position.X, command->position.Y), layout, mBrush);
+
+		//renderTarget->EndDraw();
+		//brush->Release();
+		layout->Release();
+		mTextFormat->Release();
 
 	}
 

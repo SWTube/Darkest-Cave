@@ -17,10 +17,29 @@ namespace cave
 {
 	export struct RenderCommand 
 	{
+		enum eType
+		{
+			UNKNOWN_COMMAND,
+			SPRITE_COMMAND,
+			TEXT_COMMAND,
+		};
+
+		eType type = RenderCommand::eType::UNKNOWN_COMMAND;
+		uint32_t zIndex = 0u;
+	};
+	export struct SpriteCommand : RenderCommand
+	{
 		VertexT* vertexData = nullptr;
 		//WORD* indexData = nullptr;
 		Texture* texture = nullptr;
-		uint32_t zIndex = 0u;
+	};
+	export struct TextCommand : RenderCommand
+	{
+		LPCWSTR fontName = L"";
+		LPCWSTR content = L"";
+		float fontSize = 0.0f;
+		Float3 position = { 0,0,0 };
+		D2D1::ColorF color = { 0,0,0,1 };
 	};
 
 
@@ -33,8 +52,8 @@ namespace cave
 			return instance;
 		}
 
-		void AddRenderCommand(RenderCommand RenderCommand);
-		std::vector<RenderCommand> GetRenderQueue();
+		void AddRenderCommand(RenderCommand* RenderCommand);
+		std::vector<RenderCommand*> GetRenderQueue();
 		void ClearRenderQueue();
 	private:
 		RenderQueue() = default;
@@ -42,19 +61,19 @@ namespace cave
 		RenderQueue& operator=(const RenderQueue& other) = delete;
 		~RenderQueue();
 
-		std::vector<RenderCommand> mRenderCommands;
+		std::vector<RenderCommand*> mRenderCommands;
 	};
 
 	RenderQueue::~RenderQueue()
 	{
 		mRenderCommands.clear();
 	}
-	void RenderQueue::AddRenderCommand(RenderCommand RenderCommand)
+	void RenderQueue::AddRenderCommand(RenderCommand* RenderCommand)
 	{
 		mRenderCommands.push_back(RenderCommand);
 	}
 	
-	std::vector<RenderCommand> RenderQueue::GetRenderQueue()
+	std::vector<RenderCommand*> RenderQueue::GetRenderQueue()
 	{
 		return mRenderCommands;
 	}

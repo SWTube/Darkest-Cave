@@ -5,16 +5,15 @@
 
 
 module;
-
-
+#include <wchar.h>
 #include "GraphicsApiPch.h"
-
 #include "CoreTypes.h"
 #include "Memory/MemoryPool.h"
 
 export module DeviceResources;
 
 export import Window;
+import String;
 
 namespace cave
 {
@@ -31,6 +30,7 @@ namespace cave
 		eResult CreateDeviceResources();
 		void Destroy();
 
+		int32_t InteroperateD2D(HWND);
 		int32_t ConfigureBackBuffer();
 		int32_t ReleaseBackBuffer();
 		int32_t GoFullScreen();
@@ -56,6 +56,9 @@ namespace cave
 		ID3D11DeviceContext* GetDeviceContext();
 		ID3D11RenderTargetView* GetRenderTarget();
 		ID3D11DepthStencilView* GetDepthStencil();
+		
+		IDWriteFactory* GetDWFactory();
+		ID2D1RenderTarget* GetD2DRenderTarget();
 
 		virtual void TurnZBufferOn();
 		virtual void TurnZBufferOff();
@@ -96,6 +99,14 @@ namespace cave
 		ID3D11Texture2D* mBackBuffer = nullptr;
 		ID3D11RenderTargetView* mRenderTargetView = nullptr;
 
+
+		//-----------------------------------------------------------------------------
+		// D2D 
+		//-----------------------------------------------------------------------------
+
+		IDWriteFactory* mDwFactory = nullptr;
+		//IDWriteTextFormat* mTextFormat = nullptr;
+		ID2D1RenderTarget* mD2RenderTarget = nullptr;
 
 		//-----------------------------------------------------------------------------
 		// Direct3D device resources for the depth stencil
@@ -419,11 +430,13 @@ namespace cave
 		}
 
 		
+		InteroperateD2D(hWindow);
 		result = ConfigureBackBuffer();
 
 		return eResult::CAVE_OK;
 	}
 
+	
 	int32_t DeviceResources::ConfigureBackBuffer()
 	{
 		int32_t result = S_OK;
@@ -612,10 +625,63 @@ namespace cave
 			return false;
 		}
 
+		return result;
+	}
 
+	int32_t DeviceResources::InteroperateD2D(HWND hwnd)
+	{
+		int32_t result = S_OK;
+
+		IDXGISurface* pBackBuffer;
+
+		// Get a surface in the swap chain
+		mSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+
+		ID2D1Factory* d2dFactory;
+		// Create the DXGI Surface Render Target.
+		FLOAT dpiX;
+		FLOAT dpiY;
+
+		D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &d2dFactory);
+		//d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
+		HDC hdc = GetDC(NULL);
+		if (hdc)
+		{
+			dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
+			dpiY = GetDeviceCaps(hdc, LOGPIXELSY);
+			ReleaseDC(NULL, hdc);
+		}
+
+		//dpiX = (FLOAT)GetDpiForWindow(hwnd);
+		//dpiY = dpiX;
+
+		D2D1_RENDER_TARGET_PROPERTIES props =
+			D2D1::RenderTargetProperties(
+				D2D1_RENDER_TARGET_TYPE_DEFAULT,
+				D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED),
+				dpiX,
+				dpiY
+			);
+
+		// Create a Direct2D render target which can draw into the surface in the swap chain
+		result = d2dFactory->CreateDxgiSurfaceRenderTarget(
+			pBackBuffer,
+			&props,
+			&mD2RenderTarget
+		);
+
+		DWriteCreateFactory(
+			DWRITE_FACTORY_TYPE_SHARED,
+			__uuidof(mDwFactory),
+			reinterpret_cast<IUnknown**>(&mDwFactory)
+		);
+
+		d2dFactory->Release();
 
 		return result;
 	}
+
+
 
 	int32_t DeviceResources::ReleaseBackBuffer()
 	{
@@ -627,6 +693,7 @@ namespace cave
 			mRenderTargetView->Release();
 			mRenderTargetView = nullptr;
 		}
+
 		// Release the back buffer itself:
 		if (mBackBuffer != nullptr)
 		{
@@ -729,6 +796,7 @@ namespace cave
 		return result;
 	}
 
+
 	float DeviceResources::GetAspectRatio()
 	{
 		return static_cast<float>(mBackBufferDesc.Width) / static_cast<float>(mBackBufferDesc.Height);
@@ -762,6 +830,16 @@ namespace cave
 	ID3D11DepthStencilView* DeviceResources::GetDepthStencil()
 	{
 		return mDepthStencilView;
+	}
+
+	IDWriteFactory* DeviceResources::GetDWFactory()
+	{
+		return mDwFactory;
+	}
+
+	ID2D1RenderTarget* DeviceResources::GetD2DRenderTarget()
+	{
+		return mD2RenderTarget;
 	}
 
 	D3D_DRIVER_TYPE DeviceResources::GetDriverType() const
@@ -807,12 +885,33 @@ namespace cave
 			mImmediateContext->ClearState();
 		}
 
-		if (mAlphaEnableBlendingState != nullptr) {
+		if (mDwFactory != nullptr)
+		{
+			mDwFactory->Release();
+			mDwFactory = nullptr;
+		}
+
+		if (mD2RenderTarget != nullptr)
+		{
+			mD2RenderTarget->Release();
+			mD2RenderTarget = nullptr;
+		}
+
+		//mTextFormat
+		//if (mTextFormat != nullptr)
+		//{
+		//	mTextFormat->Release();
+		//	mTextFormat = nullptr;
+		//}
+
+		if (mAlphaEnableBlendingState != nullptr) 
+		{
 			mAlphaEnableBlendingState->Release();
 			mAlphaEnableBlendingState = nullptr;
 		}
 
-		if (mAlphaDisableBlendingState != nullptr) {
+		if (mAlphaDisableBlendingState != nullptr) 
+		{
 			mAlphaDisableBlendingState->Release();
 			mAlphaDisableBlendingState = nullptr;
 		}
