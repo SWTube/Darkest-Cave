@@ -240,27 +240,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
-    <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
-    <ClInclude Include="Core\Public\Containers\Hash.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
-    <ClInclude Include="Core\Public\Containers\TStack.h" />
     <ClInclude Include="Core\Public\Containers\Vertex.h" />
-    <ClInclude Include="Core\Public\Core.h" />
-    <ClInclude Include="Core\Public\CoreFwd.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
-    <ClInclude Include="Core\Public\CoreMinimal.h" />
-    <ClInclude Include="Core\Public\CorePch.h" />
     <ClInclude Include="Core\Public\CoreTypes.h" />
     <ClInclude Include="Core\Public\Debug\Log.h">
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
-    <ClInclude Include="Core\Public\Memory\DataBlock.h" />
+    <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h" />
     <ClInclude Include="Core\Public\Math\Vector2.h" />
-    <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\Shapes\Quadrant.h" />
-    <ClInclude Include="Core\Public\String\String.h" />
     <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
     <ClInclude Include="Core\Public\Utils\Defines.h" />
@@ -286,23 +277,21 @@
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Private\Containers\Array.cpp" />
-    <ClCompile Include="Core\Private\Containers\Hash.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
     <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
-    <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
-    <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
-    <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
-    <ClCompile Include="Core\Public\Containers\GraphNode.ixx" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
-    <ClCompile Include="Core\Public\Containers\Matrix.ixx" />
-    <ClCompile Include="Core\Public\Containers\TreeNode.ixx" />
-    <ClCompile Include="Core\Public\Containers\Trie.ixx" />
+    <ClCompile Include="Core\Public\Containers\Array.ixx" />
+    <ClCompile Include="Core\Public\Containers\HashTable.ixx" />
+    <ClCompile Include="Core\Public\Containers\LinkedList.ixx" />
+    <ClCompile Include="Core\Public\Containers\Pair.ixx" />
+    <ClCompile Include="Core\Public\Containers\Stack.ixx" />
+    <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx" />
+    <ClCompile Include="Core\Public\Math\Math.ixx" />
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
     <ClCompile Include="Core\Public\Memory\Memory.ixx" />
     <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx" />
