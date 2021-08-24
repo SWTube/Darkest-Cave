@@ -117,6 +117,7 @@ namespace cave {
 		, mAnimName(name)
 	{
 		AddAnim(name, animation);
+		mAnimations[name].texture->GetUVCoordsByFrame(mAnimations[name].curFrames, mStartTextureCoord, mEndTextureCoord);
 	}
 
 	AnimatedSprite::AnimatedSprite(std::string name, MultiTexture* texture, uint32_t frame, const float duration, bool isLoof) 
@@ -126,6 +127,7 @@ namespace cave {
 		mbIsPlaying = true;
 		Animation newAnim(texture, 0,frame, duration, isLoof);
 		AddAnim(name, newAnim);
+		mAnimations[name].texture->GetUVCoordsByFrame(mAnimations[name].curFrames, mStartTextureCoord, mEndTextureCoord);
 	}
 
 	AnimatedSprite::AnimatedSprite(std::string name, const std::filesystem::path& filename, uint32_t column, uint32_t row, float duration, bool isLoof)
@@ -135,7 +137,7 @@ namespace cave {
 		mbIsPlaying = true;
 		Animation newAnim(reinterpret_cast<MultiTexture*>(mTexture), 0, column * row -1, duration, isLoof);
 		AddAnim(name, newAnim);
-
+		mAnimations[name].texture->GetUVCoordsByFrame(mAnimations[name].curFrames, mStartTextureCoord, mEndTextureCoord);
 	}
 
 	AnimatedSprite::AnimatedSprite(const AnimatedSprite& other)
@@ -143,6 +145,7 @@ namespace cave {
 		mbIsPlaying(other.mbIsPlaying),
 		mAnimName(other.mAnimName)
 	{
+
 		mAnimations = other.mAnimations;
 
 	}
@@ -163,7 +166,8 @@ namespace cave {
 			mPosition = other.mPosition;
 			mWidth = other.mWidth;
 			mHeight = other.mHeight;
-
+			mStartTextureCoord = other.mStartTextureCoord;
+			mEndTextureCoord = other.mEndTextureCoord;
 			mbIsPlaying = other.mbIsPlaying;
 			mAnimName = other.mAnimName;
 
@@ -180,7 +184,8 @@ namespace cave {
 			mPosition = other.mPosition;
 			mWidth = other.mWidth;
 			mHeight = other.mHeight;
-
+			mStartTextureCoord = other.mStartTextureCoord;
+			mEndTextureCoord = other.mEndTextureCoord;
 			mbIsPlaying = other.mbIsPlaying;
 			mAnimName = other.mAnimName;
 
@@ -265,6 +270,7 @@ namespace cave {
 		}
 		mAnimations[animName].startFrame = start;
 		mAnimations[animName].endFrame = end;
+
 	}
 
 	void AnimatedSprite::SetCurAnim(std::string animName)
