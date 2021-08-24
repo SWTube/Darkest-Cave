@@ -6,6 +6,8 @@ int main() {
 	// 전체 맵 크기
 	int maxHeight = 70;
 	int maxWidth = 165;
+	//int maxHeight = 20;
+	//int maxWidth = 20;
 
 	// 초기 맵 설정
 	int** map = new int*[maxHeight];
@@ -26,7 +28,7 @@ int main() {
 	TreeNode root;
 	root.setRoot(map, maxHeight, maxWidth);
 
-	root.devide(map, 64);
+	root.devide(map, 32);
 
 	/*
 	// 맵 제작
@@ -73,9 +75,10 @@ int main() {
 	*/
 	// 맵 프린트
 	
+	
 	for (int i = 0; i < maxHeight; i++) {
 		for (int j = 0; j < maxWidth; j++) {
-			if (map[i][j] == 1 || map[i][j] == 2 || map[i][j] == 3) {
+			if (map[i][j] == 2 || map[i][j] == 3) {
 				std::cout << map[i][j];
 			}
 			else {
@@ -84,6 +87,29 @@ int main() {
 		}
 		std::cout << std::endl;
 	}
+	
+
+	/*
+	for (int i = 0; i < maxHeight; i++) {
+		for (int j = 0; j < maxWidth; j++) {
+			if (map[i][j] != 0) {
+				std::cout << map[i][j];
+			}
+			else {
+				std::cout << ' ';
+			}
+		}
+		std::cout << std::endl;
+	}
+	*/
+	/*
+	for (int i = 0; i < maxHeight; i++) {
+		for (int j = 0; j < maxWidth; j++) {
+			std::cout << map[i][j];
+		}
+		std::cout << std::endl;
+	}
+	*/
 
 	// 맵 매모리 삭제
 	for (int i = 0; i < maxHeight; i++) {
