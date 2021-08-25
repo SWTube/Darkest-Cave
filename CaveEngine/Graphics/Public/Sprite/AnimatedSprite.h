@@ -1,46 +1,54 @@
 #pragma once
-#include "WindowsSprite.h"
+#include "Sprite.h"
 #include <unordered_map>
 #include <string>
+
+//import Sprite;
+
 namespace cave {
 	struct Animation {
-		bool mIsLoof;
-		uint32_t mFrames;
-		uint32_t mCurFrames;
-		float mDuration;
-		float mInterval;
-		MultiTexture* mTexture;
-		
+		MultiTexture* texture;
+		uint32_t frames;
+		uint32_t curFrames;
+		bool bIsLoof;
+		float duration;
+		float interval;
+
 		Animation() {
-			mIsLoof = false;
-			mFrames = 0;
-			mCurFrames = 0;
-			mDuration = 0.0f;
-			mInterval = 0.0f;
-			mTexture = nullptr;
+			texture = nullptr;
+			frames = 0;
+			curFrames = 0;
+			bIsLoof = false;
+			duration = 0.0f;
+			interval = 0.0f;
+
 		}
 		Animation(MultiTexture* texture, uint32_t frame, float duration, bool isLoof)
-			:mFrames(frame),
-			mDuration(duration),
-			mTexture(texture),
-			mIsLoof(isLoof)
+			: texture(texture),
+			frames(frame),
+			curFrames(0),
+			bIsLoof(isLoof),
+			duration(duration)
+	
 		{
-			mCurFrames = 0;
 			assert(frame > 0);
-			mInterval = mDuration / mFrames;
+			interval = duration / static_cast<float>(frames);
 		}
+
 		~Animation() {
-			mTexture = nullptr;
+			texture = nullptr;
 		}
 
 
 	};
 
-	class AnimatedSprite : public WindowsSprite {
+	class AnimatedSprite : public Sprite {
 	public:
 		AnimatedSprite() = delete;
 		AnimatedSprite(std::string name, Animation* animation, MemoryPool* pool);
 		AnimatedSprite(std::string name, MultiTexture* texture, uint32_t frame, const float duration, bool isLoof,MemoryPool* pool);
+		AnimatedSprite(const AnimatedSprite& other);
+		
 		virtual ~AnimatedSprite();
 
 		void Destroy() override;
@@ -51,13 +59,12 @@ namespace cave {
 		void SetState(std::string state);
 
 	private:
-		bool mbIsPlaying = false;
 		MemoryPool* mPool = nullptr;
-		std::string mState = "";
-		std::unordered_map<std::string, Animation*> mAnimations;
-		
+		bool mbIsPlaying = false;
 		float mTotalElapsed = 0.0f;
 		float tempElapsed = 0.01f; // (임시)업데이트 간 간격
+		std::string mState = "";
+		std::unordered_map<std::string, Animation*> mAnimations;
 
 	};
 

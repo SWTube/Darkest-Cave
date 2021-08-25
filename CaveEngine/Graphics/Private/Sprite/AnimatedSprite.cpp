@@ -1,9 +1,9 @@
 #include "Sprite\AnimatedSprite.h"
-#include <iostream>
+
 namespace cave {
 
 	AnimatedSprite::AnimatedSprite(std::string name, Animation* animation, MemoryPool* pool) :
-		WindowsSprite(animation->mTexture)
+		Sprite(animation->texture)
 		,mPool(pool)
 		,mState(name)
 	{
@@ -11,7 +11,7 @@ namespace cave {
 	}
 
 	AnimatedSprite::AnimatedSprite(std::string name, MultiTexture* texture, uint32_t frame, const float duration,bool isLoof, MemoryPool* pool) :
-		WindowsSprite(texture)
+		Sprite(texture)
 		,mPool(pool)
 		,mState(name)
 	{
@@ -21,21 +21,35 @@ namespace cave {
 		AddAniamtion(name, newAnim);
 	}
 
+	AnimatedSprite::AnimatedSprite(const AnimatedSprite& other)
+		:Sprite(other),
+		mPool(other.mPool),
+		mbIsPlaying(other.mbIsPlaying),
+		mState(other.mState)
+	{
+		for (auto it = other.mAnimations.begin(); it != mAnimations.end(); it++) {
+			Animation* newAnim = reinterpret_cast<Animation*>(mPool->Allocate(sizeof(Animation)));
+			new(newAnim) Animation(it->second->texture,it->second->frames,it->second->duration,it->second->bIsLoof);
+			AddAniamtion(it->first, newAnim);
+		}
+
+	}
+
 	AnimatedSprite::~AnimatedSprite()
 	{
+		Destroy();
 	}
 
 	void AnimatedSprite::Destroy()
 	{
-		WindowsSprite::Destroy();
+		Sprite::Destroy();
 
-		//mPool->Deallocate(mDeviceResources, sizeof(DeviceResources))
-		for(auto it = mAnimations.begin(); it != mAnimations.end(); it++)
+		for(auto it = mAnimations.begin(); it != mAnimations.end();)
 		{
 			it->second->~Animation();
 			mPool->Deallocate(it->second, sizeof(Animation));
 			it->second = nullptr;
-			mAnimations.erase(it);
+			mAnimations.erase(it++);
 
 		}
 		mAnimations.clear();
@@ -48,11 +62,11 @@ namespace cave {
 
 		mTotalElapsed += tempElapsed;
 		Animation* curAnimation = mAnimations[mState];
-		if (mTotalElapsed >= curAnimation->mInterval) {
-			mTotalElapsed -= curAnimation->mInterval;
-			curAnimation->mCurFrames++;
-			if (curAnimation->mCurFrames > curAnimation->mFrames) {
-				if (mAnimations[mState]->mIsLoof) curAnimation->mCurFrames = 0;
+		if (mTotalElapsed >= curAnimation->interval) {
+			mTotalElapsed -= curAnimation->interval;
+			curAnimation->curFrames++;
+			if (curAnimation->curFrames > curAnimation->frames) {
+				if (mAnimations[mState]->bIsLoof) curAnimation->curFrames = 0;
 				else
 				{
 					mbIsPlaying = false;
@@ -60,7 +74,7 @@ namespace cave {
 				}
 			}
 
-			mAnimations[mState]->mTexture->SetFrame(mAnimations[mState]->mCurFrames);
+			mAnimations[mState]->texture->SetFrame(mAnimations[mState]->curFrames);
 
 		}
 	}
@@ -78,7 +92,7 @@ namespace cave {
 		}
 
 		mState = state;
-		mTexture = mAnimations[mState]->mTexture;
-		mAnimations[mState]->mCurFrames = 0;
+		mTexture = mAnimations[mState]->texture;
+		mAnimations[mState]->curFrames = 0;
 	}
 }

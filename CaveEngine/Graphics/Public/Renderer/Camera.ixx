@@ -1,12 +1,100 @@
-/*!
+﻿/*!
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Renderer/Camera.h"
+module;
+
+#include "GraphicsApiPch.h"
+
+#include "CoreTypes.h"
+#include "Containers/Vertex.h"
+
+export module Camera;
+
 
 namespace cave
 {
+	export class Camera final
+	{
+	public:
+		constexpr Camera() = default;
+		constexpr Camera(const Camera& other) = default;
+		constexpr Camera(Camera&& other) = default;
+		constexpr Camera& operator=(const Camera& other) = default;
+		constexpr Camera& operator=(Camera&& other) = default;
+		virtual ~Camera() = default;
+
+		constexpr void SetPosition(float x, float y, float z);
+		constexpr void SetPosition(const Float3& position);
+		constexpr void SetPosition(Float3&& position);
+
+		constexpr void SetRotation(float x, float y, float z);
+		constexpr void SetRotation(const Float3& rotation);
+		constexpr void SetRotation(Float3&& rotation);
+
+		constexpr const Float3& GetPosition() const;
+		constexpr const Float3& GetRotation() const;
+
+		void Render();
+
+		constexpr const DirectX::XMMATRIX& GetViewMatrix() const;
+
+	private:
+		Float3 mPosition = Float3(0.0f, 0.0f, 0.0f);
+		Float3 mRotation = Float3(0.0f, 0.0f, 0.0f);
+		DirectX::XMMATRIX mView = DirectX::XMMatrixIdentity();
+	};
+
+	constexpr void Camera::SetPosition(float x, float y, float z)
+	{
+		mPosition.X = x;
+		mPosition.Y = y;
+		mPosition.Z = z;
+	}
+
+	constexpr void Camera::SetPosition(const Float3& position)
+	{
+		mPosition = position;
+	}
+
+	constexpr void Camera::SetPosition(Float3&& position)
+	{
+		mPosition = position;
+	}
+
+	constexpr void Camera::SetRotation(float x, float y, float z)
+	{
+		mRotation.X = x;
+		mRotation.Y = y;
+		mRotation.Z = z;
+	}
+
+	constexpr void Camera::SetRotation(const Float3& rotation)
+	{
+		mRotation = rotation;
+	}
+
+	constexpr void Camera::SetRotation(Float3&& rotation)
+	{
+		mRotation = rotation;
+	}
+
+	constexpr const Float3& Camera::GetPosition() const
+	{
+		return mPosition;
+	}
+
+	constexpr const Float3& Camera::GetRotation() const
+	{
+		return mRotation;
+	}
+
+	constexpr const DirectX::XMMATRIX& Camera::GetViewMatrix() const
+	{
+		return mView;
+	}
+
 	void Camera::Render()
 	{
 		Float3 up;
@@ -49,7 +137,7 @@ namespace cave
 		lookAtVector = DirectX::XMLoadFloat3(&dLookAt);
 
 		// XMVECTOR 구조체에 로드한다.
-		
+
 		// yaw (Y 축), pitch (X 축) 및 roll (Z 축)의 회전값을 라디안 단위로 설정합니다.
 		pitch = mRotation.X * 0.0174532925f;
 		yaw = mRotation.Y * 0.0174532925f;
