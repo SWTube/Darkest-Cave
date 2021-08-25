@@ -25,12 +25,12 @@ namespace cave
 
 		virtual void Destroy() override;
 
-		void SetContent(LPCWSTR content);
+		void SetContent(WString content);
 		void SetFontSize(float size);
 		void SetColor(float r,float g, float b, float a = 1.0f);
-		void SetFontName(LPCWSTR fontName);
-		LPCWSTR GetFontName();
-		LPCWSTR GetContent();
+		void SetFontName(WString fontName);
+		WString GetFontName();
+		WString GetContent();
 		D2D1::ColorF GetColor();
 
 	protected:
@@ -40,8 +40,8 @@ namespace cave
 
 	private:
 		float mFontSize = 0.0f;
-		LPCWSTR mFontName = L"";
-		LPCWSTR mContent = L"";
+		WString mFontName = L"";
+		WString mContent = L"";
 		D2D1::ColorF mColor = D2D1::ColorF(0, 0, 0, 1);
 	};
 
@@ -146,12 +146,12 @@ namespace cave
 
 	}
 
-	void Text::SetContent(LPCWSTR content)
+	void Text::SetContent(WString content)
 	{
 		mContent = content;
 	}
 
-	void Text::SetFontName(LPCWSTR fontName)
+	void Text::SetFontName(WString fontName)
 	{
 		mFontName = fontName;
 	}
