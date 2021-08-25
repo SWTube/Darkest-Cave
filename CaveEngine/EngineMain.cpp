@@ -114,6 +114,10 @@ int main(int32_t argc, char** argv)
 	//cave::StringTest::Main();
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
 
+	clock = tic();
+	cave::WStringTest::Main();
+	LOGDF(cave::eLogChannel::CORE_TIMER, "WString Test: Elapsed time %f seconds.", toc(&clock));
+
 	//KeyboardTest();
 
 	//clock = tic();
