@@ -6,20 +6,23 @@
 #pragma once
 
 #include "Physics.h"
+#include "Body/PhysicsBody.h"
 
 namespace cave
 {
-  class PhysicsWorld
-  {
-  public:
-    PhysicsWorld(b2Vec2 gravity);
-    ~PhysicsWorld();
+    class PhysicsWorld
+    {
+    public:
+        PhysicsWorld(b2Vec2 gravity);
+        ~PhysicsWorld();
 
-    void SetGravity(b2Vec2 gravity);
-    b2Vec2 GetGravity();
+        void SetGravity(b2Vec2 gravity);
+        b2Vec2 GetGravity();
 
-    void Update(float step, float velocityIterations, float positionIterations);
-  private:
-    b2World mWorld;
-  }
-}
+        void AddPhysicsObject(PhysicsBody* physicsBody);
+
+        void Update(float step, float velocityIterations, float positionIterations);
+    private:
+        b2World* mWorld;
+    };
+};

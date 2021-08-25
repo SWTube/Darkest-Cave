@@ -3,28 +3,32 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "PhysicsWorld.h"
+#include "World/PhysicsWorld.h"
 
 namespace cave
 {
-  PhysicsWorld::PhysicsWorld(b2Vec2 gravity)
-  {
-    mWorld = b2World(gravity);
-  }
-  PhysicsWorld::~PhysicsWorld()
-  {
-
-  }
-  void PhysicsWorld::SetGravity(b2Vec2 gravity)
-  {
-    mWorld.gravity = gravity;
-  }
-  b2Vec2 PhysicsWorld::GetGravity()
-  {
-    return mWorld.gravity;
-  }
-  void PhysicsWorld::Update(float step, float velocityIterations, float positionIterations)
-  {
-    mWorld.Step(step, velocityIterations, positionIterations);
-  }
+	PhysicsWorld::PhysicsWorld(b2Vec2 gravity)
+	{
+		mWorld = new b2World(gravity);
+	}
+	PhysicsWorld::~PhysicsWorld()
+	{
+		delete mWorld;
+	}
+	void PhysicsWorld::SetGravity(b2Vec2 gravity)
+	{
+		mWorld->SetGravity(gravity);
+	}
+	b2Vec2 PhysicsWorld::GetGravity()
+	{
+		return mWorld->GetGravity();
+	}
+	void PhysicsWorld::AddPhysicsObject(PhysicsBody* physicsBody)
+	{
+		physicsBody->SetBody(mWorld->CreateBody(physicsBody->GetBodyDef()));
+	}
+	void PhysicsWorld::Update(float step, float velocityIterations, float positionIterations)
+	{
+		mWorld->Step(step, velocityIterations, positionIterations);
+	}
 }

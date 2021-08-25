@@ -295,7 +295,11 @@
     <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\GenericSprite.h" />
     <ClInclude Include="Graphics\Public\Sprite\Sprite.h" />
+    <ClInclude Include="Physics\Public\Body\PhysicsBody.h" />
+    <ClInclude Include="Physics\Public\Body\RigidBody.h" />
+    <ClInclude Include="Physics\Public\Body\StaticBody.h" />
     <ClInclude Include="Physics\Public\Physics.h" />
+    <ClInclude Include="Physics\Public\World\PhysicsWorld.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
@@ -349,6 +353,10 @@
     <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
     <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp" />
+    <ClCompile Include="Physics\Private\Body\PhysicsBody.cpp" />
+    <ClCompile Include="Physics\Private\Body\RigidBody.cpp" />
+    <ClCompile Include="Physics\Private\Body\StaticBody.cpp" />
+    <ClCompile Include="Physics\Private\World\PhysicsWorld.cpp" />
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />

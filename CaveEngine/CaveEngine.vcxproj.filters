@@ -178,6 +178,18 @@
     <ClCompile Include="Core\Public\Containers\TreeNode.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\Private\World\PhysicsWorld.cpp">
+      <Filter>Source Files\Physics\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Private\Body\PhysicsBody.cpp">
+      <Filter>Source Files\Physics\Body</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Private\Body\StaticBody.cpp">
+      <Filter>Source Files\Physics\Body</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Private\Body\RigidBody.cpp">
+      <Filter>Source Files\Physics\Body</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -369,6 +381,18 @@
     <ClInclude Include="Physics\Public\Physics.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Public\Body\PhysicsBody.h">
+      <Filter>Header Files\Physics\Body</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Public\Body\RigidBody.h">
+      <Filter>Header Files\Physics\Body</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Public\Body\StaticBody.h">
+      <Filter>Header Files\Physics\Body</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Public\World\PhysicsWorld.h">
+      <Filter>Header Files\Physics\World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -551,6 +575,18 @@
     </Filter>
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{38d2121f-f0d7-4989-b19b-98eaa4e1b8c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics\Body">
+      <UniqueIdentifier>{66ebcb2c-e091-4108-853c-7bdd41e42c4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics\World">
+      <UniqueIdentifier>{2e145c6e-b9d9-4194-b1be-343469d46ac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\Body">
+      <UniqueIdentifier>{1e581dd6-9816-434b-8dce-6afe2d47aeba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\World">
+      <UniqueIdentifier>{defd66cd-0a0f-4071-8c45-ac7363dd6beb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -3,15 +3,15 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#include "Body/StaticBody.h"
+#include "Body/RigidBody.h"
 
 namespace cave
 {
-	StaticBody::StaticBody()
+	RigidBody::RigidBody()
 	{
-		mBodyDef.type = b2_staticBody; // set bodyType to staticBody
+		
 	}
-	StaticBody::~StaticBody()
+	RigidBody::~RigidBody()
 	{
 
 	}

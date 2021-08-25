@@ -6,17 +6,14 @@
 #pragma once
 
 #include "Physics.h"
+#include "PhysicsBody.h"
 
 namespace cave
 {
-  class StaticBody : public PhysicsBody
-  {
-  public:
-    StaticBody();
-    ~StaticBody();
-  private:
-    b2BodyDef mBodyDef;
-    b2Body mBody;
-    b2Shape mShape;
-  }
-}
+    class StaticBody : public PhysicsBody
+    {
+    public:
+        StaticBody();
+        ~StaticBody();
+    };
+};

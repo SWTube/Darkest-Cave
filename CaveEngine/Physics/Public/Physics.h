@@ -15,6 +15,6 @@
 	 PhysicsBody includes.
  ----------------------------------------------------------------------------*/
 
-#include "Body/PhysicsBody.h"
-#include "Body/StaticBody.h"
-#include "Body/RigidBody.h"
+// #include "Body/PhysicsBody.h"
+// #include "Body/StaticBody.h"
+// #include "Body/RigidBody.h"
