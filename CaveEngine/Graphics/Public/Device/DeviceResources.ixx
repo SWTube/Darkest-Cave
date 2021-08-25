@@ -13,7 +13,7 @@ module;
 export module DeviceResources;
 
 export import Window;
-import String;
+import cave.Core.String;
 
 namespace cave
 {
@@ -672,7 +672,7 @@ namespace cave
 
 		DWriteCreateFactory(
 			DWRITE_FACTORY_TYPE_SHARED,
-			__uuidof(mDwFactory),
+			__uuidof(IDWriteFactory),
 			reinterpret_cast<IUnknown**>(&mDwFactory)
 		);
 
