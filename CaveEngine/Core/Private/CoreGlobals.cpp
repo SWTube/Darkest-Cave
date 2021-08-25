@@ -5,7 +5,10 @@
 
 #include "CoreGlobals.h"
 
+import cave.Core.Containers.Hash;
+
 namespace cave
 {
 	MemoryPool gCoreMemoryPool(CORE_MEMORY_POOL_SIZE);
+	Hash gHash;
 }

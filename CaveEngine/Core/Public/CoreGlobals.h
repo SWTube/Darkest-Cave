@@ -9,9 +9,12 @@
 
 #include "Memory/MemoryPool.h"
 
+import cave.Core.Containers.Hash;
+
 namespace cave
 {
 	constexpr size_t CORE_MEMORY_POOL_SIZE = 1048576ul;
 
 	extern MemoryPool gCoreMemoryPool;
+	extern Hash gHash;
 } // namespace cave
