@@ -127,21 +127,51 @@
     <ClCompile Include="Core\Public\Containers\Pair.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\Window.cpp" />
-    <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
-    <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
-    <ClCompile Include="Graphics\Public\Device\Window.ixx" />
-    <ClCompile Include="Graphics\Public\Renderer\Camera.ixx" />
-    <ClCompile Include="Graphics\Public\Renderer\Renderable.ixx" />
-    <ClCompile Include="Graphics\Public\Renderer\Renderer.ixx" />
-    <ClCompile Include="Graphics\Public\Renderer\RenderQueue.ixx" />
-    <ClCompile Include="Graphics\Public\Shader\Shader.ixx" />
-    <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
-    <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx" />
-    <ClCompile Include="Graphics\Public\UI\Text.ixx" />
-    <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />
-    <ClCompile Include="ResourceManager\Public\Texture\Texture.ixx" />
-    <ClCompile Include="ResourceManager\Public\Texture\TextureManager.ixx" />
+    <ClCompile Include="ResourceManager\Public\Texture\TextureManager.ixx">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Public\Texture\Texture.ixx">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\UI\Text.ixx">
+      <Filter>Header Files\Graphics\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Shader\Shader.ixx">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Device\Window.ixx">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\Window.cpp">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Device\BufferManager.ixx">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Renderer\Camera.ixx">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Renderer\Renderable.ixx">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Renderer\Renderer.ixx">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Renderer\RenderQueue.ixx">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">
@@ -152,9 +182,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Public\Engine.h">
       <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Graphics.h">
-      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h">
       <Filter>Header Files\Graphics</Filter>
@@ -422,6 +449,9 @@
     </Filter>
     <Filter Include="Header Files\Core\KeyboardInput">
       <UniqueIdentifier>{8b16aa60-7040-4797-8b91-69daedd00bc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\UI">
+      <UniqueIdentifier>{c75036ba-c200-4a31-943c-863337bf0878}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
