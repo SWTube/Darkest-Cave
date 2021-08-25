@@ -266,7 +266,9 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 
+	cave::Renderer* renderer =  main.GetRenderer();
 	
+	renderer->LoadFontFile(L"D:\\Desktop\\SW-Project\\Darkist-Cave\\CaveEngine\\Graphics\\Resource\\NotoSansKR-Regular.otf");
 	if (result == cave::eResult::CAVE_OK)
 	{
 		//// Go full-screen.

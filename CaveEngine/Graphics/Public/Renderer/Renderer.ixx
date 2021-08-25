@@ -3,7 +3,6 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 module;
-#include <wchar.h>
 #include <string>
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
@@ -12,7 +11,7 @@ module;
 //#include "Texture/Texture.h"
 
 export module Renderer;
-
+import cave.Core.String;
 import DeviceResources;
 import Camera;
 import Shader;
@@ -46,10 +45,10 @@ namespace cave
 		bool WindowShouldClose();
 		DeviceResources* GetDeviceResources() const;
 
-		void LoadFontFile(LPCWSTR fontfile);
+		eResult LoadFontFile(LPCWSTR fontfile);
 	private:
 		void drawText(TextCommand* command);
-
+		void loadFontsInFolder();
 	private:
 		static constexpr size_t RENDERER_MEMORY_SIZE = 1024ul * 1024ul * 10ul;
 		MemoryPool* mPool = nullptr;
@@ -257,27 +256,66 @@ namespace cave
 
 	}
 
-	void Renderer::LoadFontFile(LPCWSTR fontfile)
+	eResult Renderer::LoadFontFile(LPCWSTR fontfile)
 	{
+		uint32_t result;
 		IDWriteFactory3* dwFactory = mDeviceResources->GetDWFactory();
 
-		IDWriteFontFile* fontFileReference;
-		dwFactory->CreateFontFileReference(fontfile, nullptr, &fontFileReference);
+		IDWriteFontFile* fontFile;
+		result = dwFactory->CreateFontFileReference(fontfile, nullptr, &fontFile);
+		
+		if (result != S_OK)
+		{
+			return eResult::CAVE_FAIL;
+		}
+		
+		IDWriteFontSetBuilder* fontSetBuilder;
+		result = dwFactory->CreateFontSetBuilder(&fontSetBuilder);
 
+		if (result != S_OK)
+			return eResult::CAVE_FAIL;
 
-		IDWriteFontSetBuilder1* fontSetBuilder;
-		dwFactory->CreateFontSetBuilder(&fontSetBuilder);
+		BOOL isSupported;
+		DWRITE_FONT_FILE_TYPE fileType;
+		UINT32 numberOfFonts;
 
-		fontSetBuilder->AddFontFile(fontFileReference.Get());
+		fontFile->Analyze(&isSupported, &fileType, /* face type */ nullptr, &numberOfFonts);
 
-		IDWriteFontSet* customFontSet;
-		fontSetBuilder->CreateFontSet(&customFontSet);
+		if (!isSupported)
+			eResult::CAVE_FAIL;
 
-		dwFactory->CreateFontCollectionFromFontSet(
-			customFontSet.Get()
-			, &mFontCollection
+		// For each font within the font file, get a font face reference and add to the builder.
+		for (UINT32 fontIndex = 0; fontIndex < numberOfFonts; fontIndex++)
+		{
+			IDWriteFontFaceReference* fontFaceReference;
+			dwFactory->CreateFontFaceReference(fontFile, fontIndex, DWRITE_FONT_SIMULATIONS_NONE, &fontFaceReference);
 
-		);
+			// If fonts were assumed known, we could set custom properties, and would do that here.
+			// But these are not assumed known, so we'll leave it to DirectWrite to read properties
+			// directly out of the font files.
+
+			fontSetBuilder->AddFontFaceReference(fontFaceReference);
+			fontFaceReference->Release();
+		}
+		IDWriteFontSet* fontSet;
+
+		fontSetBuilder->CreateFontSet(&fontSet);
+		fontSetBuilder->Release();
+
+		dwFactory->CreateFontCollectionFromFontSet(fontSet, &mFontCollection);
+		
+		fontSet->Release();
+
+		IDWriteFontFamily* fontFamily;
+		IDWriteLocalizedStrings* localizedFontName;
+
+		TCHAR c_styleFontName[100];
+
+		mFontCollection->GetFontFamily(0, &fontFamily);
+		fontFamily->GetFamilyNames(&localizedFontName);
+		localizedFontName->GetString(0, c_styleFontName, 100);
+
+		return eResult::CAVE_OK;
 
 	}
 	void Renderer::drawText(TextCommand* command)
@@ -288,13 +326,13 @@ namespace cave
 		IDWriteTextLayout* layout;
 		//renderTarget->BeginDraw();
 		dwFactory->CreateTextFormat(
-			command->fontName, 0, DWRITE_FONT_WEIGHT::DWRITE_FONT_WEIGHT_NORMAL,
+			command->fontName.GetCString(), mFontCollection, DWRITE_FONT_WEIGHT::DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE::DWRITE_FONT_STYLE_NORMAL,
 			DWRITE_FONT_STRETCH::DWRITE_FONT_STRETCH_NORMAL,
 			command->fontSize, L"ko", &mTextFormat);
 
-		dwFactory->CreateTextLayout(command->content, wcslen(command->content), mTextFormat, 800, 500, &layout);
-		layout->SetFontSize(command->fontSize, { 0, wcslen(command->content) });
+		dwFactory->CreateTextLayout(command->content.GetCString(), command->content.GetLength(), mTextFormat, 800, 500, &layout);
+		layout->SetFontSize(command->fontSize, { 0, command->content.GetLength() });
 		mBrush->SetColor(command->color);
 		renderTarget->DrawTextLayout(D2D1::Point2F(command->position.X, command->position.Y), layout, mBrush);
 
@@ -302,6 +340,11 @@ namespace cave
 		//brush->Release();
 		layout->Release();
 		mTextFormat->Release();
+
+	}
+
+	void Renderer::loadFontsInFolder()
+	{
 
 	}
 

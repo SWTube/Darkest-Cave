@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
@@ -68,10 +68,16 @@ namespace cave
 		AnimatedSprite as1("default", "spaceship.dds", 4, 1, 3, true); // 애니메이션 이름,파일명, 가로 개수, 세로 개수, 재생시간, 반복여부.
 		as1.SetPosition({ 700,200 });
 		
-		cave::WString ws1 = L"string";
+		cave::WString ws1 = L"이 글씨체는 무엇일까?";
 
-		Text t1(ws1.GetCString(), L"돋움", 30);
+		//Text t1(L"한국어" , L"배달의민족 주아", 30);
+		
+		Text t1(L"한국어", L"Noto Sans KR", 30);
+		t1.SetPosition({ 600,500 });
 
+		Text t2(L"기본", L"기본", 30);
+		t2.SetPosition({ 600,300 });
+		
 		while (WM_QUIT != msg.message)
 		{
 			// Process window events.
@@ -91,6 +97,7 @@ namespace cave
 				s1.Render();
 				as1.Render();
 				t1.Render();
+				t2.Render();
 				// Render frames during idle time (when no messages are waiting).
 				mRenderer->Render();
 

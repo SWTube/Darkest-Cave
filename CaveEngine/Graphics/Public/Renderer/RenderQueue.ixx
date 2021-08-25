@@ -11,6 +11,7 @@ module;
 #include "Containers/Vertex.h"
 export module RenderQueue;
 
+import cave.Core.String;
 import TextureManager;
 
 namespace cave 
@@ -35,8 +36,8 @@ namespace cave
 	};
 	export struct TextCommand : RenderCommand
 	{
-		LPCWSTR fontName = L"";
-		LPCWSTR content = L"";
+		WString fontName = L"";
+		WString content = L"";
 		float fontSize = 0.0f;
 		Float3 position = { 0,0,0 };
 		D2D1::ColorF color = { 0,0,0,1 };
