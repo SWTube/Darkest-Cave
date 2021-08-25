@@ -22,7 +22,6 @@
 #include "Engine.h"
 #include "Object/TagPool.h"
 #include "Shapes/Quadrant.h"
-#include "Sprite/Sprite.h"
 #include "Containers/Vertex.h"
 #include "KeyboardInput/KeyboardInput.h"
 
@@ -48,6 +47,7 @@ import cave.Core.Math;
 import cave.Core.Containers.Stack;
 import cave.Core.String;
 // import KeyboardInput;
+import Renderer;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -109,9 +109,10 @@ int main(int32_t argc, char** argv)
 #endif
 
 #ifdef CAVE_BUILD_DEBUG
-	TicTocTimer clock = tic();
-	cave::StringTest::Main();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
+	//TicTocTimer clock = tic();
+	RenderTest();
+	//cave::StringTest::Main();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
 
 	//KeyboardTest();
 
@@ -265,14 +266,6 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 
-	cave::Renderer* renderer = main.GetRenderer();
-
-	renderer->AddSprite("orange_mushroom.png");
-
-	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
-	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
-	renderer->SetSpritePosition(2, cave::Float2(500, 200));
-	//renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
 	
 	if (result == cave::eResult::CAVE_OK)
 	{
@@ -283,7 +276,7 @@ void RenderTest()
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
 	// 	// Run the program.
-	// 	result = main.Run();
+	 	result = main.Run();
 	}
 
 	main.Destroy();
