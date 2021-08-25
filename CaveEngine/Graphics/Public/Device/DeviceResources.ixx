@@ -57,7 +57,7 @@ namespace cave
 		ID3D11RenderTargetView* GetRenderTarget();
 		ID3D11DepthStencilView* GetDepthStencil();
 		
-		IDWriteFactory* GetDWFactory();
+		IDWriteFactory3* GetDWFactory();
 		ID2D1RenderTarget* GetD2DRenderTarget();
 
 		virtual void TurnZBufferOn();
@@ -104,7 +104,7 @@ namespace cave
 		// D2D 
 		//-----------------------------------------------------------------------------
 
-		IDWriteFactory* mDwFactory = nullptr;
+		IDWriteFactory3* mDwFactory = nullptr;
 		//IDWriteTextFormat* mTextFormat = nullptr;
 		ID2D1RenderTarget* mD2RenderTarget = nullptr;
 
@@ -672,7 +672,7 @@ namespace cave
 
 		DWriteCreateFactory(
 			DWRITE_FACTORY_TYPE_SHARED,
-			__uuidof(IDWriteFactory),
+			__uuidof(IDWriteFactory3),
 			reinterpret_cast<IUnknown**>(&mDwFactory)
 		);
 
@@ -832,7 +832,7 @@ namespace cave
 		return mDepthStencilView;
 	}
 
-	IDWriteFactory* DeviceResources::GetDWFactory()
+	IDWriteFactory3* DeviceResources::GetDWFactory()
 	{
 		return mDwFactory;
 	}
