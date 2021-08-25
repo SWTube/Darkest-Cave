@@ -7,6 +7,8 @@
 
 import Sprite;
 import AnimatedSprite;
+import Text;
+import cave.Core.String;
 #ifdef __WIN32__
 
 namespace cave
@@ -63,8 +65,13 @@ namespace cave
 		s1.SetTextureWithFilePath("orange_mushroom.png");
 		s1.SetPosition({ 400,400 });
 		
-		AnimatedSprite as1("default", "spaceship.dds", 4, 3, true);
+		AnimatedSprite as1("default", "spaceship.dds", 4, 1, 3, true); // 애니메이션 이름,파일명, 가로 개수, 세로 개수, 재생시간, 반복여부.
 		as1.SetPosition({ 700,200 });
+		
+		cave::WString ws1 = L"string";
+
+		Text t1(ws1.GetCString(), L"돋움", 30);
+
 		while (WM_QUIT != msg.message)
 		{
 			// Process window events.
@@ -83,6 +90,7 @@ namespace cave
 				mRenderer->Update();
 				s1.Render();
 				as1.Render();
+				t1.Render();
 				// Render frames during idle time (when no messages are waiting).
 				mRenderer->Render();
 

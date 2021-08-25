@@ -46,6 +46,7 @@ namespace cave
 		bool WindowShouldClose();
 		DeviceResources* GetDeviceResources() const;
 
+		void LoadFontFile(LPCWSTR fontfile);
 	private:
 		void drawText(TextCommand* command);
 
@@ -64,6 +65,7 @@ namespace cave
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 
+		IDWriteFontCollection1* mFontCollection;
 		ID2D1SolidColorBrush* mBrush = nullptr;
 		IDWriteTextFormat* mTextFormat = nullptr;
 		
@@ -255,6 +257,29 @@ namespace cave
 
 	}
 
+	void Renderer::LoadFontFile(LPCWSTR fontfile)
+	{
+		IDWriteFactory3* dwFactory = mDeviceResources->GetDWFactory();
+
+		IDWriteFontFile* fontFileReference;
+		dwFactory->CreateFontFileReference(fontfile, nullptr, &fontFileReference);
+
+
+		IDWriteFontSetBuilder1* fontSetBuilder;
+		dwFactory->CreateFontSetBuilder(&fontSetBuilder);
+
+		fontSetBuilder->AddFontFile(fontFileReference.Get());
+
+		IDWriteFontSet* customFontSet;
+		fontSetBuilder->CreateFontSet(&customFontSet);
+
+		dwFactory->CreateFontCollectionFromFontSet(
+			customFontSet.Get()
+			, &mFontCollection
+
+		);
+
+	}
 	void Renderer::drawText(TextCommand* command)
 	{
 		IDWriteFactory* dwFactory = mDeviceResources->GetDWFactory();

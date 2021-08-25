@@ -9,7 +9,6 @@ module;
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
 #include "Containers/Vertex.h"
-//#include "Texture/Texture.h"
 
 export module Renderable;
 export import RenderQueue;
