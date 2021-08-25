@@ -9,15 +9,25 @@
 
 namespace cave
 {
+    enum class ePhysicsBodyType
+    {
+        Static,
+        Dynamic,
+        Kinematic
+    };
+
     class PhysicsBody
     {
     public:
         PhysicsBody();
         ~PhysicsBody();
 
+        ePhysicsBodyType GetType();
+        void SetType(ePhysicsBodyType type);
+
+        b2Vec2 GetPosition();
         void SetPosition(float x, float y);
         void SetPosition(b2Vec2 position);
-        b2Vec2 GetPosition();
 
         b2BodyDef* GetBodyDef();
 
