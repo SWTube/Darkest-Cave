@@ -247,11 +247,11 @@ export namespace cave
 		friend bool operator!=(const WString& lhs, const wchar_t* rhs) noexcept;
 		// input / output
 		friend std::wostream& operator<<(std::wostream& os, const WString& wStr);
-		friend std::istream& operator>>(std::istream& is, WString& wStr);
-		friend std::istream& GetLine(std::istream& input, WString& wStr, wchar_t delim);
-		friend std::istream& GetLine(std::istream&& input, WString& wStr, wchar_t delim);
-		friend std::istream& GetLine(std::istream& input, WString& wStr);
-		friend std::istream& GetLine(std::istream&& input, WString& wStr);
+		friend std::wistream& operator>>(std::wistream& is, WString& wStr);
+		friend std::wistream& GetLine(std::wistream& input, WString& wStr, wchar_t delim);
+		friend std::wistream& GetLine(std::wistream&& input, WString& wStr, wchar_t delim);
+		friend std::wistream& GetLine(std::wistream& input, WString& wStr);
+		friend std::wistream& GetLine(std::wistream&& input, WString& wStr);
 		// numeric conversions
 		friend int32_t WStringToInt32(const WString& wStr, size_t* pos, int32_t base);
 		friend int32_t WStringToInt32(const WString& wStr, size_t* pos);
@@ -2126,9 +2126,29 @@ export namespace cave
 
 		size_t sLength = Strlen(cStr);
 
+		if (pos + count > mLength)
+		{
+			count = mLength - pos;
+		}
+
 		if (count2 > sLength)
 		{
 			count2 = sLength;
+		}
+
+		size_t newLength = mLength + count2 - count;
+
+		if (newLength >= mCapacity)
+		{
+			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
+			if (newCapacity - 1 >= newLength + 1)
+			{
+				SetCapacity(newCapacity - 1);
+			}
+			else
+			{
+				SetCapacity((newCapacity - 1) << 1);
+			}
 		}
 
 		if (count < count2)
@@ -2148,12 +2168,8 @@ export namespace cave
 
 		Memory::Memcpy(&mString[pos], cStr, Math::GetMinSizeType(mCapacity - pos, count2));
 		//strncpy_s(&mString[pos], mCapacity - pos, cStr, count2);
-		if (pos + count >= mLength)
-		{
-			count = mLength - pos;
-		}
 
-		mLength = mLength + count2 - count;
+		mLength = newLength;
 		mString[mLength] = '\0';
 
 		return *this;
@@ -2193,6 +2209,26 @@ export namespace cave
 	{
 		assert(pos <= mLength);
 
+		if (pos + count > mLength)
+		{
+			count = mLength - pos;
+		}
+
+		size_t newLength = mLength + count2 - count;
+
+		if (newLength >= mCapacity)
+		{
+			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
+			if (newCapacity - 1 >= newLength + 1)
+			{
+				SetCapacity(newCapacity - 1);
+			}
+			else
+			{
+				SetCapacity((newCapacity - 1) << 1);
+			}
+		}
+
 		if (count < count2)
 		{
 			for (size_t i = mLength + 1; i > pos + count; --i)
@@ -2209,12 +2245,7 @@ export namespace cave
 		}
 
 		Memory::Memset(&mString[pos], ch, count2);
-		if (pos + count >= mLength)
-		{
-			count = mLength - pos;
-		}
-
-		mLength = mLength + count2 - count;
+		mLength = newLength;
 		mString[mLength] = '\0';
 
 		return *this;
@@ -2556,7 +2587,7 @@ export namespace cave
 		char* temp = mString + pos;
 		size_t index = pos;
 
-		while (index >= 0)
+		while (true)
 		{
 			const char* checkS = s;
 			size_t counter = 0;
@@ -4625,7 +4656,7 @@ export namespace cave
 		, mCapacity(ALIGNED_BYTE)
 		, mString(static_cast<wchar_t*>(mPool->Allocate(mCapacity * sizeof(wchar_t))))
 	{
-		Memory::Memset(mString, '\0', mCapacity);
+		Memory::WMemset(mString, L'\0', mCapacity);
 	}
 
 	/**
@@ -4656,8 +4687,8 @@ export namespace cave
 		, mCapacity(GetSufficientCapacity<ALIGNED_BYTE>(mLength))
 		, mString(static_cast<wchar_t*>(mPool->Allocate(mCapacity * sizeof(wchar_t))))
 	{
-		Memory::Memset(mString, wCh, mLength);
-		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::WMemset(mString, wCh, mLength);
+		Memory::WMemset(&mString[mLength], L'\0', (mCapacity - mLength));
 	}
 
 	/**
@@ -4739,7 +4770,7 @@ export namespace cave
 
 		// Copy wStr to mString
 		WStrcpy(mString, mCapacity, &other.mString[pos], count);
-		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::WMemset(&mString[mLength], L'\0', (mCapacity - mLength));
 	}
 
 	/**
@@ -4788,7 +4819,7 @@ export namespace cave
 
 		// Copy wStr to mString
 		WStrcpy(mString, mCapacity, wStr, count);
-		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::WMemset(&mString[mLength], L'\0', (mCapacity - mLength));
 	}
 
 	/**
@@ -4823,13 +4854,13 @@ export namespace cave
 		assert(wStr != nullptr);
 
 		// Allocate Memory
-		mLength = WStrlen(wStr) - 1;
+		mLength = WStrlen(wStr);
 		mCapacity = GetSufficientCapacity<ALIGNED_BYTE>(mLength);
 		mString = static_cast<wchar_t*>(mPool->Allocate(mCapacity * sizeof(wchar_t)));
 
 		// Copy wStr to mString
 		WStrcpy(mString, mCapacity, wStr, mLength);
-		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::WMemset(&mString[mLength], L'\0', (mCapacity - mLength));
 	}
 
 	/**
@@ -4868,8 +4899,8 @@ export namespace cave
 		mCapacity = GetSufficientCapacity<ALIGNED_BYTE>(mLength);
 		mString = static_cast<wchar_t*>(mPool->Allocate(mCapacity * sizeof(wchar_t)));
 
-		memcpy(mString, first, mLength);
-		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::WMemcpy(mString, first, mLength);
+		Memory::WMemset(&mString[mLength], L'\0', (mCapacity - mLength));
 	}
 
 	/**
@@ -4889,7 +4920,7 @@ export namespace cave
 		assert(other.mPool != nullptr && other.mString != nullptr);
 		mString = static_cast<wchar_t*>(mPool->Allocate((mCapacity) * sizeof(wchar_t)));
 		WStrcpy(mString, mCapacity, other.mString, mLength);
-		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::WMemset(&mString[mLength], L'\0', (mCapacity - mLength));
 	}
 
 	/**
@@ -4910,7 +4941,7 @@ export namespace cave
 		assert(other.mString != nullptr);
 		mString = static_cast<wchar_t*>(mPool->Allocate((mCapacity) * sizeof(wchar_t)));
 		WStrcpy(mString, mCapacity, other.mString, mLength);
-		Memory::Memset(&mString[mLength], '\0', mCapacity - mLength);
+		Memory::WMemset(&mString[mLength], L'\0', (mCapacity - mLength));
 	}
 
 	/**
@@ -5011,7 +5042,7 @@ export namespace cave
 			}
 
 			mLength = wStr.mLength;
-			Memory::Memset(mString, '\0', mLength);
+			Memory::WMemset(mString, L'\0', mLength);
 			WStrcpy(mString, mCapacity, wStr.mString, mLength);
 		}
 
@@ -5083,7 +5114,7 @@ export namespace cave
 				mString = static_cast<wchar_t*>(mPool->Allocate(mCapacity * sizeof(wchar_t)));
 			}
 
-			Memory::Memset(mString, '\0', mLength);
+			Memory::WMemset(mString, L'\0', mLength);
 			WStrcpy(mString, mCapacity, wStr, sLength);
 			mLength = sLength;
 		}
@@ -5103,10 +5134,10 @@ export namespace cave
 	 */
 	WString& WString::operator=(wchar_t wCh)
 	{
-		assert(wCh != '\0');
+		assert(wCh != L'\0');
 
 		mLength = 2ul;
-		Memory::Memset(&mString[1], '\0', mCapacity);
+		Memory::WMemset(&mString[1], L'\0', (mCapacity - 1));
 		mString[0] = wCh;
 
 		return *this;
@@ -5320,7 +5351,7 @@ export namespace cave
 		{
 			wchar_t* newString = reinterpret_cast<wchar_t*>(mPool->Allocate(newCapacity * sizeof(wchar_t)));
 			WStrcpy(newString, newCapacity, mString, mLength);
-			Memory::Memset(&newString[mLength], '\0', newCapacity - mLength);
+			Memory::WMemset(&newString[mLength], L'\0', (newCapacity - mLength));
 
 			mPool->Deallocate(mString, mCapacity * sizeof(wchar_t));
 			mCapacity = newCapacity;
@@ -5359,7 +5390,7 @@ export namespace cave
 		{
 			wchar_t* newString = static_cast<wchar_t*>(mPool->Allocate(fitCapacity * sizeof(wchar_t)));
 			WStrcpy(newString, fitCapacity, mString, mLength);
-			Memory::Memset(&newString[mLength], '\0', fitCapacity - mLength);
+			Memory::WMemset(&newString[mLength], L'\0', (fitCapacity - mLength));
 			mPool->Deallocate(mString, mCapacity * sizeof(wchar_t));
 			mCapacity = fitCapacity;
 			mString = newString;
@@ -5380,7 +5411,7 @@ export namespace cave
 	 */
 	void WString::Clear() noexcept
 	{
-		Memory::Memset(mString, '\0', mLength);
+		Memory::WMemset(mString, L'\0', mLength);
 		mLength = 0ul;
 	}
 
@@ -5410,7 +5441,7 @@ export namespace cave
 #endif
 			wchar_t* newString = static_cast<wchar_t*>(mPool->Allocate(newCapacity * sizeof(wchar_t)));
 			WStrcpy(newString, newCapacity, mString, mLength);
-			Memory::Memset(&newString[mLength], '\0', newCapacity - mLength);
+			Memory::WMemset(&newString[mLength], L'\0', (newCapacity - mLength));
 
 			mPool->Deallocate(mString, mCapacity * sizeof(wchar_t));
 			mString = newString;
@@ -5424,7 +5455,7 @@ export namespace cave
 
 		mLength = mLength + count;
 
-		Memory::Memset(&mString[index], wCh, count);
+		Memory::WMemset(&mString[index], wCh, count);
 
 		return true;
 	}
@@ -5476,7 +5507,7 @@ export namespace cave
 #endif
 			wchar_t* newString = static_cast<wchar_t*>(mPool->Allocate(newCapacity * sizeof(wchar_t)));
 			WStrcpy(newString, newCapacity, mString, mLength);
-			Memory::Memset(&newString[mLength], '\0', newCapacity - mLength);
+			Memory::WMemset(&newString[mLength], L'\0', (newCapacity - mLength));
 
 			mPool->Deallocate(mString, mCapacity * sizeof(wchar_t));
 			mString = newString;
@@ -5489,7 +5520,7 @@ export namespace cave
 		}
 		mLength = mLength + count;
 
-		WStrcpy(&mString[index], mCapacity - index, wStr, count);
+		Memory::WMemcpy(&mString[index], wStr, Math::GetMinSizeType(mCapacity - index, count));
 
 		return true;
 	}
@@ -5519,7 +5550,7 @@ export namespace cave
 #endif
 			wchar_t* newString = static_cast<wchar_t*>(mPool->Allocate(newCapacity * sizeof(wchar_t)));
 			WStrcpy(newString, newCapacity, mString, mLength);
-			Memory::Memset(&newString[mLength], '\0', mCapacity - mLength);
+			Memory::WMemset(&newString[mLength], L'\0', (mCapacity - mLength));
 
 			mPool->Deallocate(mString, mCapacity * sizeof(wchar_t));
 			mString = newString;
@@ -5533,7 +5564,7 @@ export namespace cave
 
 		mLength = mLength + wStr.mLength;
 
-		WStrcpy(&mString[index], mCapacity - index, wStr.mString, wStr.mLength);
+		Memory::WMemcpy(&mString[index], wStr.mString, Math::GetMinSizeType(mCapacity - index, wStr.mLength));
 
 		return true;
 	}
@@ -5580,7 +5611,7 @@ export namespace cave
 #endif
 			wchar_t* newString = static_cast<wchar_t*>(mPool->Allocate(newCapacity * sizeof(wchar_t)));
 			WStrcpy(newString, newCapacity, mString, mLength);
-			Memory::Memset(&newString[mLength], '\0', mCapacity - mLength);
+			Memory::WMemset(&newString[mLength], L'\0', (mCapacity - mLength));
 
 			mPool->Deallocate(mString, mCapacity * sizeof(wchar_t));
 			mString = newString;
@@ -5594,7 +5625,7 @@ export namespace cave
 
 		mLength = mLength + count;
 
-		WStrcpy(&mString[index], mCapacity - index, &wStr.mString[indexWStr], count);
+		Memory::WMemcpy(&mString[index], &wStr.mString[indexWStr], Math::GetMinSizeType(mCapacity - index, count));
 
 		return true;
 	}
@@ -5628,7 +5659,7 @@ export namespace cave
 			return false;
 		}
 
-		for (; mString[index] != '\0'; ++index)
+		for (; mString[index] != L'\0'; ++index)
 		{
 			mString[index] = mString[index + count];
 		}
@@ -5648,7 +5679,7 @@ export namespace cave
 	 */
 	constexpr void WString::PushBack(wchar_t wCh)
 	{
-		if (wCh == '\0')
+		if (wCh == L'\0')
 		{
 			return;
 		}
@@ -5666,7 +5697,7 @@ export namespace cave
 
 			// Copy wStr to mString
 			WStrcpy(newString, newCapacity, mString, mLength);
-			Memory::Memset(&newString[mLength], '\0', newCapacity - newLength);
+			Memory::WMemset(&newString[mLength], L'\0', (newCapacity - newLength));
 			mPool->Deallocate(mString, mCapacity * sizeof(wchar_t));
 			mString = newString;
 			mLength = newLength;
@@ -6239,6 +6270,31 @@ export namespace cave
 			count2 = wStr.mLength;
 		}
 
+		if (pos + count >= mLength)
+		{
+			count = mLength - pos;
+		}
+
+		if (pos2 + count2 >= wStr.mLength)
+		{
+			count2 = wStr.mLength - pos2;
+		}
+
+		size_t newLength = mLength + count2 - count;
+
+		if (newLength >= mCapacity)
+		{
+			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
+			if (newCapacity - 1 >= newLength + 1)
+			{
+				SetCapacity(newCapacity - 1);
+			}
+			else
+			{
+				SetCapacity((newCapacity - 1) << 1);
+			}
+		}
+
 		if (count < count2)
 		{
 			for (size_t i = mLength + 1; i > pos + count; --i)
@@ -6254,19 +6310,9 @@ export namespace cave
 			}
 		}
 
-		WStrcpy(&mString[pos], mCapacity - pos, &wStr.mString[pos2], count2);
-		if (pos + count >= mLength)
-		{
-			count = mLength - pos;
-		}
-
-		if (pos2 + count2 >= wStr.mLength)
-		{
-			count2 = wStr.mLength - pos2;
-		}
-
-		mLength = mLength + count2 - count;
-		mString[mLength] = '\0';
+		Memory::WMemcpy(&mString[pos], &wStr.mString[pos2], Math::GetMinSizeType(mCapacity - pos, count2));
+		mLength = newLength;
+		mString[mLength] = L'\0';
 
 		return *this;
 	}
@@ -6289,9 +6335,29 @@ export namespace cave
 
 		size_t sLength = WStrlen(cStr);
 
+		if (pos + count > mLength)
+		{
+			count = mLength - pos;
+		}
+
 		if (count2 > sLength)
 		{
 			count2 = sLength;
+		}
+
+		size_t newLength = mLength + count2 - count;
+
+		if (newLength >= mCapacity)
+		{
+			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
+			if (newCapacity - 1 >= newLength + 1)
+			{
+				SetCapacity(newCapacity - 1);
+			}
+			else
+			{
+				SetCapacity((newCapacity - 1) << 1);
+			}
 		}
 
 		if (count < count2)
@@ -6309,14 +6375,10 @@ export namespace cave
 			}
 		}
 
-		WStrcpy(&mString[pos], mCapacity - pos, cStr, count2);
-		if (pos + count >= mLength)
-		{
-			count = mLength - pos;
-		}
+		Memory::WMemcpy(&mString[pos], cStr, Math::GetMinSizeType(mCapacity - pos, count2));
 
-		mLength = mLength + count2 - count;
-		mString[mLength] = '\0';
+		mLength = newLength;
+		mString[mLength] = L'\0';
 
 		return *this;
 	}
@@ -6355,6 +6417,26 @@ export namespace cave
 	{
 		assert(pos <= mLength);
 
+		if (pos + count > mLength)
+		{
+			count = mLength - pos;
+		}
+
+		size_t newLength = mLength + count2 - count;
+
+		if (newLength >= mCapacity)
+		{
+			size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
+			if (newCapacity - 1 >= newLength + 1)
+			{
+				SetCapacity(newCapacity - 1);
+			}
+			else
+			{
+				SetCapacity((newCapacity - 1) << 1);
+			}
+		}
+
 		if (count < count2)
 		{
 			for (size_t i = mLength + 1; i > pos + count; --i)
@@ -6370,14 +6452,9 @@ export namespace cave
 			}
 		}
 
-		Memory::Memset(&mString[pos], wCh, count2);
-		if (pos + count >= mLength)
-		{
-			count = mLength - pos;
-		}
-
-		mLength = mLength + count2 - count;
-		mString[mLength] = '\0';
+		Memory::WMemset(&mString[pos], wCh, count2);
+		mLength = newLength;
+		mString[mLength] = L'\0';
 
 		return *this;
 	}
@@ -6426,14 +6503,14 @@ export namespace cave
 	 * @details Resizes the string to contain count wchar_tacters.
 	 * 			If the current size is less than count, additional wchar_tacters are appended.
 	 * 			If the current size is greater than count, the string is reduced to its first count elements.
-	 * 			Initializes new wchar_tacters to '\0'., the second version initializes new wchar_tacters to wCh.
+	 * 			Initializes new wchar_tacters to L'\0'., the second version initializes new wchar_tacters to wCh.
 	 * @param count new size of the string
 	 * @param wCh wchar_tacter to initialize the new wchar_tacters with
 	 *
 	 */
 	constexpr void WString::Resize(size_t count)
 	{
-		Resize(count, '\0');
+		Resize(count, L'\0');
 	}
 
 	/**
@@ -6452,7 +6529,7 @@ export namespace cave
 		size_t newLength = count;
 		if (newLength < mLength)
 		{
-			Memory::Memset(&mString[newLength], wCh, mLength - newLength);
+			Memory::WMemset(&mString[newLength], wCh, (mLength - newLength));
 		}
 		else
 		{
@@ -6461,17 +6538,17 @@ export namespace cave
 				size_t newCapacity = GetSufficientCapacity<ALIGNED_BYTE>(newLength);
 				wchar_t* newString = reinterpret_cast<wchar_t*>(mPool->Allocate(newCapacity * sizeof(wchar_t)));
 				WStrcpy(newString, newCapacity, mString, mLength);
-				Memory::Memset(&newString[mLength], '\0', newCapacity - mLength);
+				Memory::WMemset(&newString[mLength], L'\0', newCapacity - mLength);
 				mPool->Deallocate(mString, mCapacity * sizeof(wchar_t));
 				mString = newString;
 				mCapacity = newCapacity;
 			}
 
-			Memory::Memset(&mString[mLength], wCh, newLength - mLength);
+			Memory::WMemset(&mString[mLength], wCh, (newLength - mLength));
 		}
 
 		mLength = newLength;
-		mString[mLength] = '\0';
+		mString[mLength] = L'\0';
 	}
 
 	// Search
@@ -6531,23 +6608,23 @@ export namespace cave
 			size_t counter = index - pos;
 			const wchar_t* checkS = wStr;
 			// Find first index of mString that either is NULL or is same to first wchar_tacter of wStr
-			for (; counter < count && *temp != '\0' && *temp != *checkS; ++temp, ++index, ++counter)
+			for (; counter < count && *temp != L'\0' && *temp != *checkS; ++temp, ++index)
 			{
 			}
 
 			// Fail. No identical first letter wchar_tacter
-			if (*temp == '\0')
+			if (*temp == L'\0')
 			{
 				return NPOS;
 			}
 
 			// Check whether wStr and rest of wchar_tacters of mString resembles
-			for (; counter < count && *temp != '\0' && *temp == *checkS; ++temp, ++checkS, ++counter)
+			for (; counter < count && *temp != L'\0' && *temp == *checkS; ++temp, ++checkS, ++counter)
 			{
 			}
 
 			// Success. Resembles
-			if (*checkS == '\0')
+			if (*checkS == L'\0')
 			{
 				return index;
 			}
@@ -6692,7 +6769,7 @@ export namespace cave
 			return NPOS;
 		}
 
-		if (*wStr == '\0')
+		if (*wStr == L'\0')
 		{
 			if (mLength > 0)
 			{
@@ -6702,7 +6779,7 @@ export namespace cave
 			return 0;
 		}
 
-		if (*mString == '\0')
+		if (*mString == L'\0')
 		{
 			return NPOS;
 		}
@@ -6715,12 +6792,12 @@ export namespace cave
 		wchar_t* temp = mString + pos;
 		size_t index = pos;
 
-		while (index - pos < count)
+		while (true)
 		{
 			const wchar_t* checkS = wStr;
-			size_t counter = index - pos;
+			size_t counter = 0;
 			// Find last index of mString that either is first wchar_tacter or is same to first wchar_tacter of wStr
-			for (; counter < count && temp != (mString - 1) && *temp != *checkS; --temp, --index, ++counter)
+			for (; counter < count && temp != (mString - 1) && *temp != *checkS; --temp, --index)
 			{
 			}
 
@@ -6732,12 +6809,12 @@ export namespace cave
 
 			wchar_t* firstCharacter = temp;
 			// Check whether wStr and rest of wchar_tacters of mString resembles
-			for (; counter < count && *firstCharacter != '\0' && *firstCharacter == *checkS; ++firstCharacter, ++checkS, ++counter)
+			for (; counter < count && *firstCharacter != L'\0' && *firstCharacter == *checkS; ++firstCharacter, ++checkS, ++counter)
 			{
 			}
 
 			// Success. Resembles
-			if (*checkS == '\0')
+			if (*checkS == L'\0')
 			{
 				return index;
 			}
@@ -6833,6 +6910,11 @@ export namespace cave
 	 */
 	constexpr size_t WString::GetLastIndexOf(wchar_t wCh, size_t pos) const
 	{
+		if (pos == NPOS)
+		{
+			pos = 0;
+		}
+
 		for (size_t i = mLength; i > pos; --i)
 		{
 			if (mString[i - 1] == wCh)
@@ -7081,11 +7163,11 @@ export namespace cave
 		const wchar_t* rhsString = rhs.mString;
 		if (rhsString != nullptr)
 		{
-			for (; *lhsString == *rhsString && *lhsString != '\0' && *rhsString != '\0'; ++lhsString, ++rhsString)
+			for (; *lhsString == *rhsString && *lhsString != L'\0' && *rhsString != L'\0'; ++lhsString, ++rhsString)
 			{
 			}
 
-			if (*lhsString == '\0' && *rhsString == '\0')
+			if (*lhsString == L'\0' && *rhsString == L'\0')
 			{
 				return true;
 			}
@@ -7140,11 +7222,11 @@ export namespace cave
 		const wchar_t* rhsString = rhs;
 		if (rhsString != nullptr)
 		{
-			for (; *lhsString == *rhsString && *lhsString != '\0' && *rhsString != '\0'; ++lhsString, ++rhsString)
+			for (; *lhsString == *rhsString && *lhsString != L'\0' && *rhsString != L'\0'; ++lhsString, ++rhsString)
 			{
 			}
 
-			if (*lhsString == '\0' && *rhsString == '\0')
+			if (*lhsString == L'\0' && *rhsString == L'\0')
 			{
 				return true;
 			}
@@ -7232,7 +7314,7 @@ export namespace cave
 	 * @return is
 	 *
 	 */
-	std::istream& operator>>(std::istream& is, WString& wStr)
+	std::wistream& operator>>(std::wistream& is, WString& wStr)
 	{
 		wStr.Clear();
 
@@ -7285,7 +7367,7 @@ export namespace cave
 	 * @return input
 	 *
 	 */
-	std::istream& GetLine(std::istream& is, WString& wStr, wchar_t delim)
+	std::wistream& GetLine(std::wistream& is, WString& wStr, wchar_t delim)
 	{
 		wStr.Clear();
 
@@ -7349,7 +7431,7 @@ export namespace cave
 	 * @return input
 	 *
 	 */
-	std::istream& GetLine(std::istream&& is, WString& wStr, wchar_t delim)
+	std::wistream& GetLine(std::wistream&& is, WString& wStr, wchar_t delim)
 	{
 		wStr.Clear();
 
@@ -7398,30 +7480,30 @@ export namespace cave
 	 *
 	 * @brief (2) Read data from an I/O stream into a string
 	 * @details GetLine reads wchar_tacters from an input stream and places them into a string:@n
-	 * 			Same as GetLine(input, wStr, input.widen('\n')), that is, the default delimiter is the endline wchar_tacter.
+	 * 			Same as GetLine(input, wStr, input.widen(L'\n')), that is, the default delimiter is the endline wchar_tacter.
 	 * @param input the stream to get data from
 	 * @param wStr the string to put the data into
 	 * @return input
 	 *
 	 */
-	std::istream& GetLine(std::istream& input, WString& wStr)
+	std::wistream& GetLine(std::wistream& input, WString& wStr)
 	{
-		return GetLine(input, wStr, input.widen('\n'));
+		return GetLine(input, wStr, input.widen(L'\n'));
 	}
 
 	/**
 	 *
 	 * @brief (2) Read data from an I/O stream into a string
 	 * @details GetLine reads wchar_tacters from an input stream and places them into a string:@n
-	 * 			Same as GetLine(input, wStr, input.widen('\n')), that is, the default delimiter is the endline wchar_tacter.
+	 * 			Same as GetLine(input, wStr, input.widen(L'\n')), that is, the default delimiter is the endline wchar_tacter.
 	 * @param input the stream to get data from
 	 * @param wStr the string to put the data into
 	 * @return input
 	 *
 	 */
-	std::istream& GetLine(std::istream&& input, WString& wStr)
+	std::wistream& GetLine(std::wistream&& input, WString& wStr)
 	{
-		return GetLine(std::move(input), wStr, input.widen('\n'));
+		return GetLine(std::move(input), wStr, input.widen(L'\n'));
 	}
 
 	/**
@@ -7468,9 +7550,9 @@ export namespace cave
 		}
 
 		bool isNegative = false;
-		if (wStr.mString[index] == '-' || wStr.mString[index] == '+')
+		if (wStr.mString[index] == L'-' || wStr.mString[index] == L'+')
 		{
-			isNegative = wStr.mString[index] == '-';
+			isNegative = wStr.mString[index] == L'-';
 			++index;
 			if (pos != nullptr)
 			{
@@ -7480,18 +7562,18 @@ export namespace cave
 
 		if (base <= 10)
 		{
-			assert(('0' <= wStr.mString[index] && wStr.mString[index] <= '0' + base - 1));
+			assert((L'0' <= wStr.mString[index] && wStr.mString[index] <= L'0' + base - 1));
 		}
 		else
 		{
 			assert(
-				('0' <= wStr.mString[index] && wStr.mString[index] <= '9')
-				|| ('a' <= wStr.mString[index] && wStr.mString[index] <= 'a' + base - 11)
-				|| ('A' <= wStr.mString[index] && wStr.mString[index] <= 'A' + base - 11)
+				(L'0' <= wStr.mString[index] && wStr.mString[index] <= L'9')
+				|| (L'a' <= wStr.mString[index] && wStr.mString[index] <= L'a' + base - 11)
+				|| (L'A' <= wStr.mString[index] && wStr.mString[index] <= L'A' + base - 11)
 			);
 		}
 
-		if (wStr.mString[index] == '0')
+		if (wStr.mString[index] == L'0')
 		{
 			if (base == 8)
 			{
@@ -7502,7 +7584,7 @@ export namespace cave
 				}
 			}
 
-			if (base == 16 && wStr.mString[index + 1] == 'x' || wStr.mString[index + 1] == 'X')
+			if (base == 16 && wStr.mString[index + 1] == L'x' || wStr.mString[index + 1] == L'X')
 			{
 				index += 2;
 				if (pos != nullptr)
@@ -7517,9 +7599,9 @@ export namespace cave
 			int32_t digit = 0;
 			if (base <= 10)
 			{
-				if ('0' <= wStr.mString[index] && wStr.mString[index] <= '0' + base - 1)
+				if (L'0' <= wStr.mString[index] && wStr.mString[index] <= L'0' + base - 1)
 				{
-					digit = static_cast<int32_t>(wStr.mString[index] - '0');
+					digit = static_cast<int32_t>(wStr.mString[index] - L'0');
 				}
 				else
 				{
@@ -7528,17 +7610,17 @@ export namespace cave
 			}
 			else
 			{
-				if ('0' <= wStr.mString[index] && wStr.mString[index] <= '9')
+				if (L'0' <= wStr.mString[index] && wStr.mString[index] <= L'9')
 				{
-					digit = static_cast<int32_t>(wStr.mString[index] - '0');
+					digit = static_cast<int32_t>(wStr.mString[index] - L'0');
 				}
-				else if ('a' <= wStr.mString[index] && wStr.mString[index] <= 'a' + base - 11)
+				else if (L'a' <= wStr.mString[index] && wStr.mString[index] <= L'a' + base - 11)
 				{
-					digit = static_cast<int32_t>(wStr.mString[index] - 'a');
+					digit = static_cast<int32_t>(wStr.mString[index] - L'a');
 				}
-				else if ('A' <= wStr.mString[index] && wStr.mString[index] <= 'A' + base - 11)
+				else if (L'A' <= wStr.mString[index] && wStr.mString[index] <= L'A' + base - 11)
 				{
-					digit = static_cast<int32_t>(wStr.mString[index] - 'A');
+					digit = static_cast<int32_t>(wStr.mString[index] - L'A');
 				}
 				else
 				{
@@ -7667,9 +7749,9 @@ export namespace cave
 		}
 
 		bool isNegative = false;
-		if (wStr.mString[index] == '-' || wStr.mString[index] == '+')
+		if (wStr.mString[index] == L'-' || wStr.mString[index] == L'+')
 		{
-			isNegative = wStr.mString[index] == '-';
+			isNegative = wStr.mString[index] == L'-';
 			++index;
 			if (pos != nullptr)
 			{
@@ -7679,18 +7761,18 @@ export namespace cave
 
 		if (base <= 10)
 		{
-			assert(('0' <= wStr.mString[index] && wStr.mString[index] <= '0' + base - 1));
+			assert((L'0' <= wStr.mString[index] && wStr.mString[index] <= L'0' + base - 1));
 		}
 		else
 		{
 			assert(
-				('0' <= wStr.mString[index] && wStr.mString[index] <= '9')
-				|| ('a' <= wStr.mString[index] && wStr.mString[index] <= 'a' + base - 11)
-				|| ('A' <= wStr.mString[index] && wStr.mString[index] <= 'A' + base - 11)
+				(L'0' <= wStr.mString[index] && wStr.mString[index] <= L'9')
+				|| (L'a' <= wStr.mString[index] && wStr.mString[index] <= L'a' + base - 11)
+				|| (L'A' <= wStr.mString[index] && wStr.mString[index] <= L'A' + base - 11)
 			);
 		}
 
-		if (wStr.mString[index] == '0')
+		if (wStr.mString[index] == L'0')
 		{
 			if (base == 8)
 			{
@@ -7701,7 +7783,7 @@ export namespace cave
 				}
 			}
 
-			if (base == 16 && wStr.mString[index + 1] == 'x' || wStr.mString[index + 1] == 'X')
+			if (base == 16 && wStr.mString[index + 1] == L'x' || wStr.mString[index + 1] == L'X')
 			{
 				index += 2;
 				if (pos != nullptr)
@@ -7716,9 +7798,9 @@ export namespace cave
 			int64_t digit = 0;
 			if (base <= 10)
 			{
-				if ('0' <= wStr.mString[index] && wStr.mString[index] <= '0' + base - 1)
+				if (L'0' <= wStr.mString[index] && wStr.mString[index] <= L'0' + base - 1)
 				{
-					digit = static_cast<int64_t>(wStr.mString[index] - '0');
+					digit = static_cast<int64_t>(wStr.mString[index] - L'0');
 				}
 				else
 				{
@@ -7727,17 +7809,17 @@ export namespace cave
 			}
 			else
 			{
-				if ('0' <= wStr.mString[index] && wStr.mString[index] <= '9')
+				if (L'0' <= wStr.mString[index] && wStr.mString[index] <= L'9')
 				{
-					digit = static_cast<int64_t>(wStr.mString[index] - '0');
+					digit = static_cast<int64_t>(wStr.mString[index] - L'0');
 				}
-				else if ('a' <= wStr.mString[index] && wStr.mString[index] <= 'a' + base - 11)
+				else if (L'a' <= wStr.mString[index] && wStr.mString[index] <= L'a' + base - 11)
 				{
-					digit = static_cast<int64_t>(wStr.mString[index] - 'a');
+					digit = static_cast<int64_t>(wStr.mString[index] - L'a');
 				}
-				else if ('A' <= wStr.mString[index] && wStr.mString[index] <= 'A' + base - 11)
+				else if (L'A' <= wStr.mString[index] && wStr.mString[index] <= L'A' + base - 11)
 				{
-					digit = static_cast<int64_t>(wStr.mString[index] - 'A');
+					digit = static_cast<int64_t>(wStr.mString[index] - L'A');
 				}
 				else
 				{
@@ -8221,9 +8303,9 @@ export namespace cave
 
 		// PLUS OR MINUS SIGN
 		bool isNegative = false;
-		if (wStr.mString[index] == '-' || wStr.mString[index] == '+')
+		if (wStr.mString[index] == L'-' || wStr.mString[index] == L'+')
 		{
-			isNegative = wStr.mString[index] == '-';
+			isNegative = wStr.mString[index] == L'-';
 			++index;
 			if (pos != nullptr)
 			{
@@ -8232,18 +8314,18 @@ export namespace cave
 		}
 
 		assert(
-			('0' <= wStr.mString[index] && wStr.mString[index] <= '9')
-			|| ('a' <= wStr.mString[index] && wStr.mString[index] <= 'f')
-			|| ('A' <= wStr.mString[index] && wStr.mString[index] <= 'F')
-			|| (wStr.mString[index] == '.')
+			(L'0' <= wStr.mString[index] && wStr.mString[index] <= L'9')
+			|| (L'a' <= wStr.mString[index] && wStr.mString[index] <= L'f')
+			|| (L'A' <= wStr.mString[index] && wStr.mString[index] <= L'F')
+			|| (wStr.mString[index] == L'.')
 		);
 
 		// HEXADECIMAL or INFINITY EXPRESSION or NOT-A-NUMBER EXPRESSION
 		bool isHexadecimal = false;
 		long double base = 10.0l;
-		if (wStr.mString[index] == '0')
+		if (wStr.mString[index] == L'0')
 		{
-			if (wStr.mString[index + 1] == 'x' || wStr.mString[index + 1] == 'X')
+			if (wStr.mString[index + 1] == L'x' || wStr.mString[index + 1] == L'X')
 			{
 				index += 2;
 				isHexadecimal = true;
@@ -8283,7 +8365,7 @@ export namespace cave
 		while (result != INFINITY || result != NAN)
 		{
 			uint8_t digit = 0;
-			if (!isFractionalPart && wStr.mString[index] == '.')
+			if (!isFractionalPart && wStr.mString[index] == L'.')
 			{
 				isFractionalPart = true;
 				++index;
@@ -8295,12 +8377,12 @@ export namespace cave
 			}
 
 			if (
-				!isExponential && (wStr.mString[index] == 'e' || wStr.mString[index] == 'E')
-				&& (wStr.mString[index + 1] == '+' || wStr.mString[index + 1] == '-')
+				!isExponential && (wStr.mString[index] == L'e' || wStr.mString[index] == L'E')
+				&& (wStr.mString[index + 1] == L'+' || wStr.mString[index + 1] == L'-')
 				)
 			{
 				isExponential = true;
-				isNegativeExponential = wStr.mString[index + 1] == '-';
+				isNegativeExponential = wStr.mString[index + 1] == L'-';
 				index += 2;
 				if (pos != nullptr)
 				{
@@ -8311,9 +8393,9 @@ export namespace cave
 
 			if (!isHexadecimal)
 			{
-				if ('0' <= wStr.mString[index] && wStr.mString[index] <= '9')
+				if (L'0' <= wStr.mString[index] && wStr.mString[index] <= L'9')
 				{
-					digit = static_cast<uint8_t>(wStr.mString[index] - '0');
+					digit = static_cast<uint8_t>(wStr.mString[index] - L'0');
 				}
 				else
 				{
@@ -8448,7 +8530,7 @@ export namespace cave
 
 		size_t sLength = size + 1ul;
 		wchar_t* wStr = reinterpret_cast<wchar_t*>(Memory::Malloc(sLength * sizeof(wchar_t)));
-		Memory::Memset(wStr, 0, sLength);
+		Memory::WMemset(wStr, 0, sLength);
 		swprintf(wStr, sLength, L"%d", value);
 
 		WString result = WString{ wStr };
@@ -8479,7 +8561,7 @@ export namespace cave
 
 		size_t sLength = size + 1ul;
 		wchar_t* wStr = reinterpret_cast<wchar_t*>(Memory::Malloc(sLength * sizeof(wchar_t)));
-		Memory::Memset(wStr, 0, sLength);
+		Memory::WMemset(wStr, 0, sLength);
 		swprintf(wStr, sLength, L"%lld", value);
 
 		WString result = WString{ wStr };
@@ -8510,7 +8592,7 @@ export namespace cave
 
 		size_t sLength = size + 1ul;
 		wchar_t* wStr = reinterpret_cast<wchar_t*>(Memory::Malloc(sLength * sizeof(wchar_t)));
-		Memory::Memset(wStr, 0, sLength);
+		Memory::WMemset(wStr, 0, sLength);
 		swprintf(wStr, sLength, L"%u", value);
 
 		WString result = WString{ wStr };
@@ -8541,7 +8623,7 @@ export namespace cave
 
 		size_t sLength = size + 1ul;
 		wchar_t* wStr = reinterpret_cast<wchar_t*>(Memory::Malloc(sLength * sizeof(wchar_t)));
-		Memory::Memset(wStr, 0, sLength);
+		Memory::WMemset(wStr, 0, sLength);
 		swprintf(wStr, sLength, L"%llu", value);
 
 		WString result = WString{ wStr };
@@ -8572,7 +8654,7 @@ export namespace cave
 
 		size_t sLength = size + 1ul + 6ul + 1ul;
 		wchar_t* wStr = reinterpret_cast<wchar_t*>(Memory::Malloc(sLength * sizeof(wchar_t)));
-		Memory::Memset(wStr, 0, sLength);
+		Memory::WMemset(wStr, 0, sLength);
 		swprintf(wStr, sLength, L"%f", value);
 
 		WString result = WString{ wStr };
@@ -8603,7 +8685,7 @@ export namespace cave
 
 		size_t sLength = size + 1ul + 6ul + 1ul;
 		wchar_t* wStr = reinterpret_cast<wchar_t*>(Memory::Malloc(sLength * sizeof(wchar_t)));
-		Memory::Memset(wStr, 0, sLength);
+		Memory::WMemset(wStr, 0, sLength);
 		swprintf(wStr, sLength, L"%f", value);
 
 		WString result = WString{ wStr };
@@ -8634,7 +8716,7 @@ export namespace cave
 
 		size_t sLength = size + 1ul + 6ul + 1ul;
 		wchar_t* wStr = reinterpret_cast<wchar_t*>(Memory::Malloc(sLength * sizeof(wchar_t)));
-		Memory::Memset(wStr, 0, sLength);
+		Memory::WMemset(wStr, 0, sLength);
 		swprintf(wStr, sLength, L"%Lf", value);
 
 		WString result = WString{ wStr };
@@ -8653,9 +8735,8 @@ export namespace cave
 		}
 		else
 		{
-			size_t capacity = GetSufficientCapacity<WString::ALIGNED_BYTE>(convertResult);
-			wideStr = reinterpret_cast<wchar_t*>(pool.Allocate(sizeof(wchar_t) * GetSufficientCapacity<WString::ALIGNED_BYTE>(convertResult)));
-			convertResult = MultiByteToWideChar(CP_UTF8, 0, str, static_cast<int>(Strlen(str)), wideStr, convertResult);
+			wideStr = reinterpret_cast<wchar_t*>(pool.Allocate(sizeof(wchar_t) * GetSufficientCapacity<WString::ALIGNED_BYTE>(static_cast<size_t>(convertResult))));
+			convertResult = MultiByteToWideChar(CP_UTF8, 0, str, static_cast<int>(Strlen(str)), wideStr, static_cast<int>(convertResult));
 			if (convertResult <= 0)
 			{
 				LOGEF(eLogChannel::CORE_STRING, "Error occurred: Failure to convert its message text using CStringToWCStringMalloc: convertResult=%ld", convertResult);
@@ -8695,7 +8776,7 @@ export namespace cave
 
 #ifdef CAVE_BUILD_DEBUG
 		size_t size = 0ul;
-		while (dest[size++] != '\0')
+		while (dest[size++] != L'\0')
 		{
 		}
 
@@ -8730,7 +8811,7 @@ export namespace cave
 
 #ifdef CAVE_BUILD_DEBUG
 		size_t size = 0ul;
-		while (dest[size++] != '\0')
+		while (dest[size++] != L'\0')
 		{
 		}
 
@@ -8758,8 +8839,9 @@ export namespace cave
 		}
 
 		size_t size = 0ul;
-		while (wStr[size++] != '\0')
+		while (wStr[size] != L'\0')
 		{
+			++size;
 		}
 
 		return size;
@@ -8843,6 +8925,8 @@ export namespace cave
 			StringToFloat();
 			ToString();
 			CStringToWCStringMalloc();
+			/*
+			*/
 		}
 
 		void Constructor()
@@ -8855,7 +8939,7 @@ export namespace cave
 
 			{
 				String s(4, '=');
-				assert(strncmp(s.GetCString(), "====", s.GetLength()) == 0);
+				assert(Strcmp(s.GetCString(), "====", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String(size_t count, char ch) TEST SUCCESS");
 			}
 
@@ -8869,48 +8953,48 @@ export namespace cave
 			{
 				String const other("Mutatis Mutandis");
 				String s(other, 8);
-				assert(strncmp(s.GetCString(), "Mutandis", s.GetLength()) == 0);
+				assert(Strcmp(s.GetCString(), "Mutandis", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String(const String& other, size_t pos) TEST SUCCESS");
 			}
 
 			{
 				String s("C-style string", 7);
-				assert(strncmp(s.GetCString(), "C-style", s.GetLength()) == 0);
+				assert(Strcmp(s.GetCString(), "C-style", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String(char const* s, size_t count) TEST SUCCESS");
 			}
 
 			{
 				String s("C-style\0string");
-				assert(strncmp(s.GetCString(), "C-style", s.GetLength()) == 0);
+				assert(Strcmp(s.GetCString(), "C-style", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String(char const* s) TEST SUCCESS");
 			}
 
 			{
 				char mutable_c_str[] = "another C-style string";
 				String s(mutable_c_str + 8, mutable_c_str + Strlen(mutable_c_str) - 1);
-				assert(strncmp(s.GetCString(), "C-style string", s.GetLength()) == 0);
+				assert(Strcmp(s.GetCString(), "C-style string", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String(const char* first, const char* last) TEST SUCCESS");
 			}
 
 			{
 				String const other("Exemplar");
 				String s(other);
-				assert(strncmp(s.GetCString(), "Exemplar", s.GetLength()) == 0);
+				assert(Strcmp(s.GetCString(), "Exemplar", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String(const String& other) TEST SUCCESS");
 			}
 
 			{
 				String s(String("C++ by ") + String("example"));
 				assert(s.GetLength() == Strlen("C++ by example"));
-				assert(strncmp(s.GetCString(), "C++ by example", s.GetLength()) == 0);
+				assert(Strcmp(s.GetCString(), "C++ by example", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String(String&& str) TEST SUCCESS");
 			}
 
 			{
 				// overload resolution selects String(InputIt first, InputIt last) [with InputIt = int]
 				// which behaves as if String(size_t count, char ch) is called
-				String s(3, std::toupper('a'));
-				assert(strncmp(s.GetCString(), "AAA", s.GetLength()) == 0);
+				String s(3, static_cast<char>(std::toupper('a')));
+				assert(Strcmp(s.GetCString(), "AAA", s.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String(size_t count, char ch) TEST SUCCESS");
 			}
 		}
@@ -9234,7 +9318,6 @@ export namespace cave
 				LOGD(eLogChannel::CORE_STRING, "String& Replace(size_t pos, size_t count, const String& str) TEST SUCCESS");
 			}
 
-			/*
 			{
 				String str = "hello world";
 
@@ -9298,6 +9381,7 @@ export namespace cave
 				assert(strncmp(str.GetCString(), "hhhello worlddddd", str.GetLength()) == 0);
 				LOGD(eLogChannel::CORE_STRING, "String& Replace(size_t pos, size_t count, size_t count2, char ch) TEST SUCCESS");
 			}
+			/*
 			*/
 		}
 
@@ -9348,7 +9432,7 @@ export namespace cave
 
 		void GetIndexOf()
 		{
-			int32_t n = 0u;
+			size_t n = 0;
 			String const s = "This is a string";
 
 			// search from beginning of string
@@ -9736,8 +9820,967 @@ export namespace cave
 
 			WLOGDF(eLogChannel::CORE_STRING, L"string %S to %s", cString, wCString);
 
-			size_t size = GetSufficientCapacity<WString::ALIGNED_BYTE>(WStrlen(wCString));
 			gCoreMemoryPool.Deallocate(wCString, sizeof(wchar_t) * GetSufficientCapacity<WString::ALIGNED_BYTE>(WStrlen(wCString)));
+		}
+	}
+
+	export namespace WStringTest
+	{
+		void Main();
+		void Constructor();
+		void AssignmentOperator();
+		void SubscriptOperator();
+		void GetFront();
+		void GetBack();
+		void GetCString();
+		void IsEmpty();
+		void GetSize();
+		void SetCapacity();
+		void GetCapacity();
+		void Shrink();
+		void Clear();
+		void InsertAt();
+		void RemoveAt();
+		void Append();
+		void AdditionCompoundAssignmentOperator();
+		void StartsWith();
+		void EndsWith();
+		void Contains();
+		void Replace();
+		void GetSubstring();
+		void Resize();
+		void GetIndexOf();
+		void GetLastIndexOf();
+		void AdditionOperator();
+		void ComparisonOperator();
+		void StreamOperator();
+		// GetLine();
+		void WStringToInt();
+		void WStringToFloat();
+		void ToWString();
+
+		void Main()
+		{
+			// LogManager::SetVerbosity(eLogVerbosity::Error);
+			Constructor();
+			AssignmentOperator();
+			SubscriptOperator();
+			GetFront();
+			GetBack();
+			GetCString();
+			IsEmpty();
+			GetSize();
+			SetCapacity();
+			GetCapacity();
+			Shrink();
+			Clear();
+			InsertAt();
+			RemoveAt();
+			Append();
+			AdditionCompoundAssignmentOperator();
+			StartsWith();
+			EndsWith();
+			Contains();
+			Replace();
+			GetSubstring();
+			Resize();
+			GetIndexOf();
+			GetLastIndexOf();
+			AdditionOperator();
+			ComparisonOperator();
+			StreamOperator();
+			// GetLine();
+			WStringToInt();
+			WStringToFloat();
+			ToWString();
+			/*
+			*/
+		}
+
+		void Constructor()
+		{
+			{
+				WString wStr;
+				assert(wStr.IsEmpty() && (wStr.GetLength() == 0));
+				WLOGD(eLogChannel::CORE_STRING, L"WString() TEST SUCCESS");
+			}
+
+			{
+				WString wStr(4, L'=');
+				assert(WStrcmp(wStr.GetCString(), L"====", wStr.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString(size_t count, wchar_t ch) TEST SUCCESS");
+			}
+
+			{
+				WString const other(L"Exemplary");
+				WString wStr(other, 0, other.GetLength() - 1);
+				WLOGDF(eLogChannel::CORE_STRING, L"other: %wStr, wStr: %wStr", other.GetCString(), wStr.GetCString());
+				assert(WStrcmp(wStr.GetCString(), L"Exemplar", wStr.GetLength()) == 0);
+			}
+
+			{
+				WString const other(L"Mutatis Mutandis");
+				WString wStr(other, 8);
+				assert(WStrcmp(wStr.GetCString(), L"Mutandis", wStr.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString(const WString& other, size_t pos) TEST SUCCESS");
+			}
+
+			{
+				WString wStr(L"C-style string", 7);
+				assert(WStrcmp(wStr.GetCString(), L"C-style", wStr.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString(wchar_t const* wStr, size_t count) TEST SUCCESS");
+			}
+
+			{
+				WString wStr(L"C-style\0string");
+				assert(WStrcmp(wStr.GetCString(), L"C-style", wStr.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString(wchar_t const* wStr) TEST SUCCESS");
+			}
+
+			{
+				wchar_t mutable_c_str[] = L"another C-style string";
+				WString wStr(mutable_c_str + 8, mutable_c_str + WStrlen(mutable_c_str) - 1);
+				assert(WStrcmp(wStr.GetCString(), L"C-style string", wStr.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString(const wchar_t* first, const wchar_t* last) TEST SUCCESS");
+			}
+
+			{
+				WString const other(L"Exemplar");
+				WString wStr(other);
+				assert(WStrcmp(wStr.GetCString(), L"Exemplar", wStr.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString(const WString& other) TEST SUCCESS");
+			}
+
+			{
+				WString wStr(WString(L"C++ by ") + WString(L"example"));
+				assert(wStr.GetLength() == WStrlen(L"C++ by example"));
+				assert(WStrcmp(wStr.GetCString(), L"C++ by example", wStr.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString(WString&& str) TEST SUCCESS");
+			}
+
+			{
+				// overload resolution selects WString(InputIt first, InputIt last) [with InputIt = int]
+				// which behaves as if WString(size_t count, wchar_t ch) is called
+				WString wStr(3, towupper(L'a'));
+				assert(WStrcmp(wStr.GetCString(), L"AAA", wStr.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString(size_t count, wchar_t ch) TEST SUCCESS");
+			}
+			/*
+			*/
+		}
+
+		void AssignmentOperator()
+		{
+			WString str1;
+			WString str2{ L"alpha" };
+
+			str1 = str2;
+			assert(WStrcmp(str1.GetCString(), L"alpha", str1.GetLength()) == 0);
+			assert(WStrcmp(str2.GetCString(), L"alpha", str1.GetLength()) == 0);
+			assert(WStrcmp(str1.GetCString(), str2.GetCString(), str1.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"WString& operator=(const WString&) TEST SUCCESS");
+
+			str1 = std::move(str2);
+			assert(WStrcmp(str1.GetCString(), L"alpha", str1.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"WString& operator=(WString&&) TEST SUCCESS");
+
+			str1 = L"beta";
+			assert(WStrcmp(str1.GetCString(), L"beta", str1.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"WString& operator=(const wchar_t*) TEST SUCCESS");
+
+			str1 = '!';
+			assert(WStrcmp(str1.GetCString(), L"!", str1.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"WString& operator=(wchar_t) TEST SUCCESS");
+		}
+
+		void SubscriptOperator()
+		{
+			WString const e(L"Exemplar");
+			for (size_t i = e.GetLength() - 1, j = 0; i != 0; i /= 2, ++j)
+			{
+				assert(e[i] == L"rmx"[j]);
+			}
+
+			const wchar_t* c = &e[0];
+			assert(WStrcmp(c, e.GetCString(), e.GetLength()) == 0);
+
+			// Change the last character of wStr into a 'y'
+			WString wStr(L"Exemplar ");
+			wStr[wStr.GetLength() - 1] = 'y'; // equivalent to wStr.GetBack() = 'y';
+			assert(WStrcmp(wStr.GetCString(), L"Exemplary", wStr.GetLength()) == 0);
+
+			WLOGD(eLogChannel::CORE_STRING, L"operator[](size_t pos) TEST SUCCESS");
+		}
+
+		void GetFront()
+		{
+			{
+				WString wStr(L"Exemplary");
+				wchar_t& f = wStr.GetFront();
+				f = 'e';
+				assert(WStrcmp(wStr.GetCString(), L"exemplary", wStr.GetLength()) == 0);
+			}
+
+			{
+				WString const c(L"Exemplary");
+				wchar_t const& f = c.GetFront();
+				assert(WStrcmp(&f, L"Exemplary", WStrlen(&f)) == 0);
+			}
+
+			WLOGD(eLogChannel::CORE_STRING, L"wchar_t& GetFront() TEST SUCCESS");
+		}
+
+		void GetBack()
+		{
+			{
+				WString wStr(L"Exemplary");
+				wchar_t& back = wStr.GetBack();
+				back = L's';
+				assert(WStrcmp(wStr.GetCString(), L"Exemplars", wStr.GetLength()) == 0);
+			}
+
+			{
+				WString const c(L"Exemplary");
+				wchar_t const& back = c.GetBack();
+				assert(back == L'y');
+			}
+
+			WLOGD(eLogChannel::CORE_STRING, L"wchar_t& GetBack() TEST SUCCESS");
+		}
+
+		void GetCString()
+		{
+			WString const wStr(L"Emplary");
+			assert(wStr.GetLength() == WStrlen(wStr.GetCString()));
+			assert(0 == *(wStr.GetCString() + wStr.GetLength()));
+
+			WLOGD(eLogChannel::CORE_STRING, L"const wchar_t* GetCString() TEST SUCCESS");
+		}
+
+		void IsEmpty()
+		{
+			WString wStr;
+			assert(wStr.IsEmpty());
+			assert(WStrcmp(wStr.GetCString(), L"", 1ul) == 0);
+
+			wStr = L"Exemplar";
+			assert(!wStr.IsEmpty());
+			assert(WStrcmp(wStr.GetCString(), L"Exemplar", wStr.GetLength()) == 0);
+
+			wStr = L"";
+			assert(wStr.IsEmpty());
+			assert(WStrcmp(wStr.GetCString(), L"", 1ul) == 0);
+
+			WLOGD(eLogChannel::CORE_STRING, L"bool IsEmpty() TEST SUCCESS");
+		}
+
+		void GetSize()
+		{
+			WString wStr(L"Exemplar");
+			assert(8ul == wStr.GetLength());
+
+			WLOGD(eLogChannel::CORE_STRING, L"size_t GetSize() TEST SUCCESS");
+		}
+
+		void SetCapacity()
+		{
+			WString wStr;
+			size_t newCapacity = 100ul;
+			assert(newCapacity > wStr.GetCapacity());
+
+			wStr.SetCapacity(newCapacity);
+			assert(newCapacity <= wStr.GetCapacity());
+
+			WLOGD(eLogChannel::CORE_STRING, L"void SetCapacity() TEST SUCCESS");
+		}
+
+		void GetCapacity()
+		{
+			WString wStr{ L"Exemplar" };
+			assert(wStr.GetCapacity() == 15ul);
+
+			wStr += L" is an example string.";
+			assert(wStr.GetCapacity() == 31ul);
+
+			WLOGD(eLogChannel::CORE_STRING, L"size_t GetCapacity() TEST SUCCESS");
+		}
+
+		void Shrink()
+		{
+			WString wStr;
+			assert(wStr.GetCapacity() == WString::ALIGNED_BYTE - 1ul);
+			assert(wStr.GetLength() == 0ul);
+
+			for (int i = 0; i < 42; i++)
+			{
+				wStr.Append(L" 42 ");
+			}
+
+			assert(wStr.GetCapacity() == 255ul);
+			assert(wStr.GetLength() == 168ul);
+
+			wStr.Clear();
+			assert(wStr.GetCapacity() == 255ul);
+			assert(wStr.GetLength() == 0ul);
+
+			wStr.Shrink();
+			assert(wStr.GetCapacity() == WString::ALIGNED_BYTE - 1ul);
+			assert(wStr.GetLength() == 0ul);
+
+			WLOGD(eLogChannel::CORE_STRING, L"void Shrink() TEST SUCCESS");
+		}
+
+		void Clear()
+		{
+			WString wStr{ L"Exemplar" };
+			size_t const capacity = wStr.GetCapacity();
+
+			wStr.Clear();
+			assert(wStr.GetCapacity() == capacity);
+			assert(wStr.IsEmpty());
+			assert(wStr.GetLength() == 0);
+
+			WLOGD(eLogChannel::CORE_STRING, L"void Clear() TEST SUCCESS");
+		}
+
+		void InsertAt()
+		{
+			WString wStr = L"xmplr";
+
+			wStr.InsertAt(0, 1, L'E');
+			assert(WStrcmp(L"Exmplr", wStr.GetCString(), wStr.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool InsertAt(size_t index, size_t count, wchar_t ch) TEST SUCCESS");
+
+			wStr.InsertAt(2, L"e");
+			assert(WStrcmp(L"Exemplr", wStr.GetCString(), wStr.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool InsertAt(size_t index, const wchar_t* wStr) TEST SUCCESS");
+
+			WString a = L"a";
+			wStr.InsertAt(6, a);
+			assert(WStrcmp(L"Exemplar", wStr.GetCString(), wStr.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool InsertAt(size_t index, WString const& str) TEST SUCCESS");
+
+			WString exampleStr = L" is an example string.";
+			wStr.InsertAt(8, exampleStr, 0, 14);
+			assert(WStrcmp(L"Exemplar is an example", wStr.GetCString(), wStr.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool InsertAt(size_t index, WString const& str, size_t indexStr, size_t count) TEST SUCCESS");
+		}
+
+		void RemoveAt()
+		{
+			WString wStr = L"This is an example";
+			assert(WStrcmp(wStr.GetCString(), L"This is an example", wStr.GetLength()) == 0);
+
+			wStr.RemoveAt(0, 5); // Erase "This "
+			assert(WStrcmp(wStr.GetCString(), L"is an example", wStr.GetLength()) == 0);
+
+			WLOGD(eLogChannel::CORE_STRING, L"bool RemoveAt(size_t index = 0, size_t count) TEST SUCCESS");
+		}
+
+		void Append()
+		{
+			WString str = L"string";
+			const wchar_t* cPtr = L"C-string";
+			const wchar_t cArr[] = L"Two and one";
+
+			WString output;
+
+			// 1) Append a wchar_t 3 times. 
+			// Notice, this is the only overload accepting chars.
+			output.Append(3, L'*');
+			assert(WStrcmp(output.GetCString(), L"***", output.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool Append(size_t count, wchar_t ch) TEST SUCCESS");
+
+			//  2) Append a whole string
+			output.Append(str);
+			assert(WStrcmp(output.GetCString(), L"***string", output.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool Append(const WString& str) TEST SUCCESS");
+
+			// 3) Append part of a string (last 3 letters, in this case)
+			output.Append(str, 3, 3);
+			assert(WStrcmp(output.GetCString(), L"***stringing", output.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool Append(const WString& str, size_t pos, size_t count) TEST SUCCESS");
+
+			// 4) Append part of a C-string
+			output.Append(1, L' ');
+			assert(WStrcmp(output.GetCString(), L"***stringing ", output.GetLength()) == 0);
+			output.Append(cArr, 4);
+			assert(WStrcmp(output.GetCString(), L"***stringing Two ", output.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool Append(const wchar_t* wStr, size_t count) TEST SUCCESS");
+
+			// 5) Append a whole C-string
+			output.Append(cPtr);
+			assert(WStrcmp(output.GetCString(), L"***stringing Two C-string", output.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"bool Append(const wchar_t* wStr, size_t count) TEST SUCCESS");
+		}
+
+		void AdditionCompoundAssignmentOperator()
+		{
+			WString str;
+			str.SetCapacity(50); //reserves sufficient storage space to avoid memory reallocation
+			assert(WStrcmp(str.GetCString(), L"", 1ul) == 0);
+
+			str += L"This";
+			assert(WStrcmp(str.GetCString(), L"This", str.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"WString& operator+=(const wchar_t* wStr) TEST SUCCESS");
+
+			str += WString(L" is ");
+			assert(WStrcmp(str.GetCString(), L"This is ", str.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"WString& operator+=(const WString& str) TEST SUCCESS");
+
+			str += 'a';
+			assert(WStrcmp(str.GetCString(), L"This is a", str.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"WString& operator+=(wchar_t ch) TEST SUCCESS");
+		}
+
+		void StartsWith()
+		{
+			WString helloWorld = WString(L"hello world");
+
+			assert(helloWorld.StartsWith(WString(L"hello")));
+			assert(!helloWorld.StartsWith(WString(L"goodbye")));
+			assert(helloWorld.StartsWith(L'h'));
+			assert(!helloWorld.StartsWith(L'x'));
+
+			WLOGD(eLogChannel::CORE_STRING, L"bool StartsWith TEST SUCCESS");
+		}
+
+		void EndsWith()
+		{
+			WString helloWorld = WString(L"hello world");
+
+			assert(helloWorld.EndsWith(WString(L"world")));
+			assert(!helloWorld.EndsWith(WString(L"goodbye")));
+			assert(helloWorld.EndsWith(L'd'));
+			assert(!helloWorld.EndsWith(L'x'));
+
+			WLOGD(eLogChannel::CORE_STRING, L"bool EndsWith TEST SUCCESS");
+		}
+
+		void Contains()
+		{
+			WString helloWorld = WString(L"hello world");
+
+			assert(helloWorld.Contains(WString(L"hello")));
+			assert(!helloWorld.Contains(WString(L"goodbye")));
+			assert(helloWorld.Contains(L'w'));
+			assert(!helloWorld.Contains(L'x'));
+
+			WLOGD(eLogChannel::CORE_STRING, L"bool Contains TEST SUCCESS");
+		}
+
+		void Replace()
+		{
+			{
+				WString str = L"hello world";
+
+				str.Replace(0, 1, WString(L"bey"));
+				assert(str.GetLength() == WStrlen(L"beyello world"));
+				assert(WStrcmp(str.GetCString(), L"beyello world", str.GetLength()) == 0);
+
+				str.Replace(str.GetLength(), 1, WString(L"boy"));
+				assert(str.GetLength() == WStrlen(L"beyello worldboy"));
+				assert(WStrcmp(str.GetCString(), L"beyello worldboy", str.GetLength()) == 0);
+
+				str.Replace(2, 2, WString(L""));
+				assert(str.GetLength() == WStrlen(L"bello worldboy"));
+				assert(WStrcmp(str.GetCString(), L"bello worldboy", str.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString& Replace(size_t pos, size_t count, const WString& str) TEST SUCCESS");
+			}
+
+			{
+				WString str = L"hello world";
+
+				str.Replace(0, 1, WString(L"bey"), 1, 1);
+				assert(str.GetLength() == WStrlen(L"eello world"));
+				assert(WStrcmp(str.GetCString(), L"eello world", str.GetLength()) == 0);
+
+				str.Replace(str.GetLength(), 1, WString(L"boy"), 3, 1);
+				assert(str.GetLength() == WStrlen(L"eello world"));
+				assert(WStrcmp(str.GetCString(), L"eello world", str.GetLength()) == 0);
+
+				str.Replace(0, 5, WString(L"good morning, hello"), 14, 5);
+				assert(str.GetLength() == WStrlen(L"hello world"));
+				assert(WStrcmp(str.GetCString(), L"hello world", str.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString& Replace(size_t pos, size_t count, const WString& str, size_t pos2, size_t count2 = NPOS) TEST SUCCESS");
+			}
+
+			{
+				WString str = L"hello world";
+
+				str.Replace(0, 1, L"bey", 2);
+				assert(str.GetLength() == WStrlen(L"beello world"));
+				assert(WStrcmp(str.GetCString(), L"beello world", str.GetLength()) == 0);
+
+				str.Replace(str.GetLength(), 1, L"boy", 1);
+				assert(str.GetLength() == WStrlen(L"beello worldb"));
+				assert(WStrcmp(str.GetCString(), L"beello worldb", str.GetLength()) == 0);
+
+				str.Replace(2, 2, L"blyat", 0);
+				assert(str.GetLength() == WStrlen(L"belo worldb"));
+				assert(WStrcmp(str.GetCString(), L"belo worldb", str.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString& Replace(size_t pos, size_t count, const wchar_t* cStr, size_t count2) TEST SUCCESS");
+			}
+
+			{
+				WString str = L"hello world";
+
+				str.Replace(0, 1, L"bey");
+				assert(str.GetLength() == WStrlen(L"beyello world"));
+				assert(WStrcmp(str.GetCString(), L"beyello world", str.GetLength()) == 0);
+
+				str.Replace(str.GetLength(), 1, L"boy");
+				assert(str.GetLength() == WStrlen(L"beyello worldboy"));
+				assert(WStrcmp(str.GetCString(), L"beyello worldboy", str.GetLength()) == 0);
+
+				str.Replace(2, 2, L"");
+				assert(str.GetLength() == WStrlen(L"bello worldboy"));
+				assert(WStrcmp(str.GetCString(), L"bello worldboy", str.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString& Replace(size_t pos, size_t count, const wchar_t* cStr) TEST SUCCESS");
+			}
+
+			{
+				WString str = L"hello world";
+
+				str.Replace(0, 1, 3, L'h');
+				assert(str.GetLength() == WStrlen(L"hhhello world"));
+				assert(WStrcmp(str.GetCString(), L"hhhello world", str.GetLength()) == 0);
+
+				str.Replace(str.GetLength(), 2, 4, L'd');
+				assert(str.GetLength() == WStrlen(L"hhhello worlddddd"));
+				assert(WStrcmp(str.GetCString(), L"hhhello worlddddd", str.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString& Replace(size_t pos, size_t count, size_t count2, wchar_t ch) TEST SUCCESS");
+			}
+			/*
+			*/
+		}
+
+		void GetSubstring()
+		{
+			WString a = L"0123456789abcdefghij";
+
+			// count is npos, returns [pos, GetLength())
+			WString sub1 = a.GetSubstring(10);
+			assert(sub1.GetLength() == WStrlen(L"abcdefghij"));
+			assert(WStrcmp(sub1.GetCString(), L"abcdefghij", sub1.GetLength()) == 0);
+
+			// both pos and pos+count are within bounds, returns [pos, pos+count)
+			WString sub2 = a.GetSubstring(5, 3);
+			assert(sub2.GetLength() == WStrlen(L"567"));
+			assert(WStrcmp(sub2.GetCString(), L"567", sub2.GetLength()) == 0);
+
+			// pos is within bounds, pos+count is not, returns [pos, GetLength()) 
+			WString sub4 = a.GetSubstring(a.GetLength() - 3, 50);
+			// this is effectively equivalent to
+			// WString sub4 = a.GetSubstring(17, 3);
+			// since a.GetLength() == 20, pos == a.GetLength()-3 == 17, and a.GetLength()-pos == 3
+
+			assert(sub4.GetLength() == WStrlen(L"hij"));
+			assert(WStrcmp(sub4.GetCString(), L"hij", sub4.GetLength()) == 0);
+
+			WLOGD(eLogChannel::CORE_STRING, L"WString GetSubstring(size_t pos, size_t count) TEST SUCCESS");
+		}
+
+		void Resize()
+		{
+			const size_t desired_length = 8ul;
+			WString longString(L"Where is the end?");
+			WString shortString(L"Ha");
+
+			// Shorten
+			longString.Resize(desired_length);
+			assert(longString.GetLength() == WStrlen(L"Where is"));
+			assert(WStrcmp(longString.GetCString(), L"Where is", longString.GetLength()) == 0);
+
+			// Lengthen
+			shortString.Resize(desired_length, L'a');
+			assert(shortString.GetLength() == WStrlen(L"Haaaaaaa"));
+			assert(WStrcmp(shortString.GetCString(), L"Haaaaaaa", shortString.GetLength()) == 0);
+
+			WLOGD(eLogChannel::CORE_STRING, L"void Resize(size_t count, wchar_t ch) TEST SUCCESS");
+		}
+
+		void GetIndexOf()
+		{
+			size_t n = 0u;
+			WString const wStr = L"This is a string";
+
+			// search from beginning of string
+			n = wStr.GetIndexOf(L"is");
+			assert(n != WString::NPOS);
+			WString sub1 = wStr.GetSubstring(n);
+			assert(sub1.GetLength() == WStrlen(L"is is a string"));
+			assert(WStrcmp(sub1.GetCString(), L"is is a string", sub1.GetLength()) == 0);
+
+			// search from position 5
+			n = wStr.GetIndexOf(L"is", 5);
+			assert(n != WString::NPOS);
+			WString sub2 = wStr.GetSubstring(n);
+			assert(sub2.GetLength() == WStrlen(L"is a string"));
+			assert(WStrcmp(sub2.GetCString(), L"is a string", sub2.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"size_t GetIndexOf(const wchar_t* wStr, size_t pos) TEST SUCCESS");
+
+			// find a single character
+			n = wStr.GetIndexOf(L'a');
+			assert(n != WString::NPOS);
+			WString sub3 = wStr.GetSubstring(n);
+			assert(sub3.GetLength() == WStrlen(L"a string"));
+			assert(WStrcmp(sub3.GetCString(), L"a string", sub3.GetLength()) == 0);
+
+			// find a single character
+			n = wStr.GetIndexOf(L'q');
+			assert(n == WString::NPOS);
+			WLOGD(eLogChannel::CORE_STRING, L"size_t GetIndexOf(wchar_t ch, size_t pos) TEST SUCCESS");
+		}
+
+		void GetLastIndexOf()
+		{
+			size_t n = 0ul;
+			WString const wStr = L"This is a string";
+
+			// search backwards from end of string
+			n = wStr.GetLastIndexOf(L"is");
+			assert(n != WString::NPOS && n == 5);
+			WString sub1 = wStr.GetSubstring(n);
+			assert(sub1.GetLength() == WStrlen(L"is a string"));
+			assert(WStrcmp(sub1.GetCString(), L"is a string", sub1.GetLength()) == 0);
+
+			// search backwards from position 4
+			n = wStr.GetLastIndexOf(L"is", 4);
+			assert(n != WString::NPOS && n == 2);
+			WString sub2 = wStr.GetSubstring(n);
+			assert(sub2.GetLength() == WStrlen(L"is is a string"));
+			assert(WStrcmp(sub2.GetCString(), L"is is a string", sub2.GetLength()) == 0);
+			WLOGD(eLogChannel::CORE_STRING, L"size_t GetIndexOf(const wchar_t* wStr, size_t pos) TEST SUCCESS");
+
+			// find a single character
+			n = wStr.GetLastIndexOf(L's');
+			assert(n != WString::NPOS && n == 10);
+			WString sub3 = wStr.GetSubstring(n);
+			assert(sub3.GetLength() == WStrlen(L"string"));
+			assert(WStrcmp(sub3.GetCString(), L"string", sub3.GetLength()) == 0);
+
+			// find a single character
+			n = wStr.GetLastIndexOf(L'q');
+			assert(n == WString::NPOS);
+
+			WLOGD(eLogChannel::CORE_STRING, L"size_t GetIndexOf(wchar_t ch, size_t pos) TEST SUCCESS");
+		}
+
+		void AdditionOperator()
+		{
+			{
+				WString lhs = L"hello ";
+				WString rhs = L"world!";
+				WString result = lhs + rhs;
+				assert(result.GetLength() == WStrlen(L"hello world!"));
+				assert(WStrcmp(result.GetCString(), L"hello world!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(const WString& lhs, const WString& rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs = L"hello ";
+				const wchar_t* rhs = L"world!";
+				WString result = lhs + rhs;
+				assert(result.GetLength() == WStrlen(L"hello world!"));
+				assert(WStrcmp(result.GetCString(), L"hello world!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(const WString& lhs, const wchar_t* rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs = L"hello";
+				wchar_t rhs = '!';
+				WString result = lhs + rhs;
+				assert(result.GetLength() == WStrlen(L"hello!"));
+				assert(WStrcmp(result.GetCString(), L"hello!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(const WString& lhs, wchar_t rhs) TEST SUCCESS");
+			}
+
+			{
+				const wchar_t* lhs = L"hello ";
+				WString rhs = L"world!";
+				WString result = lhs + rhs;
+				assert(result.GetLength() == WStrlen(L"hello world!"));
+				assert(WStrcmp(result.GetCString(), L"hello world!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(const wchar_t* lhs, const WString& rhs) TEST SUCCESS");
+			}
+
+			{
+				wchar_t lhs = 'h';
+				WString rhs = L"ello!";
+				WString result = lhs + rhs;
+				assert(result.GetLength() == WStrlen(L"hello!"));
+				assert(WStrcmp(result.GetCString(), L"hello!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(wchar_t lhs, const WString& rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs = L"hello ";
+				WString rhs = L"world!";
+				WString result = std::move(lhs) + std::move(rhs);
+				assert(result.GetLength() == WStrlen(L"hello world!"));
+				assert(WStrcmp(result.GetCString(), L"hello world!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(WString&& lhs, WString&& rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs = L"hello ";
+				WString rhs = L"world!";
+				WString result = std::move(lhs) + rhs;
+				assert(result.GetLength() == WStrlen(L"hello world!"));
+				assert(WStrcmp(result.GetCString(), L"hello world!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(WString&& lhs, const WString& rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs = L"hello ";
+				const wchar_t* rhs = L"world!";
+				WString result = std::move(lhs) + rhs;
+				assert(result.GetLength() == WStrlen(L"hello world!"));
+				assert(WStrcmp(result.GetCString(), L"hello world!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(WString&& lhs, const wchar_t* rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs = L"hello";
+				wchar_t rhs = '!';
+				WString result = std::move(lhs) + rhs;
+				assert(result.GetLength() == WStrlen(L"hello!"));
+				assert(WStrcmp(result.GetCString(), L"hello!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(WString&& lhs, wchar_t rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs = L"hello ";
+				WString rhs = L"world!";
+				WString result = lhs + std::move(rhs);
+				assert(result.GetLength() == WStrlen(L"hello world!"));
+				assert(WStrcmp(result.GetCString(), L"hello world!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(const WString& lhs, WString&& rhs) TEST SUCCESS");
+			}
+
+			{
+				const wchar_t* lhs = L"hello ";
+				WString rhs = L"world!";
+				WString result = lhs + std::move(rhs);
+				assert(result.GetLength() == WStrlen(L"hello world!"));
+				assert(WStrcmp(result.GetCString(), L"hello world!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(const wchar_t* lhs, WString&& rhs) TEST SUCCESS");
+			}
+
+			{
+				wchar_t lhs = 'h';
+				WString rhs = L"ello!";
+				WString result = lhs + std::move(rhs);
+				assert(result.GetLength() == WStrlen(L"hello!"));
+				assert(WStrcmp(result.GetCString(), L"hello!", result.GetLength()) == 0);
+				WLOGD(eLogChannel::CORE_STRING, L"WString operator+(wchar_t lhs, WString&& rhs) TEST SUCCESS");
+			}
+		}
+
+		void ComparisonOperator()
+		{
+			{
+				WString lhs1(L"hello");
+				WString rhs1(L"hello");
+				assert(lhs1 == rhs1);
+
+				WString lhs2(L"hello");
+				WString rhs2(L"hellm");
+				assert(!(lhs2 == rhs2));
+
+				WString lhs3;
+				WString rhs3;
+				assert(lhs3 == rhs3);
+
+				WString lhs4(L"");
+				WString rhs4(L"");
+				assert(lhs4 == rhs4);
+
+				WString lhs5;
+				WString rhs5(L"");
+				assert(lhs5 == rhs5);
+
+				WString lhs6(L"\0");
+				WString rhs6(L"");
+				assert(lhs6 == rhs6);
+				WLOGD(eLogChannel::CORE_STRING, L"bool operator==(const WString& lhs, const WString& rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs1(L"hello");
+				const wchar_t* rhs1 = L"hello";
+				assert(lhs1 == rhs1);
+
+				WString lhs2(L"hello");
+				const wchar_t* rhs2 = L"hellm";
+				assert(!(lhs2 == rhs2));
+
+				WString lhs3;
+				const wchar_t* rhs3 = L"";
+				assert(lhs3 == rhs3);
+
+				WString lhs4(L"");
+				const wchar_t* rhs4 = L"";
+				assert(lhs4 == rhs4);
+
+				WString lhs5(L"some");
+				wchar_t rhs5[] = { L's', L'o', L'm', L'e', L'\0' };
+				assert(lhs5 == rhs5);
+
+				WString lhs6(L"\0");
+				const wchar_t* rhs6 = L"";
+				assert(lhs6 == rhs6);
+
+				WLOGD(eLogChannel::CORE_STRING, L"bool operator==(const WString& lhs, const wchar_t* rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs1(L"hello");
+				WString rhs1(L"hell");
+				assert(lhs1 != rhs1);
+
+				WString lhs2(L"hello");
+				WString rhs2(L"hellm");
+				assert(lhs2 != rhs2);
+
+				WString lhs3;
+				WString rhs3;
+				assert(!(lhs3 != rhs3));
+
+				WString lhs4(L".");
+				WString rhs4(L"");
+				assert(lhs4 != rhs4);
+
+				WString lhs5(L"\0");
+				WString rhs5(L"");
+				assert(!(lhs5 != rhs5));
+
+				WLOGD(eLogChannel::CORE_STRING, L"bool operator!=(const WString& lhs, const WString& rhs) TEST SUCCESS");
+			}
+
+			{
+				WString lhs1(L"hello");
+				const wchar_t* rhs1 = L"hell";
+				assert(lhs1 != rhs1);
+
+				WString lhs2(L"hello");
+				const wchar_t* rhs2 = L"hellm";
+				assert(lhs2 != rhs2);
+
+				WString lhs3;
+				const wchar_t* rhs3 = L"";
+				assert(!(lhs3 != rhs3));
+
+				WString lhs4(L"");
+				const wchar_t* rhs4 = L".";
+				assert(lhs4 != rhs4);
+
+				WString lhs5(L"some");
+				wchar_t rhs5[] = { L's', L'o', L'm', L'm' };
+				assert(lhs5 != rhs5);
+
+				WString lhs6(L"\0");
+				const wchar_t* rhs6 = L"";
+				assert(!(lhs6 != rhs6));
+
+				WLOGD(eLogChannel::CORE_STRING, L"bool operator!=(const WString& lhs, const wchar_t* rhs) TEST SUCCESS");
+			}
+		}
+
+		void StreamOperator()
+		{
+			{
+				WString wStr = L"hello";
+				std::wcout << wStr << std::endl;
+
+				WLOGD(eLogChannel::CORE_STRING, L"std::ostream& operator<<(std::ostream& os, const WString& str) TEST SUCCESS");
+			}
+
+			// {
+			// 	WString wStr;
+			// 	std::cin >> wStr;
+			// 	std::cout << "wStr: " << wStr << std::endl;
+			// 	WLOGD(eLogChannel::CORE_STRING, L"std::wistream& operator>>(std::wistream& is, WString& str) TEST SUCCESS");
+			// }
+		}
+
+		//void GetLine()
+		//{
+		//	// greet the user
+		//	WString name;
+		//	std::cout << "What is your name? ";
+		//	GetLine(std::cin, name);
+		//	std::cout << "Hello " << name << ", nice to meet you.\n";
+
+		//	// read file line by line
+		//	std::istringstream input;
+		//	input.str(L"1\n2\n3\n4\n5\n6\n7\n");
+		//	int32_t sum = 0;
+		//	for (WString line; cave::GetLine(input, line); )
+		//	{
+		//		sum += WStringToInt32(line);
+		//	}
+		//	assert(sum == 28);
+
+		//	WLOGD(eLogChannel::CORE_STRING, L"std::wistream& GetLine(std::wistream& input, WString& str, wchar_t delim) TEST SUCCESS");
+		//}
+
+		void WStringToInt()
+		{
+			WString str1 = L"45";
+			WString str2 = L"3.14159";
+			WString str3 = L"31337 with words";
+			WString str4 = L"words and 2";
+
+			int32_t myint1 = WStringToInt32(str1);
+			int32_t myint2 = WStringToInt32(str2);
+			int32_t myint3 = WStringToInt32(str3);
+			// error
+			// int myint4 = WStringToInt32(str4);
+
+			assert(myint1 == 45);
+			assert(myint2 == 3);
+			assert(myint3 == 31337);
+			// std::cout << "WStringToInt32(\"" << str4 << "\") is " << myint4 << '\n';
+
+			WLOGD(eLogChannel::CORE_STRING, L"int32_t WStringToInt32(const WString& str, size_t* pos, int32_t base) TEST SUCCESS");
+		}
+
+		void WStringToFloat()
+		{
+			WString orbits(L"686.97 365.24");
+			size_t sz;
+
+			float mars = WStringToFloat(orbits, &sz);
+			float earth = WStringToFloat(orbits.GetSubstring(sz));
+
+			assert(mars == 686.97f);
+			assert(earth == 365.24f);
+
+			WLOGD(eLogChannel::CORE_STRING, L"int32_t WStringToInt32(const WString& str, size_t* pos, int32_t base) TEST SUCCESS");
+		}
+
+		void ToWString()
+		{
+			double f = 23.43;
+			double f2 = 1e-9;
+			double f3 = 1e40;
+			double f4 = 1e-40;
+			double f5 = 123456789;
+			WString fStr = cave::ToWString(f);
+			WString fStr2 = cave::ToWString(f2); // Note: returns "0.000000"
+			WString fStr3 = cave::ToWString(f3); // Note: Does not return "1e+40".
+			WString fStr4 = cave::ToWString(f4); // Note: returns "0.000000"
+			WString fStr5 = cave::ToWString(f5);
+
+			assert(fStr == L"23.430000");
+			assert(fStr2 == L"0.000000");
+			assert(fStr3 == L"10000000000000000303786028427003666890752.000000");
+			assert(fStr4 == L"0.000000");
+			assert(fStr5 == L"123456789.000000");
+
+			WLOGD(eLogChannel::CORE_STRING, L"WString ToWString(double value) TEST SUCCESS");
 		}
 	}
 #endif

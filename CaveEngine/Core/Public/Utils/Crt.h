@@ -16,3 +16,4 @@
 #include <stdio.h>
 #include <time.h>
 #include <wchar.h>
+#include <wctype.h>
