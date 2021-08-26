@@ -32,7 +32,7 @@ export namespace cave
 		}
 		~FiniteStateMachine()
 		{
-			// delete
+			delete mCurrentState;
 		}
 		void AddState(State* state)
 		{
