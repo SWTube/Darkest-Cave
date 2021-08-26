@@ -7,11 +7,12 @@ module;
 
 #include <cstdlib>
 #include <cstring>
+#include <cwchar>
 
 #include "CoreTypes.h"
 #include "Assertion/Assert.h"
 
-export module Memory;
+export module cave.Core.Memory.Memory;
 
 //import std.core;
 
@@ -37,6 +38,10 @@ namespace cave
 		static void* Memset(void* dest, int32_t fill, size_t count);
 		static void* Memcpy(void* dest, const void* src, size_t count);
 		static void* Memmove(void* dest, const void* src, size_t count);
+		static int32_t WMemcmp(const wchar_t* lhs, const wchar_t* rhs, size_t count);
+		static wchar_t* WMemset(wchar_t* dest, wchar_t ch, size_t count);
+		static wchar_t* WMemcpy(wchar_t* dest, const wchar_t* src, size_t count);
+		static wchar_t* WMemmove(wchar_t* dest, const wchar_t* src, size_t count);
 	};
 
 	template <size_t N>
@@ -168,5 +173,25 @@ namespace cave
 	void* Memory::Memmove(void* dest, const void* src, size_t count)
 	{
 		return memmove(dest, src, count);
+	}
+
+	int32_t Memory::WMemcmp(const wchar_t* lhs, const wchar_t* rhs, size_t count)
+	{
+		return wmemcmp(lhs, rhs, count);
+	}
+
+	wchar_t* Memory::WMemset(wchar_t* dest, wchar_t ch, size_t count)
+	{
+		return wmemset(dest, ch, count);
+	}
+
+	wchar_t* Memory::WMemcpy(wchar_t* dest, const wchar_t* src, size_t count)
+	{
+		return wmemcpy(dest, src, count);
+	}
+
+	wchar_t* Memory::WMemmove(wchar_t* dest, const wchar_t* src, size_t count)
+	{
+		return wmemmove(dest, src, count);
 	}
 } // namespace cave

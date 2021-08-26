@@ -7,58 +7,114 @@ module;
 
 #include "CoreTypes.h"
 
-#include "CoreGlobals.h"
+export module cave.Core.Containers.Hash;
 
-export module Hash;
-
-import Memory;
+import cave.Core.Memory.Memory;
 
 namespace cave
 {
+    uint32_t DefaultHashFunction(const void* key, size_t size, uint32_t* table);
+
     export enum class eHashId : uint32_t
     {
         DEFAULT_ID = 0xEDB88320,
+        NORMAL_REPRESENTATION = 0x04C11DB7,
     };
 
-    export template <eHashId ID = eHashId::DEFAULT_ID>
-    class Hashable
+    export class Hash
     {
     public:
-        constexpr static void Initialize();
-        constexpr Hashable(uint8_t* bytes, size_t data);
-        constexpr Hashable(const Hashable& other);
-        constexpr Hashable(Hashable&& other);
-        constexpr Hashable& operator=(const Hashable& other);
-        constexpr Hashable& operator=(Hashable&& other);
-        virtual ~Hashable();
+        constexpr Hash();
+        constexpr Hash(uint32_t(*hashFunction)(const void*, size_t, uint32_t*));
+        constexpr Hash(eHashId hashId);
+        constexpr Hash(eHashId hashId, uint32_t(*hashFunction)(const void*, size_t, uint32_t*));
+        constexpr Hash(const Hash& other) = default;
+        constexpr Hash(Hash&& other) = default;
+        constexpr Hash& operator=(const Hash& other) = default;
+        constexpr Hash& operator=(Hash&& other) = default;
+        ~Hash();
 
-        virtual uint32_t GetHash() const;
+        constexpr void SetHashId(eHashId hashId);
 
-        
+        void SetHashFunction(uint32_t(*hashFunction)(const void*, size_t, uint32_t*));
+        uint32_t GetHash(const void* key, size_t size);
     protected:
-        constexpr Hashable();
-        virtual void update(uint8_t* bytes, size_t size);
-        virtual void setSize(size_t size);
-        size_t mSize;
-        uint8_t* mBytes;
-        constexpr static uint32_t TABLE_SIZE = 256u;
-        static uint64_t msRefCount;
-        static uint32_t* msTable;
+        constexpr void initialize();
+        constexpr void initialize(uint32_t(*hashFunction)(const void*, size_t, uint32_t*));
+        constexpr void initialize(eHashId hashId);
+        constexpr void initialize(eHashId hashId, uint32_t(*hashFunction)(const void*, size_t, uint32_t*));
+
+        static constexpr uint32_t TABLE_SIZE = 256u;
+        eHashId mHashId = eHashId::DEFAULT_ID;
+        uint32_t mTable[TABLE_SIZE] = { 0u, };
+        uint32_t(*mHashFunction)(const void*, size_t, uint32_t*) = nullptr;
     };
 
-    template <eHashId ID>
-    uint32_t* Hashable<ID>::msTable = nullptr;
-
-    template <eHashId ID>
-    uint64_t Hashable<ID>::msRefCount = 0ull;
-
-    template <eHashId ID>
-    constexpr void Hashable<ID>::Initialize()
+    constexpr Hash::Hash()
+        : Hash(eHashId::DEFAULT_ID, DefaultHashFunction)
     {
-        if (msTable == nullptr)
-        {
-            msTable = reinterpret_cast<uint32_t*>(gCoreMemoryPool.Allocate(sizeof(uint32_t) * TABLE_SIZE));
+    }
 
+    constexpr Hash::Hash(eHashId hashId)
+        : Hash(hashId, DefaultHashFunction)
+    {
+    }
+
+    constexpr Hash::Hash(uint32_t(*hashFunction)(const void*, size_t, uint32_t*))
+        : Hash(eHashId::DEFAULT_ID, hashFunction)
+    {
+    }
+
+    constexpr Hash::Hash(eHashId hashId, uint32_t(*hashFunction)(const void*, size_t, uint32_t*))
+        : mHashId(hashId)
+        , mHashFunction(hashFunction)
+    {
+        uint32_t k = 0ull;
+
+        for (uint32_t i = 0; i < 256; ++i)
+        {
+            k = i;
+            for (uint32_t j = 0; j < 8; ++j)
+            {
+                if (k & 1)
+                {
+                    k = (k >> 1) ^ static_cast<uint32_t>(mHashId);
+                }
+                else
+                {
+                    k >>= 1;
+                }
+            }
+            mTable[i] = k;
+        }
+    }
+
+    Hash::~Hash()
+    {
+        mHashFunction = nullptr;
+    }
+
+    constexpr void Hash::initialize()
+    {
+        initialize(eHashId::DEFAULT_ID, DefaultHashFunction);
+    }
+
+    constexpr void Hash::initialize(uint32_t(*hashFunction)(const void*, size_t, uint32_t*))
+    {
+        initialize(eHashId::DEFAULT_ID, hashFunction);
+    }
+
+    constexpr void Hash::initialize(eHashId hashId)
+    {
+        initialize(hashId, DefaultHashFunction);
+    }
+
+    constexpr void Hash::initialize(eHashId hashId, uint32_t(*hashFunction)(const void*, size_t, uint32_t*))
+    {
+        if (mHashFunction != nullptr)
+        {
+            mHashId = hashId;
+            mHashFunction = hashFunction;
             uint32_t k = 0ull;
 
             for (uint32_t i = 0; i < 256; ++i)
@@ -68,122 +124,51 @@ namespace cave
                 {
                     if (k & 1)
                     {
-                        k = (k >> 1) ^ static_cast<uint32_t>(ID);
+                        k = (k >> 1) ^ static_cast<uint32_t>(mHashId);
                     }
                     else
                     {
                         k >>= 1;
                     }
                 }
-                msTable[i] = k;
+                mTable[i] = k;
             }
         }
     }
 
-    template <eHashId ID>
-    constexpr Hashable<ID>::Hashable()
-        : mSize(0u)
-        , mBytes(nullptr)
+    constexpr void Hash::SetHashId(eHashId hashId)
     {
-        ++msRefCount;
+        initialize(hashId);
     }
 
-    template <eHashId ID>
-    constexpr Hashable<ID>::Hashable(uint8_t* bytes, size_t size)
-        : mSize(size)
-        , mBytes(bytes)
+    void Hash::SetHashFunction(uint32_t(*hashFunction)(const void*, size_t, uint32_t*))
     {
-        ++msRefCount;
+        mHashFunction = hashFunction;
     }
 
-    template <eHashId ID>
-    constexpr Hashable<ID>::Hashable(const Hashable& other)
-        : mSize(other.mSize)
-        , mBytes(other.mBytes)
+    uint32_t Hash::GetHash(const void* key, size_t size)
     {
-        ++msRefCount;
+        return mHashFunction(key, size, mTable);
     }
 
-    template <eHashId ID>
-    constexpr Hashable<ID>::Hashable(Hashable&& other)
-        : mSize(other.mSize)
-        , mBytes(other.mBytes)
-    {
-        other.mSize = 0u;
-        other.mBytes = nullptr;
-    }
-
-    template <eHashId ID>
-    constexpr Hashable<ID>& Hashable<ID>::operator=(const Hashable& other)
-    {
-        if (this != &other)
-        {
-            mSize = other.mSize;
-            mBytes = other.mBytes;
-            ++msRefCount;
-        }
-
-        return *this;
-    }
-
-    template <eHashId ID>
-    constexpr Hashable<ID>& Hashable<ID>::operator=(Hashable&& other)
-    {
-        if (this != &other)
-        {
-            mSize = other.mSize;
-            mBytes = other.mBytes;
-            other.mSize = 0u;
-            other.mBytes = nullptr;
-        }
-
-        return *this;
-    }
-
-    template <eHashId ID>
-    Hashable<ID>::~Hashable()
-    {
-        --msRefCount;
-
-        if (msRefCount <= 0)
-        {
-            gCoreMemoryPool.Deallocate(msTable, sizeof(uint32_t) * TABLE_SIZE);
-        }
-    }
-
-    template <eHashId ID>
-    uint32_t Hashable<ID>::GetHash() const
+    uint32_t DefaultHashFunction(const void* key, size_t size, uint32_t* table)
     {
         uint32_t crc32 = 0xFFFFFFFF;
-        size_t capacity = GetUpperPowerOfTwo(static_cast<size_t>(mSize));
+        size_t capacity = GetUpperPowerOfTwo(static_cast<size_t>(size));
         for (size_t i = 0; i < capacity; ++i)
         {
             // SPECTRE MITIGATION
             // https://docs.microsoft.com/en-us/cpp/security/developer-guidance-speculative-execution?view=msvc-160
             // https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)#Mitigation
             i &= (capacity - 1);
-            uint32_t index = (crc32 ^ mBytes[i]) & 0xFF;
-            crc32 = (crc32 >> 8) ^ msTable[index];
+            uint32_t index = (crc32 ^ reinterpret_cast<const uint8_t*>(key)[i]) & 0xFF;
+            crc32 = (crc32 >> 8) ^ table[index];
         }
 
         crc32 ^= 0xFFFFFFFF;
 
         return crc32;
     }
-
-    template <eHashId ID>
-    void Hashable<ID>::update(uint8_t* bytes, size_t size)
-    {
-        mBytes = bytes;
-        mSize = size;
-    }
-
-    template <eHashId ID>
-    void Hashable<ID>::setSize(size_t size)
-    {
-        mSize = size;
-    }
-
 
     // http://mwultong.blogspot.com/2006/05/c-c-crc32.html
     // uint64_t GetFileCrc(FILE*);

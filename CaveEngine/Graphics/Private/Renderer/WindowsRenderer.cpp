@@ -9,7 +9,7 @@
 #include <ppltasks.h>
 
 #include "Debug/Log.h"
-import DdsTextureLoader;
+
 
 namespace cave
 {
@@ -33,11 +33,26 @@ namespace cave
 			return eResult::CAVE_OUT_OF_MEMORY;
 		}
 		mCamera->SetPosition(0.0f, 0.0f, -100.f);
+		
+		//set TextureManager device.
+		TextureManager::GetInstance().SetDevice(mDeviceResources->GetDevice());
+
+		mBufferManager = reinterpret_cast<BufferManager*>(mPool->Allocate(sizeof(BufferManager)));
+		new(mBufferManager) BufferManager();
+		mBufferManager->Init(mDeviceResources, 1000);
+
 		// set color shader
 		// set texture shader
 		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
 		new(mShader) cave::Shader(L"DirectXTest.fxh", *mPool);
 		mShader->Compile(mDeviceResources->GetDevice());
+
+		//Sprite::mScreenWidth = mDeviceResources->GetWidth();
+		//Sprite::mScreenHeight= mDeviceResources->GetHeight();
+
+		Sprite::SetScreenSize(mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
+
+		return eResult::CAVE_OK;
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -55,31 +70,44 @@ namespace cave
 	{
 		ID3D11DeviceContext* context = mDeviceResources->GetDeviceContext();
 
-		ID3D11RenderTargetView* renderTarget = mDeviceResources->GetRenderTarget();
-		ID3D11DepthStencilView* depthStencil = mDeviceResources->GetDepthStencil();
-
 		mDeviceResources->RenderStart();
 
 		mCamera->Render();
 
 		DirectX::XMMATRIX& worldMatrix = mDeviceResources->GetWorldMatrix();
 		const DirectX::XMMATRIX& viewMatrix = mCamera->GetViewMatrix();
-		DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
+		//DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
 		DirectX::XMMATRIX& ortho = mDeviceResources->GetOrthoMatrix();
 
 		// 모든 2D 렌더링을 시작하려면 Z 버퍼를 끕니다.
 		//mDeviceResources->TurnZBufferOff(); // 이거 없으면 안 그려짐...
 		mDeviceResources->TurnOnAlphaBlending();
+
+		std::vector<VertexT> vertexData;
 		// 3. Set Render Data ---------------------------------------------------------------------------------------------
 		for (Sprite* const object : mSprites)
 		{
 			object->Render(mDeviceResources->GetDeviceContext());
+			VertexT* vertices = object->GetVertices();
+			for (unsigned int i = 0; i < 4; i++) {
+				
+				vertexData.push_back(vertices[i]);
+			}
 
-			mShader->Render(context, object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, mTextures[object->GetTextureIndex()]->GetTexture());
 		}
 
+		mBufferManager->UpdateVertexBuffer(vertexData.data(), mSprites.size());
+
+		int count = 0;
+		for (Sprite* const object : mSprites)
+		{
+			mShader->Render(context, object->GetIndicesCount(), count * object->GetIndicesCount(), worldMatrix, viewMatrix, ortho, object->GetTexture()->GetTexture());
+			count++;
+		}
+
+
 		mDeviceResources->TurnOffAlphaBlending();
-		mDeviceResources->TurnZBufferOn();
+		//mDeviceResources->TurnZBufferOn();
 		// Present the frame to the screen.
 		mDeviceResources->RenderEnd();
 
@@ -97,6 +125,8 @@ namespace cave
 		{
 			return result;
 		}
+
+		return result;
 	}
 
 	eResult WindowsRenderer::CreateWindowSizeDependentResources(Window* window)
@@ -116,7 +146,7 @@ namespace cave
 		++mFrameCount;
 		if (mFrameCount == UINT32_MAX)
 		{
-			mFrameCount == 0u;
+			mFrameCount = 0u;
 		}
 	}
 

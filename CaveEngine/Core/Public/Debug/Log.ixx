@@ -18,7 +18,7 @@ module;
 
 #include "Assertion/Assert.h"
 
-export module Log;
+export module cave.Core.Debug.Log;
 
 namespace cave
 {
@@ -65,6 +65,7 @@ namespace cave
 		constexpr uint32_t MAX_BUFFER = 255u;
 		eLogVerbosity gCurrentVerbosity = eLogVerbosity::All;
 		char gBuffer[MAX_BUFFER] = { '\0', };
+		wchar_t gWBuffer[MAX_BUFFER] = { '\0', };
 
 		export void SetVerbosity(eLogVerbosity verbosity)
 		{
@@ -73,6 +74,7 @@ namespace cave
 
 #ifdef __WIN32__
 		void Log(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const char* message);
+		void WLog(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message);
 
 		export void Verbose(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const char* message)
 		{
@@ -158,6 +160,92 @@ namespace cave
 			va_end(vl);
 		}
 
+		// wide
+
+		export void WVerbose(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message)
+		{
+			WLog(channel, eLogVerbosity::Verbose, fileName, functionName, lineNumber, message);
+		}
+
+		export void WVerboseF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message, ...)
+		{
+			va_list vl;
+			va_start(vl, message);
+			vswprintf(gWBuffer, MAX_BUFFER, message, vl);
+			WLog(channel, eLogVerbosity::Verbose, fileName, functionName, lineNumber, gWBuffer);
+			va_end(vl);
+		}
+
+		export void WDebug(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message)
+		{
+			WLog(channel, eLogVerbosity::Debug, fileName, functionName, lineNumber, message);
+		}
+
+		export void WDebugF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message, ...)
+		{
+			va_list vl;
+			va_start(vl, message);
+			vswprintf(gWBuffer, MAX_BUFFER, message, vl);
+			WLog(channel, eLogVerbosity::Debug, fileName, functionName, lineNumber, gWBuffer);
+			va_end(vl);
+		}
+
+		export void WInfo(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message)
+		{
+			WLog(channel, eLogVerbosity::Info, fileName, functionName, lineNumber, message);
+		}
+
+		export void WInfoF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message, ...)
+		{
+			va_list vl;
+			va_start(vl, message);
+			vswprintf(gWBuffer, MAX_BUFFER, message, vl);
+			WLog(channel, eLogVerbosity::Info, fileName, functionName, lineNumber, gWBuffer);
+			va_end(vl);
+		}
+
+		export void WWarn(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message)
+		{
+			WLog(channel, eLogVerbosity::Warn, fileName, functionName, lineNumber, message);
+		}
+
+		export void WWarnF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message, ...)
+		{
+			va_list vl;
+			va_start(vl, message);
+			vswprintf(gWBuffer, MAX_BUFFER, message, vl);
+			WLog(channel, eLogVerbosity::Warn, fileName, functionName, lineNumber, gWBuffer);
+			va_end(vl);
+		}
+
+		export void WError(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message)
+		{
+			WLog(channel, eLogVerbosity::Error, fileName, functionName, lineNumber, message);
+		}
+
+		export void WErrorF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message, ...)
+		{
+			va_list vl;
+			va_start(vl, message);
+			vswprintf(gWBuffer, MAX_BUFFER, message, vl);
+			WLog(channel, eLogVerbosity::Error, fileName, functionName, lineNumber, gWBuffer);
+			va_end(vl);
+		}
+
+		export void WAssert(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message)
+		{
+			WLog(channel, eLogVerbosity::Assert, fileName, functionName, lineNumber, message);
+		}
+
+		export void WAssertF(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message, ...)
+		{
+			va_list vl;
+			va_start(vl, message);
+			vswprintf(gWBuffer, MAX_BUFFER, message, vl);
+			WLog(channel, eLogVerbosity::Assert, fileName, functionName, lineNumber, gWBuffer);
+			va_end(vl);
+		}
+
 		void Log(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const char* message)
 		{
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
@@ -240,6 +328,91 @@ namespace cave
 				char output[255];
 				snprintf(output, 255, "%s%s/%s/line:%d :\t%s\n", buffer.c_str(), fileName, functionName, lineNumber, message);
 				OutputDebugStringA(output);
+			}
+		}
+
+		void WLog(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message)
+		{
+			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
+			{
+				static std::wstring buffer;
+
+				switch (channel)
+				{
+				case eLogChannel::GRAPHICS:
+					buffer = L"Graphics/";
+					break;
+				case eLogChannel::PHYSICS:
+					buffer = L"Physics/";
+					break;
+				case eLogChannel::AUDIO:
+					buffer = L"Audio/";
+					break;
+				case eLogChannel::AI:
+					buffer = L"AI/";
+					break;
+				case eLogChannel::GAMEPLAY:
+					buffer = L"Gameplay/";
+					break;
+				case eLogChannel::CORE:
+					buffer = L"Core/";
+					break;
+				case eLogChannel::CORE_MODULE:
+					buffer = L"Core/Module/";
+					break;
+				case eLogChannel::CORE_UNIT_TEST:
+					buffer = L"Core/UnitTest/";
+					break;
+				case eLogChannel::CORE_MEMORY:
+					buffer = L"Core/Memory/";
+					break;
+				case eLogChannel::CORE_MATH:
+					buffer = L"Core/Math/";
+					break;
+				case eLogChannel::CORE_STRING:
+					buffer = L"Core/String/";
+					break;
+				case eLogChannel::CORE_LOCALIZATION:
+					buffer = L"Core/Localization/";
+					break;
+				case eLogChannel::CORE_PARSER:
+					buffer = L"Core/Parser/";
+					break;
+				case eLogChannel::CORE_PROFILE:
+					buffer = L"Core/Profile/";
+					break;
+				case eLogChannel::CORE_ENGINE_CONFIG:
+					buffer = L"Core/EngineConfig/";
+					break;
+				case eLogChannel::CORE_RNG:
+					buffer = L"Core/RandomNumberGenerator/";
+					break;
+				case eLogChannel::CORE_OBJECT:
+					buffer = L"Core/Object/";
+					break;
+				case eLogChannel::CORE_THREAD:
+					buffer = L"Core/Thread/";
+					break;
+				case eLogChannel::CORE_CONTAINER:
+					buffer = L"Core/Containers/";
+					break;
+				case eLogChannel::CORE_FILE_SYSTEM:
+					buffer = L"Core/FileSystem/";
+					break;
+				case eLogChannel::CORE_TIMER:
+					buffer = L"Core/Timer/";
+					break;
+				case eLogChannel::CORE_RESOURCE_MANAGER:
+					buffer = L"Core/ResourceManager/";
+					break;
+				default:
+					assert(false);
+					break;
+				}
+
+				wchar_t output[255];
+				swprintf(output, 255, L"%s%S/%S/line:%d :\t%s\n", buffer.c_str(), fileName, functionName, lineNumber, message);
+				OutputDebugStringW(output);
 			}
 		}
 #else

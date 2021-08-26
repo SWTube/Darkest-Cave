@@ -4,11 +4,10 @@
  */
 
 #include "CoreTypes.h"
-#include "Device/DeviceResources.h"
 #include "Renderer/GenericRenderer.h"
 
 #ifdef __WIN32__
-import DdsTextureLoader;
+import DeviceResources;
 
 namespace cave
 {
@@ -32,7 +31,7 @@ namespace cave
 		void Destroy() override;
 
 	private:
-		void cleanupDevice();
+	
 
 		DirectX::XMMATRIX	mView = DirectX::XMMatrixIdentity();
 		DirectX::XMMATRIX	mProjection = DirectX::XMMatrixIdentity();

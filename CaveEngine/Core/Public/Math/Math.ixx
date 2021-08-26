@@ -11,7 +11,7 @@ module;
 
 #include "Assertion/Assert.h"
 
-export module Math;
+export module cave.Core.Math;
 
 import cave.Core.Containers.Array;
 
@@ -22,7 +22,8 @@ namespace cave
 	public:
 		static uint32_t GetFibonacciNumber(uint32_t number, uint32_t* cache, size_t size);
 		static uint32_t GetFibonacciNumberRecursive(uint32_t number, uint32_t* cache, size_t size);
-		static constexpr size_t GetMaxSizeType(size_t a, size_t b);
+		static FORCEINLINE constexpr size_t GetMaxSizeType(size_t x, size_t y);
+		static FORCEINLINE constexpr size_t GetMinSizeType(size_t x, size_t y);
 	};
 
 	uint32_t Math::GetFibonacciNumber(uint32_t number, uint32_t* cache, size_t size)
@@ -69,8 +70,17 @@ namespace cave
 		return ret;
 	}
 
-	constexpr size_t Math::GetMaxSizeType(size_t a, size_t b)
+	constexpr size_t Math::GetMaxSizeType(size_t x, size_t y)
 	{
-		return (a > b) ? a : b;
+		size_t a = x - y;
+
+		return (x - (a & (a >> (sizeof(size_t) * 8 - 1))));
+	}
+
+	constexpr size_t Math::GetMinSizeType(size_t x, size_t y)
+	{
+		size_t a = x - y;
+
+		return (x - (a & ~(a >> (sizeof(size_t) * 8 - 1))));
 	}
 }

@@ -10,9 +10,9 @@ module;
 #include "Containers/Node.h"
 #include "Debug/Log.h"
 
-export module DataBlock;
+export module cave.Core.Memory.DataBlock;
 
-import Memory;
+import cave.Core.Memory.Memory;
 
 namespace cave
 {

@@ -1,11 +1,12 @@
 module;
-
+#pragma warning(disable : 4061)
+#include <wincodec.h>
 #include <algorithm>
 #include <memory>
 
 #include "GraphicsApiPch.h"
 
-#include "CoreMinimal.h"
+#include "CoreTypes.h"
 #include "Assertion/Assert.h"
 
 #ifdef __clang__
