@@ -9,7 +9,7 @@ namespace cave
 {
 	StaticBody::StaticBody()
 	{
-		mBodyDef.type = b2_staticBody; // set bodyType to staticBody
+		SetType(ePhysicsBodyType::Static);
 	}
 	StaticBody::~StaticBody()
 	{

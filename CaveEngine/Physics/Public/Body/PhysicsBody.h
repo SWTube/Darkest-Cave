@@ -33,8 +33,21 @@ namespace cave
 
         b2Body* GetBody();
         void SetBody(b2Body* body);
+
+        b2Fixture* GetFixture();
+
+        b2Shape* GetShape();
+        void SetShape(); // TODO. change to Shape.h we made.
+
+        float GetDensity();
+        void SetDensity(float density);
+
+        float GetFriction();
+        void SetFriction(float friction);
     protected:
         b2BodyDef mBodyDef;
         b2Body* mBody;
+        b2FixtureDef mFixtureDef;
+        b2Fixture* mFixture;
     };
 };

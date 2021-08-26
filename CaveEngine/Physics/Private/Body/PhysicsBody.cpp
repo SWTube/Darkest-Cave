@@ -13,7 +13,7 @@ namespace cave
   }
   PhysicsBody::~PhysicsBody()
   {
-
+	  mBody->DestroyFixture(mFixture);
   }
   ePhysicsBodyType PhysicsBody::GetType()
   {
@@ -54,5 +54,41 @@ namespace cave
   }
   void PhysicsBody::SetBody(b2Body* body)
   {
+	  mBody = body;
+  }
+  b2Fixture* PhysicsBody::GetFixture()
+  {
+	  return mFixture;
+  }
+  float PhysicsBody::GetDensity()
+  {
+	  return mFixture->GetDensity();
+  }
+  b2Shape* PhysicsBody::GetShape()
+  {
+	  return mFixture->GetShape();
+  }
+  void PhysicsBody::SetShape()
+  {
+	  // TODO. temp code. change to Shape.h we made.
+	  b2PolygonShape s;
+	  s.SetAsBox(1.0f, 1.0f);
+	  mFixtureDef.shape = &s;
+	  mFixtureDef.density = 1.0f;
+	  mFixtureDef.friction = 0.5f;
+	  mFixture = mBody->CreateFixture(&mFixtureDef);
+  }
+  void PhysicsBody::SetDensity(float density)
+  {
+	  mFixture->SetDensity(density);
+	  mBody->ResetMassData();
+  }
+  float PhysicsBody::GetFriction()
+  {
+	  return mFixture->GetFriction();
+  }
+  void PhysicsBody::SetFriction(float friction)
+  {
+	  mFixture->SetFriction(friction);
   }
 }
