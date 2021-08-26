@@ -28,10 +28,6 @@ namespace cave
 	  else if (type == ePhysicsBodyType::Dynamic) mBodyDef.type = b2_dynamicBody;
 	  else if (type == ePhysicsBodyType::Kinematic) mBodyDef.type = b2_kinematicBody;
   }
-  ePhysicsBodyType PhysicsBody::GetType()
-  {
-	  return ePhysicsBodyType();
-  }
   b2Vec2 PhysicsBody::GetPosition()
   {
 	  return mBody->GetPosition();
