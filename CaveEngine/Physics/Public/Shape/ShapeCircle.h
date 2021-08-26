@@ -4,33 +4,21 @@
  */
 
 #pragma once
+
 #include "Physics.h"
 
 namespace cave
 {
-	enum class eShapeType
-	{
-		Polygon,
-		Circle,
-		Edge
-	};
-
-	class Shape
+	class ShapeCircle
 	{
 	public:
-		Shape() = delete;
+		ShapeCircle();
 
-		Shape(eShapeType shapeType);
-		
-		virtual ~Shape();
+		~ShapeCircle();
 
-		template <class T>
-		T& GetShape();
+		b2CircleShape& GetShape();
 
 	private:
-		eShapeType mShapeType;
-		b2PolygonShape mPolygonShape;
 		b2CircleShape mCircleShape;
-		b2EdgeShape mEdgeShape;
 	};
 }
