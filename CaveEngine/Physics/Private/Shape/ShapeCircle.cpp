@@ -10,7 +10,7 @@ namespace cave
 	ShapeCircle::ShapeCircle()
 	{
 		mCircleShape = b2CircleShape();
-
+		mCircleShape.m_radius = 1.f;
 	}
 
 	ShapeCircle::~ShapeCircle()

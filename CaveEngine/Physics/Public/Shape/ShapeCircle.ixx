@@ -3,13 +3,15 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 
-#pragma once
+module;
 
 #include "Physics.h"
 
+export module ShapeCircle;
+
 namespace cave
 {
-	class ShapeCircle final
+	export class ShapeCircle final
 	{
 	public:
 		ShapeCircle();
@@ -21,4 +23,20 @@ namespace cave
 	private:
 		b2CircleShape mCircleShape;
 	};
+
+	ShapeCircle::ShapeCircle()
+	{
+		mCircleShape = b2CircleShape();
+
+	}
+
+	ShapeCircle::~ShapeCircle()
+	{
+
+	}
+
+	b2CircleShape& ShapeCircle::GetShape()
+	{
+		return mCircleShape;
+	}
 }

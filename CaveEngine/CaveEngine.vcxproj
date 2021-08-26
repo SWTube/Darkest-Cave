@@ -299,6 +299,8 @@
     <ClInclude Include="Physics\Public\Body\RigidBody.h" />
     <ClInclude Include="Physics\Public\Body\StaticBody.h" />
     <ClInclude Include="Physics\Public\Physics.h" />
+    <ClInclude Include="Physics\Public\Shape\ShapeCircle.h" />
+    <ClInclude Include="Physics\Public\Shape\ShapePolygon.h" />
     <ClInclude Include="Physics\Public\World\PhysicsWorld.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
@@ -356,7 +358,11 @@
     <ClCompile Include="Physics\Private\Body\PhysicsBody.cpp" />
     <ClCompile Include="Physics\Private\Body\RigidBody.cpp" />
     <ClCompile Include="Physics\Private\Body\StaticBody.cpp" />
+    <ClCompile Include="Physics\Private\Shape\ShapeCircle.cpp" />
+    <ClCompile Include="Physics\Private\Shape\ShapePolygon.cpp" />
     <ClCompile Include="Physics\Private\World\PhysicsWorld.cpp" />
+    <ClCompile Include="Physics\Public\Shape\ShapeCircle.ixx" />
+    <ClCompile Include="Physics\Public\Shape\ShapePolygon.ixx" />
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
     <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />

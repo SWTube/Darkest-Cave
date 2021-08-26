@@ -190,6 +190,10 @@
     <ClCompile Include="Physics\Private\Body\RigidBody.cpp">
       <Filter>Source Files\Physics\Body</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\Private\Shape\ShapeCircle.cpp" />
+    <ClCompile Include="Physics\Private\Shape\ShapePolygon.cpp" />
+    <ClCompile Include="Physics\Public\Shape\ShapeCircle.ixx" />
+    <ClCompile Include="Physics\Public\Shape\ShapePolygon.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -393,6 +397,8 @@
     <ClInclude Include="Physics\Public\World\PhysicsWorld.h">
       <Filter>Header Files\Physics\World</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Public\Shape\ShapePolygon.h" />
+    <ClInclude Include="Physics\Public\Shape\ShapeCircle.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -587,6 +593,12 @@
     </Filter>
     <Filter Include="Source Files\Physics\World">
       <UniqueIdentifier>{defd66cd-0a0f-4071-8c45-ac7363dd6beb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics\Shape">
+      <UniqueIdentifier>{7f5478c8-70a0-4000-8a74-5b1eb37d6b89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\Shape">
+      <UniqueIdentifier>{42965685-04e1-4176-8cf1-ef462ee2aa57}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
