@@ -172,6 +172,9 @@
     <ClCompile Include="Core\Public\Types\Float.ixx">
       <Filter>Header Files\Core\Types</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Utils\FileSystem.ixx">
+      <Filter>Header Files\Core\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">

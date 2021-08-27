@@ -298,6 +298,7 @@
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
     <ClCompile Include="Core\Public\Types\Float.ixx" />
     <ClCompile Include="Core\Public\Types\Vertex.ixx" />
+    <ClCompile Include="Core\Public\Utils\FileSystem.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
