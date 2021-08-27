@@ -4,14 +4,26 @@
  */
 
 #pragma once
-
+#include <string>
 #include "GraphicsApiPch.h"
 
 #include "CoreTypes.h"
-#include "Device/DeviceResources.h"
-#include "Renderer/Camera.h"
-#include "Sprite/Sprite.h"
-#include "Shader/Shader.h"
+//#include "Device/DeviceResources.h"
+//#include "Renderer/Camera.h"
+#include "Containers/Vertex.h"
+//#include "Texture/Texture.h"
+//#include "Sprite/Sprite.h"
+//include "Sprite/AnimatedSprite.h"
+
+
+import DeviceResources;
+import Camera;
+import Shader;
+import TextureManager;
+import Texture;
+import BufferManager;
+import Sprite;
+import AnimatedSprite;
 
 namespace cave
 {
@@ -32,15 +44,13 @@ namespace cave
     	virtual void Render() = 0;
 		virtual void Destroy();
 
-		virtual eResult AddSprite(Sprite&& object);
+		virtual eResult AddSprite(Sprite* sprite);
 		virtual eResult AddSprite(const std::filesystem::path& filePath);
 		virtual eResult AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t frame, float duration, bool isLoof);
-		virtual eResult AddTexture(Texture&& texture);
-		virtual eResult AddTexture(const std::filesystem::path& filePath);
+		virtual eResult AddAnimatedSprite(const std::filesystem::path& filePath, std::string animationName, uint32_t row, uint32_t column, uint32_t frame, float duration, bool isLoof);
+
 		virtual eResult RemoveSprite(uint32_t index);
-		virtual eResult RemoveTexture(uint32_t index);
-		virtual void SetSpriteTexture(uint32_t index, uint32_t textureIndex);
-		virtual uint32_t GetSpriteTextureIndex(uint32_t index) const;
+
 		virtual void SetSpriteSize(uint32_t index, uint32_t width, uint32_t height);
 		virtual void SetSpritePosition(uint32_t index, Float2 position);
 		virtual void SetSpriteZIndex(uint32_t index, uint32_t z);
@@ -57,17 +67,14 @@ namespace cave
 
 		Camera* mCamera = nullptr;
 
-#ifdef __WIN32__
 		DirectX::XMMATRIX mProjection;
-#else
-		glm::mat4 mProjection = glm::mat4(1.0f);
-#endif
+
 		DeviceResources* mDeviceResources = nullptr;
+		BufferManager* mBufferManager = nullptr;
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 
 		std::vector<Sprite*> mSprites;
-		std::vector<Texture*> mTextures;
 		Shader* mShader;
 	};
 }

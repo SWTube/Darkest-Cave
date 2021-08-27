@@ -3,14 +3,31 @@
 namespace cave {
 
 	//가로로 쭉 이어진 스프라이트 시트라고 가정.
-	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t frameCount,eTextureFormat textureFormat, MemoryPool& pool)
+	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t frameCount, Padding padding, eTextureFormat textureFormat, MemoryPool& pool)
 		:Texture(device,filePath, textureFormat, pool)
 	{
 		mFrame = 0;
 		mFrameCount = frameCount;
 		mColumn = frameCount;
+		mPadding = padding;
 		mRow = 1;
-		mUVPerFrame = Float2(1.0f / float(frameCount), 1.0f);
+		mUVPerFrame = Float2(1.0f / static_cast<float>(frameCount), 1.0f);
+		mEndUV = mUVPerFrame;
+		mTotalWidth = mWidth;
+		mTotalHeight = mHeight;
+		mWidth *= mUVPerFrame.X;
+		mHeight *= mUVPerFrame.Y;
+	}
+
+	MultiTexture::MultiTexture(ID3D11Device* device, const std::filesystem::path& filePath, uint32_t row, uint32_t column, uint32_t frameCount, eTextureFormat textureFormat, MemoryPool& pool)
+		:Texture(device, filePath, textureFormat, pool)
+		,mFrame(0)
+		,mFrameCount(frameCount)
+		,mPadding(padding)
+		,mRow(row)
+		,mColumn(column)
+	{
+		mUVPerFrame = Float2(1.0f / static_cast<float>(column), 1.0f/ static_cast<float>(row));
 		mEndUV = mUVPerFrame;
 		mWidth *= mUVPerFrame.X;
 		mHeight *= mUVPerFrame.Y;
@@ -46,6 +63,7 @@ namespace cave {
 			mFrameCount = other.mFrameCount;
 			mColumn = other.mColumn;
 			mRow = other.mRow;
+			mPadding = other.mPadding;
 			mUVPerFrame = other.mUVPerFrame;
 		}
 		return *this;
@@ -60,6 +78,7 @@ namespace cave {
 			mFrameCount = other.mFrameCount;
 			mColumn = other.mColumn;
 			mRow = other.mRow;
+			mPadding = other.mPadding;
 			mUVPerFrame = other.mUVPerFrame;
 
 			other.Destroy();
@@ -73,14 +92,18 @@ namespace cave {
 		Destroy();
 	}
 
-	//void MultiTexture::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
-	//{
-	//	Texture::Init(device, deviceContext);
-	//	mWidth *= mUVPerFrame.X;
-	//	mHeight *= mUVPerFrame.Y;
-	//}
+	void MultiTexture::GetUVCoordsByFrame(uint32_t frame, Float2& startCoord, Float2& endCoord)
+	{
+		if (frame > mFrameCount) frame = mFrameCount;
 
-	void MultiTexture::SetFrame(int frame)
+		float u = int(frame % (mColumn)) * mUVPerFrame.X;
+		float v = int(frame / (mColumn)) % mRow * mUVPerFrame.Y;
+
+		startCoord = Float2(u, v);
+		endCoord = startCoord + mUVPerFrame;
+	}
+
+	void MultiTexture::SetFrame(uint32_t frame)
 	{
 		if (frame > mFrameCount) frame = mFrameCount;
 		mFrame = frame;

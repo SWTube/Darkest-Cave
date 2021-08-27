@@ -5,7 +5,7 @@
 
 #include "Containers/Node.h"
 
-import Memory;
+import cave.Core.Memory.Memory;
 
 namespace cave
 {

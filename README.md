@@ -13,11 +13,9 @@ Game Team develops the custom engine for the game, and the game application itse
 * [Alegruz](https://github.com/Alegruz) - Lead Game Engineer
 
 ### Graphics
-* [leeroun](https://github.com/leeroun) - Senior Graphics Engineer
-* [dnpcs12](https://github.com/dnpcs12) - Graphics Engineer
-* [mmindong](https://github.com/mmindoong) - Junior Graphics Engineer
+* [dnpcs12](https://github.com/dnpcs12) - Senior Graphics Engineer
 * [wpdudH](https://github.com/wpdudH) - Junior Graphics Engineer
-* [Nomad-Learner](https://github.com/Nomad-Learner) - Junior Graphics Engineer
+* [krishia](https://github.com/krishia) - Intern Graphics 
 
 ### Collision and Physics
 * [ThisIsSimple](https://github.com/ThisIsSimple) - Senior Physics Engineer

@@ -8,31 +8,29 @@ module;
 #include "CoreGlobals.h"
 #include "Memory/MemoryPool.h"
 
-export module LinkedList;
+export module cave.Core.Containers.LinkedList;
 
 import IteratorType;
-import Memory;
+import cave.Core.Memory.Memory;
 
 export namespace cave
 {
-	template<class ElementType>
+	
 	struct LinkedListNode {
-		ElementType mElement;
+		void* mElement;
 		LinkedListNode* mNext;
 		LinkedListNode* mPrev;
 	};
 
-	template<class ElementType>
 	class LinkedList;
-
-	template<class ElementType>
+	
 	class LinkedListConstIterator
 	{
 	public:
-		friend LinkedList<ElementType>;
+		friend class LinkedList;
 
 		constexpr LinkedListConstIterator();
-		constexpr LinkedListConstIterator(LinkedList<ElementType>& container, size_t startIndex = 0);
+		constexpr LinkedListConstIterator(LinkedList& container, size_t startIndex);
 		constexpr LinkedListConstIterator(const LinkedListConstIterator& other);
 
 		constexpr LinkedListConstIterator& operator=(const LinkedListConstIterator& other);
@@ -43,30 +41,30 @@ export namespace cave
 		constexpr LinkedListConstIterator& operator--();
 		constexpr LinkedListConstIterator operator--(int);
 
-		constexpr const ElementType& operator*();
+		constexpr const void* operator*();
 
 		constexpr bool operator==(const LinkedListConstIterator& other);
 		constexpr bool operator!=(const LinkedListConstIterator& other);
 	protected:
-		constexpr LinkedListConstIterator(LinkedListNode<ElementType>* node);
+		constexpr LinkedListConstIterator(LinkedListNode* node);
 
 	private:
-		LinkedListNode<ElementType>* mNode;
+		LinkedListNode* mNode;
 	};
 
-	template<class ElementType>
-	class LinkedListIterator : public LinkedListConstIterator<ElementType>
+	
+	class LinkedListIterator final : public LinkedListConstIterator
 	{
 	public:
-		friend LinkedList<ElementType>;
+		friend class LinkedList;
 
-		using Base = LinkedListConstIterator<ElementType>;
+		using Base = LinkedListConstIterator;
 
 		constexpr LinkedListIterator();
-		constexpr LinkedListIterator(LinkedList<ElementType>& container, size_t startIndex = 0);
-		constexpr LinkedListIterator(const LinkedListConstIterator<ElementType>& other);
+		constexpr LinkedListIterator(LinkedList& container, size_t startIndex);
+		constexpr LinkedListIterator(const LinkedListConstIterator& other);
 
-		constexpr LinkedListIterator& operator=(const LinkedListConstIterator<ElementType>& other);
+		constexpr LinkedListIterator& operator=(const LinkedListConstIterator& other);
 
 		constexpr LinkedListIterator& operator++();
 		constexpr LinkedListIterator operator++(int);
@@ -74,34 +72,28 @@ export namespace cave
 		constexpr LinkedListIterator& operator--();
 		constexpr LinkedListIterator operator--(int);
 
-		constexpr ElementType& operator*();
+		constexpr void* operator*();
 
 	protected:
-		constexpr LinkedListIterator(LinkedListNode<ElementType>* node);
+		constexpr LinkedListIterator(LinkedListNode* node);
 	};
 
-	template<class ElementType>
+	
 	class LinkedList final
 	{
 	public:
-		using ConstIterator = LinkedListConstIterator<ElementType>;
-		using Iterator = LinkedListIterator<ElementType>;
+		using ConstIterator = LinkedListConstIterator;
+		using Iterator = LinkedListIterator;
 
-		constexpr LinkedList();
-		constexpr LinkedList(MemoryPool& pool);
-		constexpr LinkedList(size_t count, const ElementType& element);
-		constexpr LinkedList(size_t count, const ElementType& element, MemoryPool& pool);
-		template<class IteratorType>
-		requires IteratorInputAble<IteratorType, ElementType>
-		constexpr LinkedList(IteratorType first, IteratorType last);
-		template<class IteratorType>
-		requires IteratorInputAble<IteratorType, ElementType>
-		constexpr LinkedList(IteratorType first, IteratorType last, MemoryPool& pool);
-		constexpr LinkedList(const LinkedList& other);
-		constexpr LinkedList(const LinkedList& other, MemoryPool& pool);
-		constexpr LinkedList(LinkedList&& other);
-		constexpr LinkedList(std::initializer_list<ElementType> init);
-		constexpr LinkedList(std::initializer_list<ElementType> init, MemoryPool& pool);
+		LinkedList();
+		LinkedList(MemoryPool& pool);
+		LinkedList(size_t count, void* item);
+		LinkedList(size_t count, void* item, MemoryPool& pool);
+		LinkedList(const LinkedList& other);
+		LinkedList(const LinkedList& other, MemoryPool& pool);
+		LinkedList(LinkedList&& other);
+		LinkedList(std::initializer_list<void*> initializerList);
+		LinkedList(std::initializer_list<void*> initializerList, MemoryPool& pool);
 
 		constexpr LinkedList& operator=(const LinkedList& other);
 		constexpr LinkedList& operator=(LinkedList&& other);
@@ -110,14 +102,30 @@ export namespace cave
 		constexpr bool operator!=(const LinkedList& other);
 
 		~LinkedList();
+		
+		constexpr void Clear();
+
+		constexpr void Swap(LinkedList& other);
+
+		Iterator Insert(ConstIterator position, void* item);
+		Iterator Insert(ConstIterator position, size_t count, void* item);
+
+		Iterator Delete(ConstIterator position);
+		Iterator Delete(ConstIterator first, ConstIterator last);
+
+		void InsertFront(void* item);
+		void InsertBack(void* item);
+
+		void DeleteFront();
+		void DeleteBack();
 
 		constexpr bool IsEmpty() const;
 
-		constexpr ElementType& GetFront();
-		constexpr const ElementType& GetFront() const;
+		constexpr void* GetFront();
+		constexpr const void* GetFront() const;
 
-		constexpr ElementType& GetBack();
-		constexpr const ElementType& GetBack() const;
+		constexpr void* GetBack();
+		constexpr const void* GetBack() const;
 
 		constexpr size_t GetSize() const;
 		constexpr size_t GetMaxSize() const;
@@ -125,35 +133,19 @@ export namespace cave
 		constexpr Iterator begin();
 		constexpr Iterator end();
 
+		constexpr ConstIterator cbegin();
+		constexpr ConstIterator cend();
+
 		constexpr Iterator GetBeginIterator();
 		constexpr Iterator GetEndIterator();
 
 		constexpr ConstIterator GetBeginConstIterator();
 		constexpr ConstIterator GetEndConstIterator();
-		
-		constexpr void Clear();
-
-		constexpr Iterator Insert(ConstIterator position, const ElementType& element);
-		constexpr Iterator Insert(ConstIterator position, size_t count, const ElementType& element);
-		template<class IteratorType>
-		requires IteratorInputAble<IteratorType, ElementType>
-		constexpr Iterator Insert(ConstIterator position, IteratorType first, IteratorType last);
-
-		constexpr Iterator Delete(ConstIterator position);
-		constexpr Iterator Delete(ConstIterator first, ConstIterator last);
-
-		constexpr void InsertFront(const ElementType& element);
-		constexpr void InsertBack(const ElementType& element);
-
-		constexpr void DeleteFront();
-		constexpr void DeleteBack();
-
-		constexpr void Swap(LinkedList& other);
 
 	private:
 		MemoryPool* mPool;
-		LinkedListNode<ElementType>* mHead;
-		LinkedListNode<ElementType>* mTail;
+		LinkedListNode* mHead;
+		LinkedListNode* mTail;
 		size_t mSize;
 	};
 
@@ -163,13 +155,13 @@ export namespace cave
 	* 
 	*/
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType>::LinkedListConstIterator()
+	
+	constexpr LinkedListConstIterator::LinkedListConstIterator()
 		: mNode(nullptr)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType>::LinkedListConstIterator(LinkedList<ElementType>& container, size_t startIndex)
+	
+	constexpr LinkedListConstIterator::LinkedListConstIterator(LinkedList& container, size_t startIndex)
 	{
 		mNode = container.GetBeginIterator().mNode;
 
@@ -179,34 +171,34 @@ export namespace cave
 		}
 	}
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType>::LinkedListConstIterator(LinkedListNode<ElementType>* node)
+	
+	constexpr LinkedListConstIterator::LinkedListConstIterator(LinkedListNode* node)
 		: mNode(node)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType>::LinkedListConstIterator(const LinkedListConstIterator& other)
+	
+	constexpr LinkedListConstIterator::LinkedListConstIterator(const LinkedListConstIterator& other)
 		: mNode(other.mNode)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType>& LinkedListConstIterator<ElementType>::operator=(const LinkedListConstIterator& other)
+	
+	constexpr LinkedListConstIterator& LinkedListConstIterator::operator=(const LinkedListConstIterator& other)
 	{
 		mNode = other.mNode;
 
 		return *this;
 	}
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType>& LinkedListConstIterator<ElementType>::operator++()
+	
+	constexpr LinkedListConstIterator& LinkedListConstIterator::operator++()
 	{
 		mNode = mNode->mNext;
 
 		return *this;
 	}
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType> LinkedListConstIterator<ElementType>::operator++(int)
+	
+	constexpr LinkedListConstIterator LinkedListConstIterator::operator++(int)
 	{
 		LinkedListConstIterator returnIterator = *this;
 		mNode = mNode->mNext;
@@ -214,16 +206,16 @@ export namespace cave
 		return returnIterator;
 	}
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType>& LinkedListConstIterator<ElementType>::operator--()
+	
+	constexpr LinkedListConstIterator& LinkedListConstIterator::operator--()
 	{
 		mNode = mNode->mPrev;
 
 		return *this;
 	}
 
-	template<class ElementType>
-	constexpr LinkedListConstIterator<ElementType> LinkedListConstIterator<ElementType>::operator--(int)
+	
+	constexpr LinkedListConstIterator LinkedListConstIterator::operator--(int)
 	{
 		LinkedListConstIterator returnIterator = *this;
 		mNode = mNode->mPrev;
@@ -231,20 +223,20 @@ export namespace cave
 		return returnIterator;
 	}
 
-	template<class ElementType>
-	constexpr const ElementType& LinkedListConstIterator<ElementType>::operator*()
+	
+	constexpr const void* LinkedListConstIterator::operator*()
 	{
 		return mNode->mElement;
 	}
 
-	template<class ElementType>
-	constexpr bool LinkedListConstIterator<ElementType>::operator==(const LinkedListConstIterator& other)
+	
+	constexpr bool LinkedListConstIterator::operator==(const LinkedListConstIterator& other)
 	{
 		return mNode == other.mNode;
 	}
 
-	template<class ElementType>
-	constexpr bool LinkedListConstIterator<ElementType>::operator!=(const LinkedListConstIterator& other)
+	
+	constexpr bool LinkedListConstIterator::operator!=(const LinkedListConstIterator& other)
 	{
 		return mNode != other.mNode;
 	}
@@ -255,44 +247,44 @@ export namespace cave
 	*
 	*/
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType>::LinkedListIterator()
+	
+	constexpr LinkedListIterator::LinkedListIterator()
 		: Base()
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType>::LinkedListIterator(LinkedList<ElementType>& container, size_t startIndex)
+	
+	constexpr LinkedListIterator::LinkedListIterator(LinkedList& container, size_t startIndex)
 		: Base(container, startIndex)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType>::LinkedListIterator(LinkedListNode<ElementType>* node)
+	
+	constexpr LinkedListIterator::LinkedListIterator(LinkedListNode* node)
 		: Base(node)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType>::LinkedListIterator(const LinkedListConstIterator<ElementType>& other)
+	
+	constexpr LinkedListIterator::LinkedListIterator(const LinkedListConstIterator& other)
 		: Base(other)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType>& LinkedListIterator<ElementType>::operator=(const LinkedListConstIterator<ElementType>& other)
+	
+	constexpr LinkedListIterator& LinkedListIterator::operator=(const LinkedListConstIterator& other)
 	{
 		Base::operator=(other);
 
 		return *this;
 	}
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType>& LinkedListIterator<ElementType>::operator++()
+	
+	constexpr LinkedListIterator& LinkedListIterator::operator++()
 	{
 		Base::operator++();
 
 		return *this;
 	}
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType> LinkedListIterator<ElementType>::operator++(int)
+	
+	constexpr LinkedListIterator LinkedListIterator::operator++(int)
 	{
 		LinkedListConstIterator returnIterator = *this;
 		Base::operator++();
@@ -300,16 +292,16 @@ export namespace cave
 		return returnIterator;
 	}
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType>& LinkedListIterator<ElementType>::operator--()
+	
+	constexpr LinkedListIterator& LinkedListIterator::operator--()
 	{
 		Base::operator--();
 
 		return *this;
 	}
 
-	template<class ElementType>
-	constexpr LinkedListIterator<ElementType> LinkedListIterator<ElementType>::operator--(int)
+	
+	constexpr LinkedListIterator LinkedListIterator::operator--(int)
 	{
 		LinkedListConstIterator returnIterator = *this;
 		Base::operator--();
@@ -317,10 +309,10 @@ export namespace cave
 		return returnIterator;
 	}
 
-	template<class ElementType>
-	constexpr ElementType& LinkedListIterator<ElementType>::operator*()
+	
+	constexpr void* LinkedListIterator::operator*()
 	{
-		return const_cast<ElementType&>(Base::operator*());
+		return const_cast<void*>(Base::operator*());
 	}
 
 	/*
@@ -329,16 +321,15 @@ export namespace cave
 	*
 	*/
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList()
+	
+	LinkedList::LinkedList()
 		: LinkedList(gCoreMemoryPool)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(MemoryPool& pool)
+	LinkedList::LinkedList(MemoryPool& pool)
 		: mPool(&pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mHead(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
+		, mTail(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
 		, mSize(0)
 	{
 		mHead->mNext = mTail;
@@ -348,28 +339,26 @@ export namespace cave
 		mTail->mNext = nullptr;
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(size_t count, const ElementType& element)
-		: LinkedList(count, element, gCoreMemoryPool)
+	LinkedList::LinkedList(size_t count, void* item)
+		: LinkedList(count, item, gCoreMemoryPool)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(size_t count, const ElementType& element, MemoryPool& pool)
+	LinkedList::LinkedList(size_t count, void* item, MemoryPool& pool)
 		: mPool(&pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mHead(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
+		, mTail(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
 		, mSize(count)
 	{
 		mHead->mPrev = nullptr;
 		mTail->mNext = nullptr;
 
-		LinkedListNode<ElementType>* prevNode = mHead;
+		LinkedListNode* prevNode = mHead;
 
 		for (size_t i = 0; i < count; ++i)
 		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode* newNode = reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode)));
 
-			newNode->mElement = element;
+			newNode->mElement = item;
 
 			newNode->mPrev = prevNode;
 			prevNode->mNext = newNode;
@@ -381,68 +370,27 @@ export namespace cave
 		prevNode->mNext = mTail;
 	}
 
-	template<class ElementType>
-	template<class IteratorType>
-	requires IteratorInputAble<IteratorType, ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(IteratorType first, IteratorType last)
-		: LinkedList(first, last, gCoreMemoryPool)
-	{ }
-
-	template<class ElementType>
-	template<class IteratorType>
-	requires IteratorInputAble<IteratorType, ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(IteratorType first, IteratorType last, MemoryPool& pool)
-		: mPool(&pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mSize(0)
-	{
-		mHead->mPrev = nullptr;
-		mTail->mNext = nullptr;
-
-		LinkedListNode<ElementType>* prevNode = mHead;
-
-		for (auto iterator = first; iterator != last; ++iterator)
-		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
-
-			newNode->mElement = *iterator;
-
-			newNode->mPrev = prevNode;
-			prevNode->mNext = newNode;
-
-			prevNode = newNode;
-
-			++mSize;
-		}
-
-		mTail->mPrev = prevNode;
-		prevNode->mNext = mTail;
-	}
-
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(const LinkedList& other)
+	LinkedList::LinkedList(const LinkedList& other)
 		: LinkedList(other, gCoreMemoryPool)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(const LinkedList& other, MemoryPool& pool)
+	LinkedList::LinkedList(const LinkedList& other, MemoryPool& pool)
 		: mPool(&pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mHead(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
+		, mTail(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
 		, mSize(other.mSize)
 	{
 		mHead->mPrev = nullptr;
 		mTail->mNext = nullptr;
 
-		LinkedListNode<ElementType>* otherNode = other.mHead;
-		LinkedListNode<ElementType>* prevNode = mHead;
+		LinkedListNode* otherNode = other.mHead;
+		LinkedListNode* prevNode = mHead;
 
 		while (otherNode->mNext != other.mTail)
 		{
 			otherNode = otherNode->mNext;
 
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode* newNode = reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode)));
 			
 			newNode->mElement = otherNode->mElement;
 
@@ -456,11 +404,10 @@ export namespace cave
 		prevNode->mNext = mTail;
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(LinkedList&& other)
+	LinkedList::LinkedList(LinkedList&& other)
 		: mPool(other.mPool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mHead(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
+		, mTail(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
 		, mSize(other.mSize)
 	{
 		mHead->mNext = other.mHead->mNext;
@@ -473,26 +420,25 @@ export namespace cave
 		other.mTail->mPrev = other.mHead;
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(std::initializer_list<ElementType> init)
-		: LinkedList(init, gCoreMemoryPool)
+	LinkedList::LinkedList(std::initializer_list<void*> initializerList)
+		: LinkedList(initializerList, gCoreMemoryPool)
 	{ }
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::LinkedList(std::initializer_list<ElementType> init, MemoryPool& pool)
+	
+	LinkedList::LinkedList(std::initializer_list<void*> initializerList, MemoryPool& pool)
 		: mPool(&pool)
-		, mHead(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
-		, mTail(reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>))))
+		, mHead(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
+		, mTail(reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode))))
 		, mSize(0)
 	{
 		mHead->mPrev = nullptr;
 		mTail->mNext = nullptr;
 
-		LinkedListNode<ElementType>* prevNode = mHead;
+		LinkedListNode* prevNode = mHead;
 
-		for (auto iterator = init.begin(); iterator != init.end(); ++iterator)
+		for (auto iterator = initializerList.begin(); iterator != initializerList.end(); ++iterator)
 		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode* newNode = reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode)));
 			
 			newNode->mElement = *iterator;
 
@@ -508,13 +454,13 @@ export namespace cave
 		prevNode->mNext = mTail;
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>& LinkedList<ElementType>::operator=(const LinkedList& other)
+	
+	constexpr LinkedList& LinkedList::operator=(const LinkedList& other)
 	{
 		if (*this != other)
 		{
-			LinkedListNode<ElementType>* setElementNode = mHead;
-			LinkedListNode<ElementType>* getElementNode = other.mHead;
+			LinkedListNode* setElementNode = mHead;
+			LinkedListNode* getElementNode = other.mHead;
 
 			while (setElementNode->mNext != mTail && getElementNode->mNext != other.mTail)
 			{
@@ -526,13 +472,13 @@ export namespace cave
 
 			if (setElementNode->mNext != mTail)
 			{
-				LinkedListNode<ElementType>* tempNode = setElementNode;
+				LinkedListNode* tempNode = setElementNode;
 
 				setElementNode = setElementNode->mNext;
 
 				while (setElementNode != mTail)
 				{
-					mPool->Deallocate(setElementNode, sizeof(LinkedListNode<ElementType>));
+					mPool->Deallocate(setElementNode, sizeof(LinkedListNode));
 					setElementNode = setElementNode->mNext;
 				}
 
@@ -545,7 +491,7 @@ export namespace cave
 				{
 					getElementNode = getElementNode->mNext;
 
-					LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
+					LinkedListNode* newNode = reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode)));
 
 					newNode->mElement = getElementNode->mElement;
 
@@ -565,8 +511,8 @@ export namespace cave
 		return *this;
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>& LinkedList<ElementType>::operator=(LinkedList&& other)
+	
+	constexpr LinkedList& LinkedList::operator=(LinkedList&& other)
 	{
 		if (*this != other)
 		{
@@ -576,128 +522,139 @@ export namespace cave
 		return *this;
 	}
 
-	template<class ElementType>
-	constexpr bool LinkedList<ElementType>::operator==(const LinkedList& other)
+	
+	constexpr bool LinkedList::operator==(const LinkedList& other)
 	{
 		return (mHead == other.mHead);
 	}
 
-	template<class ElementType>
-	constexpr bool LinkedList<ElementType>::operator!=(const LinkedList& other)
+	
+	constexpr bool LinkedList::operator!=(const LinkedList& other)
 	{
 		return (mHead != other.mHead);
 	}
 
-	template<class ElementType>
-	LinkedList<ElementType>::~LinkedList()
+	
+	LinkedList::~LinkedList()
 	{
-		LinkedListNode<ElementType>* tempNode;
+		LinkedListNode* tempNode;
 
 		while (mHead != mTail)
 		{
 			tempNode = mHead;
 			mHead = mHead->mNext;
-			mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+			mPool->Deallocate(tempNode, sizeof(LinkedListNode));
 		}
 
-		mPool->Deallocate(mTail, sizeof(LinkedListNode<ElementType>));
+		mPool->Deallocate(mTail, sizeof(LinkedListNode));
 	}
 
-	template<class ElementType>
-	constexpr bool LinkedList<ElementType>::IsEmpty() const
+	
+	constexpr bool LinkedList::IsEmpty() const
 	{
 		return (mHead->mNext == mTail);
 	}
 
-	template<class ElementType>
-	constexpr ElementType& LinkedList<ElementType>::GetFront()
+	
+	constexpr void* LinkedList::GetFront()
 	{
 		assert(!IsEmpty());
 
 		return mHead->mNext->mElement;
 	}
 
-	template<class ElementType>
-	constexpr const ElementType& LinkedList<ElementType>::GetFront() const
+	
+	constexpr const void* LinkedList::GetFront() const
 	{
 		assert(!IsEmpty());
 
 		return mHead->mNext->mElement;
 	}
 
-	template<class ElementType>
-	constexpr ElementType& LinkedList<ElementType>::GetBack()
+	
+	constexpr void* LinkedList::GetBack()
 	{
 		assert(!IsEmpty());
 
 		return mTail->mPrev->mElement;
 	}
 
-	template<class ElementType>
-	constexpr const ElementType& LinkedList<ElementType>::GetBack() const
+	
+	constexpr const void* LinkedList::GetBack() const
 	{
 		assert(!IsEmpty());
 
 		return mTail->mPrev->mElement;
 	}
 
-	template<class ElementType>
-	constexpr size_t LinkedList<ElementType>::GetSize() const
+	
+	constexpr size_t LinkedList::GetSize() const
 	{
 		return mSize;
 	}
 
-	template<class ElementType>
-	constexpr size_t LinkedList<ElementType>::GetMaxSize() const
+	
+	constexpr size_t LinkedList::GetMaxSize() const
 	{
-		return mPool->GetFreeMemorySize() / sizeof(ElementType);
+		return mPool->GetFreeMemorySize() / sizeof(void*);
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::begin()
-	{
-		return Iterator(mHead->mNext);
-	}
-
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::end()
-	{
-		return Iterator(mTail);
-	}
-
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::GetBeginIterator()
+	
+	constexpr LinkedList::Iterator LinkedList::begin()
 	{
 		return Iterator(mHead->mNext);
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::GetEndIterator()
+	
+	constexpr LinkedList::Iterator LinkedList::end()
 	{
 		return Iterator(mTail);
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::ConstIterator LinkedList<ElementType>::GetBeginConstIterator()
+	constexpr LinkedList::ConstIterator LinkedList::cbegin()
+	{
+		return Iterator(mHead->mNext);
+	}
+
+
+	constexpr LinkedList::ConstIterator LinkedList::cend()
+	{
+		return Iterator(mTail);
+	}
+
+	
+	constexpr LinkedList::Iterator LinkedList::GetBeginIterator()
+	{
+		return Iterator(mHead->mNext);
+	}
+
+	
+	constexpr LinkedList::Iterator LinkedList::GetEndIterator()
+	{
+		return Iterator(mTail);
+	}
+
+	
+	constexpr LinkedList::ConstIterator LinkedList::GetBeginConstIterator()
 	{
 		return ConstIterator(mHead->mNext);
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::ConstIterator LinkedList<ElementType>::GetEndConstIterator()
+	
+	constexpr LinkedList::ConstIterator LinkedList::GetEndConstIterator()
 	{
 		return ConstIterator(mTail);
 	}
 
-	template<class ElementType>
-	constexpr void LinkedList<ElementType>::Clear()
+	
+	constexpr void LinkedList::Clear()
 	{
 		while (mHead->mNext != mTail)
 		{
-			LinkedListNode<ElementType>* tempNode = mHead->mNext;
+			LinkedListNode* tempNode = mHead->mNext;
 			mHead->mNext = mHead->mNext->mNext;
 
-			mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+			mPool->Deallocate(tempNode, sizeof(LinkedListNode));
 		}
 
 		mSize = 0;
@@ -705,13 +662,13 @@ export namespace cave
 		mTail->mPrev = mHead;
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::Insert(ConstIterator position, const ElementType& element)
+	
+	LinkedList::Iterator LinkedList::Insert(ConstIterator position, void* element)
 	{
 		assert(position.mNode != mHead);
 
-		LinkedListNode<ElementType>* positionNode = position.mNode;
-		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
+		LinkedListNode* positionNode = position.mNode;
+		LinkedListNode* newNode = reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode)));
 		
 		newNode->mElement = element;
 
@@ -726,8 +683,8 @@ export namespace cave
 		return Iterator(newNode);
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::Insert(ConstIterator position, size_t count, const ElementType& element)
+	
+	LinkedList::Iterator LinkedList::Insert(ConstIterator position, size_t count, void* element)
 	{
 		assert(position.mNode != mHead);
 
@@ -736,12 +693,12 @@ export namespace cave
 			return Iterator(position);
 		}
 
-		LinkedListNode<ElementType>* prevNode = position.mNode->mPrev;
+		LinkedListNode* prevNode = position.mNode->mPrev;
 		Iterator returnIterator(prevNode);
 
 		for (size_t i = 0; i < count; ++i)
 		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
+			LinkedListNode* newNode = reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode)));
 			
 			newNode->mElement = element;
 
@@ -759,43 +716,8 @@ export namespace cave
 		return ++returnIterator;
 	}
 
-	template<class ElementType>
-	template<class IteratorType>
-	requires IteratorInputAble<IteratorType, ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::Insert(ConstIterator position, IteratorType first, IteratorType last)
-	{
-		assert(position.mNode != mHead);
-
-		if (first == last)
-		{
-			return Iterator(position);
-		}
-
-		LinkedListNode<ElementType>* prevNode = position.mNode->mPrev;
-		Iterator returnIterator(prevNode);
-
-		for (auto iterator = first; iterator != last; ++iterator)
-		{
-			LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
-			
-			newNode->mElement = *iterator;
-
-			prevNode->mNext = newNode;
-			newNode->mPrev = prevNode;
-
-			prevNode = newNode;
-
-			++mSize;
-		}
-
-		prevNode->mNext = position.mNode;
-		position.mNode->mPrev = prevNode;
-
-		return ++returnIterator;
-	}
-
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::Delete(ConstIterator position)
+	
+	LinkedList::Iterator LinkedList::Delete(ConstIterator position)
 	{
 		assert(position.mNode != mHead);
 		assert(position.mNode != mTail);
@@ -805,18 +727,18 @@ export namespace cave
 		position.mNode->mNext->mPrev = position.mNode->mPrev;
 		position.mNode->mPrev->mNext = position.mNode->mNext;
 
-		mPool->Deallocate(position.mNode, sizeof(LinkedListNode<ElementType>));
+		mPool->Deallocate(position.mNode, sizeof(LinkedListNode));
 		--mSize;
 		
 		return returnIterator;
 	}
 
-	template<class ElementType>
-	constexpr LinkedList<ElementType>::Iterator LinkedList<ElementType>::Delete(ConstIterator first, ConstIterator last)
+	
+	LinkedList::Iterator LinkedList::Delete(ConstIterator first, ConstIterator last)
 	{
 		assert(first.mNode != mHead);
 
-		LinkedListNode<ElementType>* deleteNode = first.mNode;
+		LinkedListNode* deleteNode = first.mNode;
 
 		Iterator returnIterator(first.mNode->mPrev);
 
@@ -825,10 +747,10 @@ export namespace cave
 
 		while (deleteNode != last.mNode)
 		{
-			LinkedListNode<ElementType>* tempNode = deleteNode;
+			LinkedListNode* tempNode = deleteNode;
 			deleteNode = deleteNode->mNext;
 
-			mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+			mPool->Deallocate(tempNode, sizeof(LinkedListNode));
 
 			--mSize;
 		}
@@ -836,12 +758,12 @@ export namespace cave
 		return returnIterator;
 	}
 
-	template<class ElementType>
-	constexpr void LinkedList<ElementType>::InsertFront(const ElementType& element)
+	
+	void LinkedList::InsertFront(void* item)
 	{
-		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
+		LinkedListNode* newNode = reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode)));
 		
-		newNode->mElement = element;
+		newNode->mElement = item;
 
 		mHead->mNext->mPrev = newNode;
 		newNode->mNext = mHead->mNext;
@@ -852,12 +774,12 @@ export namespace cave
 		++mSize;
 	}
 
-	template<class ElementType>
-	constexpr void LinkedList<ElementType>::InsertBack(const ElementType& element)
+	
+	void LinkedList::InsertBack(void* item)
 	{
-		LinkedListNode<ElementType>* newNode = reinterpret_cast<LinkedListNode<ElementType>*>(mPool->Allocate(sizeof(LinkedListNode<ElementType>)));
+		LinkedListNode* newNode = reinterpret_cast<LinkedListNode*>(mPool->Allocate(sizeof(LinkedListNode)));
 		
-		newNode->mElement = element;
+		newNode->mElement = item;
 
 		mTail->mPrev->mNext = newNode;
 		newNode->mPrev = mTail->mPrev;
@@ -868,41 +790,41 @@ export namespace cave
 		++mSize;
 	}
 	
-	template<class ElementType>
-	constexpr void LinkedList<ElementType>::DeleteFront()
+	
+	void LinkedList::DeleteFront()
 	{
 		assert(!IsEmpty());
 
-		LinkedListNode<ElementType>* tempNode = mHead->mNext;
+		LinkedListNode* tempNode = mHead->mNext;
 
 		mHead->mNext->mNext->mPrev = mHead;
 		mHead->mNext = mHead->mNext->mNext;
 
-		mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+		mPool->Deallocate(tempNode, sizeof(LinkedListNode));
 
 		--mSize;
 	}
 
-	template<class ElementType>
-	constexpr void LinkedList<ElementType>::DeleteBack()
+	
+	void LinkedList::DeleteBack()
 	{
 		assert(!IsEmpty());
 
-		LinkedListNode<ElementType>* tempNode = mTail->mPrev;
+		LinkedListNode* tempNode = mTail->mPrev;
 
 		mTail->mPrev->mPrev->mNext = mTail;
 		mTail->mPrev = mTail->mPrev->mPrev;
 
-		mPool->Deallocate(tempNode, sizeof(LinkedListNode<ElementType>));
+		mPool->Deallocate(tempNode, sizeof(LinkedListNode));
 
 		--mSize;
 	}
 
-	template<class ElementType>
-	constexpr void LinkedList<ElementType>::Swap(LinkedList& other)
+	
+	constexpr void LinkedList::Swap(LinkedList& other)
 	{
-		LinkedListNode<ElementType>* tempHead = mHead;
-		LinkedListNode<ElementType>* tempTail = mTail;
+		LinkedListNode* tempHead = mHead;
+		LinkedListNode* tempTail = mTail;
 		size_t tempSize = mSize;
 
 		mHead = other.mHead;

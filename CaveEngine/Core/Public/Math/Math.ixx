@@ -5,14 +5,18 @@
 
 module;
 
+#include <concepts>
 #include <cstdlib>
 #include <ctime>
 
 #include "CoreTypes.h"
 
+#include "Assertion/Assert.h"
 #include "Debug/Log.h"
-	
-export module Math;
+
+export module cave.Core.Math;
+
+import cave.Core.Containers.Array;
 
 constexpr float EPSILON = 0.000001;
 constexpr float PI = 3.141592;
@@ -25,8 +29,13 @@ constexpr float RAD_TO_DEG = 57.2958;
 
 namespace cave
 {
-	export class Math final
+	export class Math
 	{
+	public:
+		static uint32_t GetFibonacciNumber(uint32_t number, uint32_t* cache, size_t size);
+		static uint32_t GetFibonacciNumberRecursive(uint32_t number, uint32_t* cache, size_t size);
+		static FORCEINLINE constexpr size_t GetMaxSizeType(size_t x, size_t y);
+		static FORCEINLINE constexpr size_t GetMinSizeType(size_t x, size_t y);
 	public:
 		static int32_t RecursiveFactorial(int32_t number);
 
@@ -37,15 +46,15 @@ namespace cave
 		static float ArcSin(float angle);
 		static float ArcCos(float angle);
 		static float ArcTan(float angle);
-		
+
 		// Ceiling & Floor functions
 		static int32_t Ceil(float value);
 		static int32_t Floor(float value);
-		
+
 		static float Exp(float value);
 		static float Abs(float value);
 		static float Mod(float numerator, float denominator);
-		
+
 		static float Pow(float base, int32_t exponent);
 
 		// Square root & Inverse Square root
@@ -152,11 +161,11 @@ namespace cave
 		return value >= 0 ? value : -value;
 	}
 
-	float Math::Mod(float numerator, float denominator)	
+	float Math::Mod(float numerator, float denominator)
 	{
 		return (numerator - (denominator * static_cast<int32_t>(numerator / denominator)));
 	}
-		
+
 	float Math::Pow(float base, int32_t exponent)
 	{
 		float result = 1.f;
@@ -242,6 +251,64 @@ namespace cave
 		}
 	}
 
+	uint32_t Math::GetFibonacciNumber(uint32_t number, uint32_t* cache, size_t size)
+	{
+		assert(number <= size);
+
+		if (cache[0] != 0u)
+		{
+			cache[0] = 0u;
+		}
+
+		if (cache[1] == 0u)
+		{
+			cache[1] = 0u;
+		}
+
+		for (uint32_t i = 2u; i <= number; ++i)
+		{
+			cache[i] = cache[i - 2] + cache[i - 1];
+		}
+
+		return cache[number];
+	}
+
+	uint32_t Math::GetFibonacciNumberRecursive(uint32_t number, uint32_t* cache, size_t size)
+	{
+		assert(number <= size);
+
+		if (number <= 1u)
+		{
+			return number;
+		}
+
+		if (cache[number] != 0u)
+		{
+			return cache[number];
+		}
+
+		uint32_t ret = GetFibonacciNumberRecursive(number - 2u, cache, size)
+			+ GetFibonacciNumberRecursive(number - 1u, cache, size);
+
+		cache[number] = ret;
+
+		return ret;
+	}
+
+	constexpr size_t Math::GetMaxSizeType(size_t x, size_t y)
+	{
+		size_t a = x - y;
+
+		return (x - (a & (a >> (sizeof(size_t) * 8 - 1))));
+	}
+
+	constexpr size_t Math::GetMinSizeType(size_t x, size_t y)
+	{
+		size_t a = x - y;
+
+		return (x - (a & ~(a >> (sizeof(size_t) * 8 - 1))));
+	}
+
 	export namespace MathTest
 	{
 		void Main()
@@ -252,7 +319,7 @@ namespace cave
 
 			for (uint32_t i = 0; i < 10; ++i)
 			{
-				float num = static_cast<float>((rand() - rand())/ 100.f);
+				float num = static_cast<float>((rand() - rand()) / 100.f);
 				float num_2 = static_cast<float>((rand() - rand()) / 100.f);
 				int32_t expo = rand() % 10;
 

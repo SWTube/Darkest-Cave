@@ -18,13 +18,11 @@
 #include "tictoc.h"
 
 #include "CoreGlobals.h"
-#include "CoreMinimal.h"
 
 #include "Engine.h"
 #include "Object/TagPool.h"
 #include "Shapes/Quadrant.h"
-#include "Sprite/Sprite.h"
-#include "Containers/Vertex.h"
+#include "KeyboardInput/KeyboardInput.h"
 
 #if _DEBUG
 //#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -36,16 +34,20 @@ void MemoryTest1(cave::MemoryPool& pool);
 template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool);
 void RenderTest();
+void KeyboardTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 
 #ifdef __WIN32__
-import Hash;
-import Log;
-import Math;
-import Stack;
-import String;
-import Trie;
+import cave.Core.Containers.Array;
+import cave.Core.Containers.Hash;
+import cave.Core.Containers.HashTable;
+import cave.Core.Math;
+import cave.Core.Containers.Stack;
+import cave.Core.String;
+import cave.Core.Utils.FileSystem;
+// import KeyboardInput;
+import Renderer;
 
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -108,33 +110,43 @@ int main(int32_t argc, char** argv)
 
 #ifdef CAVE_BUILD_DEBUG
 	TicTocTimer clock = tic();
-	// cave::MemoryPoolTest::Test();
-	// cave::StackTest::Test<int>();
-	//  RenderTest();
-	// cave::TagPoolTest::Test();
-	cave::Hashable<>::Initialize();
-	cave::String hello = "hello";
+	cave::FileSystemTest::Main();
+	//RenderTest();
+	//cave::StringTest::Main();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
 
-	cave::TrieTest::Main();
-	cave::QuadrantTest::Main();
-	
-	cave::MathTest::Main();
+	//clock = tic();
+	//cave::WStringTest::Main();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "WString Test: Elapsed time %f seconds.", toc(&clock));
 
-	clock = tic();
-	LOGDF(cave::eLogChannel::CORE_CONTAINER, "hash of hello: 0x%x", hello.GetHash());
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	//KeyboardTest();
 
-	clock = tic();
-	cave::StackTest::Main();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	//clock = tic();
+	//cave::StackTest::Main();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
-	clock = tic();
-	cave::StackTest::ComparisonOperator();
-	LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+	//clock = tic();
+	//cave::HashTableTest::Main();
+	//cave::HashTable hashTable(sizeof(uint32_t));
+	//uint32_t keys[256];
+	//uint32_t values[256];
+	//srand(time(nullptr));
+
+	//double averageInsertionTime = 0.0;
+	//for (uint32_t i = 0u; i < 256u; ++i)
+	//{
+	//	keys[i] = i;
+	//	values[i] = static_cast<uint32_t>(rand());
+	//	clock = tic();
+	//	hashTable.Insert(&keys[i], &values[i]);
+	//	double insertionTime = toc(&clock);
+	//	LOGDF(cave::eLogChannel::CORE_TIMER, "%3u: HashTable Insert elapsed time %lf seconds.", i, insertionTime);
+	//	averageInsertionTime += insertionTime;
+	//}
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "HashTable Insert average elapsed time %lf seconds.", averageInsertionTime / 256.0);
 	// _CrtDumpMemoryLeaks();
 
 #endif
-
 	// Cleanup is handled in destructors.
     return 0;
 }
@@ -259,15 +271,6 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 
-
-	cave::Renderer* renderer = main.GetRenderer();
-
-	renderer->AddSprite("orange_mushroom.png");
-
-	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
-	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
-	renderer->SetSpritePosition(2, cave::Float2(500, 200));
-	//renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
 	
 	if (result == cave::eResult::CAVE_OK)
 	{
@@ -278,8 +281,19 @@ void RenderTest()
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
 	// 	// Run the program.
-	// 	result = main.Run();
+	 	result = main.Run();
 	}
 
 	main.Destroy();
+}
+
+void KeyboardTest()
+{
+	char ch = CAVE_BACKSPACE;
+
+	switch (ch)
+	{
+		case CAVE_BACKSPACE:
+			LOGD(cave::eLogChannel::CORE, "Key Code : 0x%x", cave::eKeyCode::CAVE_BACKSPACE);
+	}
 }
