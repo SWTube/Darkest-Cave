@@ -184,6 +184,9 @@
     <ClCompile Include="Core\Public\Containers\Stack.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Math\Math.ixx">
+      <Filter>Header Files\Core\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Core.h">
@@ -548,6 +551,9 @@
     </Filter>
     <Filter Include="Header Files\Core\KeyboardInput">
       <UniqueIdentifier>{8b16aa60-7040-4797-8b91-69daedd00bc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Math">
+      <UniqueIdentifier>{4187e7e0-7a62-4b15-8fc7-aed0af67c341}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

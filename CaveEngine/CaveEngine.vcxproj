@@ -323,6 +323,7 @@
     <ClCompile Include="Core\Public\Containers\TreeNode.ixx" />
     <ClCompile Include="Core\Public\Containers\Trie.ixx" />
     <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx" />
+    <ClCompile Include="Core\Public\Math\Math.ixx" />
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
     <ClCompile Include="Core\Public\Memory\Memory.ixx" />
     <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx" />
