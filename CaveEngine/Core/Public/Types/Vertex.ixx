@@ -13,14 +13,14 @@ import cave.Core.Types.Float;
 
 namespace cave
 {
-	export extern constexpr uint32_t VERTEX_POSITION = 0b001;
-	export extern constexpr uint32_t VERTEX_TEXCOORD = 0b010;
-	export extern constexpr uint32_t VERTEX_COLOR = 0b100;
+	//export extern constexpr uint32_t VERTEX_POSITION = 0b001;
+	//export extern constexpr uint32_t VERTEX_TEXCOORD = 0b010;
+	//export extern constexpr uint32_t VERTEX_COLOR = 0b100;
+
+	//constexpr uint32_t GetVertexSize(uint32_t vertexFlag);
 
 	export class Vertex
 	{
-	protected:
-		uint32_t VertexFlag = VERTEX_POSITION;
 	public:
 		Float3 Position = Float3(0.0f, 0.0f, 0.0f);
 
@@ -33,7 +33,7 @@ namespace cave
 		constexpr Vertex(float* array);
 		constexpr Vertex(const Float3& array);
 		constexpr Vertex(Float3&& array);
-		constexpr uint32_t GetSize() const;
+		//virtual constexpr uint32_t GetSize() const;
 
 		constexpr bool operator==(const Vertex& rhs) const;
 	};
@@ -52,6 +52,7 @@ namespace cave
 		constexpr VertexT(float* array);
 		constexpr VertexT(const Float3& position, const Float2& texCoord);
 		constexpr VertexT(Float3&& position, Float2&& texCoord);
+		//virtual constexpr uint32_t GetSize() const override;
 	};
 
 	export class VertexTC : public VertexT
@@ -68,6 +69,24 @@ namespace cave
 		constexpr VertexTC(float* array);
 		constexpr VertexTC(const Float3& position, const Float2& texCoord, const Float4& color);
 		constexpr VertexTC(Float3&& position, Float2&& texCoord, Float4&& color);
+		//virtual constexpr uint32_t GetSize() const override;
+	};
+
+	export class VertexC : public Vertex
+	{
+	public:
+		Float4 Color = Float4(0.0f, 0.0f, 0.0f, 0.0f);
+
+		VertexC();
+		VertexC(const VertexC& other);
+		VertexC& operator=(const VertexC& other);
+		constexpr VertexC(VertexC&& other) noexcept;
+		constexpr VertexC& operator=(VertexC&& other) noexcept;
+		constexpr VertexC(float posX, float posY, float posZ, float red, float green, float blue, float alpha);
+		constexpr VertexC(float* array);
+		constexpr VertexC(const Float3& position, const Float4& color);
+		constexpr VertexC(Float3&& position, Float4&& color);
+		//virtual constexpr uint32_t GetSize() const override;
 	};
 
 	constexpr Vertex& Vertex::operator=(Vertex&& other) noexcept
@@ -108,46 +127,44 @@ namespace cave
 	{
 	}
 
-	constexpr uint32_t Vertex::GetSize() const
-	{
-		uint32_t size = 0u;
-		if (VertexFlag & VERTEX_POSITION)
-		{
-			size += 3u;
-		}
+	//constexpr uint32_t Vertex::GetSize() const
+	//{
+	//	uint32_t size = 0u;
+	//	if (VertexFlag & VERTEX_POSITION)
+	//	{
+	//		size += 3u;
+	//	}
 
-		if (VertexFlag & VERTEX_TEXCOORD)
-		{
-			size += 2u;
-		}
+	//	if (VertexFlag & VERTEX_TEXCOORD)
+	//	{
+	//		size += 2u;
+	//	}
 
-		size = size * sizeof(float) + sizeof(VertexFlag);
+	//	size = size * sizeof(float) + sizeof(VertexFlag);
 
-		if (size | 0b10 || size | 0b01)
-		{
-			size &= ~(0b11);
-			size += 0b100;
-		}
+	//	if (size | 0b10 || size | 0b01)
+	//	{
+	//		size &= ~(0b11);
+	//		size += 0b100;
+	//	}
 
-		return size;
-	}
+	//	return size;
+	//}
 
 	constexpr bool Vertex::operator==(const Vertex& rhs) const
 	{
-		return (Position == rhs.Position) && (VertexFlag == rhs.VertexFlag);
+		return (Position == rhs.Position);
 	}
 
 	VertexT::VertexT()
 		: Vertex()
 	{
-		VertexFlag |= VERTEX_TEXCOORD;
 	}
 
 	VertexT::VertexT(const VertexT& other)
 		: Vertex(other)
 		, TexCoord(other.TexCoord)
 	{
-		VertexFlag |= VERTEX_TEXCOORD;
 	}
 
 	VertexT& VertexT::operator=(const VertexT& other)
@@ -156,7 +173,6 @@ namespace cave
 		{
 			Vertex::operator=(other);
 			TexCoord = other.TexCoord;
-			VertexFlag |= VERTEX_TEXCOORD;
 		}
 
 		return *this;
@@ -168,7 +184,6 @@ namespace cave
 		{
 			Position = other.Position;
 			TexCoord = other.TexCoord;
-			VertexFlag |= VERTEX_TEXCOORD;
 		}
 	}
 
@@ -178,7 +193,6 @@ namespace cave
 		{
 			Position = other.Position;
 			TexCoord = other.TexCoord;
-			VertexFlag |= VERTEX_TEXCOORD;
 		}
 
 		return *this;
@@ -188,41 +202,35 @@ namespace cave
 		: Vertex(array)
 		, TexCoord(Float2(array[3], array[4]))
 	{
-		VertexFlag |= VERTEX_TEXCOORD;
 	}
 
 	constexpr VertexT::VertexT(const Float3& position, const Float2& texCoord)
 		: Vertex(position)
 		, TexCoord(texCoord)
 	{
-		VertexFlag |= VERTEX_TEXCOORD;
 	}
 
 	constexpr VertexT::VertexT(Float3&& position, Float2&& texCoord)
 		: Vertex(std::move(position))
 		, TexCoord(std::move(texCoord))
 	{
-		VertexFlag |= VERTEX_TEXCOORD;
 	}
 
 	constexpr VertexT::VertexT(float posX, float posY, float posZ, float texX, float texY)
 		: Vertex(posX, posY, posZ)
 		, TexCoord(Float2(texX, texY))
 	{
-		VertexFlag |= VERTEX_TEXCOORD;
 	}
 
 	VertexTC::VertexTC()
 		: VertexT()
 	{
-		VertexFlag |= VERTEX_COLOR;
 	}
 
 	VertexTC::VertexTC(const VertexTC& other)
 		: VertexT(other)
 		, Color(other.Color)
 	{
-		VertexFlag |= VERTEX_COLOR;
 	}
 
 	VertexTC& VertexTC::operator=(const VertexTC& other)
@@ -231,7 +239,6 @@ namespace cave
 		{
 			VertexT::operator=(other);
 			Color = other.Color;
-			VertexFlag |= VERTEX_COLOR;
 		}
 
 		return *this;
@@ -241,7 +248,6 @@ namespace cave
 		: VertexT(std::move(other))
 		, Color(std::move(other.Color))
 	{
-		VertexFlag |= VERTEX_COLOR;
 	}
 
 	constexpr VertexTC& VertexTC::operator=(VertexTC&& other) noexcept
@@ -251,7 +257,6 @@ namespace cave
 			VertexT::operator=(std::move(other));
 
 			Color = std::move(other.Color);
-			VertexFlag |= VERTEX_COLOR;
 		}
 
 		return *this;
@@ -261,27 +266,89 @@ namespace cave
 		: VertexT(posX, posY, posZ, texX, texY)
 		, Color(red, green, blue, alpha)
 	{
-		VertexFlag |= VERTEX_COLOR;
 	}
 
 	constexpr VertexTC::VertexTC(float* array)
 		: VertexT(array)
 		, Color(array[5], array[6], array[7], array[8])
 	{
-		VertexFlag |= VERTEX_COLOR;
 	}
 
 	constexpr VertexTC::VertexTC(const Float3& position, const Float2& texCoord, const Float4& color)
 		: VertexT(position, texCoord)
 		, Color(color)
 	{
-		VertexFlag |= VERTEX_COLOR;
 	}
 
 	constexpr VertexTC::VertexTC(Float3&& position, Float2&& texCoord, Float4&& color)
 		: VertexT(std::move(position), std::move(texCoord))
 		, Color(std::move(color))
 	{
-		VertexFlag |= VERTEX_COLOR;
+	}
+
+	VertexC::VertexC()
+		: Vertex()
+	{
+	}
+
+	VertexC::VertexC(const VertexC& other)
+		: Vertex(other)
+		, Color(other.Color)
+	{
+	}
+
+	VertexC& VertexC::operator=(const VertexC& other)
+	{
+		if (this != &other)
+		{
+			Vertex::operator=(other);
+			Color = other.Color;
+		}
+
+		return *this;
+	}
+
+	constexpr VertexC::VertexC(VertexC&& other) noexcept
+	{
+		if (this != &other)
+		{
+			Position = other.Position;
+			Color = other.Color;
+		}
+	}
+
+	constexpr VertexC& VertexC::operator=(VertexC&& other) noexcept
+	{
+		if (this != &other)
+		{
+			Position = other.Position;
+			Color = other.Color;
+		}
+
+		return *this;
+	}
+
+	constexpr VertexC::VertexC(float* array)
+		: Vertex(array)
+		, Color(array[3], array[4], array[5], array[6])
+	{
+	}
+
+	constexpr VertexC::VertexC(const Float3& position, const Float4& color)
+		: Vertex(position)
+		, Color(color)
+	{
+	}
+
+	constexpr VertexC::VertexC(Float3&& position, Float4&& color)
+		: Vertex(std::move(position))
+		, Color(std::move(Color))
+	{
+	}
+
+	constexpr VertexC::VertexC(float posX, float posY, float posZ, float red, float green, float blue, float alpha)
+		: Vertex(posX, posY, posZ)
+		, Color(red, green, blue, alpha)
+	{
 	}
 } // namespace cave

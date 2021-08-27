@@ -210,8 +210,7 @@ namespace cave
 				.SemanticIndex = 0,
 				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
 				.InputSlot = 0,
-				//.AlignedByteOffset = 0,
-				.AlignedByteOffset = sizeof(uint32_t),
+				.AlignedByteOffset = 0,
 				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
 				.InstanceDataStepRate = 0
 			},
