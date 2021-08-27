@@ -7,9 +7,10 @@
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
 #include "Memory/MemoryPool.h"
-#include "Sprite/Sprite.h"
 
 export module Shader;
+
+import Sprite;
 
 namespace cave
 {

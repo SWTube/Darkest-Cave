@@ -8,12 +8,14 @@ module;
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
 //#include "Texture/Texture.h"
 
 export module Renderable;
+
 export import RenderQueue;
 
+import cave.Core.Types.Float;
+import cave.Core.Types.Vertex;
 
 namespace cave 
 {
