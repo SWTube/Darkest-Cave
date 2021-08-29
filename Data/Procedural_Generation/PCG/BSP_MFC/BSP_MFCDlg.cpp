@@ -1,4 +1,4 @@
-﻿
+
 // BSP_MFCDlg.cpp: 구현 파일
 //
 
@@ -105,8 +105,8 @@ void CBSPMFCDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// BSP
 	// 전체 맵 크기
-	int maxHeight = 40;
-	int maxWidth = 150;
+	int maxHeight = 600;
+	int maxWidth = 600;
 
 	// 초기 맵 설정
 	int** map = new int* [maxHeight];
@@ -128,71 +128,45 @@ void CBSPMFCDlg::OnLButtonUp(UINT nFlags, CPoint point)
 	root.setRoot(map, maxHeight, maxWidth);
 
 	// 맵 제작
-	root.devide_col(map);
-	root.goLeftNode()->devide_row(map);
-	root.goRightNode()->devide_row(map);
-	root.goLeftNode()->goLeftNode()->devide_col(map);
-	root.goLeftNode()->goRightNode()->devide_col(map);
-	root.goRightNode()->goLeftNode()->devide_col(map);
-	root.goRightNode()->goRightNode()->devide_col(map);
-	root.goRightNode()->goRightNode()->goRightNode()->devide_row(map);
-
-
-	root.goLeftNode()->goLeftNode()->goLeftNode()->allocateRoom(map);
-	root.goLeftNode()->goLeftNode()->goRightNode()->allocateRoom(map);
-	root.goLeftNode()->goRightNode()->goLeftNode()->allocateRoom(map);
-	root.goLeftNode()->goRightNode()->goRightNode()->allocateRoom(map);
-	root.goRightNode()->goLeftNode()->goLeftNode()->allocateRoom(map);
-	root.goRightNode()->goLeftNode()->goRightNode()->allocateRoom(map);
-	root.goRightNode()->goRightNode()->goLeftNode()->allocateRoom(map);
-	root.goRightNode()->goRightNode()->goRightNode()->goLeftNode()->allocateRoom(map);
-	root.goRightNode()->goRightNode()->goRightNode()->goRightNode()->allocateRoom(map);
-
-	root.connectRoom(map, root.goLeftNode()->goLeftNode()->goLeftNode(), root.goLeftNode()->goLeftNode()->goRightNode());
-	root.connectRoom(map, root.goLeftNode()->goRightNode()->goLeftNode(), root.goLeftNode()->goRightNode()->goRightNode());
-	root.connectRoom(map, root.goRightNode()->goLeftNode()->goLeftNode(), root.goRightNode()->goLeftNode()->goRightNode());
-	root.connectRoom(map, root.goRightNode()->goRightNode()->goRightNode()->goLeftNode(), root.goRightNode()->goRightNode()->goRightNode()->goRightNode());
-
-	root.connectRoom_Y(map, root.goLeftNode()->goLeftNode()->goLeftNode(), root.goLeftNode()->goRightNode()->goLeftNode());
-	root.connectRoom_Y(map, root.goRightNode()->goLeftNode()->goLeftNode(), root.goRightNode()->goRightNode()->goLeftNode());
-	root.connectRoom_X(map, root.goRightNode()->goRightNode()->goLeftNode(), root.goRightNode()->goRightNode()->goRightNode()->goLeftNode());
-	root.connectRoom_X(map, root.goLeftNode()->goLeftNode()->goRightNode(), root.goRightNode()->goLeftNode()->goLeftNode());
+	root.devide(map, 128);
 
 
 	CClientDC dc(this); //DC생성
-    CPen my_pen(PS_SOLID, 1, RGB(0, 0, 255)); // 굵기가 5인 팬을 생성한다.
-    dc.SelectObject(&my_pen); //  생성한 팬을 DC에 연결한다.
-    SelectObject(dc, GetStockObject(NULL_BRUSH)); // 안이 투명한 도형을 그려주기 위해 NULL브러쉬를 만든다.
- 
-    if (nFlags & MK_CONTROL) // 컨트롤키가 눌려졌을때 
-    {
-        dc.Ellipse(rect_start_pos.x, rect_start_pos.y, point.x, point.y); // 원을 그려준다.
-    }
- 
-    else { // 컨트롤키가 눌려지지 않았을때
-        //dc.Rectangle(rect_start_pos.x, rect_start_pos.y, point.x, point.y); // 사각형을 그려준다.
+	CPen my_pen(PS_SOLID, 1, RGB(0, 0, 255)); // 굵기가 5인 팬을 생성한다.
+	dc.SelectObject(&my_pen); //  생성한 팬을 DC에 연결한다.
+	SelectObject(dc, GetStockObject(NULL_BRUSH)); // 안이 투명한 도형을 그려주기 위해 NULL브러쉬를 만든다.
 
-		
+	if (nFlags & MK_CONTROL) // 컨트롤키가 눌려졌을때 
+	{
+		dc.Ellipse(rect_start_pos.x, rect_start_pos.y, point.x, point.y); // 원을 그려준다.
+	}
+
+	else { // 컨트롤키가 눌려지지 않았을때
+		//dc.Rectangle(rect_start_pos.x, rect_start_pos.y, point.x, point.y); // 사각형을 그려준다.
+
+
 		for (int i = 0; i < maxHeight; i++) {
 			for (int j = 0; j < maxWidth; j++) {
 				if (map[i][j] == 1) {
-					dc.SetPixelV(i, j, RGB(255, 0, 0));
+					//dc.SetPixelV(i, j, RGB(255, 0, 0));
 				}
 				else if (map[i][j] == 2) {
 					dc.SetPixelV(i, j, RGB(0, 0, 255));
 				}
 				else if (map[i][j] == 3) {
 					dc.SetPixelV(i, j, RGB(0, 255, 0));
+					dc.SetPixelV(i + 1, j + 1, RGB(0, 255, 0));
+					dc.SetPixelV(i - 1, j - 1, RGB(0, 255, 0));
 				}
 			}
 		}
-		
+
 		/*
 		dc.Rectangle(root.getX(), root.getY(), (root.getX() + root.getWidth()) * 3, (root.getY() + root.getHeight()) * 6);
 		dc.Rectangle(root.goLeftNode()->getX(), root.goLeftNode()->getY(), (root.goLeftNode()->getX() + root.goLeftNode()->getWidth()) * 3, (root.goLeftNode()->getY() + root.goLeftNode()->getHeight()) * 6);
 		dc.Rectangle(root.goRightNode()->getX(), root.goRightNode()->getY(), (root.goRightNode()->getX() + root.goRightNode()->getWidth()) * 3, (root.goRightNode()->getY() + root.goRightNode()->getHeight()) * 6);
 		*/
-    }
+	}
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
 	CDialogEx::OnLButtonUp(nFlags, point);
