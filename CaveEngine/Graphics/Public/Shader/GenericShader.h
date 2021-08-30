@@ -9,8 +9,8 @@
 
 #include "GraphicsApiPch.h"
 
-#include "CoreGlobals.h"
 #include "CoreTypes.h"
+#include "CoreGlobals.h"
 #include "Memory/MemoryPool.h"
 #include "Sprite/Sprite.h"
 

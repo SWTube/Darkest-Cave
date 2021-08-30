@@ -5,13 +5,12 @@
 
 
 #include <math.h>
-#include <time.h>
 
 #include "CoreTypes.h"
 
 #include "Debug/Log.h"
 
-export module RandomNumberGenerator;
+export module cave.Core.RandomNumberGenerator;
 
 namespace cave
 {

@@ -103,7 +103,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;dwrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -240,88 +240,54 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
-    <ClInclude Include="Core\Public\Containers\Array.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
-    <ClInclude Include="Core\Public\Containers\Hash.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
-    <ClInclude Include="Core\Public\Containers\TStack.h" />
-    <ClInclude Include="Core\Public\Containers\Vertex.h" />
-    <ClInclude Include="Core\Public\Core.h" />
-    <ClInclude Include="Core\Public\CoreFwd.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
-    <ClInclude Include="Core\Public\CoreMinimal.h" />
-    <ClInclude Include="Core\Public\CorePch.h" />
     <ClInclude Include="Core\Public\CoreTypes.h" />
     <ClInclude Include="Core\Public\Debug\Log.h">
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
-    <ClInclude Include="Core\Public\Memory\DataBlock.h" />
+    <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h" />
     <ClInclude Include="Core\Public\Math\Vector2.h" />
-    <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\Shapes\Quadrant.h" />
-    <ClInclude Include="Core\Public\String\String.h" />
     <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
     <ClInclude Include="Core\Public\Utils\Defines.h" />
     <ClInclude Include="Engine\Public\Engine.h" />
     <ClInclude Include="Engine\Public\GenericEngine.h" />
-    <ClInclude Include="Engine\Public\UnixEngine.h" />
     <ClInclude Include="Engine\Public\WindowsEngine.h" />
     <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
     <ClInclude Include="Gameplay\Public\World\Level.h" />
     <ClInclude Include="Gameplay\Public\World\World.h" />
-    <ClInclude Include="Graphics\Public\Device\DeviceResources.h" />
-    <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h" />
-    <ClInclude Include="Graphics\Public\Device\GenericWindow.h" />
-    <ClInclude Include="Graphics\Public\Device\Window.h" />
-    <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h" />
-    <ClInclude Include="Graphics\Public\Device\WindowsWindow.h" />
     <ClInclude Include="Gameplay\Public\Game.h" />
     <ClInclude Include="Gameplay\Public\Object\Script.h" />
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
     <ClInclude Include="Gameplay\Public\Object\Tag.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
-    <ClInclude Include="Graphics\Public\Graphics.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
-    <ClInclude Include="Graphics\Public\Renderer\Camera.h" />
-    <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h" />
-    <ClInclude Include="Graphics\Public\Renderer\Renderer.h" />
-    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h" />
-    <ClInclude Include="Graphics\Public\Shader\GenericShader.h" />
-    <ClInclude Include="Graphics\Public\Shader\Shader.h" />
-    <ClInclude Include="Graphics\Public\Shader\WindowsShader.h" />
-    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h" />
-    <ClInclude Include="Graphics\Public\Sprite\GenericSprite.h" />
-    <ClInclude Include="Graphics\Public\Sprite\Sprite.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
-    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
-    <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
-    <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Private\Containers\Array.cpp" />
-    <ClCompile Include="Core\Private\Containers\Hash.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
-    <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
-    <ClCompile Include="Core\Private\Memory\DataBlock.cpp" />
-    <ClCompile Include="Core\Private\Memory\Memory.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
-    <ClCompile Include="Core\Private\String\String.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
-    <ClCompile Include="Core\Public\Containers\GraphNode.ixx" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
-    <ClCompile Include="Core\Public\Containers\Matrix.ixx" />
-    <ClCompile Include="Core\Public\Containers\TreeNode.ixx" />
-    <ClCompile Include="Core\Public\Containers\Trie.ixx" />
+    <ClCompile Include="Core\Public\Containers\Array.ixx" />
+    <ClCompile Include="Core\Public\Containers\HashTable.ixx" />
+    <ClCompile Include="Core\Public\Containers\LinkedList.ixx" />
+    <ClCompile Include="Core\Public\Containers\Pair.ixx" />
+    <ClCompile Include="Core\Public\Containers\Stack.ixx" />
+    <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx" />
+    <ClCompile Include="Core\Public\Math\Math.ixx" />
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx" />
     <ClCompile Include="Core\Public\Memory\Memory.ixx" />
     <ClCompile Include="Core\Public\Random\RandomNumberGenerator.ixx" />
@@ -331,29 +297,31 @@
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
+    <ClCompile Include="Core\Public\Types\Float.ixx" />
+    <ClCompile Include="Core\Public\Types\Vertex.ixx" />
+    <ClCompile Include="Core\Public\Utils\FileSystem.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
     <ClCompile Include="Gameplay\Private\World\Level.cpp" />
     <ClCompile Include="Gameplay\Private\World\World.cpp" />
-    <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp" />
-    <ClCompile Include="Graphics\Private\Device\GenericDeviceResources.cpp" />
-    <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp" />
-    <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp" />
-    <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp" />
-    <ClCompile Include="Graphics\Private\Renderer\Camera.cpp" />
-    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp" />
-    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp" />
-    <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp" />
-    <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp" />
-    <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
-    <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp" />
+    <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
+    <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
+    <ClCompile Include="Graphics\Public\Device\Window.ixx" />
+    <ClCompile Include="Graphics\Public\Renderer\Camera.ixx" />
+    <ClCompile Include="Graphics\Public\Renderer\Renderable.ixx" />
+    <ClCompile Include="Graphics\Public\Renderer\Renderer.ixx" />
+    <ClCompile Include="Graphics\Public\Renderer\RenderQueue.ixx" />
+    <ClCompile Include="Graphics\Public\Shader\Shader.ixx" />
+    <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
+    <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx" />
+    <ClCompile Include="Graphics\Public\UI\Text.ixx" />
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
-    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
-    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
     <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx" />
-    <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
+    <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />
+    <ClCompile Include="ResourceManager\Public\Texture\Texture.ixx" />
+    <ClCompile Include="ResourceManager\Public\Texture\TextureManager.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\WicTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
     <ClCompile Include="ThirdParty\tictoc\src\tictoc.c" />

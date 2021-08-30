@@ -37,19 +37,13 @@ namespace cave
 		constexpr const Float3& GetRotation() const;
 
 		void Render();
-#ifdef __WIN32__
+
 		constexpr const DirectX::XMMATRIX& GetViewMatrix() const;
-#else
-		constexpr const glm::mat4& GetViewMatrix() const;
-#endif
+
 	private:
 		Float3 mPosition = Float3(0.0f, 0.0f, 0.0f);
 		Float3 mRotation = Float3(0.0f, 0.0f, 0.0f);
-#ifdef __WIN32__
 		DirectX::XMMATRIX mView = DirectX::XMMatrixIdentity();
-#else
-		glm::mat4 mView  = glm::mat4(1.0f);
-#endif
 	};
 
 	constexpr void Camera::SetPosition(float x, float y, float z)

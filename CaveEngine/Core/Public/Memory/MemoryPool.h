@@ -12,8 +12,8 @@
 #include "Assertion/Assert.h"
 #include "Debug/Log.h"
 
-import DataBlock;
-import Memory;
+import cave.Core.Memory.DataBlock;
+import cave.Core.Memory.Memory;
 
 namespace cave
 {
