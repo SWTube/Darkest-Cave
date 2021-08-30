@@ -15,5 +15,14 @@ namespace cave
     public:
         RigidBody();
         ~RigidBody();
+
+        void ApplyForce(const b2Vec2& force, const b2Vec2& point = nullptr);
+        void ApplyTorque(float torque);
+        void ApplyLinearImpulse(b2Vec2 impulse, b2Vec2 point);
+        void ApplyAngularImpulse(float impulse);
+
+        void SetGravityScale(float gravityScale);
+        void SetFixedRotation(bool fixedRotation);
+        void SetAsBullet(bool isBullet);
     };
 };

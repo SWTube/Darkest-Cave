@@ -15,4 +15,8 @@ namespace cave
 	{
 
 	}
+	void RigidBody::ApplyForce(b2Vec2 force, b2Vec2 point)
+	{
+		mBody->ApplyForce(force, mBody->GetWorldCenter(), mBody->IsAwake());
+	}
 }

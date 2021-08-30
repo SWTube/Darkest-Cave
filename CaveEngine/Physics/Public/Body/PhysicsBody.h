@@ -44,6 +44,11 @@ namespace cave
 
         float GetFriction();
         void SetFriction(float friction);
+
+        void SetAllowSleep(bool allowSleep);
+
+        bool IsAwake();
+        void SetAwake(bool awake);
     protected:
         b2BodyDef mBodyDef;
         b2Body* mBody;

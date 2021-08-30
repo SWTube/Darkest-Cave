@@ -87,4 +87,16 @@ namespace cave
   {
 	  mFixture->SetFriction(friction);
   }
+  void PhysicsBody::SetAllowSleep(bool allowSleep)
+  {
+	  mBodyDef.allowSleep = allowSleep;
+  }
+  bool PhysicsBody::IsAwake()
+  {
+	  return mBody->IsAwake();
+  }
+  void PhysicsBody::SetAwake(bool awake)
+  {
+	  mBody->SetAwake(awake);
+  }
 }
