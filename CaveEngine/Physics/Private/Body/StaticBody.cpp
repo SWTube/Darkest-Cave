@@ -9,7 +9,7 @@ namespace cave
 {
 	StaticBody::StaticBody()
 	{
-		SetType(ePhysicsBodyType::Static);
+		SetType(ePhysicsType::Static);
 	}
 	StaticBody::~StaticBody()
 	{

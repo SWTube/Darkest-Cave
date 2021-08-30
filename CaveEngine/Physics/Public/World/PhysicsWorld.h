@@ -19,7 +19,7 @@ namespace cave
         void SetGravity(b2Vec2 gravity);
         b2Vec2 GetGravity();
 
-        void AddPhysicsObject(PhysicsBody* physicsBody);
+        void AddChild(PhysicsBody* physicsBody);
 
         void Update(float step, float velocityIterations, float positionIterations);
     private:

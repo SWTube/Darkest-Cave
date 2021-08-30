@@ -23,9 +23,11 @@ namespace cave
 	{
 		return mWorld->GetGravity();
 	}
-	void PhysicsWorld::AddPhysicsObject(PhysicsBody* physicsBody)
+	void PhysicsWorld::AddChild(PhysicsBody* physicsBody)
 	{
-		physicsBody->SetBody(mWorld->CreateBody(physicsBody->GetBodyDef()));
+		auto body = mWorld->CreateBody(physicsBody->GetBodyDef());
+		physicsBody->SetBody(body);
+		physicsBody->CreateFixture();
 	}
 	void PhysicsWorld::Update(float step, float velocityIterations, float positionIterations)
 	{

@@ -9,7 +9,7 @@
 
 namespace cave
 {
-    enum class ePhysicsBodyType
+    enum class ePhysicsType
     {
         Static,
         Dynamic,
@@ -20,21 +20,32 @@ namespace cave
     {
     public:
         PhysicsBody();
+        PhysicsBody(ePhysicsType type);
         ~PhysicsBody();
 
-        ePhysicsBodyType GetType();
-        void SetType(ePhysicsBodyType type);
+        ePhysicsType GetType();
+        void SetType(ePhysicsType type);
+
+        b2Transform GetTransform();
+        void SetTransform(b2Vec2 position, float angle);
 
         b2Vec2 GetPosition();
         void SetPosition(float x, float y);
         void SetPosition(b2Vec2 position);
+
+        float GetAngle();
+        void SetAngle(float angle);
 
         b2BodyDef* GetBodyDef();
 
         b2Body* GetBody();
         void SetBody(b2Body* body);
 
+        b2FixtureDef GetFixtureDef();
+
         b2Fixture* GetFixture();
+        void SetFixture(b2Fixture* fixture);
+        void CreateFixture();
 
         b2Shape* GetShape();
         void SetShape(); // TODO. change to Shape.h we made.

@@ -13,16 +13,18 @@ namespace cave
     class RigidBody : public PhysicsBody
     {
     public:
-        RigidBody();
+        RigidBody(ePhysicsType type) : PhysicsBody(type) {};
         ~RigidBody();
-
-        void ApplyForce(const b2Vec2& force, const b2Vec2& point = nullptr);
-        void ApplyTorque(float torque);
-        void ApplyLinearImpulse(b2Vec2 impulse, b2Vec2 point);
-        void ApplyAngularImpulse(float impulse);
 
         void SetGravityScale(float gravityScale);
         void SetFixedRotation(bool fixedRotation);
         void SetAsBullet(bool isBullet);
+        
+        void ApplyForce(const b2Vec2& force);
+        void ApplyForce(const b2Vec2& force, const b2Vec2& point);
+        void ApplyTorque(float torque);
+        void ApplyLinearImpulse(b2Vec2 impulse);
+        void ApplyLinearImpulse(b2Vec2 impulse, b2Vec2 point);
+        void ApplyAngularImpulse(float impulse);
     };
 };
