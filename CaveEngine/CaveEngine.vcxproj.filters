@@ -40,9 +40,6 @@
     <ClCompile Include="Core\Private\Containers\Node.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Vertex.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
@@ -151,9 +148,6 @@
     <ClCompile Include="Graphics\Public\Device\Window.ixx">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\Window.cpp">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClCompile>
@@ -172,8 +166,14 @@
     <ClCompile Include="Graphics\Public\Renderer\RenderQueue.ixx">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\BinarySearchTree.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
+    <ClCompile Include="Core\Public\Types\Vertex.ixx">
+      <Filter>Header Files\Core\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Types\Float.ixx">
+      <Filter>Header Files\Core\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Utils\FileSystem.ixx">
+      <Filter>Header Files\Core\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,9 +209,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\Utils\Crt.h">
       <Filter>Header Files\Core\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Vertex.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\Node.h">
       <Filter>Header Files\Core\Containers</Filter>
@@ -258,9 +255,6 @@
     <ClInclude Include="Engine\Public\GenericEngine.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\Window.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
@@ -275,9 +269,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h">
       <Filter>Header Files\Core\KeyboardInput</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\LinkedList.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -458,6 +449,9 @@
     </Filter>
     <Filter Include="Header Files\Graphics\UI">
       <UniqueIdentifier>{c75036ba-c200-4a31-943c-863337bf0878}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Types">
+      <UniqueIdentifier>{5883785d-9e32-4cf3-b63c-730729a66c28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

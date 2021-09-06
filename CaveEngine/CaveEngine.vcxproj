@@ -241,9 +241,7 @@
   <ItemGroup>
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
-    <ClInclude Include="Core\Public\Containers\LinkedList.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
-    <ClInclude Include="Core\Public\Containers\Vertex.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
     <ClInclude Include="Core\Public\CoreTypes.h" />
     <ClInclude Include="Core\Public\Debug\Log.h">
@@ -268,7 +266,6 @@
     <ClInclude Include="Gameplay\Public\Object\Obejct.h" />
     <ClInclude Include="Gameplay\Public\Object\Tag.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
-    <ClInclude Include="Graphics\Public\Device\Window.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
@@ -278,13 +275,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
-    <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
-    <ClCompile Include="Core\Public\Containers\BinarySearchTree.ixx" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Array.ixx" />
     <ClCompile Include="Core\Public\Containers\HashTable.ixx" />
@@ -301,13 +296,15 @@
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
+    <ClCompile Include="Core\Public\Types\Float.ixx" />
+    <ClCompile Include="Core\Public\Types\Vertex.ixx" />
+    <ClCompile Include="Core\Public\Utils\FileSystem.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />
     <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
     <ClCompile Include="Gameplay\Private\World\Level.cpp" />
     <ClCompile Include="Gameplay\Private\World\World.cpp" />
-    <ClCompile Include="Graphics\Private\Device\Window.cpp" />
     <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
     <ClCompile Include="Graphics\Public\Device\Window.ixx" />

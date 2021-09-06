@@ -14,6 +14,7 @@ module;
 #endif
 
 #include "CoreGlobals.h"
+
 #include "Memory/MemoryPool.h"
 
 export module cave.Core.Containers.Array;

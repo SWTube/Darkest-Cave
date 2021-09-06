@@ -8,9 +8,10 @@ module;
 #include "GraphicsApiPch.h"
 
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
+
 export module RenderQueue;
 
+import cave.Core.Types.Vertex;
 import TextureManager;
 
 namespace cave 

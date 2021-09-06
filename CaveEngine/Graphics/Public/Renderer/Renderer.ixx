@@ -8,11 +8,11 @@ module;
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
 //#include "Texture/Texture.h"
 
 export module Renderer;
 
+import cave.Core.Types.Vertex;
 import DeviceResources;
 import Camera;
 import Shader;

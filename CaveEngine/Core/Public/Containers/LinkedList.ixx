@@ -11,7 +11,7 @@ module;
 export module cave.Core.Containers.LinkedList;
 
 import IteratorType;
-import Memory;
+import cave.Core.Memory.Memory;
 
 export namespace cave
 {
