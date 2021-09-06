@@ -241,6 +241,7 @@
   <ItemGroup>
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
+    <ClInclude Include="Core\Public\Containers\LinkedList.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
     <ClInclude Include="Core\Public\CoreTypes.h" />
@@ -280,6 +281,7 @@
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
+    <ClCompile Include="Core\Public\Containers\BinarySearchTree.ixx" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Array.ixx" />
     <ClCompile Include="Core\Public\Containers\HashTable.ixx" />
