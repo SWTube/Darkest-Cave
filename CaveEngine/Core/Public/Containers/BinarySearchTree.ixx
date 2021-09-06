@@ -2,7 +2,7 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-
+#define _CRT_SECURE_NO_WARNINGS
 module;
 
 #ifdef CAVE_BUILD_DEBUG
@@ -17,14 +17,37 @@ module;
 
 export module cave.Core.Containers.BinarySearchTree;
 
+#ifdef CAVE_BUILD_DEBUG
+
+import cave.Core.String;
+
+#endif
+
+
 export namespace cave
 {
+	enum class eBinarySearchTreeColor : bool
+	{
+		RED,
+		BLACK
+	};
+
 	struct BinarySearchTreeNode
 	{
 		void* mItem;
+		eBinarySearchTreeColor mColor;
 		BinarySearchTreeNode* mLeftChild;
 		BinarySearchTreeNode* mRightChild;
 		BinarySearchTreeNode* mParent;
+
+		constexpr BinarySearchTreeNode()
+		{
+			mItem = nullptr;
+			mColor = eBinarySearchTreeColor::BLACK;
+			mLeftChild = nullptr;
+			mRightChild = nullptr;
+			mParent = nullptr;
+		}
 	};
 
 	class BinarySearchTree final
@@ -35,24 +58,40 @@ export namespace cave
 
 		~BinarySearchTree();
 
-		constexpr void Insert(void* item);
-		constexpr void Delete(void* item);
+		constexpr bool Insert(void* item);
+		constexpr bool Delete(void* item);
 		constexpr bool Search(void* item);
 
+		constexpr size_t GetSize() const;
+
 #ifdef CAVE_BUILD_DEBUG
-
-		constexpr void PrintInt32();
-		constexpr void PrintInt32Recursive(BinarySearchTreeNode* node);
-
+		void PrintInt32();
+		constexpr bool ColorCheck();
+		size_t GetHeight();
 #endif
 
 	private:
 		constexpr BinarySearchTreeNode* GetNextNode(BinarySearchTreeNode* node);
+		constexpr BinarySearchTreeNode* GetItemNode(void* item);
+		constexpr void LeftRotation(BinarySearchTreeNode* node);
+		constexpr void RightRotation(BinarySearchTreeNode* node);
+		constexpr void InsertColorFix(BinarySearchTreeNode* node);
+		constexpr void DeleteColorFix(BinarySearchTreeNode* node, BinarySearchTreeNode* parentNode);
+
+#ifdef CAVE_BUILD_DEBUG
+		void PrintInt32Recursive(BinarySearchTreeNode* node, size_t space, size_t height);
+		constexpr int32_t ColorCheckRecursive(BinarySearchTreeNode* node, bool& colorCheck);
+		size_t GetHeightRecursive(BinarySearchTreeNode* node);
+#endif
 
 	private:
 		MemoryPool* mPool;
 		BinarySearchTreeNode* mRootNode;
+		static BinarySearchTreeNode msNilNode;
+		size_t mSize;
 	};
+
+	BinarySearchTreeNode BinarySearchTree::msNilNode = BinarySearchTreeNode();
 
 	constexpr BinarySearchTree::BinarySearchTree()
 		: BinarySearchTree(gCoreMemoryPool)
@@ -61,6 +100,7 @@ export namespace cave
 	constexpr BinarySearchTree::BinarySearchTree(MemoryPool& pool)
 		: mPool(&pool)
 		, mRootNode(nullptr)
+		, mSize(0)
 	{ }
 
 	BinarySearchTree::~BinarySearchTree()
@@ -72,13 +112,13 @@ export namespace cave
 			return;
 		}
 
-		while (tempNode != mRootNode || (tempNode->mLeftChild != nullptr) || (tempNode->mRightChild != nullptr))
+		while (tempNode != mRootNode || (tempNode->mLeftChild != &msNilNode) || (tempNode->mRightChild != &msNilNode))
 		{
-			if (tempNode->mLeftChild != nullptr)
+			if (tempNode->mLeftChild != &msNilNode)
 			{
 				tempNode = tempNode->mLeftChild;
 			}
-			else if (tempNode->mRightChild != nullptr)
+			else if (tempNode->mRightChild != &msNilNode)
 			{
 				tempNode = tempNode->mRightChild;
 			}
@@ -89,42 +129,28 @@ export namespace cave
 
 				if (tempNode->mLeftChild == deleteNode)
 				{
-					tempNode->mLeftChild = nullptr;
+					tempNode->mLeftChild = &msNilNode;
 				}
 				else
 				{
-					tempNode->mRightChild = nullptr;
+					tempNode->mRightChild = &msNilNode;
 				}
-
-				LOGDF(eLogChannel::CORE_CONTAINER, "-%d", *reinterpret_cast<int32_t*>(deleteNode->mItem));
 
 				mPool->Deallocate(deleteNode, sizeof(BinarySearchTreeNode));
 			}
 		}
 
-		LOGDF(eLogChannel::CORE_CONTAINER, "-%d", *reinterpret_cast<int32_t*>(tempNode->mItem));
-		LOGD(eLogChannel::CORE_CONTAINER, "Deallocate End");
 		mPool->Deallocate(tempNode, sizeof(BinarySearchTreeNode));
 		mRootNode = nullptr;
 	}
 
-	constexpr void BinarySearchTree::Insert(void* item)
+	constexpr bool BinarySearchTree::Insert(void* item)
 	{
-		if (mRootNode == nullptr)
-		{
-			mRootNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
-			mRootNode->mItem = item;
-			mRootNode->mLeftChild = nullptr;
-			mRootNode->mRightChild = nullptr;
-			mRootNode->mParent = nullptr;
-			LOGDF(eLogChannel::CORE_CONTAINER, "+%d", *reinterpret_cast<int32_t*>(mRootNode->mItem));
-			return;
-		}
-
+		BinarySearchTreeNode* insertNode = nullptr;
 		BinarySearchTreeNode* tempNode = mRootNode;
 		BinarySearchTreeNode* parentTempNode = tempNode;
 
-		while (tempNode != nullptr)
+		while (tempNode != &msNilNode && tempNode != nullptr)
 		{
 			parentTempNode = tempNode;
 
@@ -138,66 +164,58 @@ export namespace cave
 			}
 			else
 			{
-				return;
+				return false;
 			}
 		}
 
-		tempNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
-		tempNode->mItem = item;
-		tempNode->mLeftChild = nullptr;
-		tempNode->mRightChild = nullptr;
-		tempNode->mParent = parentTempNode;
+		++mSize;
+		insertNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
+		insertNode->mItem = item;
+		insertNode->mLeftChild = &msNilNode;
+		insertNode->mRightChild = &msNilNode;
+		insertNode->mParent = parentTempNode;
+		insertNode->mColor = eBinarySearchTreeColor::RED;
 
-		if (item < parentTempNode->mItem)
+		if (parentTempNode == nullptr)
 		{
-			parentTempNode->mLeftChild = tempNode;
+			insertNode->mColor = eBinarySearchTreeColor::BLACK;
+			mRootNode = insertNode;
 		}
-		else if (item > parentTempNode->mItem)
+		else
 		{
-			parentTempNode->mRightChild = tempNode;
+			if (item < parentTempNode->mItem)
+			{
+				parentTempNode->mLeftChild = insertNode;
+			}
+			else if (item > parentTempNode->mItem)
+			{
+				parentTempNode->mRightChild = insertNode;
+			}
 		}
 
-		LOGDF(eLogChannel::CORE_CONTAINER, "+%d", *reinterpret_cast<int32_t*>(tempNode->mItem));
+		InsertColorFix(insertNode);
+
+		return true;
 	}
 
-	constexpr void BinarySearchTree::Delete(void* item)
+	constexpr bool BinarySearchTree::Delete(void* item)
 	{
-		BinarySearchTreeNode* deleteNode = mRootNode;
+		BinarySearchTreeNode* deleteNode = GetItemNode(item);
 		BinarySearchTreeNode* childNode = nullptr;
 
-		while (deleteNode != nullptr)
+		if (deleteNode == &msNilNode)
 		{
-			if (item < deleteNode->mItem)
-			{
-				deleteNode = deleteNode->mLeftChild;
-			}
-			else if (item > deleteNode->mItem)
-			{
-				deleteNode = deleteNode->mRightChild;
-			}
-			else
-			{
-				break;
-			}
-		}
-
-		if (deleteNode == nullptr)
-		{
-			return;
+			return false;
 		}
 
 
-		if((deleteNode->mLeftChild != nullptr) && (deleteNode->mRightChild != nullptr))
+		if((deleteNode->mLeftChild != &msNilNode) && (deleteNode->mRightChild != &msNilNode))
 		{
-			void* tempItem = deleteNode->mItem;
-
 			deleteNode->mItem = GetNextNode(deleteNode)->mItem;
 			deleteNode = GetNextNode(deleteNode);
-
-			deleteNode->mItem = tempItem;
 		}
 
-		if (deleteNode->mLeftChild != nullptr)
+		if (deleteNode->mLeftChild != &msNilNode)
 		{
 			childNode = deleteNode->mLeftChild;
 		}
@@ -208,7 +226,7 @@ export namespace cave
 
 		if (deleteNode == mRootNode)
 		{
-			if (childNode == nullptr)
+			if (childNode == &msNilNode)
 			{
 				mRootNode = nullptr;
 			}
@@ -231,87 +249,402 @@ export namespace cave
 				
 			}
 
-			if (childNode != nullptr)
+			if (childNode != &msNilNode)
 			{
 				childNode->mParent = deleteNode->mParent;
 			}
 		}
 
+		if (deleteNode->mColor == eBinarySearchTreeColor::BLACK && mRootNode != nullptr)
+		{
+			DeleteColorFix(childNode, deleteNode->mParent);
+		}
+
+		--mSize;
 		mPool->Deallocate(deleteNode, sizeof(BinarySearchTreeNode));
-		LOGDF(eLogChannel::CORE_CONTAINER, "-%d", *reinterpret_cast<int32_t*>(deleteNode->mItem));
+
+		return true;
 	}
 
 	constexpr bool BinarySearchTree::Search(void* item)
 	{
-		BinarySearchTreeNode* tempNode = mRootNode;
+		BinarySearchTreeNode* searchNode = GetItemNode(item);
 
-		while (tempNode != nullptr)
+		if (searchNode != &msNilNode)
 		{
-			if (item < tempNode->mItem)
-			{
-				tempNode = tempNode->mLeftChild;
-			}
-			else if (item > tempNode->mItem)
-			{
-				tempNode = tempNode->mRightChild;
-			}
-			else
-			{
-				return true;
-			}
+			return true;
 		}
 
 		return false;
 	}
 
+	constexpr size_t BinarySearchTree::GetSize() const
+	{
+		return mSize;
+	}
+
+	constexpr BinarySearchTreeNode* BinarySearchTree::GetItemNode(void* item)
+	{
+		BinarySearchTreeNode* itemNode = mRootNode;
+
+		if (mRootNode == nullptr)
+		{
+			itemNode = &msNilNode;
+		}
+
+		while (itemNode != &msNilNode)
+		{
+			if (item < itemNode->mItem)
+			{
+				itemNode = itemNode->mLeftChild;
+			}
+			else if (item > itemNode->mItem)
+			{
+				itemNode = itemNode->mRightChild;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		return itemNode;
+	}
+
 	constexpr BinarySearchTreeNode* BinarySearchTree::GetNextNode(BinarySearchTreeNode* node)
 	{
-		BinarySearchTreeNode* prevNode = node;
 		node = node->mRightChild;
 
-		while (node != nullptr)
+		while (node->mLeftChild != &msNilNode)
 		{
-			prevNode = node;
 			node = node->mLeftChild;
 		}
 
-		return prevNode;
+		return node;
+	}
+
+	constexpr void BinarySearchTree::LeftRotation(BinarySearchTreeNode* node)
+	{
+		BinarySearchTreeNode* rightChild = node->mRightChild;
+
+		node->mRightChild = rightChild->mLeftChild;
+		rightChild->mLeftChild->mParent = node;
+
+		rightChild->mParent = node->mParent;
+
+		if (node == mRootNode)
+		{
+			mRootNode = rightChild;
+		}
+		else if (node->mParent->mLeftChild == node)
+		{
+			node->mParent->mLeftChild = rightChild;
+		}
+		else
+		{
+			node->mParent->mRightChild = rightChild;
+		}
+
+		rightChild->mLeftChild = node;
+		node->mParent = rightChild;
+	}
+
+	constexpr void BinarySearchTree::RightRotation(BinarySearchTreeNode* node)
+	{
+		BinarySearchTreeNode* leftChild = node->mLeftChild;
+
+		node->mLeftChild = leftChild->mRightChild;
+		leftChild->mRightChild->mParent = node;
+
+		leftChild->mParent = node->mParent;
+
+		if (node == mRootNode)
+		{
+			mRootNode = leftChild;
+		}
+		else if (node->mParent->mLeftChild == node)
+		{
+			node->mParent->mLeftChild = leftChild;
+		}
+		else
+		{
+			node->mParent->mRightChild = leftChild;
+		}
+
+		leftChild->mRightChild = node;
+		node->mParent = leftChild;
+	}
+
+	constexpr void BinarySearchTree::InsertColorFix(BinarySearchTreeNode* node)
+	{
+		BinarySearchTreeNode* parentNode;
+		BinarySearchTreeNode* uncleNode;
+
+		while (node != mRootNode && node->mParent->mColor == eBinarySearchTreeColor::RED)
+		{
+			parentNode = node->mParent;
+
+			if (parentNode->mParent->mLeftChild == parentNode)
+			{
+				uncleNode = parentNode->mParent->mRightChild;
+			}
+			else
+			{
+				uncleNode = parentNode->mParent->mLeftChild;
+			}
+
+			if (uncleNode->mColor == eBinarySearchTreeColor::BLACK)
+			{
+				bool isParentNodeLeftChild = parentNode == parentNode->mParent->mLeftChild;
+				bool isNodeLeftChild = node == parentNode->mLeftChild;
+
+				if (isParentNodeLeftChild)
+				{
+					if (!isNodeLeftChild)
+					{
+						LeftRotation(parentNode);
+						BinarySearchTreeNode* tempNode = node;
+						node = parentNode;
+						parentNode = tempNode;
+					}
+
+					RightRotation(parentNode->mParent);
+
+					parentNode->mColor = eBinarySearchTreeColor::BLACK;
+					parentNode->mRightChild->mColor = eBinarySearchTreeColor::RED;
+				}
+				else
+				{
+					if (isNodeLeftChild)
+					{
+						RightRotation(parentNode);
+						BinarySearchTreeNode* tempNode = node;
+						node = parentNode;
+						parentNode = tempNode;
+					}
+
+					LeftRotation(parentNode->mParent);
+
+					parentNode->mColor = eBinarySearchTreeColor::BLACK;
+					parentNode->mLeftChild->mColor = eBinarySearchTreeColor::RED;
+				}
+
+				break;
+			}
+			else
+			{
+				uncleNode->mColor = eBinarySearchTreeColor::BLACK;
+				parentNode->mColor = eBinarySearchTreeColor::BLACK;
+
+				parentNode->mParent->mColor = eBinarySearchTreeColor::RED;
+
+				node = parentNode->mParent;
+			}
+		}
+
+		mRootNode->mColor = eBinarySearchTreeColor::BLACK;
+		
+	}
+
+	constexpr void BinarySearchTree::DeleteColorFix(BinarySearchTreeNode* node, BinarySearchTreeNode* parentNode)
+	{
+		BinarySearchTreeNode* cousinNode;
+
+		while (node != mRootNode && node->mColor == eBinarySearchTreeColor::BLACK)
+		{
+			if (parentNode->mLeftChild == node)
+			{
+				cousinNode = parentNode->mRightChild;
+
+				if (cousinNode->mColor == eBinarySearchTreeColor::RED)
+				{
+					cousinNode->mColor = eBinarySearchTreeColor::BLACK;
+					parentNode->mColor = eBinarySearchTreeColor::RED;
+					LeftRotation(parentNode);
+
+					cousinNode = parentNode->mRightChild;
+				}
+
+				if (cousinNode->mLeftChild->mColor == eBinarySearchTreeColor::RED && cousinNode->mRightChild->mColor == eBinarySearchTreeColor::BLACK)
+				{
+					cousinNode->mColor = eBinarySearchTreeColor::RED;
+					cousinNode->mLeftChild->mColor = eBinarySearchTreeColor::BLACK;
+					RightRotation(cousinNode);
+
+					cousinNode = cousinNode->mParent;
+				}
+
+				if (cousinNode->mRightChild->mColor == eBinarySearchTreeColor::RED)
+				{
+					cousinNode->mColor = parentNode->mColor;
+					parentNode->mColor = eBinarySearchTreeColor::BLACK;
+					cousinNode->mRightChild->mColor = eBinarySearchTreeColor::BLACK;
+					LeftRotation(parentNode);
+
+					break;
+				}
+				else
+				{
+					cousinNode->mColor = eBinarySearchTreeColor::RED;
+					node = parentNode;
+					parentNode = parentNode->mParent;
+				}
+			}
+			else
+			{
+				cousinNode = parentNode->mLeftChild;
+
+				if (cousinNode->mColor == eBinarySearchTreeColor::RED)
+				{
+					cousinNode->mColor = eBinarySearchTreeColor::BLACK;
+					parentNode->mColor = eBinarySearchTreeColor::RED;
+					RightRotation(parentNode);
+
+					cousinNode = parentNode->mLeftChild;
+				}
+
+				if (cousinNode->mRightChild->mColor == eBinarySearchTreeColor::RED && cousinNode->mLeftChild->mColor == eBinarySearchTreeColor::BLACK)
+				{
+					cousinNode->mColor = eBinarySearchTreeColor::RED;
+					cousinNode->mRightChild->mColor = eBinarySearchTreeColor::BLACK;
+					LeftRotation(cousinNode);
+
+					cousinNode = cousinNode->mParent;
+				}
+
+				if (cousinNode->mLeftChild->mColor == eBinarySearchTreeColor::RED)
+				{
+					cousinNode->mColor = parentNode->mColor;
+					parentNode->mColor = eBinarySearchTreeColor::BLACK;
+					cousinNode->mLeftChild->mColor = eBinarySearchTreeColor::BLACK;
+					RightRotation(parentNode);
+
+					break;
+				}
+				else
+				{
+					cousinNode->mColor = eBinarySearchTreeColor::RED;
+					node = parentNode;
+					parentNode = parentNode->mParent;
+				}
+			}
+		}
+
+		node->mColor = eBinarySearchTreeColor::BLACK;
 	}
 
 #ifdef CAVE_BUILD_DEBUG
 
-	constexpr void BinarySearchTree::PrintInt32()
+	void BinarySearchTree::PrintInt32()
 	{
-		PrintInt32Recursive(mRootNode);
+		LOGD(eLogChannel::CORE_CONTAINER, "");
+		PrintInt32Recursive(mRootNode, 0, 10);
+		LOGD(eLogChannel::CORE_CONTAINER, "");
 	}
 
-	constexpr void BinarySearchTree::PrintInt32Recursive(BinarySearchTreeNode* node)
+	void BinarySearchTree::PrintInt32Recursive(BinarySearchTreeNode* node, size_t space, size_t height)
 	{
-		if (node == nullptr)
-		{
+		// Base case
+		if (node == &msNilNode) {
 			return;
 		}
 
-		PrintInt32Recursive(node->mLeftChild);
-		LOGDF(eLogChannel::CORE_CONTAINER, "%d", *reinterpret_cast<int32_t*>(node->mItem));
-		PrintInt32Recursive(node->mRightChild);
+		String outputString;
+
+		// increase distance between levels
+		space += height;
+
+		// print right child first
+		PrintInt32Recursive(node->mRightChild, space, 10);
+		LOGD(eLogChannel::CORE_CONTAINER, "");
+
+		// print the current node after padding with spaces
+		for (int i = height; i < space; i++) {
+			outputString += ' ';
+		}
+
+		LOGDF(eLogChannel::CORE_CONTAINER, "%s%d", outputString.GetCString(), *reinterpret_cast<int32_t*>(node->mItem));
+
+		PrintInt32Recursive(node->mLeftChild, space, 10);
+	}
+
+	size_t BinarySearchTree::GetHeight()
+	{
+		return GetHeightRecursive(mRootNode);
+	}
+
+	size_t BinarySearchTree::GetHeightRecursive(BinarySearchTreeNode* node)
+	{
+		if (node == &msNilNode)
+		{
+			return 0;
+		}
+
+		size_t leftHeight = GetHeightRecursive(node->mLeftChild);
+		size_t rightHeight = GetHeightRecursive(node->mRightChild);
+		if (leftHeight > rightHeight)
+		{
+			return leftHeight + 1;
+		}
+		else
+		{
+			return rightHeight + 1;
+		}
 	}
 	
+	constexpr bool BinarySearchTree::ColorCheck()
+	{
+		bool colorCheck = true;
+
+		ColorCheckRecursive(mRootNode, colorCheck);
+
+		return colorCheck;
+	}
+
+	constexpr int32_t BinarySearchTree::ColorCheckRecursive(BinarySearchTreeNode* node, bool& colorCheck)
+	{
+		int32_t leftBlackCount;
+
+		if (node == &msNilNode)
+		{
+			return 1;
+		}
+
+		if (!colorCheck)
+		{
+			return 0;
+		}
+
+		if (node->mParent != nullptr && node->mParent->mColor == eBinarySearchTreeColor::RED && node->mColor == eBinarySearchTreeColor::RED)
+		{
+			colorCheck = false;
+			return 0;
+		}
+
+		leftBlackCount = ColorCheckRecursive(node->mLeftChild, colorCheck);
+		colorCheck = leftBlackCount == ColorCheckRecursive(node->mRightChild, colorCheck);
+
+		if (node->mColor == eBinarySearchTreeColor::BLACK)
+		{
+			return leftBlackCount + 1;
+		}
+		
+		return leftBlackCount;
+	}
 
 #endif
 
 #ifdef CAVE_BUILD_DEBUG
 	namespace BinarySearchTreeTest
 	{
-		int32_t** itemTable;
+		int32_t* itemTable;
+
 		size_t* insertCount;
-
 		size_t* deleteCount;
-
 		size_t* searchCount;
 
-		constexpr size_t MAX_COUNT = 16;
-		size_t testCount;
+		size_t tableSize;
+
 		constexpr uint8_t TEST_ALL = 0b11111111;
 		constexpr uint8_t TEST_INSERT = 0b00000001;
 		constexpr uint8_t TEST_DELETE = 0b00000010;
@@ -325,11 +658,12 @@ export namespace cave
 			{
 				for (size_t i = 0; i < insertCount[count]; ++i)
 				{
-					size_t row = rand() % testCount;
-					size_t col = rand() % MAX_COUNT;
+					size_t index = rand() % tableSize;
 
-					tree.Insert(&itemTable[row][col]);
-					//LOGDF(eLogChannel::CORE_CONTAINER, "Insert: %d", itemTable[count][i]);
+					if (tree.Insert(&itemTable[index]))
+					{
+						//LOGDF(eLogChannel::CORE_CONTAINER, "+%d", itemTable[index]);
+					}
 				}
 			}
 
@@ -337,11 +671,12 @@ export namespace cave
 			{
 				for (size_t i = 0; i < deleteCount[count]; ++i)
 				{
-					size_t row = rand() % testCount;
-					size_t col = rand() % MAX_COUNT;
+					size_t index = rand() % tableSize;
 
-					tree.Delete(&itemTable[row][col]);
-					//LOGDF(eLogChannel::CORE_CONTAINER, "Delete: %d", itemTable[row][col]);
+					if (tree.Delete(&itemTable[index]))
+					{
+						//LOGDF(eLogChannel::CORE_CONTAINER, "-%d", itemTable[index]);
+					}
 				}
 			}
 
@@ -349,41 +684,38 @@ export namespace cave
 			{
 				for (size_t i = 0; i < searchCount[count]; ++i)
 				{
-					size_t row = rand() % (count + 1);
-					size_t col = rand() % insertCount[row];
+					size_t index = rand() % tableSize;
 
-					LOGDF(eLogChannel::CORE_CONTAINER, "Search: %d | %d", itemTable[row][col], tree.Search(&itemTable[row][col]));
+					LOGDF(eLogChannel::CORE_CONTAINER, "Search: %d | %d", itemTable[index], tree.Search(&itemTable[index]));
 				}
 			}
 		}
 
-		void Test(size_t containerTestCount, uint8_t containerTestCase)
+		void Test(size_t containerTableSize, size_t containerTestCount, uint8_t containerTestCase)
 		{
 			srand(time(NULL));
 
-			testCount = containerTestCount;
+			tableSize = containerTableSize;
 
 			BinarySearchTree tree;
 
-			itemTable = reinterpret_cast<int32_t**>(gCoreMemoryPool.Allocate(sizeof(int32_t*) * containerTestCount));
+			itemTable = reinterpret_cast<int32_t*>(gCoreMemoryPool.Allocate(sizeof(int32_t) * tableSize));
+
 			insertCount = reinterpret_cast<size_t*>(gCoreMemoryPool.Allocate(sizeof(size_t) * containerTestCount));
-
 			deleteCount = reinterpret_cast<size_t*>(gCoreMemoryPool.Allocate(sizeof(size_t) * containerTestCount));
-
 			searchCount = reinterpret_cast<size_t*>(gCoreMemoryPool.Allocate(sizeof(size_t) * containerTestCount));
 
 			for (size_t i = 0; i < containerTestCount; ++i)
 			{
-				itemTable[i] = reinterpret_cast<int32_t*>(gCoreMemoryPool.Allocate(sizeof(int32_t) * MAX_COUNT));
 
-				insertCount[i] = rand() % 4 + 1;
-				deleteCount[i] = rand() % 32 + 1;
-				searchCount[i] = rand() % insertCount[i] + 1;
+				insertCount[i] = rand() % 100 + 1;
+				deleteCount[i] = rand() % 200 + 1;
+				searchCount[i] = rand() % 1 + 1;
+			}
 
-				for (size_t j = 0; j < MAX_COUNT; ++j)
-				{
-					itemTable[i][j] = rand();
-				}
+			for (size_t i = 0; i < tableSize; ++i)
+			{
+				itemTable[i] = rand();
 			}
 
 			for (size_t i = 0; i < containerTestCount; ++i)
@@ -404,18 +736,16 @@ export namespace cave
 				}
 
 				//tree.PrintInt32();
+				size_t sizeHeight = 0;
+				for (sizeHeight; (1 << sizeHeight) < tree.GetSize(); ++sizeHeight);
+
+				LOGDF(eLogChannel::CORE_CONTAINER, "Size: %d, SizeHeight : %d, Height: %d,", tree.GetSize(), sizeHeight, tree.GetHeight());
 			}
 
-			for (size_t i = 0; i < containerTestCount; ++i)
-			{
-				gCoreMemoryPool.Deallocate(itemTable[i], sizeof(int32_t) * MAX_COUNT);
-			}
+			gCoreMemoryPool.Deallocate(itemTable, sizeof(int32_t) * tableSize);
 
-			gCoreMemoryPool.Deallocate(itemTable, sizeof(int32_t*) * containerTestCount);
 			gCoreMemoryPool.Deallocate(insertCount, sizeof(size_t) * containerTestCount);
-
 			gCoreMemoryPool.Deallocate(deleteCount, sizeof(size_t) * containerTestCount);
-
 			gCoreMemoryPool.Deallocate(searchCount, sizeof(size_t) * containerTestCount);
 		}
 	}
