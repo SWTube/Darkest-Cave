@@ -317,6 +317,7 @@
     <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
     <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx" />
     <ClCompile Include="Graphics\Public\UI\Text.ixx" />
+    <ClCompile Include="Graphics\Resource\FontManager.ixx" />
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />
