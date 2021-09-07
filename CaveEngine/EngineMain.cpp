@@ -132,13 +132,11 @@ int main(int32_t argc, char** argv)
 }
 void SoundTest()
 {
-	CaveSound cavesound;
-	cavesound.SoundInitialize();
-	cavesound.SoundExtension();
-	cavesound.SetListenerPos();
-	cavesound.AddSound("Footsteps.wav");
-	cavesound.SoundToSource("Footsteps.wav");
-	cavesound.SoundPlay();
+	cave::Sound sound;
+	sound.Initialize();
+	sound.Extension();
+	sound.Add("Footsteps.wav");
+	sound.Play("Footsteps.wav");
 	std::cout << "play wav" << std::endl;
 	Sleep(5000);
 }

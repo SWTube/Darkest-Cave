@@ -1,154 +1,195 @@
 
 #include "efx/CaveSound.h"
-void CaveSound::SoundInitialize()
+
+namespace cave
 {
+	ALint Sound::wavCount = 0;
 
-	ALFWInit();
-	ALFWprintf("OpenAL Now Available\n");
-
-	if (!ALFWInitOpenAL())
+	void Sound::Initialize()
 	{
-		ALFWprintf("Failed to initialize OpenAL\n");
-		ALFWShutdown();
-	}
-	
-	alGenBuffers(128, caveBuffer);
-	if (alGetError() != NO_ERROR)
-		exit(1);
 
-	alGenSources(128, caveSource);
-	if (alGetError() != NO_ERROR)
+		ALFWInit();
+
+		if (!ALFWInitOpenAL())
+		{
+			ALFWprintf("Failed to initialize OpenAL\n");
+			ALFWShutdown();
+		}
+
+		alGenBuffers(128, Buffer);
+		if (alGetError() != NO_ERROR)
+			exit(1);
+
+		alGenSources(128, Source);
+		if (alGetError() != NO_ERROR)
+		{
+			ALFWprintf("Failed to generate a source\n");
+			alDeleteBuffers(1, Buffer);
+			ALFWShutdownOpenAL();
+			ALFWShutdown();
+			exit(1);
+		}
+
+		if (alGetError() != AL_NO_ERROR)
+		{
+			ALFWprintf("Failed to set the source attributes.\n");
+			alDeleteBuffers(1, Buffer);
+			alDeleteSources(1, Source);
+			ALFWShutdownOpenAL();
+			ALFWShutdown();
+			exit(1);
+		}
+
+	}
+
+	void Sound::Extension()
 	{
-		ALFWprintf("Failed to generate a source\n");
-		alDeleteBuffers(1, caveBuffer);
-		ALFWShutdownOpenAL();
-		ALFWShutdown();
-		exit(1);
+
+		// Update 
+		alGenAuxiliaryEffectSlots = (LPALGENEFFECTS)alGetProcAddress("alGenAuxiliaryEffectSlots");
+		alGenEffects = (LPALGENEFFECTS)alGetProcAddress("alGenEffects");
+		alDeleteEffects = (LPALDELETEEFFECTS)alGetProcAddress("alDeleteEffects");
+		alIsEffect = (LPALISEFFECT)alGetProcAddress("alIsEffect");
+		alEffecti = (LPALEFFECTI)alGetProcAddress("alEffecti");
+		alEffectf = (LPALEFFECTF)alGetProcAddress("alEffectf");
+		alGenFilters = (LPALGENFILTERS)alGetProcAddress("alGenFilters");
+		alIsFilter = (LPALISFILTER)alGetProcAddress("alIsFilter");
+		alFilteri = (LPALFILTERI)alGetProcAddress("alFilteri");
+		alFilterf = (LPALFILTERF)alGetProcAddress("alFilterf");
+		alAuxiliaryEffectSloti = (LPALAUXILIARYEFFECTSLOTI)alGetProcAddress("alAuxiliaryEffectSloti");
+		if (!(alGenEffects && alDeleteEffects && alIsEffect)) std::cout << "Something wrong while Initialize EFX";
+
+		alGetError();
+		alGenEffects(1, &Effect);
+		alGenAuxiliaryEffectSlots(1, &EffectSlot);
+		alGenFilters(1, &Filter);
 	}
-	
-	if (alGetError() != AL_NO_ERROR)
+
+	void Sound::Add(const ALchar* wavFile)
 	{
-		ALFWprintf("Failed to set the source attributes.\n");
-		alDeleteBuffers(1, caveBuffer);
-		alDeleteSources(1, caveSource);
-		ALFWShutdownOpenAL();
-		ALFWShutdown();
-		exit(1);
+		if (!ALFWLoadWaveToBuffer((char*)ALFWaddMediaPath(wavFile), Buffer[wavCount]))
+		{
+			ALFWprintf("Failed to load or attach %s\n", ALFWaddMediaPath(wavFile));
+			alDeleteBuffers(1, Buffer);
+			ALFWShutdownOpenAL(); ALFWShutdown();
+			exit(1);
+		}
+
+		alSourcei(Source[wavCount], AL_BUFFER, Buffer[wavCount]);
+
+		wavMap.insert(std::unordered_map<const ALchar*, ALint>::value_type(wavFile, wavCount));
+		wavCount++;
 	}
-}
 
-void CaveSound::SoundExtension()
-{
-	
-
-	/*pDevice = alcOpenDevice(NULL); // 디폴트 OpenAL device를 오픈한다.
-	if (!pDevice) return;
-	// Effect Extension 기능이 지원되는 장치인지 확인한다.
-	if (alcIsExtensionPresent(pDevice, "ALC_EXT_EFX") == AL_FALSE) return;
-	printf("EFX Extension found!\n");
-	// Context 생성. 생성하면서 source 당 최대 4개의 Auxiliary Send를 허용하겠다고 설정함.
-	attribs[0] = ALC_MAX_AUXILIARY_SENDS;
-	attribs[1] = 1;
-	pContext = alcCreateContext(pDevice, attribs);
-	if (!pContext) return;
-	alcMakeContextCurrent(pContext); // 생성한 context를 활성화
-// 각 Source 당 실제 사용 가능한 Aux. Send 개수를 얻는다.
-	alcGetIntegerv(pDevice, ALC_MAX_AUXILIARY_SENDS, 1, &iSends);
-	printf("Device supports %d Aux Sends per Source\n", iSends);*/
-	// Effect Extension 함수 포인터를 얻는다.
-	// 중요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	alGenAuxiliaryEffectSlots = (LPALGENEFFECTS)alGetProcAddress("alGenAuxiliaryEffectSlots");
-	alGenEffects = (LPALGENEFFECTS)alGetProcAddress("alGenEffects");
-	alDeleteEffects = (LPALDELETEEFFECTS)alGetProcAddress("alDeleteEffects");
-	alIsEffect = (LPALISEFFECT)alGetProcAddress("alIsEffect");
-	alEffecti = (LPALEFFECTI)alGetProcAddress("alEffecti");
-	alEffectf = (LPALEFFECTF)alGetProcAddress("alEffectf");
-
-	alGenFilters = (LPALGENFILTERS)alGetProcAddress("alGenFilters");
-	alIsFilter = (LPALISFILTER)alGetProcAddress("alIsFilter");
-	alFilteri = (LPALFILTERI)alGetProcAddress("alFilteri");
-	alFilterf = (LPALFILTERF)alGetProcAddress("alFilterf");
-	alAuxiliaryEffectSloti = (LPALAUXILIARYEFFECTSLOTI)alGetProcAddress("alAuxiliaryEffectSloti");
-	
-	// 필요한 모든 Effect Extension 함수들의 포인터를 얻는다.
-	// 얻은 function pointer들이 유효한지 검사한다.
-	if (!(alGenEffects && alDeleteEffects && alIsEffect)) std::cout << "fuck its not working!";
-	// EFX 초기화가 완료되어 이제부터 EFX 프로그래밍이 가능해졌음!!!!
-}
-
-void CaveSound::AddSound(const ALchar* wavFile)
-{
-
-	// 구조체에서 웨이브이름이랑 몇번째에 저장했는지
-	// 
-	if (!ALFWLoadWaveToBuffer((char*)ALFWaddMediaPath(wavFile), caveBuffer[0]))
+	void Sound::SetLoop(const ALchar* wavFile, bool b)
 	{
-		ALFWprintf("Failed to load or attach %s\n", ALFWaddMediaPath(wavFile));
-		alDeleteBuffers(1, caveBuffer);
-		ALFWShutdownOpenAL(); ALFWShutdown();
-		exit(1);
+		if (b == true)
+			alSourcei(Source[wavMap[wavFile]], AL_LOOPING, AL_TRUE);
+		else if (b == false)
+			alSourcei(Source[wavMap[wavFile]], AL_LOOPING, AL_FALSE);
 	}
-}
+
+	void Sound::SetMaxDistance(const ALchar* wavFile, ALfloat maxDis)
+	{
+		alSourcef(Source[wavMap[wavFile]], AL_MAX_DISTANCE, maxDis);
+	}
+
+	void Sound::SetRefDistance(const ALchar* wavFile, ALfloat refDis)
+	{
+		alSourcef(Source[wavMap[wavFile]], AL_REFERENCE_DISTANCE, refDis);
+	}
 
 
-void CaveSound::SoundToSource(const ALchar* wavFile)
-{
-	alSourcei(caveSource[0], AL_BUFFER, caveBuffer[0]);
-}
+	void Sound::SetListenerPos()
+	{
+		alListenerfv(AL_POSITION, ListenerPos);
+		alListenerfv(AL_VELOCITY, ListenerVel);
+		alListenerfv(AL_ORIENTATION, ListenerOri);
+	}
 
-void CaveSound::SetLoop(bool b)
-{
-	if (b == true)
-		alSourcei(caveSource[0], AL_LOOPING, AL_TRUE);
-	else if(b == false)
-		alSourcei(caveSource[0], AL_LOOPING, AL_FALSE);
-}
+	void Sound::Play(const ALchar* wavFile)
+	{
 
-void CaveSound::SetMaxDistance(ALfloat maxDis)
-{
-	alSourcef(caveSource[0], AL_MAX_DISTANCE, maxDis);
-}
+		alSourcePlay(Source[wavMap[wavFile]]);
 
-void CaveSound::SetRefDistance(ALfloat refDis)
-{
-	alSourcef(caveSource[0], AL_REFERENCE_DISTANCE, refDis);
-}
+	}
 
+	void Sound::SetVolume(const ALchar* wavFile, ALfloat* gain)
+	{
+		alSourcefv(Source[wavMap[wavFile]], AL_GAIN, gain);
+	}
 
-void CaveSound::SetListenerPos()
-{
-	//게임에서 리스너(플레이어 캐릭터)의 값을 가져옴
-	
-	//리스너에 값 적용
-	alListenerfv(AL_POSITION, ListenerPos);
-	alListenerfv(AL_VELOCITY, ListenerVel);
-	alListenerfv(AL_ORIENTATION, ListenerOri);
-}
+	void Sound::SetPitch(const ALchar* wavFile, ALfloat* pitch)
+	{
+		alSourcefv(Source[wavMap[wavFile]], AL_PITCH, pitch);
+	}
 
-void CaveSound::SoundPlay()
-{
-	alSourcePlay(caveSource[0]);
-	
-}
+	void Sound::SetSourcePos(const ALchar* wavFile)
+	{
+		alSourcefv(Source[wavMap[wavFile]], AL_POSITION, SourcePos);
+	}
 
-void CaveSound::SetVolume(ALfloat *gain)
-{
-	alSourcefv(caveSource[0], AL_GAIN, gain);
-}
+	void Sound::SetRolloff(const ALchar* wavFile, ALfloat rolloff)
+	{
+		alSourcef(Source[wavMap[wavFile]], AL_ROLLOFF_FACTOR, rolloff);
+	}
 
-void CaveSound::SetPitch(ALfloat *pitch)
-{
-	alSourcefv(caveSource[0], AL_PITCH, pitch);
-}
+	void Sound::SetEffect(const ALchar* wavFile, const ALchar* effect)
+	{
+		alGetError();
 
-void CaveSound::SetSourcePos()
-{
-	alSourcefv(caveSource[0], AL_POSITION, SourcePos);
-}
+		if (effect == "0")
+		{
+			alSource3i(Source[wavMap[wavFile]], AL_AUXILIARY_SEND_FILTER, AL_EFFECTSLOT_NULL, 0, NULL);
+			if (alGetError() != AL_NO_ERROR)
+				printf("Failed to disable Source Send 0\n");
+		}
 
-void CaveSound::SetRolloff(ALfloat rolloff)
-{
-	alSourcef(caveSource[0], AL_ROLLOFF_FACTOR, rolloff);
+		else
+		{
+			if (effect == "reverb")
+			{
+				if (alIsEffect(Effect)) {
+					alEffecti(Effect, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
+					if (alGetError() != AL_NO_ERROR)
+						printf("Reverb Effect not supported\n");
+					else
+						alEffectf(Effect, AL_REVERB_DECAY_TIME, 5.0f);
+				}
+			}
+
+			alAuxiliaryEffectSloti(EffectSlot, AL_EFFECTSLOT_EFFECT, Effect);
+			if (alGetError() != AL_NO_ERROR)
+				printf("Failed to load effect into effect slot\n");
+
+			alSource3i(Source[wavMap[wavFile]], AL_AUXILIARY_SEND_FILTER, EffectSlot, 0, NULL);
+			if (alGetError() != AL_NO_ERROR)
+				printf("Failed to configure Source Send 0\n");
+		}
+	}
+
+	void Sound::SetFilter(const ALchar* wavFile, const ALchar* filter)
+	{
+		if (filter == "low_pass");
+		{
+			if (alIsFilter(Filter))
+			{
+				alFilteri(Filter, AL_FILTER_TYPE, AL_FILTER_LOWPASS);
+
+				if (alGetError() != AL_NO_ERROR)
+					printf("Low Pass Filter not supported\n");
+
+				else
+				{
+					alFilterf(Filter, AL_LOWPASS_GAIN, 0.5f);
+					alFilterf(Filter, AL_LOWPASS_GAINHF, 0.5f);
+				}
+			}
+		}
+		alSource3i(Source[wavMap[wavFile]], AL_AUXILIARY_SEND_FILTER, EffectSlot, 0, Filter);
+		if (alGetError() != AL_NO_ERROR)
+			printf("Failed to configure Source Send 1\n");
+	}
 }
 
 
