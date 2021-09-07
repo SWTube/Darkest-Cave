@@ -7,11 +7,11 @@ module;
 #include "GraphicsApiPch.h"
 #include <vector>
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
 #include "Memory/MemoryPool.h"
 
 export module BufferManager;
 
+import cave.Core.Types.Vertex;
 import DeviceResources;
 
 namespace cave {

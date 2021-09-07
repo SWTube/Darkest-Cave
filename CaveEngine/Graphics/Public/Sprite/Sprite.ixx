@@ -2,13 +2,17 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
+
 module;
+
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
 //#include "Texture/Texture.h"
+
 export module Sprite;
+
+import cave.Core.Types.Vertex;
 import Renderable;
 import TextureManager;
 

@@ -9,16 +9,15 @@
 #include <d3d11_1.h>
 #include <directxmath.h>
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
 #include "CoreGlobals.h"
-
-
 
 //#include "Device/DeviceResources.h"
 //#include "Renderer/Renderer.h"
 
+import cave.Core.Types.Vertex;
 import DeviceResources;
 import Renderer;
+
 namespace cave
 {
 	class GenericEngine

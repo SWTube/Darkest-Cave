@@ -11,12 +11,13 @@ module;
 
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
 #include "Debug/Log.h"
 
 export module Texture;
 
 //export import std.filesystem;
+import cave.Core.Types.Float;
+import cave.Core.Types.Vertex;
 import DdsTextureLoader;
 import WicTextureLoader;
 

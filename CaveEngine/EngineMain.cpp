@@ -22,7 +22,6 @@
 #include "Engine.h"
 #include "Object/TagPool.h"
 #include "Shapes/Quadrant.h"
-#include "Containers/Vertex.h"
 #include "KeyboardInput/KeyboardInput.h"
 
 #if _DEBUG
@@ -46,6 +45,7 @@ import cave.Core.Containers.HashTable;
 import cave.Core.Math;
 import cave.Core.Containers.Stack;
 import cave.Core.String;
+import cave.Core.Utils.FileSystem;
 // import KeyboardInput;
 import Renderer;
 
@@ -109,8 +109,9 @@ int main(int32_t argc, char** argv)
 #endif
 
 #ifdef CAVE_BUILD_DEBUG
-	//TicTocTimer clock = tic();
-	RenderTest();
+	TicTocTimer clock = tic();
+	cave::FileSystemTest::Main();
+	//RenderTest();
 	//cave::StringTest::Main();
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
 
