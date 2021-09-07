@@ -312,6 +312,7 @@
     <ClCompile Include="Graphics\Public\Renderer\Renderer.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\RenderQueue.ixx" />
     <ClCompile Include="Graphics\Public\Shader\Shader.ixx" />
+    <ClCompile Include="Graphics\Public\Shape\Line.ixx" />
     <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
     <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx" />
     <ClCompile Include="Graphics\Public\UI\Text.ixx" />
