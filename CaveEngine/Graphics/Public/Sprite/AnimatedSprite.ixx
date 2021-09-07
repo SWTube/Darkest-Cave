@@ -2,7 +2,9 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
+
 module;
+
 //#include "Sprite.h"
 #include <unordered_map>
 #include <string>
@@ -10,10 +12,11 @@ module;
 
 #include "CoreTypes.h"
 #include "CoreGlobals.h"
-#include "Containers/Vertex.h"
 //#include "Texture/Texture.h"
 
 export module AnimatedSprite;
+
+import cave.Core.Types.Vertex;
 import Sprite;
 //import Texture;
 import TextureManager;

@@ -4,17 +4,18 @@
  */
 
 module;
+
 #include <filesystem>
 
 #include "ResourceManagerApiPch.h"
 
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
 
 //#include "Texture/Texture.h"
 export module MultiTexture;
 
+import cave.Core.Types.Vertex;
 import Texture;
 import DdsTextureLoader;
 import WicTextureLoader;

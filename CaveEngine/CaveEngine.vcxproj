@@ -242,7 +242,6 @@
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
-    <ClInclude Include="Core\Public\Containers\Vertex.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
     <ClInclude Include="Core\Public\CoreTypes.h" />
     <ClInclude Include="Core\Public\Debug\Log.h">
@@ -276,7 +275,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
-    <ClCompile Include="Core\Private\Containers\Vertex.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
@@ -298,6 +296,9 @@
     <ClCompile Include="Core\Public\String\String.ixx" />
     <ClCompile Include="Core\Public\Debug\Log.ixx" />
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
+    <ClCompile Include="Core\Public\Types\Float.ixx" />
+    <ClCompile Include="Core\Public\Types\Vertex.ixx" />
+    <ClCompile Include="Core\Public\Utils\FileSystem.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Private\GenericEngine.cpp" />
     <ClCompile Include="Engine\Private\WindowsEngine.cpp" />

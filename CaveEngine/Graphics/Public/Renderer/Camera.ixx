@@ -8,10 +8,11 @@ module;
 #include "GraphicsApiPch.h"
 
 #include "CoreTypes.h"
-#include "Containers/Vertex.h"
 
 export module Camera;
 
+import cave.Core.Types.Float;
+import cave.Core.Types.Vertex;
 
 namespace cave
 {
