@@ -52,7 +52,8 @@ namespace cave
 		static int32_t Floor(float value);
 
 		static float Exp(float value);
-		static float Abs(float value);
+		static int32_t Abs(int32_t value);
+		static float FAbs(float value);
 		static float Mod(float numerator, float denominator);
 
 		static float Pow(float base, int32_t exponent);
@@ -156,7 +157,14 @@ namespace cave
 		return sum;
 	}
 
-	float Math::Abs(float value)
+	int32_t Math::Abs(int32_t value)
+	{
+		int32_t movedValue = value >> 31; // if first bit is 1 -> movedValue == 1, else 0
+
+		return ((value ^ movedValue) - movedValue);
+	}
+
+	float Math::FAbs(float value)
 	{
 		return value >= 0 ? value : -value;
 	}
@@ -197,21 +205,16 @@ namespace cave
 
 	float Math::Sqrt(float value)
 	{
+		assert(value >= 0.f);
+
 		float x = 2;
 
-		if (value <= 0.f)
+		for (uint32_t i = 0; i < 1000; ++i)
 		{
-			return 0.f;
+			x = (x + (value / x)) / 2;
 		}
-		else
-		{
-			for (uint32_t i = 0; i < 1000; ++i)
-			{
-				x = (x + (value / x)) / 2;
-			}
 
-			return x;
-		}
+		return x;
 	}
 
 	float Math::InverseSqrt(float value)
@@ -230,6 +233,8 @@ namespace cave
 
 	float Math::Log(float value)
 	{
+		assert(value >= 0.f);
+
 		float result = 0.f;
 
 		if ((value - 1.f) < EPSILON)
@@ -319,18 +324,21 @@ namespace cave
 
 			for (uint32_t i = 0; i < 10; ++i)
 			{
-				float num = static_cast<float>((rand() - rand()) / 100.f);
-				float num_2 = static_cast<float>((rand() - rand()) / 100.f);
-				int32_t expo = rand() % 10;
+				float randomNumberFloat = static_cast<float>((rand() - rand()) / 100.f);
+				float randomNumberFloat_2 = static_cast<float>((rand() - rand()) / 100.f);
+				float randomNumberPositive = static_cast<float>(rand() / 100.f);
+				int32_t randomNumberInt = rand() - rand();
+				uint32_t expo = rand() % 10;
 
-				LOGDF(cave::eLogChannel::CORE_MATH, "Floor(%f): %d", num, Math::Floor(num));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Ceil(%f): %d", num, Math::Ceil(num));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Abs(%f): %f", num, Math::Abs(num));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Pow(%f, %d): %f", num, expo, Math::Pow(num, expo));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Mod(%f, %f): %f", num, num_2, Math::Mod(num, num_2));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Sqrt(%f): %f", num, Math::Sqrt(num));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Exp(%f): %f", num, Math::Exp(num));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Log(%f): %f", num, Math::Log(num));
+				LOGDF(cave::eLogChannel::CORE_MATH, "Floor(%f): %d", randomNumberFloat, Math::Floor(randomNumberFloat));
+				LOGDF(cave::eLogChannel::CORE_MATH, "Ceil(%f): %d", randomNumberFloat, Math::Ceil(randomNumberFloat));
+				LOGDF(cave::eLogChannel::CORE_MATH, "Abs(%d): %d", randomNumberInt, Math::Abs(randomNumberInt));
+				LOGDF(cave::eLogChannel::CORE_MATH, "FAbs(%f): %f", randomNumberFloat, Math::FAbs(randomNumberFloat));
+				LOGDF(cave::eLogChannel::CORE_MATH, "Pow(%f, %d): %f", randomNumberFloat, expo, Math::Pow(randomNumberFloat, expo));
+				LOGDF(cave::eLogChannel::CORE_MATH, "Mod(%f, %f): %f", randomNumberFloat, randomNumberFloat_2, Math::Mod(randomNumberFloat, randomNumberFloat_2));
+				LOGDF(cave::eLogChannel::CORE_MATH, "Sqrt(%f): %f", randomNumberPositive, Math::Sqrt(randomNumberPositive));
+				LOGDF(cave::eLogChannel::CORE_MATH, "Exp(%f): %f", randomNumberFloat, Math::Exp(randomNumberFloat));
+				LOGDF(cave::eLogChannel::CORE_MATH, "Log(%f): %f", randomNumberPositive, Math::Log(randomNumberPositive));
 
 				LOGD(cave::eLogChannel::CORE_MATH, "\n");
 			}
