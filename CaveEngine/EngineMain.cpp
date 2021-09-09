@@ -111,6 +111,7 @@ int main(int32_t argc, char** argv)
 #ifdef CAVE_BUILD_DEBUG
 	//TicTocTimer clock = tic();
 	//cave::FileSystemTest::Main();
+	//cave::MathTest::Main();
 	//RenderTest();
 	//cave::StringTest::Main();
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
