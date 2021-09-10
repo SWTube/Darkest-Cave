@@ -134,7 +134,7 @@ void SoundTest()
 {
 	cave::Sound sound;
 	sound.Initialize();
-	sound.Extension();
+//	sound.Extension();
 	sound.Add("Footsteps.wav");
 	sound.Play("Footsteps.wav");
 	std::cout << "play wav" << std::endl;

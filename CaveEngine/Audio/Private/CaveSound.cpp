@@ -57,12 +57,16 @@ namespace cave
 		alFilteri = (LPALFILTERI)alGetProcAddress("alFilteri");
 		alFilterf = (LPALFILTERF)alGetProcAddress("alFilterf");
 		alAuxiliaryEffectSloti = (LPALAUXILIARYEFFECTSLOTI)alGetProcAddress("alAuxiliaryEffectSloti");
-		if (!(alGenEffects && alDeleteEffects && alIsEffect)) std::cout << "Something wrong while Initialize EFX";
+		if (!(alGenEffects && alDeleteEffects && alIsEffect))
+		{
+			std::cout << "Something wrong while Initialize EFX";
+		}
+
 
 		alGetError();
-		alGenEffects(1, &Effect);
-		alGenAuxiliaryEffectSlots(1, &EffectSlot);
-		alGenFilters(1, &Filter);
+		//alGenEffects(1, &Effect);
+		//alGenAuxiliaryEffectSlots(1, &EffectSlot);
+		//alGenFilters(1, &Filter);
 	}
 
 	void Sound::Add(const ALchar* wavFile)
