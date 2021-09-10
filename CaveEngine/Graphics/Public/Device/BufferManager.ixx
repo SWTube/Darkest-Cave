@@ -23,7 +23,7 @@ namespace cave {
 		BufferManager& operator=(const BufferManager&) = delete;
 		BufferManager& operator=(const BufferManager&&) = delete;
 		eResult Init(DeviceResources* deviceResources, uint32_t vertexPoolSize);
-		void UpdateVertexBuffer(VertexT* vertexData, WORD spriteCount);
+		void UpdateVertexBuffer(VertexTC* vertexData, WORD spriteCount);
 		virtual ~BufferManager();
 		void Destroy();
 
@@ -46,7 +46,7 @@ namespace cave {
 		//vertex buffer pool »ý¼º.
 		D3D11_BUFFER_DESC vertexBufferDesc;
 		vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		vertexBufferDesc.ByteWidth = sizeof(VertexT) * mPoolSize * 4;
+		vertexBufferDesc.ByteWidth = sizeof(VertexTC) * mPoolSize * 4;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		vertexBufferDesc.MiscFlags = 0;
@@ -117,18 +117,18 @@ namespace cave {
 		
 	}
 
-	void BufferManager::UpdateVertexBuffer(VertexT* vertexData, WORD spriteCount) 
+	void BufferManager::UpdateVertexBuffer(VertexTC* vertexData, WORD spriteCount) 
 	{
-		VertexT* verticesPtr = nullptr;
+		VertexTC* verticesPtr = nullptr;
 		
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		HRESULT hResult = mDeviceResources->GetDeviceContext()->Map(mVertexBufferPool, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
-		verticesPtr = reinterpret_cast<VertexT*>(mappedResource.pData);
-		memcpy(verticesPtr, reinterpret_cast<void*>(vertexData), (sizeof(VertexT) * 4 * spriteCount));
+		verticesPtr = reinterpret_cast<VertexTC*>(mappedResource.pData);
+		memcpy(verticesPtr, reinterpret_cast<void*>(vertexData), (sizeof(VertexTC) * 4 * spriteCount));
 		mDeviceResources->GetDeviceContext()->Unmap(mVertexBufferPool, 0);
 
-		uint32_t stride = sizeof(VertexT);
+		uint32_t stride = sizeof(VertexTC);
 		uint32_t offset = 0;
 		mDeviceResources->GetDeviceContext()->IASetVertexBuffers(0, 1, &mVertexBufferPool, &stride, &offset);
 		mDeviceResources->GetDeviceContext()->IASetIndexBuffer(mIndexBufferPool, DXGI_FORMAT_R16_UINT, 0);

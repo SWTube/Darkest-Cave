@@ -53,7 +53,7 @@ namespace cave
 		uint32_t mZIndex = 0u;
 
 		Float3 mPosition = Float3(0, 0, 0);
-
+		float mAngle = 0.0f;
 
 	protected:
 		RenderCommand* mCommand = nullptr;

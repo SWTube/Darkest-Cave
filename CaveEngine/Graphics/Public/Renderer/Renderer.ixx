@@ -211,7 +211,7 @@ namespace cave
 
 		//}
 		mDeviceResources->GetD2DRenderTarget()->BeginDraw();
-		std::vector<VertexT> vertexData;
+		std::vector<VertexTC> vertexData;
 		std::vector<RenderCommand*> commands = RenderQueue::GetInstance().GetRenderQueue();
 		uint32_t spriteCount = 0;
 		for (RenderCommand* command : commands) 
@@ -236,9 +236,17 @@ namespace cave
 			if (command->type == RenderCommand::eType::SPRITE_COMMAND)
 			{
 				SpriteCommand* sc = reinterpret_cast<SpriteCommand*>(command);
+				worldMatrix = DirectX::XMMatrixRotationZ(command->angle);
 				Texture* tex = sc->texture;
+
 				if (tex != nullptr) // 나중에 texture가 nullptr이여도 색을 입혀서 그려주게 구현하고 싶음.
+				{
 					mShader->Render(context, 6, spriteCount * 6, worldMatrix, viewMatrix, ortho, tex->GetTexture());
+				}
+				else
+				{
+					mShader->Render(context, 6, spriteCount * 6, worldMatrix, viewMatrix, ortho, nullptr);
+				}
 				spriteCount++;
 			}
 			else if(command->type == RenderCommand::eType::TEXT_COMMAND)

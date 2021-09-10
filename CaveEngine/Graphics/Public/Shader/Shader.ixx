@@ -220,11 +220,18 @@ namespace cave
 				.Format = DXGI_FORMAT_R32G32_FLOAT,
 				.InputSlot = 0,
 				.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
-
 				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				// .InputSlotClass=D3D11_APPEND_ALIGNED_ELEMENT, 
 				.InstanceDataStepRate = 0
 			},
+			{
+				.SemanticName = "COLOR",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0
+			}
 		};
 		UINT numElements = ARRAYSIZE(layout);
 
@@ -320,8 +327,6 @@ namespace cave
 
 		context->DrawIndexed(indexCount, startIndex, 0);
 	}
-
-
 
 	//--------------------------------------------------------------------------------------
 	// Helper for compiling shaders with D3DCompile

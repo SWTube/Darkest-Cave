@@ -8,7 +8,6 @@ module;
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-//#include "Texture/Texture.h"
 
 export module Sprite;
 
@@ -44,7 +43,7 @@ namespace cave
 		static constexpr void SetScreenSize(uint32_t width, uint32_t height);
 
 
-		VertexT* GetVertices();
+		VertexTC* GetVertices();
 		void SetTexture(Texture* texture);
 		void SetTextureWithFilePath(const std::filesystem::path& filePath);
 
@@ -61,11 +60,11 @@ namespace cave
 		static constexpr uint32_t VERTICES_COUNT = 4u;
 		static constexpr uint32_t INDICES_COUNT = 6u;
 
-		VertexT mVertices[VERTICES_COUNT] = {
-			VertexT(-1.0f,  1.0f, 0.0f,	1.0f, 0.0f),	// top left
-			VertexT(1.0f,  1.0f, 0.0f,	0.0f, 0.0f),	// top right
-			VertexT(1.0f, -1.0f, 0.0f,	1.0f, 1.0f),	// bottom right
-			VertexT(-1.0f, -1.0f, 0.0f,	0.0f, 1.0f),	// bottom left
+		VertexTC mVertices[VERTICES_COUNT] = {
+			VertexTC(-1.0f,  1.0f, 0.0f,	1.0f, 0.0f,1.0f,1.0f,1.0f,1.0f),	// top left
+			VertexTC(1.0f,  1.0f, 0.0f,	0.0f, 0.0f,1.0f,1.0f,1.0f,1.0f),	// top right
+			VertexTC(1.0f, -1.0f, 0.0f,	1.0f, 1.0f,1.0f,1.0f,1.0f,1.0f),	// bottom right
+			VertexTC(-1.0f, -1.0f, 0.0f,	0.0f, 1.0f,1.0f,1.0f,1.0f,1.0f),	// bottom left
 		};
 
 
@@ -79,6 +78,7 @@ namespace cave
 		uint32_t mWidth = 0u;
 		uint32_t mHeight = 0u;
 
+		Float4 mColor = Float4(1.0f, 1.0f, 1.0f, 1.0f);
 		Float3 mPreviousPosition = Float3(-1, -1, -1);
 
 		Float2 mStartTextureCoord = Float2(0.0f, 0.0f);
@@ -241,7 +241,7 @@ namespace cave
 	}
 
 
-	VertexT* Sprite::GetVertices() 
+	VertexTC* Sprite::GetVertices() 
 	{
 		return mVertices;
 	}
@@ -252,9 +252,6 @@ namespace cave
 		float right = 0.0f;
 		float top = 0.0f;
 		float bottom = 0.0f;
-		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		VertexT* verticesPtr = nullptr;
-		eResult result = eResult::CAVE_OK;
 
 		mPreviousPosition = mPosition;
 
@@ -263,16 +260,27 @@ namespace cave
 		top = static_cast<float>(mScreenHeight / 2) - mPosition.Y + static_cast<float>(mHeight) / 2.0f;
 		bottom = top - static_cast<float>(mHeight);
 
-		mVertices[0] = std::move(VertexT(Float3(left, top, mPosition.Z), mStartTextureCoord));		// top left
-		mVertices[1] = std::move(VertexT(Float3(right, top, mPosition.Z), Float2(mEndTextureCoord.X, mStartTextureCoord.Y)));	// top right
-		mVertices[2] = std::move(VertexT(Float3(right, bottom, mPosition.Z), mEndTextureCoord));		// bottom right
-		mVertices[3] = std::move(VertexT(Float3(left, bottom, mPosition.Z), Float2(mStartTextureCoord.X, mEndTextureCoord.Y)));		// bottom left
+		mVertices[0] = std::move(VertexTC(Float3(left, top, mPosition.Z), 
+			mStartTextureCoord, 
+			mColor));		// top left
+		
+		mVertices[1] = std::move(VertexTC(Float3(right, top, mPosition.Z), 
+			Float2(mEndTextureCoord.X, mStartTextureCoord.Y), 
+			mColor));	// top right
+		
+		mVertices[2] = std::move(VertexTC(Float3(right, bottom, mPosition.Z),
+			mEndTextureCoord , 
+			mColor));		// bottom right
+	
+		mVertices[3] = std::move(VertexTC(Float3(left, bottom, mPosition.Z), 
+			Float2(mStartTextureCoord.X, mEndTextureCoord.Y),
+			mColor));		// bottom left
 		
 		SpriteCommand* command = reinterpret_cast<SpriteCommand*>(mCommand);
 		command->vertexData = mVertices;
 		command->texture = mTexture;
 		command->zIndex = mZIndex;
-
+		command->angle = mAngle;
 	}
 
 

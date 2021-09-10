@@ -8,6 +8,7 @@
 import Sprite;
 import AnimatedSprite;
 import Text;
+import cave.Graphics.Shape.Line;
 import cave.Core.String;
 #ifdef __WIN32__
 
@@ -78,6 +79,7 @@ namespace cave
 		Text t2(L"기본", L"기본", 30);
 		t2.SetPosition({ 600,300 });
 		
+		Line L1({0,300}, {1600,300}, 1);
 		while (WM_QUIT != msg.message)
 		{
 			// Process window events.
@@ -98,6 +100,7 @@ namespace cave
 				as1.Render();
 				t1.Render();
 				t2.Render();
+				L1.Render();
 				// Render frames during idle time (when no messages are waiting).
 				mRenderer->Render();
 

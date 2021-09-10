@@ -28,11 +28,11 @@ namespace cave
 
 		eType type = RenderCommand::eType::UNKNOWN_COMMAND;
 		uint32_t zIndex = 0u;
+		float angle = 0.0f;
 	};
 	export struct SpriteCommand : RenderCommand
 	{
-		VertexT* vertexData = nullptr;
-		//WORD* indexData = nullptr;
+		VertexTC* vertexData = nullptr;
 		Texture* texture = nullptr;
 	};
 	export struct TextCommand : RenderCommand

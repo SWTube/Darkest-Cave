@@ -12,15 +12,12 @@ module;
 
 #include "CoreTypes.h"
 #include "CoreGlobals.h"
-//#include "Texture/Texture.h"
 
 export module AnimatedSprite;
 
 import cave.Core.Types.Vertex;
 import Sprite;
-//import Texture;
 import TextureManager;
-//import MultiTexture;
 
 
 namespace cave {
