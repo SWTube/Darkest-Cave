@@ -9,7 +9,7 @@ module;
 
 export module ShapePolygon;
 
-export namespace cave
+namespace cave
 {
 	export class ShapePolygon
 	{

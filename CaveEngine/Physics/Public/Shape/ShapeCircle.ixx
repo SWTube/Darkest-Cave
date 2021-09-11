@@ -9,7 +9,7 @@ module;
 
 export module ShapeCircle;
 
-export namespace cave
+namespace cave
 {
 	export class ShapeCircle final
 	{
