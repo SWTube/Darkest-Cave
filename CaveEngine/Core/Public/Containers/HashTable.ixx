@@ -107,7 +107,7 @@ namespace cave
 		// iterators
 
 		// capacity
-		constexpr bool IsEmpty() const;
+		[[nodiscard]] constexpr bool IsEmpty() const;
 		constexpr size_t GetSize() const;
 		constexpr size_t GetMaxSize() const;
 
