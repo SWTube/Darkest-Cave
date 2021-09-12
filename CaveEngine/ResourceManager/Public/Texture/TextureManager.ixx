@@ -27,6 +27,7 @@ namespace cave
 			static TextureManager msInstance;
 			return msInstance;
 		}
+		void Init(ID3D11Device* device);
 		/*
 		* filename에 해당하는 texture를 생성한 후 반환.
 		* texture 생성에 실패하거나, 이미 해당 texture가 존재 시 nullptr 반환.
@@ -43,7 +44,7 @@ namespace cave
 		MultiTexture* GetOrAddMultiTexture(const std::filesystem::path& filename, uint32_t column, uint32_t row = 1);
 		Texture* GetTexture(const std::string& key);
 		void RemoveTexture(const std::string& key);
-		void SetDevice(ID3D11Device* device);
+
 
 	private:
 		TextureManager() = default;
@@ -51,6 +52,7 @@ namespace cave
 		TextureManager& operator=(const TextureManager& other) = delete;
 		~TextureManager();
 
+		Texture* mDefaultTexture = nullptr;
 		std::unordered_map<std::string, Texture*> mTextures;
 		ID3D11Device* mDevice = nullptr;
 
@@ -58,6 +60,13 @@ namespace cave
 	
 	TextureManager::~TextureManager()
 	{
+		if (mDefaultTexture != nullptr)
+		{
+			mDefaultTexture->~Texture();
+			gCoreMemoryPool.Deallocate(mDefaultTexture, sizeof(Texture));
+			mDefaultTexture = nullptr;
+		}
+
 		for (auto it = mTextures.begin(); it != mTextures.end();) {
 			it->second->~Texture();
 			gCoreMemoryPool.Deallocate(it->second, sizeof(Texture));
@@ -160,9 +169,11 @@ namespace cave
 
 	}
 
-	void TextureManager::SetDevice(ID3D11Device* device)
+	void TextureManager::Init(ID3D11Device* device)
 	{
 		mDevice = device;
+		mDefaultTexture =  reinterpret_cast<Texture*>(gCoreMemoryPool.Allocate(sizeof(Texture)));
+		new(mDefaultTexture) cave::Texture(mDevice, "default.dds");
 	}
 
 

@@ -28,7 +28,7 @@ namespace cave
 
 		eType type = RenderCommand::eType::UNKNOWN_COMMAND;
 		uint32_t zIndex = 0u;
-		float angle = 0.0f;
+		DirectX::XMMATRIX worldMatrix;
 	};
 	export struct SpriteCommand : RenderCommand
 	{

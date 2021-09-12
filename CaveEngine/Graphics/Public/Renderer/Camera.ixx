@@ -7,7 +7,6 @@ module;
 
 #include "GraphicsApiPch.h"
 
-#include "CoreTypes.h"
 
 export module Camera;
 

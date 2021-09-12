@@ -2,11 +2,12 @@ module;
 
 #include <cmath>
 #include "GraphicsApiPch.h"
-#include "CoreTypes.h"
+
 #include "CoreGlobals.h"
 
 
 export module cave.Graphics.Shape.Line;
+import cave.Core.Types.Float;
 import cave.Core.Types.Vertex;
 import Sprite;
 import TextureManager;

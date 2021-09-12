@@ -33,7 +33,7 @@ namespace cave
 
 		Renderer(const Renderer&) = delete;
 		Renderer& operator=(const Renderer&) = delete;
-		Renderer& operator=(const Renderer&&) = delete;
+		Renderer& operator=(Renderer&&) = delete;
 
 		eResult Init(Window* window);
 		eResult CreateDeviceDependentResources();
@@ -150,7 +150,7 @@ namespace cave
 		mCamera->SetPosition(0.0f, 0.0f, -100.f);
 
 		//set TextureManager device.
-		TextureManager::GetInstance().SetDevice(mDeviceResources->GetDevice());
+		TextureManager::GetInstance().Init(mDeviceResources->GetDevice());
 		FontManager::GetInstance().Init(mDeviceResources->GetDWFactory());
 
 		mBufferManager = reinterpret_cast<BufferManager*>(mPool->Allocate(sizeof(BufferManager)));
@@ -236,7 +236,7 @@ namespace cave
 			if (command->type == RenderCommand::eType::SPRITE_COMMAND)
 			{
 				SpriteCommand* sc = reinterpret_cast<SpriteCommand*>(command);
-				worldMatrix = DirectX::XMMatrixRotationZ(command->angle);
+				//worldMatrix = DirectX::XMMatrixRotationZ(command->angle * 0.0174533f) * DirectX::XMMatrixTranslation();
 				Texture* tex = sc->texture;
 
 				if (tex != nullptr) // 나중에 texture가 nullptr이여도 색을 입혀서 그려주게 구현하고 싶음.

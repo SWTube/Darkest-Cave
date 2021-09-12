@@ -8,7 +8,6 @@ module;
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-//#include "Texture/Texture.h"
 
 export module Renderable;
 
@@ -37,6 +36,7 @@ namespace cave
 		constexpr void SetPosition(const Float2& position);
 		constexpr void SetPosition(const Float2&& position);
 		constexpr void SetZIndex(const uint32_t z);
+		constexpr void SetAngle(const float angle);
 
 		constexpr void Move(float x, float y);
 		constexpr float GetPositionX() const;
@@ -51,7 +51,6 @@ namespace cave
 
 	protected:
 		uint32_t mZIndex = 0u;
-
 		Float3 mPosition = Float3(0, 0, 0);
 		float mAngle = 0.0f;
 
@@ -158,7 +157,10 @@ namespace cave
 		mZIndex = z;
 		mPosition.Z = 1.0f - static_cast<float>(z) * 0.01f;
 	}
-
+	constexpr void Renderable::SetAngle(const float angle)
+	{
+		mAngle = angle;
+	}
 	constexpr void Renderable::Move(float x, float y)
 	{
 		if (mPosition.X <= FLT_MAX - x)

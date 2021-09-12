@@ -4,13 +4,13 @@
  */
 
 module;
-
+#include <cmath>
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
-#include "CoreTypes.h"
 
 export module Sprite;
 
+import cave.Core.Types.Float;
 import cave.Core.Types.Vertex;
 import Renderable;
 import TextureManager;
@@ -67,11 +67,6 @@ namespace cave
 			VertexTC(-1.0f, -1.0f, 0.0f,	0.0f, 1.0f,1.0f,1.0f,1.0f,1.0f),	// bottom left
 		};
 
-
-		static constexpr WORD INDICES[INDICES_COUNT] = {
-			0, 1, 2,
-			2, 3, 0,
-		};
 
 		Texture* mTexture = nullptr;
 
@@ -255,11 +250,14 @@ namespace cave
 
 		mPreviousPosition = mPosition;
 
+		float radian = mAngle * 0.0174533f;
 		left = static_cast<float>(mScreenWidth / 2) * -1 + mPosition.X - static_cast<float>(mWidth) / 2.0f;
+		//left = mPosition.X - static_cast<float>(mWidth) / 2.0f;
 		right = left + static_cast<float>(mWidth);
 		top = static_cast<float>(mScreenHeight / 2) - mPosition.Y + static_cast<float>(mHeight) / 2.0f;
+		//top = mPosition.Y + static_cast<float>(mHeight) / 2.0f;
 		bottom = top - static_cast<float>(mHeight);
-
+	
 		mVertices[0] = std::move(VertexTC(Float3(left, top, mPosition.Z), 
 			mStartTextureCoord, 
 			mColor));		// top left
@@ -276,11 +274,14 @@ namespace cave
 			Float2(mStartTextureCoord.X, mEndTextureCoord.Y),
 			mColor));		// bottom left
 		
+		//회전
+		//DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixTranslation(-mPosition.X, -mPosition.Y, -mPosition.Z) *DirectX::XMMatrixRotationZ(mAngle * 0.0174533f) * DirectX::XMMatrixTranslation(mPosition.X, mPosition.Y, mPosition.Z);
+		
 		SpriteCommand* command = reinterpret_cast<SpriteCommand*>(mCommand);
 		command->vertexData = mVertices;
 		command->texture = mTexture;
 		command->zIndex = mZIndex;
-		command->angle = mAngle;
+		//command->worldMatrix = worldMatrix;
 	}
 
 
