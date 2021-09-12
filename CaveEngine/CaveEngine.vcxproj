@@ -92,7 +92,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Box2d\include;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)ThirdParty\Box2d;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -106,7 +106,7 @@
       <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalLibraryDirectories>$(ProjectDir)Physics\Box2d\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Box2d\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
