@@ -23,6 +23,8 @@
 
 	#define PLATFORM_NAME Windows
 
+	#define FORCEINLINE __forceinline
+
 	#ifdef CORE_EXPORTS
 		#define CORE_API __declspec(dllexport)
 	#else

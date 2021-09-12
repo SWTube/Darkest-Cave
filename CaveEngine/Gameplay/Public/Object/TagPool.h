@@ -12,7 +12,6 @@
 namespace cave
 {
 	class Tag;
-	class MemoryPool;
 
 	class TagPool final
 	{
@@ -22,8 +21,10 @@ namespace cave
 		TagPool(TagPool&&) = delete;
 
 		~TagPool();
+		TagPool& operator=(const TagPool&) = delete;
+		TagPool& operator=(TagPool&&) = delete;
 		
-		static void Init(MemoryPool& memoryPool);
+		static void Init();
 		static void ShutDown();
 
 		static void AddTag(std::string& name);
@@ -37,22 +38,8 @@ namespace cave
 
 		static bool IsValid();
 
-#ifdef CAVE_BUILD_DEBUG
-		static void PrintElement();
-#endif // CAVE_BULID_DEBUG
-
 	private:
-		static Tag* createTag(std::string& name);
-
-	private:
-		static MemoryPool* mMemoryPool;
+		static bool mbValid;
 		static std::unordered_map<std::string, Tag*> mTags;
 	};
-
-#ifdef CAVE_BUILD_DEBUG
-	namespace TagPoolTest
-	{
-		void Test();
-	}
-#endif
 }

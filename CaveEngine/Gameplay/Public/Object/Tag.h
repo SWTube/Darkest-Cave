@@ -10,42 +10,31 @@
 
 namespace cave
 {
+	class GameObject;
+
 	class Tag final
 	{
 	public:
 		friend class TagPool;
 
-		~Tag();
-
-		FORCEINLINE friend bool operator==(const Tag& lhs, const Tag& rhs)
-		{
-			return lhs.mCompareSeed == rhs.mCompareSeed;
-		}
-
-		FORCEINLINE friend bool operator!=(const Tag& lhs, const Tag& rhs)
-		{
-			return lhs.mCompareSeed != rhs.mCompareSeed;
-		}
-
-		FORCEINLINE friend bool operator<(const Tag& lhs, const Tag& rhs)
-		{
-			return lhs.mCompareSeed < rhs.mCompareSeed;
-		}
-
-		std::string& GetName();
-
-	private:
 		Tag() = delete;
-		Tag(std::string& name);
 		Tag(const Tag& other) = delete;
 		Tag(Tag&& other) = delete;
 
+		~Tag();
 		Tag& operator=(const Tag& other) = delete;
 		Tag& operator=(const Tag&& other) = delete;
 
+		friend bool operator==(const Tag& lhs, std::string& rhs);
+		friend bool operator==(const Tag& lhs, const char* rhs);
+		friend bool operator!=(const Tag& lhs, std::string& rhs);
+		friend bool operator!=(const Tag& lhs, const char* rhs);
+
+	private:
+		Tag(std::string& name);
+		Tag(const char* name);
+
 	private:
 		std::string mName;
-		/*Used only compare tag.*/
-		size_t mCompareSeed;
 	};
 }

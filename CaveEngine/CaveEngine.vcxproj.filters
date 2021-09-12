@@ -12,24 +12,44 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EngineMain.cpp" />
+    <ClCompile Include="Core\Private\Containers\Array.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Memory\Memory.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\Camera.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Private\CoreGlobals.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Private\GenericEngine.cpp">
-      <Filter>Source Files\Engine</Filter>
+    <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Private\WindowsEngine.cpp">
-      <Filter>Source Files\Engine</Filter>
+    <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp">
-      <Filter>Source Files\ResourceManager</Filter>
+    <ClCompile Include="EngineMain.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay\Private\Game.cpp">
-      <Filter>Source Files\Gameplay</Filter>
+    <ClCompile Include="Core\Public\Template\IteratorType.ixx">
+      <Filter>Header Files\Core\Template</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Debug\Log.ixx">
       <Filter>Header Files\Core\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Matrix.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\String\String.ixx">
       <Filter>Header Files\Core\String</Filter>
@@ -37,14 +57,53 @@
     <ClCompile Include="Core\Public\Template\IteratorType.ixx">
       <Filter>Header Files\Core\Template</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Private\Memory\DataBlock.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Memory\Memory.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Private\Containers\Node.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Memory\MemoryPool.cpp">
+    <ClCompile Include="Core\Private\Memory\Memory.cpp">
       <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\String\String.cpp">
+      <Filter>Source Files\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\GenericDeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\GenericWindow.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\WindowsWindow.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp">
+      <Filter>Source Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Sprite\GenericSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Sprite\WindowsSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
+      <Filter>Source Files\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files\Core\Thread</Filter>
@@ -76,20 +135,152 @@
     <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp">
       <Filter>Source Files\ThirdParty\lodepng</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Vertex.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Hash.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp">
+      <Filter>Source Files\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Thread\Thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Debug\Log.ixx">
+      <Filter>Header Files\Core\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\String\String.ixx">
+      <Filter>Header Files\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
+    </ClCompile>
     <ClCompile Include="ThirdParty\tictoc\src\tictoc.c">
-      <Filter>Source Files\ThirdParty\tictoc</Filter>
+      <Filter>Source Files\ThirdParty\Tictoc</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Matrix.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Template\IteratorType.ixx">
+      <Filter>Header Files\Core\Template</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Array.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
+      <Filter>Source Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Hash.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Containers\Hash.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
+      <Filter>Source Files\Graphics\Sprite</Filter>
+    </ClCompile>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{1574bd97-bb90-457c-a02d-0c323e5174ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Containers">
+      <UniqueIdentifier>{eaaab97b-69d2-4253-af58-87c2ed5857ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Debug">
+      <UniqueIdentifier>{b39b8a72-de13-49b5-af01-05e92a0f960a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Memory">
+      <UniqueIdentifier>{e74c87e9-e7a8-4ea5-bf34-0bb67079e8c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{598e2617-0f3d-494b-8df8-c1f29cc95968}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{253d7982-db18-46a0-ba47-bbc06a025463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Containers">
+      <UniqueIdentifier>{7cf09ef5-2cfc-4c96-b9b5-9ae2d6fa0256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Memory">
+      <UniqueIdentifier>{c56f1321-69bd-4e88-b487-f116792a5f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Debug">
+      <UniqueIdentifier>{d738b192-16d7-4120-bfa4-017f8a40dba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{357a963d-3c2f-4bfc-9064-c74c1d123ecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Renderer">
+      <UniqueIdentifier>{dd057c74-8c4c-4573-9d0e-ea9c8daae624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Renderer">
+      <UniqueIdentifier>{799c705f-1638-4d91-9e46-7f4494c96585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Test">
+      <UniqueIdentifier>{f3eb281e-3b3b-478a-b5ec-802180f63120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Test">
+      <UniqueIdentifier>{cc742b2b-c8a5-4d54-a9c8-1671ae2b0b27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{adca7f36-2313-4244-84d9-1f5647390e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay">
+      <UniqueIdentifier>{9b27ea53-ca8e-4c0d-a523-f2e1f502c625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Object">
+      <UniqueIdentifier>{e16925c7-671b-411b-913b-36ff2013f1de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay">
+      <UniqueIdentifier>{c36930bf-d7ad-4ab4-bb19-82b980721c23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Object">
+      <UniqueIdentifier>{23b9f94a-9557-48e2-9815-e2065b3f9ecf}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="Gameplay\Private\Object\TagPool.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Public\Memory\DataBlock.ixx">
       <Filter>Header Files\Core\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Memory\Memory.ixx">
-      <Filter>Header Files\Core\Memory</Filter>
+    <ClCompile Include="Core\Public\Containers\Trie.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Transform.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Public\Texture\WicTextureLoader.ixx">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Vertex.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp">
+      <Filter>Source Files\Gameplay\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Trie.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx">
       <Filter>Header Files\Core\Shapes</Filter>
@@ -106,8 +297,32 @@
     <ClCompile Include="Core\Public\Containers\LinkedList.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\Array.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
+    <ClCompile Include="Gameplay\Private\World\World.cpp">
+      <Filter>Source Files\Gameplay\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\World\Level.cpp">
+      <Filter>Source Files\Gameplay\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp">
+      <Filter>Source Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Private\Shader\GenericShader.cpp">
+      <Filter>Source Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Containers\Node.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Debug\Log.cpp">
+      <Filter>Source Files\Core\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Private\Thread\Thread.cpp">
+      <Filter>Source Files\Core\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Public\Engine.ixx">
+      <Filter>Header Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Timer\Timer.ixx">
+      <Filter>Header Files\Core\Timer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx">
       <Filter>Header Files\Core\KeyboardInput</Filter>
@@ -175,22 +390,22 @@
     <ClCompile Include="Core\Public\Utils\FileSystem.ixx">
       <Filter>Header Files\Core\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Containers\Array.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\CoreTypes.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Public\Engine.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\GraphicsApiPch.h">
+    <ClInclude Include="Graphics\Public\Graphics.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h">
-      <Filter>Header Files\ResourceManager</Filter>
+    <ClInclude Include="Graphics\Public\Graphics.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h">
       <Filter>Header Files\ResourceManager</Filter>
@@ -207,36 +422,114 @@
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Utils\Crt.h">
-      <Filter>Header Files\Core\Utils</Filter>
+    <ClInclude Include="Graphics\Public\Graphics.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Public\Assertion\Assert.h">
+      <Filter>Header Files\Core\Assertion</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Memory\MemoryPool.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Memory\Memory.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Memory\DataBlock.h">
+		<Filter>Header Files\Core\Memory</Filter>
+	</ClInclude>
     <ClInclude Include="Core\Public\Containers\Node.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Memory\MemoryPool.h">
       <Filter>Header Files\Core\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Debug\Log.h">
-      <Filter>Header Files\Core\Debug</Filter>
+    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Thread\Thread.h">
-      <Filter>Header Files\Core\Thread</Filter>
+    <ClInclude Include="Core\Public\Memory\Memory.h">
+      <Filter>Header Files\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Node.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\TStack.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\String\String.h">
+      <Filter>Header Files\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Node.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\String\String.h">
+      <Filter>Header Files\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Memory\MemoryPool.h">
+      <Filter>Header Files\Core\Memory</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Utils\Defines.h">
       <Filter>Header Files\Core\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Math\Vector2.h">
-      <Filter>Header Files\Core\Math</Filter>
+    <ClInclude Include="Core\Public\String\String.h">
+      <Filter>Header Files\Core\String</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Object\GameObject.h">
-      <Filter>Header Files\Gameplay\Object</Filter>
+    <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\World\Level.h">
-      <Filter>Header Files\Gameplay\World</Filter>
+    <ClInclude Include="Graphics\Public\Device\GenericWindow.h">
+      <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Object\Obejct.h">
-      <Filter>Header Files\Gameplay\Object</Filter>
+    <ClInclude Include="Graphics\Public\Device\Window.h">
+      <Filter>Header Files\Graphics\Device</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\WindowsWindow.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\Window.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Shader\Shader.h">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Public\Texture\Texture.h">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
+      <Filter>Header Files\ThirdParty\lodepng</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\tictoc\src\tictoc.h">
+      <Filter>Header Files\ThirdParty\tictoc</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Test\Resource.h">
+      <Filter>Header Files\Graphics\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\Renderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Vertex.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Hash.h">
+      <Filter>Header Files\Core\Containers</Filter>
+	</ClInclude>
     <ClInclude Include="Gameplay\Public\Object\TagPool.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
@@ -258,11 +551,142 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\tictoc\src\tictoc.h">
+      <Filter>Header Files\ThirdParty\Tictoc</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\TStack.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h">
+      <Filter>Header Files\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h">
+      <Filter>Header Files\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Test\Resource.h">
+      <Filter>Header Files\Graphics\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Script.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\GameObject.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Tag.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\TagPool.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\World\World.h">
+      <Filter>Header Files\Gameplay\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\World\Level.h">
+      <Filter>Header Files\Gameplay\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Transform.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Player.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Object.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Vertex.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay\Public\Game\GameInstance.h">
+      <Filter>Header Files\Gameplay\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\Camera.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+	</ClInclude>
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
       <Filter>Header Files\ThirdParty\lodepng</Filter>
     </ClInclude>
-    <ClInclude Include="ThirdParty\tictoc\src\tictoc.h">
-      <Filter>Header Files\ThirdParty\tictoc</Filter>
+    <ClInclude Include="Core\Public\Containers\Vertex.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Array.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Assertion\Assert.h">
+      <Filter>Header Files\Core\Assertion</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Core\Private\Memory\Memory.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Object.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Script.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\GameObject.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
+      <Filter>Source Files\Gameplay\Object</Filter>
+    </ClCompile>
+    <ClInclude Include="Graphics\Public\Renderer\Camera.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Hash.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\GenericRenderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Sprite\Sprite.h">
+      <Filter>Header Files\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Renderer\Renderer.h">
+      <Filter>Header Files\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Public\Test\Resource.h">
+      <Filter>Header Files\Graphics\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Public\Texture\Texture.h">
+      <Filter>Header Files\ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
+      <Filter>Header Files\ThirdParty\lodepng</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
+      <Filter>Header Files\ThirdParty\lodepng</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Hash.h">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Public\Containers\Hash.h">
+      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Shapes\Quadrant.h">
       <Filter>Header Files\Core\Shapes</Filter>
@@ -292,157 +716,118 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{75bca294-0f25-4fef-9804-72dd3fddf67e}</UniqueIdentifier>
+      <UniqueIdentifier>{28a82fa1-0ea4-4551-82a2-3dade81dec6f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{784791ad-d275-461a-860a-7c000d05f8c5}</UniqueIdentifier>
+      <UniqueIdentifier>{6242fd6b-962b-49d8-9bcb-cc3b7e1984e0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shader">
-      <UniqueIdentifier>{db382874-7314-4fd2-aed2-44d3cc3ffe29}</UniqueIdentifier>
+      <UniqueIdentifier>{40ecb4d7-20ce-4029-8c37-5c43e2301cb1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{46a96fa1-35c8-456b-8700-bfd7ee3443ed}</UniqueIdentifier>
+      <UniqueIdentifier>{605b9639-9345-4e36-ba3f-ab6b7258d750}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{d778b363-5cb5-4c6a-9322-273e2d701f80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics">
-      <UniqueIdentifier>{c6fd50b5-319d-41e0-9997-5e8d6f41531a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Gameplay">
-      <UniqueIdentifier>{9027c4e6-e6cf-47a1-b4e4-c6cea895ba13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ResourceManager">
-      <UniqueIdentifier>{386cc402-ab55-437d-a285-a2b94b8195d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Engine">
-      <UniqueIdentifier>{0e572bfc-18bb-4108-86d6-8b4f54ab1c23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ThirdParty">
-      <UniqueIdentifier>{8ea20a4e-1541-4b8f-8e73-e58c32439e79}</UniqueIdentifier>
+      <UniqueIdentifier>{e7bd4976-9428-4896-bc5c-3d9ab191b6f9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{d0ac867a-68eb-4ffd-b10c-339f2e216ffa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine">
-      <UniqueIdentifier>{cb91e825-d34c-4a7e-80cf-2a1d5749d1ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ThirdParty">
-      <UniqueIdentifier>{8ef48012-114c-44a8-8998-bb9db015224f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics">
-      <UniqueIdentifier>{37ab1f46-9411-4d84-a604-f19cdfd83d48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ResourceManager">
-      <UniqueIdentifier>{ed406bc9-5f3c-42ba-983d-64f941704637}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Gameplay">
-      <UniqueIdentifier>{4b6d3631-738e-411f-92e6-2abc1ea66bad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Assertion">
-      <UniqueIdentifier>{10ad0644-16c4-44ae-8c6c-e18c6cc25721}</UniqueIdentifier>
+      <UniqueIdentifier>{7cc6c8f7-4abe-4754-ab59-c0ce709ed627}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Core\Containers">
-      <UniqueIdentifier>{ab067e10-c419-430f-8b56-dcd708381223}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Utils">
-      <UniqueIdentifier>{9c3fe424-1994-4d81-a3a2-623c491bdebf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Memory">
-      <UniqueIdentifier>{7a5d6568-204c-4246-875a-56eb958d3cbd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Debug">
-      <UniqueIdentifier>{1be8ccab-828a-4ba5-a041-a170602cf43b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\String">
-      <UniqueIdentifier>{def5946f-7f2d-4b1d-bb8a-62b232817f53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Math">
-      <UniqueIdentifier>{3abaf7ff-ca32-44cb-af04-bbd5004435b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Template">
-      <UniqueIdentifier>{258479ac-e84b-451b-b2d0-24ebc18958ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Thread">
-      <UniqueIdentifier>{aaa3f0bb-4f7f-4e0e-b8a5-4b82e9ace07e}</UniqueIdentifier>
+      <UniqueIdentifier>{c5cfcc74-5d26-433f-aa92-b6bd4cbe1f9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Core\Containers">
-      <UniqueIdentifier>{218e43b4-74f2-4730-b531-7ed1c538591a}</UniqueIdentifier>
+      <UniqueIdentifier>{3af495aa-8a92-4145-a8f0-caae18c4cfd6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\Debug">
-      <UniqueIdentifier>{1428def8-90fb-4042-abec-b179fdfafd20}</UniqueIdentifier>
+    <Filter Include="Header Files\Core\Assertion">
+      <UniqueIdentifier>{5bb4a354-0050-4d88-8a4a-93b03ccf2393}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\Memory">
-      <UniqueIdentifier>{25a30f8f-03e7-47b3-9dab-4077172c118e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Thread">
-      <UniqueIdentifier>{579bef00-4407-4288-8feb-1c161804c047}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Gameplay\Object">
-      <UniqueIdentifier>{cefc9565-5f53-43ff-b5a0-2ca31b003307}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Gameplay\World">
-      <UniqueIdentifier>{3f5f2b1f-a123-46ed-bb69-cc3cccc22a1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Gameplay\Tmp">
-      <UniqueIdentifier>{75192609-f7dd-4be4-99f9-5f111d5284da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics\Device">
-      <UniqueIdentifier>{ab4c0140-f7a6-4ffd-be1d-f7358a763a1f}</UniqueIdentifier>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{2ccf7ea5-05ce-4388-b859-9505251b7e57}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Graphics\Renderer">
-      <UniqueIdentifier>{0ebabd04-1cb6-417a-8d3b-66a9224b2850}</UniqueIdentifier>
+      <UniqueIdentifier>{b5821b28-7b65-48d3-98eb-5055c92d672f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Graphics\Sprite">
-      <UniqueIdentifier>{ffe1eb6d-e1fa-4a8a-a4a4-2089d4fe48ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics\Shader">
-      <UniqueIdentifier>{126417f0-e66e-49d1-b842-a3d6777bdf9b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics\Test">
-      <UniqueIdentifier>{5dbfda07-ddf2-449f-8d19-38012f78b855}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ResourceManager\Texture">
-      <UniqueIdentifier>{9e7756d2-1626-4b91-898f-e337ad8830c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ThirdParty\lodepng">
-      <UniqueIdentifier>{afa5be7f-7c4f-45f1-b735-910de3c4ddd4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ThirdParty\tictoc">
-      <UniqueIdentifier>{18c902a8-c096-4ec4-8054-bd6b417ebaab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Gameplay\Object">
-      <UniqueIdentifier>{ea6af3d5-9c76-4686-b2f8-9a4d6a851aef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Gameplay\World">
-      <UniqueIdentifier>{a1d7eaec-7be6-4f63-b0b1-249824f4fbc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics\Device">
-      <UniqueIdentifier>{56fefdd7-8c20-4ce3-9785-3c3fdc7e9b0a}</UniqueIdentifier>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{586ba82c-7097-43d2-b2e1-ff1f023333b7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Graphics\Renderer">
-      <UniqueIdentifier>{f3b699f6-1a50-49fb-97c5-6fb1cea4d50f}</UniqueIdentifier>
+      <UniqueIdentifier>{0624b1e2-41c9-4737-af38-5200048d945c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ResourceManager">
+      <UniqueIdentifier>{1bf903b9-9ab2-4325-ae1b-f6254662b948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ResourceManager\Texture">
+      <UniqueIdentifier>{9a563de9-89dd-4972-8b3d-c45cd3cbd3ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Device">
+      <UniqueIdentifier>{0ba11bdd-0753-4223-a579-5ab866a5f185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{6e3964bb-d2c6-4198-9e08-2dfbcc1f13e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Debug">
+      <UniqueIdentifier>{355277ae-0fb7-470f-b941-dc37595b033a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Template">
+      <UniqueIdentifier>{173d38c1-edaf-4939-85c7-8a6b9d563064}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ThirdParty">
+      <UniqueIdentifier>{47311c7d-d578-46a1-9a97-2f690429a783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\String">
+      <UniqueIdentifier>{a9a6d69d-b235-46ae-91af-11c7b20a136c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Utils">
+      <UniqueIdentifier>{fa6e711c-3f9f-4a5f-8f9a-161fa91a6b3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Memory">
+      <UniqueIdentifier>{182b4735-15f7-4ae7-b4db-6531c443b827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Debug">
+      <UniqueIdentifier>{00d419f2-0ce8-4faf-b140-78881a751719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\String">
+      <UniqueIdentifier>{e3c542ef-7f5d-4520-af18-8986d244d2af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Thread">
+      <UniqueIdentifier>{c953cad0-4508-437b-947e-3b7328ec5756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Shader">
+      <UniqueIdentifier>{d1562196-eff3-400f-a19f-167ab3ddc1b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Sprite">
+      <UniqueIdentifier>{3ebd1f92-4664-47af-8509-1a4b66a4a1f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ThirdParty\lodepng">
+      <UniqueIdentifier>{7074bf73-632b-4178-8cbf-1fd1117d0cd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ThirdParty\tictoc">
+      <UniqueIdentifier>{f9288d5d-74cb-46d8-a27e-a14acc51e03a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\String">
+      <UniqueIdentifier>{a9a6d69d-b235-46ae-91af-11c7b20a136c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\String">
+      <UniqueIdentifier>{a9a6d69d-b235-46ae-91af-11c7b20a136c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Thread">
+      <UniqueIdentifier>{b38cc294-7d48-4ff5-a789-dfd389264d17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\String">
+      <UniqueIdentifier>{e4e99bfb-3066-47f3-9ddc-3ca5edd1e4d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Device">
+      <UniqueIdentifier>{e12f1f41-e11e-42ba-9c23-931ba7443d9a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Graphics\Shader">
-      <UniqueIdentifier>{e55928fa-f669-4017-894d-faba2833ee23}</UniqueIdentifier>
+      <UniqueIdentifier>{dee8e62f-9999-4dab-9f8a-d85e402d8903}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Graphics\Sprite">
-      <UniqueIdentifier>{65c1382a-d7c8-49a8-8fe0-5251790eb0cb}</UniqueIdentifier>
+      <UniqueIdentifier>{781f0904-63ec-4404-80ee-275adfff76c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ResourceManager\Texture">
-      <UniqueIdentifier>{7b4eea55-ac39-401f-b2a4-17feefd42719}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ThirdParty\lodepng">
-      <UniqueIdentifier>{bc0a765d-9e05-4bcb-a86c-1414673b6c35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ThirdParty\tictoc">
-      <UniqueIdentifier>{70a35b61-4a92-492e-b8f1-f1beade9fe3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Shapes">
-      <UniqueIdentifier>{a097aa5a-7064-42cf-bfa6-410b58283d20}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Shapes">
-      <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
+    <Filter Include="Header Files\Core\Timer">
+      <UniqueIdentifier>{764038da-56ba-49e4-8835-3d59fea9ade4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Core\KeyboardInput">
       <UniqueIdentifier>{8b16aa60-7040-4797-8b91-69daedd00bc9}</UniqueIdentifier>
@@ -452,6 +837,48 @@
     </Filter>
     <Filter Include="Header Files\Core\Types">
       <UniqueIdentifier>{5883785d-9e32-4cf3-b63c-730729a66c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ResourceManager\Texture">
+      <UniqueIdentifier>{27c5cf6e-1616-4dc1-868e-3f1e75236210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Test">
+      <UniqueIdentifier>{0b55559d-4eea-452a-93bc-1f63a625aab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Timer">
+      <UniqueIdentifier>{764038da-56ba-49e4-8835-3d59fea9ade4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ThirdParty\lodepng">
+      <UniqueIdentifier>{089868ab-45bf-47a5-a143-10bdce8b04cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ThirdParty\Tictoc">
+      <UniqueIdentifier>{8cc3e2fb-9c20-47a7-aadd-5aae563c547d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ThirdParty\tictoc">
+      <UniqueIdentifier>{da45ebf8-10a5-4364-9cc8-cb552a77f410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ThirdParty\Tictoc">
+      <UniqueIdentifier>{8fbd3835-8552-4d7b-bac2-9e2cc63bb095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Template">
+      <UniqueIdentifier>{377a7821-e104-4395-abb3-6dadcb02f4e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\World">
+      <UniqueIdentifier>{77713b56-0d16-4326-9587-110d2a0bdf10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Shapes">
+      <UniqueIdentifier>{a097aa5a-7064-42cf-bfa6-410b58283d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\World">
+      <UniqueIdentifier>{ea3a80c0-0244-48ad-8f00-24af5d3cd0da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Game">
+      <UniqueIdentifier>{300dc9c2-fab9-4044-85ca-67ad6a2745dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay\Game">
+      <UniqueIdentifier>{83aaa7f9-b724-4c99-9ab4-1ccec13b627d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Shapes">
+      <UniqueIdentifier>{fc142231-f6ab-4fa2-bcc7-d7338f39f8f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

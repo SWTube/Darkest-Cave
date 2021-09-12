@@ -4,19 +4,26 @@
  */
 #pragma once
 
-#include <vector>
+#include <string>
+#include <unordered_set>
 #include <unordered_map>
+
+#include "CoreTypes.h"
+#include "Object/Object.h"
 
 namespace cave
 {
-	class Tag;
-	class GameObject;
 	class Level;
+	class Map;
 
-	class World final
+	class World final : public Object
 	{
 	public:
-		World();
+		friend class Level;
+
+		World() = delete;
+		World(std::string& name);
+		World(const char* name);
 		World(const World&) = delete;
 		World(World&&) = delete;
 
@@ -25,36 +32,22 @@ namespace cave
 		World& operator=(World&&) = delete;
 
 		void AddLevel(Level& level);
+		void AddLevels(std::vector<Level*>& levels);
+
+		void RemoveLevel(Level& level);
+		void RemoveLevel(const std::string& name);
 		void RemoveLevel(std::string& name);
 		void RemoveLevel(const char* name);
+		void RemoveLevels(std::vector<Level*>& levels);
 
-		void AddGameObject(GameObject& gameObject);
-		void RemoveGameObject(std::string& name);
-		void RemoveGameObject(const char* name);
+		void InitializeGameObjectsInWorld();
+		void UpdateGameObjectsInWorld();
+		void FixedUpdateGameObjectsInWorld();
 
-		Level* FindLevelByName(std::string& name);
-		Level* FindLevelByName(const char* name);
-
-		GameObject* FindGameObjectByName(std::string& name);
-		GameObject* FindGameObjectByName(const char* name);
-		std::vector<GameObject*>& FindGameObjectsByName(std::string& name);
-		std::vector<GameObject*>& FindGameObjectsByName(const char* name);
-
-		GameObject* FindGameObjectByTag(std::string& tag);
-		GameObject* FindGameObjectByTag(const char* tag);
-		std::vector<GameObject*>& FindGameObjectsByTag(std::string& tag);
-		std::vector<GameObject*>& FindGameObjectsByTag(const char* tag);
-
-		void UpdateGameObjectInWorld();
-		void UpdateAllGameObjectInWorld();
+		bool IsLevelInWorld(Level& level);
 
 	private:
+		static std::unordered_set<std::string> mGlobalUniqueName;
 		std::unordered_map<std::string, Level*> mLevels;
-		/*Read only.*/
-		std::unordered_multimap<std::string, GameObject*> mGameObjects;
-		/*Read only.*/
-		std::unordered_multimap<Tag*, GameObject*> mGameObjectsSortByTag;
-
-		Level* mCurrentLevel;
 	};
 }
