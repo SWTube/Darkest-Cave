@@ -2,12 +2,14 @@
 
 #define UPDATE_TIMESTEP (0.002f)
 
+#include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Device/DeviceResources.h"
-#include "Renderer/Renderer.h"
 #include "Game/GameInstance.h"
+#include "GraphicsApiPch.h"
 
+import DeviceResources;
 import Timer;
+import Renderer;
 
 export module Engine;
 

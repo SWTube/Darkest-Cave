@@ -248,31 +248,25 @@
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
     <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h" />
-    <ClInclude Include="Core\Public\Memory\Memory.h" />
     <ClInclude Include="Core\Public\Memory\MemoryPool.h" />
     <ClInclude Include="Core\Public\Shapes\Quadrant.h" />
     <ClInclude Include="Core\Public\Thread\Thread.h" />
     <ClInclude Include="Core\Public\Utils\Crt.h" />
+    <ClInclude Include="Core\Public\Utils\Defines.h" />
     <ClInclude Include="Gameplay\Public\Game\GameInstance.h" />
+    <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Object.h" />
     <ClInclude Include="Gameplay\Public\Object\Player.h" />
+    <ClInclude Include="Gameplay\Public\Object\Tag.h" />
     <ClInclude Include="Gameplay\Public\Object\TagPool.h" />
     <ClInclude Include="Gameplay\Public\Object\Transform.h" />
     <ClInclude Include="Gameplay\Public\World\Level.h" />
-    <ClInclude Include="Graphics\Public\Device\DeviceResources.h" />
-    <ClInclude Include="Graphics\Public\Device\GenericDeviceResources.h" />
-    <ClInclude Include="Graphics\Public\Device\GenericWindow.h" />
-    <ClInclude Include="Graphics\Public\Device\Window.h" />
-    <ClInclude Include="Graphics\Public\Device\WindowsDeviceResources.h" />
-    <ClInclude Include="Graphics\Public\Device\WindowsWindow.h" />
+    <ClInclude Include="Gameplay\Public\World\World.h" />
     <ClInclude Include="Gameplay\Public\Object\Script.h" />
-    <ClInclude Include="Graphics\Public\Shader\Shader.h" />
-    <ClInclude Include="Graphics\Public\Shader\WindowsShader.h" />
+    <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
+    <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
-    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h" />
-    <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
-    <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
@@ -305,6 +299,11 @@
     <ClCompile Include="Core\Public\Template\IteratorType.ixx" />
     <ClCompile Include="EngineMain.cpp" />
     <ClCompile Include="Engine\Public\Engine.ixx" />
+    <ClCompile Include="Gameplay\Private\Game\GameInstance.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\TagPool.cpp" />
+    <ClCompile Include="Gameplay\Private\Object\Transform.cpp" />
+    <ClCompile Include="Gameplay\Private\World\Level.cpp" />
+    <ClCompile Include="Gameplay\Private\World\World.cpp" />
     <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
     <ClCompile Include="Graphics\Public\Device\Window.ixx" />
@@ -316,16 +315,11 @@
     <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
     <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx" />
     <ClCompile Include="Graphics\Public\UI\Text.ixx" />
-    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp" />
-    <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp" />
     <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\Texture.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\TextureManager.ixx" />
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
-    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp" />
-    <ClCompile Include="Graphics\Private\Shader\WindowsShader.cpp" />
     <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx" />
-    <ClCompile Include="ResourceManager\Private\Texture\Texture.cpp" />
     <ClCompile Include="ResourceManager\Public\Texture\WicTextureLoader.ixx" />
     <ClCompile Include="ThirdParty\lodepng\Private\lodepng.cpp" />
     <ClCompile Include="Gameplay\Private\Object\Script.cpp" />

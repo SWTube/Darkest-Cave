@@ -94,7 +94,7 @@ namespace cave
 
 	void TestScript::Update(GameObject& gameObject)
 	{
-		gameObject.GetTransform()->GetPosition()->X += mSpeed;
+		/*gameObject.GetTransform()->GetPosition()->X += mSpeed;
 		if (gameObject.GetTransform()->GetPosition()->X > 250.f)
 		{
 			gameObject.GetRenderer()->SetSpriteTexture(mSpriteIndex, mNextTextureIndex);
@@ -103,7 +103,7 @@ namespace cave
 		if (gameObject.GetTransform()->GetPosition()->X > 400.f)
 		{
 			gameObject.RemoveGameObjectInLevel();
-		}
+		}*/
 	}
 
 	void TestScript::SetSpriteIndex(uint32_t index)

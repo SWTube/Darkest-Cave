@@ -9,9 +9,10 @@
 #include <unordered_set>
 #include <unordered_map>
 
-#include "Renderer/Renderer.h"
 #include "Assertion/Assert.h"
 #include "Object/Object.h"
+
+import Renderer;
 
 namespace cave
 {

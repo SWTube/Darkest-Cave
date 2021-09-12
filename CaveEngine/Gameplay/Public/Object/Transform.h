@@ -6,7 +6,8 @@
 
 #include "CoreTypes.h"
 #include "Assertion/Assert.h"
-#include "Containers/Vertex.h"
+
+import cave.Core.Types.Float;
 
 namespace cave
 {
