@@ -108,8 +108,10 @@ ALboolean ALFWInitOpenAL()
 {
 	ALDeviceList *pDeviceList = NULL;
 	ALCcontext *pContext = NULL;
-	//ALCdevice *pDevice = alcOpenDevice(NULL);
-	ALCdevice *pDevice = NULL;
+	//
+	ALCdevice *pDevice = alcOpenDevice(NULL);
+	//
+	//ALCdevice *pDevice = NULL;
 	ALint i;
 	ALboolean bReturn = AL_FALSE;
 

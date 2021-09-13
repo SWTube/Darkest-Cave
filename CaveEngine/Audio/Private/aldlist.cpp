@@ -48,6 +48,8 @@ ALDeviceList::ALDeviceList()
 	if (LoadOAL10Library(NULL, &ALFunction) == TRUE) {
 		if (ALFunction.alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT")) {
 			devices = (char *)ALFunction.alcGetString(NULL, ALC_DEVICE_SPECIFIER);
+			//ALCdevice* pDevice = alcOpenDevice(NULL);
+			//devices = alcOpenDevice("Generic Software");
 			defaultDeviceName = (char *)ALFunction.alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
 			index = 0;
 			// go through device list (each device terminated with a single NULL, list terminated with double NULL)
