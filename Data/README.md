@@ -4,7 +4,7 @@
 
 ## 모델 리스트
 
- 1. VGG19 (Block1_conv1 ~ Block5_conv1, Block1_conv2)
+ 1. VGG19 (Block1_conv1 ~ Block5_conv1, Block5_conv2)
 
 |  Operation|Filter|Parameters|Activations|layer|
 |:--:|:--:|:--:|:--:|:--:|
