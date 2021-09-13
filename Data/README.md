@@ -51,6 +51,13 @@
 | **Upsampling**| **C feature maps** |
 | Convolution |3| 1 | C|SAME	|Linear|
 
+ - Padding mode REFLECT
+ - Normalization Conditional instance normalization after every convolution
+ - Optimizer Adam (α = 0.001, β1 = 0.9, β2 = 0.999)
+ - Parameter updates 4M
+ - Batch size 8
+ - Weight initialization Isotropic gaussian (µ = 0, σ = 0.01)
+
 # 1. 커밋 내역 공유
 
 ## 1.1 절차적 맵생성
