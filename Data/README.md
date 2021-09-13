@@ -6,7 +6,7 @@
 
  1. VGG19 (Block1_conv1 ~ Block5_conv1, Block1_conv2)
 ![Details on the VGG19 architecture. For each layer, number of filters,... |  Download Table](https://www.researchgate.net/profile/Ferran-Pares/publication/314237915/figure/tbl1/AS:667100565745668@1536060577444/Details-on-the-VGG19-architecture-For-each-layer-number-of-filters-parameters-and.png)
-
+---
  2. AdaIN (VGG19, Relu 4-1)
 
 |  Operation|Filter|Parameters|Activations|
