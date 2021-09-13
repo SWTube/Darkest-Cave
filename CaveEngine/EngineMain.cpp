@@ -18,7 +18,7 @@
 #include "tictoc.h"
 
 #include "CoreGlobals.h"
-
+#include "GraphicsApiPch.h"
 #include "Shapes/Quadrant.h"
 #include "World/Level.h"
 #include "World/World.h"
