@@ -1,5 +1,56 @@
 # Darkest-Cave Data texture making
 
+# Compair Model Paramter 
+
+## 모델 리스트
+
+ 1. VGG19 (Block1_conv1 ~ Block5_conv1, Block1_conv2)
+![Details on the VGG19 architecture. For each layer, number of filters,... |  Download Table](https://www.researchgate.net/profile/Ferran-Pares/publication/314237915/figure/tbl1/AS:667100565745668@1536060577444/Details-on-the-VGG19-architecture-For-each-layer-number-of-filters-parameters-and.png)
+
+ 2. AdaIN (VGG19, Relu 4-1)
+
+|  Operation|Filter|Parameters|Activations|
+|:--:|:--:|:--:|:--:|
+| Conv2d|64| 1.7K| 3.2M |
+| ReflectionPad2d|
+| Conv2d|64| 36K| 3.2M |
+| **ReLu 1-1**|
+| Conv2d|64| 36K| 3.2M |
+| **ReLu 1-2**|
+| MaxPool2d|
+| ReflectionPad2d|
+
+### ... until Relu 4-1
+
+|  Operation|Filter|Parameters|Activations|
+|:--:|:--:|:--:|:--:|
+| ReflectionPad2d|
+| Conv2d|256| 600K| 802K |
+| **ReLu 3-4**|
+| Conv2d|512| 2.3M| 100K |
+| **ReLu 4-1**|
+---
+ 3. Inception-V3
+
+|  Operation|Kernel size|Stride|Feature maps|Padding|Nonlinearity|
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| Convolution |9| 1 | 32 |SAME	|ReLU	|
+| Convolution |3| 2 | 64 |SAME	|ReLU	|
+| Convolution |3| 2 | 128|SAME	|ReLU	|
+| Residual block|  |  | 128 |	|	|
+| Residual block|  |  | 128 |	|	|
+| Residual block|  |  | 128 |	|	|
+| Residual block|  |  | 128 |	|	|
+| Residual block|  |  | 128 |	|	|
+| Upsampling|  |  | 64|	|	|
+| Upsampling|  |  | 32|	|	|
+| Convolution|9| 1 | 3|SAME	|Sigmoid|
+| **Residual block**| **C feature maps** |
+| Convolution |3| 1 | C|SAME	|ReLU	|
+| Convolution |3| 1 | C|SAME	|Linear|
+| **Upsampling**| **C feature maps** |
+| Convolution |3| 1 | C|SAME	|Linear|
+
 # 1. 커밋 내역 공유
 
 ## 1.1 절차적 맵생성
