@@ -6,6 +6,28 @@
 
  1. VGG19 (Block1_conv1 ~ Block5_conv1, Block1_conv2)
 ![Details on the VGG19 architecture. For each layer, number of filters,... |  Download Table](https://www.researchgate.net/profile/Ferran-Pares/publication/314237915/figure/tbl1/AS:667100565745668@1536060577444/Details-on-the-VGG19-architecture-For-each-layer-number-of-filters-parameters-and.png)
+
+|  Operation|Filter|Parameters|Activations|layer|
+|:--:|:--:|:--:|:--:|:--:|
+| **Conv2d_1_1**|64| 1.7K| 3.2M |Style
+| Conv2d_1_2|64| 36K| 3.2M |
+| **max pooling**|||802K|
+|**Conv2d_2_1**|128| 73K| 1.6M |Style
+| Conv2d_2_2|128| 147K| 1.6M |
+| **max pooling**|||401K|
+| **Conv2d_3_1**|256| 300K| 802K |Style
+| Conv2d_3_2|256| 600K| 802K|
+| Conv2d_3_3|256| 600K| 802K|
+| Conv2d_3_4|256| 600K| 802K|
+| **max pooling**|
+| **Conv2d_4_1**|512| 1.1M| 401K|Style
+| Conv2d_4_2|512| 2.3M| 401K|
+| Conv2d_4_3|512| 2.3M| 401K|
+| Conv2d_4_4|512| 2.3M| 401K|
+| **max pooling**|
+| **Conv2d_5_1**|512| 2.3M| 100K |Style
+| **Conv2d_5_2**|512| 2.3M| 100K |Content
+
 ---
  2. AdaIN (VGG19, Relu 4-1)
 
