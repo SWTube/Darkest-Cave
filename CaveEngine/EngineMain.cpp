@@ -32,7 +32,7 @@ void MemoryTest1(cave::MemoryPool& pool);
 template <size_t N>
 void MemoryTest2(cave::MemoryPool& pool);
 //void RenderTest();
-//void DemoTest();
+void DemoTest();
 //void KeyboardTest();
 
 constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
@@ -236,13 +236,13 @@ void MemoryTest2(cave::MemoryPool& pool)
 //
 //	cave::Renderer* renderer = main->GetRenderer();
 //
-//	renderer->AddSprite("orange_mushroom.png");
+//	/*renderer->AddSprite("orange_mushroom.png");*/
 //
-//	renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
-//	renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
-//	renderer->SetSpritePosition(2, cave::Float2(500, 200));
-//	//renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
-//	renderer->SetSpritePosition(2, cave::Float2(500, 200));
+//	//renderer->AddAnimatedSprite("spaceship.dds", "default", 4, 3.0f, true);
+//	//renderer->AddAnimatedSprite("meteo_effect.dds", "default", 21, 10.0f, true);
+//	//renderer->SetSpritePosition(2, cave::Float2(500, 200));
+//	////renderer->SetSpriteZIndex(0, 1);  // ���ڰ� Ŭ ���� �տ� ��. (�ּ������ ����⺸�� �����׸��� �տ���) 
+//	//renderer->SetSpritePosition(2, cave::Float2(500, 200));
 //	//renderer->SetSpriteZIndex(0, 1);  // 占쏙옙占쌘곤옙 클 占쏙옙占쏙옙 占쌌울옙 占쏙옙. (占쌍쇽옙占쏙옙占쏙옙占?占쏙옙占쏙옙羞몌옙占?占쏙옙占쏙옙占쌓몌옙占쏙옙 占쌌울옙占쏙옙) 
 //	
 //	if (result == cave::eResult::CAVE_OK)
@@ -261,81 +261,82 @@ void MemoryTest2(cave::MemoryPool& pool)
 //	main->Destroy();
 //}
 
-//void DemoTest()
-//{
-//	// Main message loop
-//	// Begin initialization.
-//
-//	// Instantiate the window manager class.
-//	cave::Engine* main = cave::Engine::Instance();
-//	// Create a window.
-//	cave::eResult result = main->Init(1600u, 900u);
-//
-//	cave::Renderer* renderer = main->GetRenderer();
-//
-//											// index
-//	//renderer->AddSprite("lapland.png");		// 0 sprite
-//	//renderer->AddTexture("lapland_2.png");	// 1 texture
-//	//renderer->AddSprite("amiya.png");		// 1 sprite, 2 texture
-//	//renderer->AddTexture("amiya_2.png");	// 3 texture
-//	//renderer->AddSprite("texas.png");		// 2 sprite, 4 texture
-//	//renderer->AddTexture("texas_2.png");	// 5 texture
-//
-//	/*renderer->SetSpritePosition(0, { 0.f, 0.f });
-//	renderer->SetSpritePosition(1, { 0.f, 0.f });
-//	renderer->SetSpritePosition(2, { 0.f, 0.f });*/
-//
-//	cave::World* world = new cave::World("World_1");
-//
-//	cave::Level* level = new cave::Level("Level_1");
-//
-//	float speed = 2.f;
-//
-//	cave::GameObject* gameObject = new cave::GameObject("lapland");
-//	cave::TestScript* move = new cave::TestScript("Move", 0, 0, speed);
-//	renderer->AddSprite("lapland.png");
-//
-//	gameObject->SetRenderer(*main->GetRenderer());
-//	gameObject->AddScript(*move);
-//	level->AddGameObject(*gameObject);
-//
-//	for (size_t i = 1; i < 1000; ++i)
-//	{
-//		cave::GameObject* gO = new cave::GameObject(*gameObject);
-//		renderer->AddSprite("lapland.png");
-//		gO->SetRenderer(*main->GetRenderer());
-//		cave::TestScript* testScript = new cave::TestScript(*move);
-//		testScript->SetSpriteIndex(i);
-//		speed -= 0.002f;
-//		testScript->SetSpeed(speed);
-//		gO->AddScript(*testScript);
-//		level->AddGameObject(*gO);
-//		std::string name = "lapland" + std::to_string(i + 1);
-//		std::string sc = "Move" + std::to_string(i + 1);
-//		assert(level->FindGameObjectByName(name) != nullptr);
-//		assert(gO->FindScriptByName(sc) != nullptr);
-//	}
-//
-//	renderer->AddTexture("lapland_2.png");
-//
-//	cave::GameInstance* gameInstance = main->GetGameInstance();
-//	
-//	world->AddLevel(*level);
-//	gameInstance->AddWorld(*world);
-//
-//
-//
-//	if (result == cave::eResult::CAVE_OK)
-//	{
-//		//// Go full-screen.
-//		//deviceResources->GoFullScreen();
-//
-//		//// Whoops! We resized the "window" when we went full-screen. Better
-//
-//		// Run the program.
-//		result = main->Run();
-//	//main->Destroy();
-//}
+void DemoTest()
+{
+	// Main message loop
+	// Begin initialization.
+
+	// Instantiate the window manager class.
+	cave::Engine* main = cave::Engine::Instance();
+	// Create a window.
+	cave::eResult result = main->Init(1600u, 900u);
+
+	cave::Renderer* renderer = main->GetRenderer();
+
+											// index
+	//renderer->AddSprite("lapland.png");		// 0 sprite
+	//renderer->AddTexture("lapland_2.png");	// 1 texture
+	//renderer->AddSprite("amiya.png");		// 1 sprite, 2 texture
+	//renderer->AddTexture("amiya_2.png");	// 3 texture
+	//renderer->AddSprite("texas.png");		// 2 sprite, 4 texture
+	//renderer->AddTexture("texas_2.png");	// 5 texture
+
+	/*renderer->SetSpritePosition(0, { 0.f, 0.f });
+	renderer->SetSpritePosition(1, { 0.f, 0.f });
+	renderer->SetSpritePosition(2, { 0.f, 0.f });*/
+
+	cave::World* world = new cave::World("World_1");
+
+	cave::Level* level = new cave::Level("Level_1");
+
+	/*float speed = 2.f;
+
+	cave::GameObject* gameObject = new cave::GameObject("lapland");
+	cave::TestScript* move = new cave::TestScript("Move", 0, 0, speed);
+	renderer->AddSprite("lapland.png");
+
+	gameObject->SetRenderer(*main->GetRenderer());
+	gameObject->AddScript(*move);
+	level->AddGameObject(*gameObject);
+
+	for (size_t i = 1; i < 1000; ++i)
+	{
+		cave::GameObject* gO = new cave::GameObject(*gameObject);
+		renderer->AddSprite("lapland.png");
+		gO->SetRenderer(*main->GetRenderer());
+		cave::TestScript* testScript = new cave::TestScript(*move);
+		testScript->SetSpriteIndex(i);
+		speed -= 0.002f;
+		testScript->SetSpeed(speed);
+		gO->AddScript(*testScript);
+		level->AddGameObject(*gO);
+		std::string name = "lapland" + std::to_string(i + 1);
+		std::string sc = "Move" + std::to_string(i + 1);
+		assert(level->FindGameObjectByName(name) != nullptr);
+		assert(gO->FindScriptByName(sc) != nullptr);
+	}
+
+	renderer->AddTexture("lapland_2.png");
+
+	cave::GameInstance* gameInstance = main->GetGameInstance();
+	
+	world->AddLevel(*level);
+	gameInstance->AddWorld(*world);*/
+
+
+
+	if (result == cave::eResult::CAVE_OK)
+	{
+		//// Go full-screen.
+		//deviceResources->GoFullScreen();
+
+		//// Whoops! We resized the "window" when we went full-screen. Better
+
+		// Run the program.
+		result = main->Run();
+	}
+	//main->Destroy();
+}
 
 //void KeyboardTest()
 //{

@@ -12,6 +12,7 @@ export module Engine;
 import DeviceResources;
 import Timer;
 import Renderer;
+import Window;
 
 
 namespace cave
