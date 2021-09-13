@@ -12,7 +12,7 @@
 #include "Assertion/Assert.h"
 #include "Object/Object.h"
 
-import Renderer;
+import Renderable;
 
 namespace cave
 {
@@ -67,8 +67,8 @@ namespace cave
 
 		FORCEINLINE Transform* GetTransform() const;
 
-		void SetRenderer(Renderer& renderer);
-		FORCEINLINE Renderer* GetRenderer() const;
+		void SetRenderer(Renderable& rendererable);
+		FORCEINLINE Renderable* GetRenderer() const;
 
 		void SetPhysicsBody(PhysicsBody& physicsBody);
 		FORCEINLINE PhysicsBody* GetPhysicsBody() const;
@@ -93,7 +93,7 @@ namespace cave
 		Tag* mTag;
 
 		Transform* mTransform;
-		Renderer* mRenderer;
+		Renderable* mRenderable;
 		PhysicsBody* mPhysicsBody;
 
 		Level* mLevel;
@@ -129,10 +129,10 @@ namespace cave
 		return mTransform;
 	}
 
-	FORCEINLINE Renderer* GameObject::GetRenderer() const
+	FORCEINLINE Renderable* GameObject::GetRenderer() const
 	{
 		assert(IsValid());
-		return mRenderer;
+		return mRenderable;
 	}
 
 	FORCEINLINE PhysicsBody* GameObject::GetPhysicsBody() const

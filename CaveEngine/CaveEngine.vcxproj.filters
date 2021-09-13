@@ -33,9 +33,6 @@
     <ClCompile Include="Core\Public\Template\IteratorType.ixx">
       <Filter>Header Files\Core\Template</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Memory\Memory.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Containers\Node.cpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
@@ -44,18 +41,6 @@
     </ClCompile>
     <ClCompile Include="Core\Private\Memory\Memory.cpp">
       <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\DeviceResources.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Device\WindowsDeviceResources.cpp">
-      <Filter>Source Files\Graphics\Device</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\GenericRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Renderer\WindowsRenderer.cpp">
-      <Filter>Source Files\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files\Core\Thread</Filter>
@@ -90,32 +75,17 @@
     <ClCompile Include="Core\Public\String\String.ixx">
       <Filter>Header Files\Core\String</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="ThirdParty\tictoc\src\tictoc.c">
       <Filter>Source Files\ThirdParty\Tictoc</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Public\Containers\Matrix.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Template\IteratorType.ixx">
       <Filter>Header Files\Core\Template</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Array.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
       <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Hash.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Public\Containers\Hash.ixx">
       <Filter>Header Files\Core\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Private\Sprite\AnimatedSprite.cpp">
-      <Filter>Source Files\Graphics\Sprite</Filter>
     </ClCompile>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
@@ -191,12 +161,6 @@
     </ClCompile>
     <ClCompile Include="ResourceManager\Public\Texture\WicTextureLoader.ixx">
       <Filter>Header Files\ResourceManager\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Private\Containers\Vertex.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Public\Containers\Trie.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Shapes\BoundingRect.ixx">
       <Filter>Header Files\Core\Shapes</Filter>
@@ -332,9 +296,6 @@
     <ClInclude Include="Core\Public\CoreGlobals.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Graphics.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Assertion\Assert.h">
       <Filter>Header Files\Core\Assertion</Filter>
     </ClInclude>
@@ -356,12 +317,6 @@
     <ClInclude Include="Core\Public\Memory\MemoryPool.h">
       <Filter>Header Files\Core\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Memory\Memory.h">
-      <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Containers\Node.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
@@ -371,20 +326,11 @@
     <ClInclude Include="Core\Public\Containers\Node.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\String\String.h">
-      <Filter>Header Files\Core\String</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Memory\MemoryPool.h">
       <Filter>Header Files\Core\Memory</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\String\String.h">
       <Filter>Header Files\Core\String</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Device\Window.h">
-      <Filter>Header Files\Graphics\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Shader\WindowsShader.h">
-      <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
@@ -404,20 +350,11 @@
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h">
       <Filter>Header Files\ThirdParty\Tictoc</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Public\Containers\TStack.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h">
       <Filter>Header Files\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h">
       <Filter>Header Files\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
-      <Filter>Header Files\ResourceManager\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\AnimatedSprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
@@ -445,9 +382,6 @@
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Object\Object.h">
       <Filter>Header Files\Gameplay\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Vertex.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Gameplay\Public\Game\GameInstance.h">
       <Filter>Header Files\Gameplay\Game</Filter>
@@ -517,28 +451,13 @@
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
-    <ClInclude Include="Graphics\Public\Renderer\Camera.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h">
-      <Filter>Header Files\Graphics\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Hash.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\Renderer.h">
       <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
-      <Filter>Header Files\ResourceManager\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager\Public\Texture\Texture.h">
       <Filter>Header Files\ResourceManager\Texture</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">

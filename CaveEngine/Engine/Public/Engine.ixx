@@ -7,11 +7,12 @@
 #include "Game/GameInstance.h"
 #include "GraphicsApiPch.h"
 
+export module Engine;
+
 import DeviceResources;
 import Timer;
 import Renderer;
 
-export module Engine;
 
 namespace cave
 {

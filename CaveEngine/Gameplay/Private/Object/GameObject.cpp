@@ -26,7 +26,7 @@ namespace cave
 		, mScripts()
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
@@ -40,7 +40,7 @@ namespace cave
 		, mScripts()
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
@@ -54,7 +54,7 @@ namespace cave
 		, mScripts()
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
@@ -68,7 +68,7 @@ namespace cave
 		, mScripts()
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
@@ -82,7 +82,7 @@ namespace cave
 		, mScripts()
 		, mTag(&tag)
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
@@ -96,7 +96,7 @@ namespace cave
 		, mScripts()
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
@@ -110,7 +110,7 @@ namespace cave
 		, mScripts()
 		, mTag(TagPool::FindTagByName(tag))
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
@@ -124,7 +124,7 @@ namespace cave
 		, mScripts()
 		, mTag(&tag)
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(nullptr)
 	{
@@ -138,7 +138,7 @@ namespace cave
 		, mScripts()
 		, mTag(other.GetTag())
 		, mTransform(new Transform())
-		, mRenderer(nullptr)
+		, mRenderable(nullptr)
 		, mPhysicsBody(nullptr)
 		, mLevel(other.GetLevel())
 	{
@@ -303,14 +303,14 @@ namespace cave
 		}
 	}
 
-	void GameObject::SetRenderer(Renderer& renderer)
+	void GameObject::SetRenderer(Renderable& rendererable)
 	{
 		assert(IsValid());
-		if (mRenderer != nullptr)
+		if (mRenderable != nullptr)
 		{
-			delete mRenderer;
+			delete mRenderable;
 		}
-		mRenderer = &renderer;
+		mRenderable = &rendererable;
 	}
 
 	void GameObject::SetPhysicsBody(PhysicsBody& physicsBody)
