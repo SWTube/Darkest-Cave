@@ -38,7 +38,8 @@ namespace cave
 		constexpr void SetZIndex(const uint32_t z);
 		constexpr void SetAngle(const float angle);
 
-		constexpr void Move(float x, float y);
+		constexpr void Move(float x, float y);		
+		constexpr void Move(Float2 movement);
 		constexpr float GetPositionX() const;
 		constexpr float GetPositionY() const;
 		constexpr Float2 GetPosition() const;
@@ -157,10 +158,12 @@ namespace cave
 		mZIndex = z;
 		mPosition.Z = 1.0f - static_cast<float>(z) * 0.01f;
 	}
+	
 	constexpr void Renderable::SetAngle(const float angle)
 	{
 		mAngle = angle;
 	}
+
 	constexpr void Renderable::Move(float x, float y)
 	{
 		if (mPosition.X <= FLT_MAX - x)
@@ -175,6 +178,26 @@ namespace cave
 		if (mPosition.Y <= FLT_MAX - y)
 		{
 			mPosition.Y += y;
+		}
+		else
+		{
+			mPosition.Y = FLT_MAX;
+		}
+	}
+	constexpr void Renderable::Move(Float2 movement)
+	{
+		if (mPosition.X <= FLT_MAX - movement.X)
+		{
+			mPosition.X += movement.X;
+		}
+		else
+		{
+			mPosition.X = FLT_MAX;
+		}
+
+		if (mPosition.Y <= FLT_MAX - movement.Y)
+		{
+			mPosition.Y += movement.Y;
 		}
 		else
 		{

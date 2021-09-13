@@ -241,11 +241,11 @@ namespace cave
 
 				if (tex != nullptr) // 나중에 texture가 nullptr이여도 색을 입혀서 그려주게 구현하고 싶음.
 				{
-					mShader->Render(context, 6, spriteCount * 6, worldMatrix, viewMatrix, ortho, tex->GetTexture());
+					mShader->Render(context, 6, spriteCount * 6, command->worldMatrix, viewMatrix, ortho, tex->GetTexture());
 				}
 				else
 				{
-					mShader->Render(context, 6, spriteCount * 6, worldMatrix, viewMatrix, ortho, nullptr);
+					mShader->Render(context, 6, spriteCount * 6, command->worldMatrix, viewMatrix, ortho, nullptr);
 				}
 				spriteCount++;
 			}

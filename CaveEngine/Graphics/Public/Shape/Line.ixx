@@ -18,7 +18,7 @@ namespace cave
 	{
 	public:
 		Line() = delete;
-		Line(Float2 point1, Float2 point2, float stroke);
+		Line(Float2 point1, Float2 point2, uint16_t stroke);
 		~Line();
 
 	protected:
@@ -29,11 +29,11 @@ namespace cave
 	private:
 		Float2 mPoint1;
 		Float2 mPoint2;
-		float mStroke;
+		uint16_t mStroke;
 
 	};
 	
-	Line::Line(Float2 point1, Float2 point2, float stroke)
+	Line::Line(Float2 point1, Float2 point2, uint16_t stroke)
 		:Sprite(),
 		mPoint1(point1),
 		mPoint2(point2),
@@ -43,13 +43,8 @@ namespace cave
 		mWidth = sqrt(pow(dis.X, 2) +  pow(dis.Y,2));
 		mHeight = mStroke;
 		mPosition = { (mPoint1.X + mPoint2.X) / 2 ,(mPoint1.Y + mPoint2.Y) / 2,0 };
-		mTexture = nullptr;
-
-		//mTexture = TextureManager::GetInstance().GetTexture("orange_mushroom.png");
-		//if (mTexture == nullptr)
-		//{
-		//	mTexture = TextureManager::GetInstance().AddTexture("orange_mushroom.png");
-		//}
+		mTexture = TextureManager::GetInstance().GetDefaultTexture();
+		mAngle = atan2(dis.Y, dis.X) * 57.2958f;
 	}
 
 	Line::~Line()

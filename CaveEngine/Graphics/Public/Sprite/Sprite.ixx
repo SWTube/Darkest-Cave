@@ -33,19 +33,19 @@ namespace cave
 		constexpr uint32_t GetIndicesCount() const;
 		constexpr Texture* GetTexture() const;
 
-		constexpr void SetFlipX(bool Flip);
-		constexpr void SetFlipY(bool Flip);
-
 		constexpr uint32_t GetWidth() const;
 		constexpr uint32_t GetHeight() const;
 		constexpr void GetSize(uint32_t& outWidth, uint32_t& outHeight) const;
 		constexpr void SetSize(uint32_t width, uint32_t height);
+
 		static constexpr void SetScreenSize(uint32_t width, uint32_t height);
-
-
 		VertexTC* GetVertices();
+
 		void SetTexture(Texture* texture);
 		void SetTextureWithFilePath(const std::filesystem::path& filePath);
+		constexpr void SetColor(const Float4 color);
+		constexpr void SetFlipX(bool Flip);
+		constexpr void SetFlipY(bool Flip);
 
 	protected:
 		virtual void update() override;
@@ -135,7 +135,10 @@ namespace cave
 		command->type =  RenderCommand::eType::SPRITE_COMMAND;
 		mCommand = command;
 	}
-
+	constexpr void Sprite::SetColor(const Float4 color)
+	{
+		mColor = color;
+	}
 
 	void Sprite::SetTexture(Texture* texture)
 	{
@@ -251,10 +254,14 @@ namespace cave
 		mPreviousPosition = mPosition;
 
 		float radian = mAngle * 0.0174533f;
-		left = static_cast<float>(mScreenWidth / 2) * -1 + mPosition.X - static_cast<float>(mWidth) / 2.0f;
+
+		float posX = static_cast<float>(mScreenWidth / 2) * -1 + mPosition.X;
+		float posY = static_cast<float>(mScreenHeight / 2) - mPosition.Y;
+
+		left = posX - static_cast<float>(mWidth) / 2.0f;
 		//left = mPosition.X - static_cast<float>(mWidth) / 2.0f;
 		right = left + static_cast<float>(mWidth);
-		top = static_cast<float>(mScreenHeight / 2) - mPosition.Y + static_cast<float>(mHeight) / 2.0f;
+		top = posY + static_cast<float>(mHeight) / 2.0f;
 		//top = mPosition.Y + static_cast<float>(mHeight) / 2.0f;
 		bottom = top - static_cast<float>(mHeight);
 	
@@ -275,13 +282,13 @@ namespace cave
 			mColor));		// bottom left
 		
 		//회전
-		//DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixTranslation(-mPosition.X, -mPosition.Y, -mPosition.Z) *DirectX::XMMatrixRotationZ(mAngle * 0.0174533f) * DirectX::XMMatrixTranslation(mPosition.X, mPosition.Y, mPosition.Z);
+		DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixTranslation(-posX, -posY, -mPosition.Z) *DirectX::XMMatrixRotationZ(mAngle * 0.0174533f) * DirectX::XMMatrixTranslation(posX, posY, mPosition.Z);
 		
 		SpriteCommand* command = reinterpret_cast<SpriteCommand*>(mCommand);
 		command->vertexData = mVertices;
 		command->texture = mTexture;
 		command->zIndex = mZIndex;
-		//command->worldMatrix = worldMatrix;
+		command->worldMatrix = worldMatrix;
 	}
 
 

@@ -43,6 +43,8 @@ namespace cave
 		Texture* GetOrAddTexture(const std::filesystem::path& filename);
 		MultiTexture* GetOrAddMultiTexture(const std::filesystem::path& filename, uint32_t column, uint32_t row = 1);
 		Texture* GetTexture(const std::string& key);
+		
+		Texture* GetDefaultTexture() const;
 		void RemoveTexture(const std::string& key);
 
 
@@ -96,6 +98,10 @@ namespace cave
 		mTextures[filename.generic_string()] = newTexture;
 
 		return newTexture;
+	}
+	Texture* TextureManager::GetDefaultTexture() const
+	{
+		return mDefaultTexture;
 	}
 
 	MultiTexture* TextureManager::AddMultiTexture(const std::filesystem::path& filename, uint32_t column, uint32_t row)
@@ -173,7 +179,7 @@ namespace cave
 	{
 		mDevice = device;
 		mDefaultTexture =  reinterpret_cast<Texture*>(gCoreMemoryPool.Allocate(sizeof(Texture)));
-		new(mDefaultTexture) cave::Texture(mDevice, "default.dds");
+		new(mDefaultTexture) cave::Texture(mDevice, "default.png");
 	}
 
 
