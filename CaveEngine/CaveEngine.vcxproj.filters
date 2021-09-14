@@ -39,9 +39,6 @@
     <ClCompile Include="Core\Private\Debug\Log.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Private\Memory\Memory.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Private\Thread\Thread.cpp">
       <Filter>Source Files\Core\Thread</Filter>
     </ClCompile>
@@ -80,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="Core\Public\Template\IteratorType.ixx">
       <Filter>Header Files\Core\Template</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager\Private\Texture\MultiTexture.cpp">
-      <Filter>Source Files\ResourceManager\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Core\Public\Containers\Hash.ixx">
       <Filter>Header Files\Core\Containers</Filter>
@@ -291,6 +285,78 @@
     <ClCompile Include="Gameplay\Private\World\World.cpp">
       <Filter>Source Files\Gameplay\World</Filter>
     </ClCompile>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\AI">
+      <UniqueIdentifier>{32dd064d-81c6-4e11-aabd-8e688a77b5b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI\BehaviorTree">
+      <UniqueIdentifier>{097d9913-5b84-488c-a092-2a4583a2d4cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{ab120e30-3e2b-47d2-9927-2e38a631d1fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI\BehaviorTree">
+      <UniqueIdentifier>{d0ade8d8-d83f-4bcb-95e8-c166dd10c48a}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="AI\Private\BehaviorTree\RandomNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\ActionNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\BehaviorTreeNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\CompositeNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\Decorator.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\IfDecorator.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\RandomNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\RepeatDecorator.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\RootNode.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\Selector.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\Sequencer.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\BehaviorTree\WhileDecorator.ixx">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\FiniteStateMachine\FiniteStateMachine.cpp">
+      <Filter>Source Files\AI\FiniteStateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\FiniteStateMachine\State.cpp">
+      <Filter>Source Files\AI\FiniteStateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\FiniteStateMachine\FiniteStateMachine.ixx">
+      <Filter>Header Files\AI\FiniteStateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Public\FiniteStateMachine\State.ixx">
+      <Filter>Header Files\AI\FiniteStateMachine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">
@@ -302,9 +368,6 @@
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h">
       <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Public\Graphics.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Public\Assertion\Assert.h">
       <Filter>Header Files\Core\Assertion</Filter>
     </ClInclude>
@@ -328,12 +391,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\Memory\MemoryPool.h">
       <Filter>Header Files\Core\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\String\String.h">
-      <Filter>Header Files\Core\String</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
@@ -356,6 +413,86 @@
     <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h">
       <Filter>Header Files\ResourceManager</Filter>
     </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\Selector.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\Sequencer.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\ActionNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\CompositeNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\BehaviorTreeNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\RootNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\IfDecorator.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\Decorator.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\WhileDecorator.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\RepeatDecorator.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\BehaviorTree\RandomNode.h">
+      <Filter>Header Files\AI\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\FiniteStateMachine\State.h">
+      <Filter>Header Files\AI\FiniteStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Public\FiniteStateMachine\FiniteStateMachine.h">
+      <Filter>Header Files\AI\FiniteStateMachine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Core\Private\Memory\Memory.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\RootNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\Sequencer.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\BehaviorTreeNode.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\Decorator.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\IfDecorator.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\WhileDecorator.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Private\BehaviorTree\RepeatDecorator.cpp">
+      <Filter>Source Files\AI\BehaviorTree</Filter>
+    </ClCompile>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
@@ -388,9 +525,6 @@
     </ClInclude>
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
       <Filter>Header Files\ThirdParty\lodepng</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Vertex.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Assertion\Assert.h">
       <Filter>Header Files\Core\Assertion</Filter>
@@ -457,17 +591,11 @@
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager\Public\Texture\MultiTexture.h">
-      <Filter>Header Files\ResourceManager\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
       <Filter>Header Files\ThirdParty\lodepng</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
       <Filter>Header Files\ThirdParty\lodepng</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Hash.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Containers\Hash.h">
       <Filter>Header Files\Core\Containers</Filter>
@@ -666,6 +794,12 @@
     </Filter>
     <Filter Include="Header Files\Core\Math">
       <UniqueIdentifier>{1c3dc6d0-2467-4912-a5f6-e6f0c572637f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI\FiniteStateMachine">
+      <UniqueIdentifier>{fbddac7e-8fc5-4d5b-9c33-60092300e866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI\FiniteStateMachine">
+      <UniqueIdentifier>{b5cc92d1-63a9-41fa-8ed5-31a056c6b8c1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

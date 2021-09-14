@@ -324,7 +324,6 @@ void DemoTest()
 	gameInstance->AddWorld(*world);*/
 
 
-
 	if (result == cave::eResult::CAVE_OK)
 	{
 		//// Go full-screen.

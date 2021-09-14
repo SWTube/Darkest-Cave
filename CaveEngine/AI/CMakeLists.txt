@@ -9,15 +9,15 @@
 # CaveEngine artificial inteligence library
 ############################################################
 
-# # define header and source files for the library
-# file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+# define header and source files for the library
+file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h")
 # list(APPEND HEADER_FILES
 #     ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h
 #     ${PROJECT_BINARY_DIR}/include/OgreComponents.h
 #     ${PROJECT_BINARY_DIR}/include/OgreExports.h
 #     ${CMAKE_CURRENT_SOURCE_DIR}/include/Ogre.i)
 
-# file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp")
 
 # # Remove optional header files
 # list(REMOVE_ITEM HEADER_FILES
@@ -36,6 +36,12 @@
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreZip.cpp"
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSearchOps.cpp"
 # )
+
+file(GLOB BT_NODE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/BehaviorTree/*.h")
+file(GLOB BT_NODE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Public/FiniteStateMachine/*.h")
+
+file(GLOB BT_NODE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/BehaviorTree/*.cpp")
+file(GLOB BT_NODE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Private/FiniteStateMachine/*.cpp")
 
 # # Add platform specific files
 # if (EMSCRIPTEN)
@@ -187,7 +193,7 @@
 # # setup OgreMain target
 
 # get_native_precompiled_header(OgreMain)
-# add_library(OgreMain ${OGRE_LIB_TYPE} ${OgreMain_pch} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES})
+add_library(AI ${HEADER_FILES} ${BT_NODE_HEADER_FILES} ${BT_NODE_SOURCE_FILES})
 
 # if (WINDOWS_STORE OR WINDOWS_PHONE)
 # 	set_target_properties(OgreMain PROPERTIES VS_WINRT_COMPONENT "true")
@@ -199,11 +205,11 @@
 #     DEPRECATED_MACRO_NAME OGRE_DEPRECATED
 #     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/OgreExports.h)
 
-# target_include_directories(OgreMain PUBLIC 
-#   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" 
-#   "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
-#   $<INSTALL_INTERFACE:include/OGRE>
-#   PRIVATE "${OGRE_PROFILING_REMOTERY_PATH}")
+target_include_directories(AI PUBLIC 
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>" 
+  "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+  $<INSTALL_INTERFACE:include/CAVE_ENGINE>)
+#  PRIVATE "${OGRE_PROFILING_REMOTERY_PATH}")
 
 # # In visual studio 2010 - 64 bit we get this error: "LINK : fatal error LNK1210: exceeded internal ILK size limit; link with /INCREMENTAL:NO"
 # if(WIN32 AND MSVC10 AND CMAKE_CL_64)

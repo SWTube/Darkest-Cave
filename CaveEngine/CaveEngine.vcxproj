@@ -239,7 +239,21 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AI\Public\BehaviorTree\RandomNode.h" />
+    <ClInclude Include="AI\Public\FiniteStateMachine\FiniteStateMachine.h" />
+    <ClInclude Include="AI\Public\FiniteStateMachine\State.h" />
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
+    <ClInclude Include="AI\Public\BehaviorTree.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\ActionNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\CompositeNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\Decorator.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\IfDecorator.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\BehaviorTreeNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\RepeatDecorator.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\RootNode.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\Selector.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\Sequencer.h" />
+    <ClInclude Include="AI\Public\BehaviorTree\WhileDecorator.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
     <ClInclude Include="Core\Public\CoreGlobals.h" />
@@ -271,6 +285,32 @@
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AI\Private\BehaviorTree\RandomNode.cpp" />
+    <ClCompile Include="AI\Private\FiniteStateMachine\FiniteStateMachine.cpp" />
+    <ClCompile Include="AI\Private\FiniteStateMachine\State.cpp" />
+    <ClCompile Include="AI\Public\BehaviorTree\ActionNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\BehaviorTreeNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\CompositeNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\Decorator.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\IfDecorator.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\RandomNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\RepeatDecorator.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\RootNode.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\Selector.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\Sequencer.ixx" />
+    <ClCompile Include="AI\Public\BehaviorTree\WhileDecorator.ixx" />
+    <ClCompile Include="AI\Public\FiniteStateMachine\FiniteStateMachine.ixx" />
+    <ClCompile Include="AI\Public\FiniteStateMachine\State.ixx" />
+    <ClCompile Include="AI\Private\BehaviorTree\ActionNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\CompositeNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\Decorator.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\IfDecorator.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\BehaviorTreeNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\RepeatDecorator.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\RootNode.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\Selector.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\Sequencer.cpp" />
+    <ClCompile Include="AI\Private\BehaviorTree\WhileDecorator.cpp" />
     <ClCompile Include="Core\Private\Containers\Node.cpp" />
     <ClCompile Include="Core\Private\CoreGlobals.cpp" />
     <ClCompile Include="Core\Private\Debug\Log.cpp" />
