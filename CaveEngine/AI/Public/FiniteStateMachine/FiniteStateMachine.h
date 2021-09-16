@@ -23,6 +23,8 @@ namespace cave
 		virtual ~FiniteStateMachine();
 		void AddState(State* state);
 		void UpdateCurrentState(char trigger);
+		void LinkState(State* state1, State* state2);
+		void LinkStateOneway(State* state1, State* state2);
 		State* ReturnCurrentState();
 		HshTable* ReturnHash();
 	private:

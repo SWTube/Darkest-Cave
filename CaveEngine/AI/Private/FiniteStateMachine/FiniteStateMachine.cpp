@@ -23,6 +23,15 @@ namespace cave
 		mNode.clear();
 		mCheckList.clear();
 	}
+	void FiniteStateMachine::LinkState(State* state1, State* state2)
+	{
+		hashT.insert(state1, state2);
+		hashT.insert(state2, state1);
+	}
+	void FiniteStateMachine::LinkStateOneway(State* state1, State* state2)
+	{
+		hashT.insert(state1, state2);
+	}
 	FiniteStateMachine::~FiniteStateMachine()
 	{
 		// delete
@@ -34,7 +43,11 @@ namespace cave
 	}
 	void FiniteStateMachine::UpdateCurrentState(char trigger)
 	{
-		State* nextState = mCurrentState->SearchNewCurrentState(trigger);
+		State isFind = hashT.Find(mCurrentState);
+		if (hashT.Find(mCurrentState).GetTrigger() == trigger)
+		{
+			State* nextState = hashT.Find(mCurretnState);
+		}
 		if (nextState == nullptr)
 		{
 			return;

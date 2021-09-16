@@ -43,13 +43,19 @@ namespace cave
 	{
 		// delete ;
 	}
-	void State::LinkState(State* state, FiniteStateMachine* hash)
+	/*void State::LinkState(State* state, FiniteStateMachine* hash)
 	{
 		hash.insert(this, state);
 		hash.insert(state, this);
 		//mNeighborState.push_back(state);
 		//state->mNeighborState.push_back(this);
 	}
+	void State::LinkStateOneway(State* state, FiniteStateMachine* hash)
+	{
+		hash.insert(this, state);
+		//mNeighborState.push_back(state);
+	}
+	*/
 	void State::SetAnimation(int animation)
 	{
 		mAnimation = animation;
@@ -62,7 +68,7 @@ namespace cave
 	{
 		mIsCurrent = false;
 	}
-	State* State::SearchNewCurrentState(char trigger, FiniteStateMachine hash)
+	/*State* State::SearchNewCurrentState(char trigger)
 	{
 		State state = hash.Find(this);
 		if (state.GetTrigger() == trigger)
@@ -70,15 +76,15 @@ namespace cave
 			return state;
 		}
 		return nullptr;
-		/*for (int i = 0; i < mNeighborState.size(); ++i)
+		for (int i = 0; i < mNeighborState.size(); ++i)
 		{
 			if (mNeighborState[i]->GetTrigger() == trigger)
 			{
 				return mNeighborState[i];
 			}
 		}
-		return nullptr;*/
-	}
+		return nullptr;
+	}*/
 	void State::UpdateState(State* newCurrentState)
 	{
 		if (newCurrentState == nullptr)
@@ -88,11 +94,7 @@ namespace cave
 		mIsCurrent = false;
 		newCurrentState->SetBool(true);
 	}
-	void State::LinkStateOneway(State* state, FiniteStateMachine* hash)
-	{
-		hash.insert(this, state);
-		//mNeighborState.push_back(state);
-	}
+	
 	std::string State::GetStateName() 
 	{
 		return mStateName;

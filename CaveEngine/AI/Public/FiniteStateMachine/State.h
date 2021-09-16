@@ -5,7 +5,6 @@
 #pragma once
 #ifdef __WIN32__
 import State;
-import cave.Core.Containers.HashTable;
 #else
 #include <iostream>
 #include <vector>
@@ -21,12 +20,12 @@ namespace cave
 		State(std::string stateName, char trigger);
 		State(std::string stateName, char trigger, int Animation);
 		virtual ~State();
-		void LinkState(State* state, FiniteStateMachine* hash);
-		void LinkStateOneway(State* state, FiniteStateMachine* hash);
+		//void LinkState(State* state, FiniteStateMachine* hash);
+		//void LinkStateOneway(State* state, FiniteStateMachine* hash);
 		void SetAnimation(int animation);
 		void SetCurrentState();
 		void CancelCurrentState();
-		State* SearchNewCurrentState(char trigger, FiniteStateMachine hash);
+		//State* SearchNewCurrentState(char trigger);
 		void UpdateState(State* newCurrentState);
 		std::string GetStateName();
 		char GetTrigger();
@@ -34,7 +33,6 @@ namespace cave
 		int ShowAnimation();
 		
 	private:
-		HashTable hashT(HASHMAX, 2);
 		int mAnimation;
 		bool mIsCurrent;
 		char mTrigger;
