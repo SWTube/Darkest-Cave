@@ -46,5 +46,9 @@ namespace cave
 	{
 		return mCurrentState;
 	}
+	HashTable* FiniteStateMachine::ReturnHash()
+	{
+		return hashT;
+	}
 }
 #endif

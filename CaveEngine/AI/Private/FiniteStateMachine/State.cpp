@@ -3,7 +3,6 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 #include "FiniteStateMachine/State.h"
-
 #ifdef __UNIX__
 
 namespace cave
@@ -44,10 +43,12 @@ namespace cave
 	{
 		// delete ;
 	}
-	void State::LinkState(State* state) 
+	void State::LinkState(State* state, FiniteStateMachine* hash)
 	{
-		mNeighborState.push_back(state);
-		state->mNeighborState.push_back(this);
+		hash.insert(this, state);
+		hash.insert(state, this);
+		//mNeighborState.push_back(state);
+		//state->mNeighborState.push_back(this);
 	}
 	void State::SetAnimation(int animation)
 	{
@@ -61,16 +62,22 @@ namespace cave
 	{
 		mIsCurrent = false;
 	}
-	State* State::SearchNewCurrentState(char trigger)
+	State* State::SearchNewCurrentState(char trigger, FiniteStateMachine hash)
 	{
-		for (int i = 0; i < mNeighborState.size(); ++i)
+		State state = hash.Find(this);
+		if (state.GetTrigger() == trigger)
+		{
+			return state;
+		}
+		return nullptr;
+		/*for (int i = 0; i < mNeighborState.size(); ++i)
 		{
 			if (mNeighborState[i]->GetTrigger() == trigger)
 			{
 				return mNeighborState[i];
 			}
 		}
-		return nullptr;
+		return nullptr;*/
 	}
 	void State::UpdateState(State* newCurrentState)
 	{
@@ -81,9 +88,10 @@ namespace cave
 		mIsCurrent = false;
 		newCurrentState->SetBool(true);
 	}
-	void State::LinkStateOneway(State* state)
+	void State::LinkStateOneway(State* state, FiniteStateMachine* hash)
 	{
-		mNeighborState.push_back(state);
+		hash.insert(this, state);
+		//mNeighborState.push_back(state);
 	}
 	std::string State::GetStateName() 
 	{
