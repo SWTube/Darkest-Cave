@@ -74,15 +74,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(ProjectDir)ThirdParty\Box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(ProjectDir)ThirdParty\Box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(ProjectDir)ThirdParty\Box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(ProjectDir)ThirdParty\Box2d\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -92,7 +96,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)ThirdParty\Box2d;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)ThirdParty\Box2d\include;$(ProjectDir)HID\Public;$(ProjectDir)ThirdParty\Box2d;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -103,10 +107,10 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>box2d.lib;d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Box2d\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Box2d\lib;$(ProjectDir)ThirdParty\Box2d\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\Graphics\Public;$(ProjectDir)\Graphics\Resource</AdditionalIncludeDirectories>
@@ -132,7 +136,7 @@
       <PreprocessorDefinitions>WIN32;PROJECT_DIR=R"($(SolutionDir))";CAPACITY_INCREASE_MODE_DOUBLE=0;CAPACITY_INCREASE_MODE_SUFFICIENT=1;CAPACITY_INCREASE_MODE=CAPACITY_INCREASE_MODE_DOUBLE;CAVE_BUILD_DEBUG=0;CAVE_BUILD_DEVELOPMENT=0;CAVE_BUILD_TEST=0;CAVE_BUILD_RELEASE=1;__WIN32__;CAVE_BUILD_RELEASE;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)ThirdParty\Box2d\include;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -144,8 +148,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>box2d.lib;d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Box2d\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -170,7 +174,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <OpenMPSupport>false</OpenMPSupport>
-      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)ThirdParty\Box2d\include;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -180,8 +184,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Box2d\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>box2d.lib;d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
@@ -212,7 +216,7 @@
       <PreprocessorDefinitions>WIN32;PROJECT_DIR=R"($(SolutionDir))";CAPACITY_INCREASE_MODE_DOUBLE=0;CAPACITY_INCREASE_MODE_SUFFICIENT=1;CAPACITY_INCREASE_MODE=CAPACITY_INCREASE_MODE_DOUBLE;CAVE_BUILD_DEBUG=0;CAVE_BUILD_DEVELOPMENT=0;CAVE_BUILD_TEST=0;CAVE_BUILD_RELEASE=1;CAVE_BUILD_RELEASE;__WIN32__;_RELEASE;PROFILE;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)AI\Public;$(ProjectDir)Audio\Public;$(ProjectDir)Core\Public;$(ProjectDir)Engine\Public;$(ProjectDir)Gameplay\Public;$(ProjectDir)Graphics\Public;$(ProjectDir)ThirdParty\Box2d\include;$(ProjectDir)HID\Public;$(ProjectDir)Physics\Public;$(ProjectDir)ProfilingDebugging\Public;$(ProjectDir)ResourceManager\Public;$(ProjectDir)ThirdParty\glfw\Public;$(ProjectDir)ThirdParty\gl3w\Public;$(ProjectDir)ThirdParty\lodepng\Public;$(ProjectDir)ThirdParty\glm;$(ProjectDir)ThirdParty\tictoc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(IntDir)%(Filename).ifc</ModuleOutputFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -224,8 +228,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>box2d.lib;d2d1.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Box2d\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -306,6 +310,46 @@
     <ClInclude Include="Graphics\Public\Sprite\WindowsSprite.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
     <ClInclude Include="ResourceManager\Public\Texture\Texture.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_api.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_block_allocator.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_body.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_broad_phase.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_chain_shape.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_circle_shape.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_collision.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_common.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_contact.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_contact_manager.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_distance.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_distance_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_draw.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_dynamic_tree.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_edge_shape.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_fixture.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_friction_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_gear_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_growable_stack.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_math.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_motor_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_mouse_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_polygon_shape.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_prismatic_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_pulley_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_revolute_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_rope.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_settings.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_shape.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_stack_allocator.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_timer.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_time_of_impact.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_time_step.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_types.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_weld_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_wheel_joint.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_world.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\b2_world_callbacks.h" />
+    <ClInclude Include="ThirdParty\Box2d\include\box2d\box2d.h" />
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h" />
     <ClInclude Include="ThirdParty\tictoc\src\tictoc.h" />
   </ItemGroup>
