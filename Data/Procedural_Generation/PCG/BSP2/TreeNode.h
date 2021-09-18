@@ -10,7 +10,7 @@ struct Info
 	int width;
 	int points_x; // x좌표
 	int points_y; // y좌표
-	
+
 	// 방 정보
 	int room_height;
 	int room_width;
@@ -41,8 +41,9 @@ public:
 	int getX();
 	int getY();
 
-	void allocateRoom(int** _map);
+	int allocateRoom(int** _map);
 	void connectRoom(int** _map, TreeNode* room1, TreeNode* room2);
+	void connectRoom4(int** _map, TreeNode* room1, TreeNode* room2);
 	void connectRoom_X(int** _map, TreeNode* room1, TreeNode* room2);
 	void connectRoom_Y(int** _map, TreeNode* room1, TreeNode* room2);
 

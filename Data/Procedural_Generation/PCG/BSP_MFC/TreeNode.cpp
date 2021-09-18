@@ -3,10 +3,13 @@
 #include<random>
 #include"TreeNode.h"
 
-int minHeight = 2;
-int minWidth = 2;
+int minHeight = 1;
+int minWidth = 1;
 
 int numOfRoom;
+
+int* room_queue;
+int index = 0;
 
 void TreeNode::setRoot(int** _map, int _height, int _width) {
 	this->info.height = _height;
@@ -14,20 +17,23 @@ void TreeNode::setRoot(int** _map, int _height, int _width) {
 	this->info.points_x = 0;
 	this->info.points_y = 0;
 
-	// ÀÚ½Ä, ºÎ¸ğ ³ëµå ÃÊ±âÈ­
+	// ìì‹, ë¶€ëª¨ ë…¸ë“œ ì´ˆê¸°í™”
 	this->leftNode = NULL;
 	this->rightNode = NULL;
 	this->parentNode = NULL;
 
-	// ¹æ °³¼ö ÃÊ±âÈ­
+	// ë°© ê°œìˆ˜ ì´ˆê¸°í™”
 	numOfRoom = 1;
+
+	// ë°© ë²ˆí˜¸ í˜¸ê¸°í™”
+	this->info.num = 1;
 }
 
 void TreeNode::devide_col(int** _map) {
-	//±Õµî ºĞÆ÷ Á¤ÀÇ ¸Ê Å©±âÀÇ 30% ~ 70%
+	//ê· ë“± ë¶„í¬ ì •ì˜ ë§µ í¬ê¸°ì˜ 40% ~ 60%
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(this->info.width * 3 / 10, this->info.width * 7 / 10);
+	std::uniform_int_distribution<int> dis(this->info.width * 4 / 10, this->info.width * 6 / 10);
 
 	int _height = this->info.height;
 	int _width;
@@ -35,7 +41,7 @@ void TreeNode::devide_col(int** _map) {
 		_width = dis(gen);
 	} while (_width < minWidth || (this->info.width - _width + 1) < minWidth);
 
-	// ¿ŞÂÊ ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+	// ì™¼ìª½ ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
 	this->leftNode = new TreeNode;
 	this->leftNode->info.height = _height;
 	this->leftNode->info.width = _width;
@@ -43,8 +49,12 @@ void TreeNode::devide_col(int** _map) {
 	this->leftNode->info.points_y = this->info.points_y;
 	this->leftNode->parentNode = this;
 	this->leftNode->info.parent_devide_type = 0;
+	this->leftNode->info.num = this->info.num * 2;
 
-	// ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+	this->leftNode->leftNode = NULL;
+	this->leftNode->rightNode = NULL;
+
+	// ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
 	this->rightNode = new TreeNode;
 	this->rightNode->info.height = this->info.height;
 	this->rightNode->info.width = this->info.width - _width + 1;
@@ -52,21 +62,25 @@ void TreeNode::devide_col(int** _map) {
 	this->rightNode->info.points_y = this->info.points_y;
 	this->rightNode->parentNode = this;
 	this->rightNode->info.parent_devide_type = 0;
+	this->rightNode->info.num = this->info.num * 2 + 1;
 
-	// °æ°è¼± ±ß±â
+	this->rightNode->leftNode = NULL;
+	this->rightNode->rightNode = NULL;
+
+	// ê²½ê³„ì„  ê¸‹ê¸°
 	for (int i = this->info.points_y + 1; i < this->info.points_y + this->info.height - 1; i++) {
 		_map[i][this->info.points_x + _width - 1] = 1;
 	}
 
-	// ¹æ°³¼ö Ãß°¡
+	// ë°©ê°œìˆ˜ ì¶”ê°€
 	numOfRoom++;
 }
 
 void TreeNode::devide_row(int** _map) {
-	//±Õµî ºĞÆ÷ Á¤ÀÇ ¸Ê Å©±âÀÇ 30% ~ 70%
+	//ê· ë“± ë¶„í¬ ì •ì˜ ë§µ í¬ê¸°ì˜ 40% ~ 60%
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(this->info.height * 3 / 10, this->info.height * 7 / 10);
+	std::uniform_int_distribution<int> dis(this->info.height * 4 / 10, this->info.height * 6 / 10);
 
 	int _height;
 	do {
@@ -74,7 +88,7 @@ void TreeNode::devide_row(int** _map) {
 	} while (_height < minHeight || (this->info.height - _height) < minHeight);
 	int _width = this->info.width;
 
-	// ¿ŞÂÊ ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+	// ì™¼ìª½ ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
 	this->leftNode = new TreeNode;
 	this->leftNode->info.height = _height + 1;
 	this->leftNode->info.width = _width;
@@ -82,8 +96,12 @@ void TreeNode::devide_row(int** _map) {
 	this->leftNode->info.points_y = this->info.points_y;
 	this->leftNode->parentNode = this;
 	this->leftNode->info.parent_devide_type = 1;
+	this->leftNode->info.num = this->info.num * 2;
 
-	// ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+	this->leftNode->leftNode = NULL;
+	this->leftNode->rightNode = NULL;
+
+	// ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
 	this->rightNode = new TreeNode;
 	this->rightNode->info.height = this->info.height - _height;
 	this->rightNode->info.width = this->info.width;
@@ -91,13 +109,17 @@ void TreeNode::devide_row(int** _map) {
 	this->rightNode->info.points_y = this->info.points_y + _height;
 	this->rightNode->parentNode = this;
 	this->rightNode->info.parent_devide_type = 1;
+	this->rightNode->info.num = this->info.num * 2 + 1;
 
-	// °æ°è¼± ±ß±â
+	this->rightNode->leftNode = NULL;
+	this->rightNode->rightNode = NULL;
+
+	// ê²½ê³„ì„  ê¸‹ê¸°
 	for (int i = this->info.points_x; i < this->info.points_x + this->info.width; i++) {
 		_map[this->info.points_y + _height][i] = 1;
 	}
 
-	// ¹æ°³¼ö Ãß°¡
+	// ë°©ê°œìˆ˜ ì¶”ê°€
 	numOfRoom++;
 }
 
@@ -107,6 +129,40 @@ TreeNode* TreeNode::goRoot() {
 		location = location->parentNode;
 	}
 
+	return location;
+}
+
+TreeNode* TreeNode::goRoom(int _num) {
+	int __num = _num;
+	int check = 0;
+
+	while (__num != 1) {
+		__num /= 2;
+		check++;
+	}
+
+	int* loc = new int[check];
+
+	for (int i = 0; _num != 1; i++) {
+		if (_num % 2 == 0) {
+			loc[i] = 0;
+		}
+		else {
+			loc[i] = 1;
+		}
+		_num /= 2;
+	}
+
+	TreeNode* location = this->goRoot();
+
+	for (int i = check - 1; i >= 0; i--) {
+		if (loc[i] == 0) {
+			location = location->leftNode;
+		}
+		else {
+			location = location->rightNode;
+		}
+	}
 	return location;
 }
 
@@ -133,11 +189,11 @@ int TreeNode::getY() {
 
 }
 
-void TreeNode::allocateRoom(int** _map) {
-	// º®¿¡¼­ 1,2,3Ä­ ¶³¾îÁü
+int TreeNode::allocateRoom(int** _map) {
+	// ë²½ì—ì„œ 1,2,3ì¹¸ ë–¨ì–´ì§
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(2, 3);
+	std::uniform_int_distribution<int> dis(6, 6);
 
 	int start_h = this->info.points_y + dis(gen);
 	int end_h = this->info.points_y + this->info.height - dis(gen);
@@ -150,17 +206,36 @@ void TreeNode::allocateRoom(int** _map) {
 	this->info.room_height = end_h - start_h;
 	this->info.room_width = end_w - start_w;
 
-	for (int i = start_h; i < end_h; i++) {
-		for (int j = start_w; j < end_w; j++) {
-			_map[i][j] = 2;
+	std::uniform_int_distribution<int> dis2(1, 10);
+	if (dis2(gen) == 1 || dis2(gen) == 2 || dis2(gen) == 3) {
+		for (int i = start_h; i < end_h; i++) {
+			for (int j = start_w; j < end_w; j++) {
+				_map[i][j] = 4;
+			}
 		}
+		//_map[start_h][start_w] = this->info.num;
+		return 0;
 	}
+	else {
+		for (int i = start_h; i < end_h; i++) {
+			for (int j = start_w; j < end_w; j++) {
+				if (dis2(gen) == 1)
+					_map[i][j] = 4;
+				else
+					_map[i][j] = 2;
+			}
+		}
+		//_map[start_h][start_w] = this->info.num;
+		return 1;
+	}
+
+	//_map[start_h][start_w] = this->info.num;
 }
 
 void TreeNode::connectRoom(int** _map, TreeNode* room1, TreeNode* room2) {
 	if (room1->parentNode == room2->parentNode) {
 		if (room1->info.parent_devide_type == 0) {
-			// °ãÄ¡´Â ºÎºĞ Ã£±â(YÁÂÇ¥)
+			// ê²¹ì¹˜ëŠ” ë¶€ë¶„ ì°¾ê¸°(Yì¢Œí‘œ)
 			int overlap_y_start;
 			int overlap_y_end;
 			for (int i = room2->info.room_points_y; i < room2->info.room_points_y + room2->info.room_height; i++) {
@@ -184,7 +259,7 @@ void TreeNode::connectRoom(int** _map, TreeNode* room1, TreeNode* room2) {
 			}
 		}
 		else {
-			// °ãÄ¡´Â ºÎºĞ Ã£±â(XÁÂÇ¥)
+			// ê²¹ì¹˜ëŠ” ë¶€ë¶„ ì°¾ê¸°(Xì¢Œí‘œ)
 			int overlap_x_start;
 			int overlap_x_end;
 			for (int i = room2->info.room_points_x; i < room2->info.room_points_x + room2->info.room_width; i++) {
@@ -209,12 +284,667 @@ void TreeNode::connectRoom(int** _map, TreeNode* room1, TreeNode* room2) {
 		}
 	}
 	else {
-		// ºÎ¸ğµéµµ ÀÌ¾î¾ß ÇÔ
+		// ë¶€ëª¨ë“¤ë„ ì´ì–´ì•¼ í•¨ -> connectRoom4
+	}
+}
+
+void TreeNode::connectRoom4(int** _map, TreeNode* room1, TreeNode* room2) {
+	// ë¶€ëª¨ë“¤ë„ ì´ì–´ì•¼ í•¨
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dis(1, 2);
+	// 2ê°œì˜ ë°©ì˜ í†µë¡œ ìœ í˜•ì€ ì´ 4ê°€ì§€ë¡œ ê·œì •
+
+	int x1, x2, y1, y2, w1, w2, h1, h2, choice;
+
+	choice = dis(gen); // 4ê°€ì§€ ê¸¸ ì¤‘ ëœë¤ ì„ íƒ
+
+	if (room1->info.room_points_x <= room2->info.room_points_x && room1->info.room_points_y >= room2->info.room_points_y) { // 1, 3 ë¶„ë©´ì— ìœ„ì¹˜í•œ ê²½ìš°
+		x1 = room1->info.room_points_x;
+		x2 = room2->info.room_points_x;
+		y1 = room1->info.room_points_y;
+		y2 = room2->info.room_points_y;
+		w1 = room1->info.room_width;
+		w2 = room2->info.room_width;
+		h1 = room1->info.room_height;
+		h2 = room2->info.room_height;
+
+		if (choice == 1) { // ìœ„ìª½, ì™¼ìª½
+			if (y1 <= (y2 + h2)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(y2 - y1));
+
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+			else if (x2 <= (x1 + w1)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(x2 - x1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
+
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
+
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+		}
+		else if (choice == 2) { // ìœ„ìª½, ì•„ë˜ìª½
+			if (y1 <= (y2 + h2)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(w2 - 1));
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2 + dis3(gen);
+				int end_y = y2 + h2;
+				std::uniform_int_distribution<int> dis4(0, 0); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+				std::uniform_int_distribution<int> dis5(0, std::abs(x2 - x1 - w1));
+				int middle_y_1 = start_y - dis4(gen);
+				if (middle_y_1 < 0) {
+					middle_y_1 = start_y - dis4(gen);
+				}
+				int middle_y_2 = end_y + dis4(gen);
+				int middle_x = x1 + w1 + dis5(gen);
+
+				for (int y = start_y; y >= middle_y_1; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= middle_x; x++) {
+					if (_map[middle_y_1][x] != 2)
+						_map[middle_y_1][x] = 3;
+				}
+
+				for (int y = middle_y_1; y <= middle_y_2; y++) {
+					if (_map[y][middle_x] != 2)
+						_map[y][middle_x] = 3;
+				}
+
+				for (int x = middle_x; x <= end_x; x++) {
+					if (_map[middle_y_2][x] != 2)
+						_map[middle_y_2][x] = 3;
+				}
+
+				for (int y = middle_y_2; y >= end_y; y--) {
+					if (_map[y][end_x] != 2)
+						_map[y][end_x] = 3;
+				}
+			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(w2 - 1));
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2 + dis3(gen);
+				int end_y = y2 + h2;
+				std::uniform_int_distribution<int> dis4(0, start_y - end_y); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+				int middle_y = end_y + dis4(gen);
+
+				for (int y = start_y; y >= middle_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[middle_y][x] != 2)
+						_map[middle_y][x] = 3;
+				}
+
+				for (int y = middle_y; y >= end_y; y--) {
+					if (_map[y][end_x] != 2)
+						_map[y][end_x] = 3;
+				}
+			}
+		}
+		else if (choice == 3) { // ì˜¤ë¥¸ìª½, ì™¼ìª½
+			if (x2 <= (x1 + w1)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(h1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
+				int start_x = x1 + w1;
+				int start_y = y1 + dis2(gen);
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+				std::uniform_int_distribution<int> dis4(0, 0); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+				int middle_x_1 = start_x + dis4(gen);
+				int middle_x_2 = end_x - dis4(gen);
+
+				std::uniform_int_distribution<int> dis5(0, std::abs(y1 - y2 - h2));
+				int middle_y = y2 + h2 + 0;
+
+				for (int x = start_x; x <= middle_x_1; x++) {
+					if (_map[start_y][x] != 2)
+						_map[start_y][x] = 3;
+				}
+
+				for (int y = start_y; y >= middle_y; y--) {
+					if (_map[y][middle_x_1] != 2)
+						_map[y][middle_x_1] = 3;
+				}
+
+				for (int x = middle_x_1; x >= middle_x_2; x--) {
+					if (_map[middle_y][x] != 2)
+						_map[middle_y][x] = 3;
+				}
+
+				for (int y = middle_y; y >= end_y; y--) {
+					if (_map[y][middle_x_2] != 2)
+						_map[y][middle_x_2] = 3;
+				}
+
+				for (int x = middle_x_2; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, h1 - 1);
+				std::uniform_int_distribution<int> dis3(0, h2 - 1);
+				int start_x = x1 + w1;
+				int start_y = y1 + dis2(gen);
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+				std::uniform_int_distribution<int> dis4(0, end_x - start_x); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+				int middle_x = start_x + dis4(gen);
+
+				for (int x = start_x; x <= middle_x; x++) {
+					if (_map[start_y][x] != 2)
+						_map[start_y][x] = 3;
+				}
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][middle_x] != 2)
+						_map[y][middle_x] = 3;
+				}
+
+				for (int x = middle_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+		}
+		else if (choice == 4) { // ì˜¤ë¥¸ìª½, ì•„ë˜ìª½
+			std::uniform_int_distribution<int> dis2(0, h1 - 1);
+			std::uniform_int_distribution<int> dis3(0, w2 - 1);
+			int start_x = x1 + w1;
+			int start_y = y1 + dis2(gen);
+			int end_x = x2 + dis3(gen);
+			int end_y = y2 + h2;
+
+			for (int x = start_x; x <= end_x; x++) {
+				if (_map[start_y][x] != 2)
+					_map[start_y][x] = 3;
+			}
+
+			for (int y = start_y; y >= end_y; y--) {
+				if (_map[y][end_x] != 2)
+					_map[y][end_x] = 3;
+			}
+		}
+	}
+	if (room1->info.room_points_x <= room2->info.room_points_x && room1->info.room_points_y < room2->info.room_points_y) { // 2, 4 ë¶„ë©´ì— ìœ„ì¹˜í•œ ê²½ìš°
+		x1 = room1->info.room_points_x;
+		x2 = room2->info.room_points_x;
+		y1 = room1->info.room_points_y;
+		y2 = room2->info.room_points_y;
+		w1 = room1->info.room_width;
+		w2 = room2->info.room_width;
+		h1 = room1->info.room_height;
+		h2 = room2->info.room_height;
+
+		if (choice == 1) { // ì•„ë˜ìª½, ì™¼ìª½
+			if (y1 <= (y2 + h2)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(y2 - y1));
+
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+			else if (x2 <= (x1 + w1)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(x2 - x1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
+
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
+
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+		}
+		else if (choice == 2) { // ì•„ë˜ìª½, ìœ„ìª½
+			if (y1 <= (y2 + h2)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(w2 - 1));
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2 + dis3(gen);
+				int end_y = y2 + h2;
+				std::uniform_int_distribution<int> dis4(0, 0); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+				std::uniform_int_distribution<int> dis5(0, std::abs(x2 - x1 - w1));
+				int middle_y_1 = start_y - dis4(gen);
+				if (middle_y_1 < 0) {
+					middle_y_1 = start_y - dis4(gen);
+				}
+				int middle_y_2 = end_y + dis4(gen);
+				int middle_x = x1 + w1 + dis5(gen);
+
+				for (int y = start_y; y >= middle_y_1; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= middle_x; x++) {
+					if (_map[middle_y_1][x] != 2)
+						_map[middle_y_1][x] = 3;
+				}
+
+				for (int y = middle_y_1; y <= middle_y_2; y++) {
+					if (_map[y][middle_x] != 2)
+						_map[y][middle_x] = 3;
+				}
+
+				for (int x = middle_x; x <= end_x; x++) {
+					if (_map[middle_y_2][x] != 2)
+						_map[middle_y_2][x] = 3;
+				}
+
+				for (int y = middle_y_2; y >= end_y; y--) {
+					if (_map[y][end_x] != 2)
+						_map[y][end_x] = 3;
+				}
+			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(w2 - 1));
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2 + dis3(gen);
+				int end_y = y2 + h2;
+				std::uniform_int_distribution<int> dis4(0, start_y - end_y); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+				int middle_y = end_y + dis4(gen);
+
+				for (int y = start_y; y >= middle_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[middle_y][x] != 2)
+						_map[middle_y][x] = 3;
+				}
+
+				for (int y = middle_y; y >= end_y; y--) {
+					if (_map[y][end_x] != 2)
+						_map[y][end_x] = 3;
+				}
+			}
+		}
+		else if (choice == 3) { // ì˜¤ë¥¸ìª½, ì™¼ìª½
+			if (x2 <= (x1 + w1)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(h1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
+				int start_x = x1 + w1;
+				int start_y = y1 + dis2(gen);
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+				std::uniform_int_distribution<int> dis4(0, 0); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+				int middle_x_1 = start_x + dis4(gen);
+				int middle_x_2 = end_x - dis4(gen);
+
+				std::uniform_int_distribution<int> dis5(0, std::abs(y2 - y1 - h1));
+				int middle_y = y1 + h1 + dis5(gen);
+
+				for (int x = start_x; x <= middle_x_1; x++) {
+					if (_map[start_y][x] != 2)
+						_map[start_y][x] = 3;
+				}
+
+				for (int y = start_y; y <= middle_y; y++) {
+					if (_map[y][middle_x_1] != 2)
+						_map[y][middle_x_1] = 3;
+				}
+
+				for (int x = middle_x_1; x >= middle_x_2; x--) {
+					if (_map[middle_y][x] != 2)
+						_map[middle_y][x] = 3;
+				}
+
+				for (int y = middle_y; y <= end_y; y++) {
+					if (_map[y][middle_x_2] != 2)
+						_map[y][middle_x_2] = 3;
+				}
+
+				for (int x = middle_x_2; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, h1 - 1);
+				std::uniform_int_distribution<int> dis3(0, h2 - 1);
+				int start_x = x1 + w1;
+				int start_y = y1 + dis2(gen);
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+				std::uniform_int_distribution<int> dis4(0, end_x - start_x); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+				int middle_x = start_x + dis4(gen);
+
+				for (int x = start_x; x <= middle_x; x++) {
+					if (_map[start_y][x] != 2)
+						_map[start_y][x] = 3;
+				}
+
+				for (int y = start_y; y <= end_y; y++) {
+					if (_map[y][middle_x] != 2)
+						_map[y][middle_x] = 3;
+				}
+
+				for (int x = middle_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
+		}
+		else if (choice == 4) { // ì˜¤ë¥¸ìª½, ìœ„ìª½
+			std::uniform_int_distribution<int> dis2(0, h1 - 1);
+			std::uniform_int_distribution<int> dis3(0, w2 - 1);
+			int start_x = x1 + w1;
+			int start_y = y1 + dis2(gen);
+			int end_x = x2 + dis3(gen);
+			int end_y = y2;
+
+			for (int x = start_x; x <= end_x; x++) {
+				if (_map[start_y][x] != 2)
+					_map[start_y][x] = 3;
+			}
+
+			for (int y = start_y; y <= end_y; y++) {
+				if (_map[y][end_x] != 2)
+					_map[y][end_x] = 3;
+			}
+		}
+	}
+
+	if (room1->info.room_points_x >= room2->info.room_points_x && room1->info.room_points_y <= room2->info.room_points_y) { // 3, 1 ë¶„ë©´ì— ìœ„ì¹˜í•œ ê²½ìš°
+		x1 = room2->info.room_points_x;
+		x2 = room1->info.room_points_x;
+		y1 = room2->info.room_points_y;
+		y2 = room1->info.room_points_y;
+		w1 = room2->info.room_width;
+		w2 = room1->info.room_width;
+		h1 = room2->info.room_height;
+		h2 = room1->info.room_height;
+
+		if (choice == 1) { // ìœ„ìª½, ì™¼ìª½
+			std::uniform_int_distribution<int> dis2(0, w1 - 1);
+			std::uniform_int_distribution<int> dis3(0, h2 - 1);
+			int start_x = x1 + dis2(gen);
+			int start_y = y1;
+			int end_x = x2;
+			int end_y = y2 + dis3(gen);
+
+			for (int y = start_y; y >= end_y; y--) {
+				if (_map[y][start_x] != 2)
+					_map[y][start_x] = 3;
+			}
+
+			for (int x = start_x; x <= end_x; x++) {
+				if (_map[end_y][x] != 2)
+					_map[end_y][x] = 3;
+			}
+
+		}
+		else if (choice == 2) { // ìœ„ìª½, ì•„ë˜ìª½
+			std::uniform_int_distribution<int> dis2(0, w1 - 1);
+			std::uniform_int_distribution<int> dis3(0, w2 - 1);
+			int start_x = x1 + dis2(gen);
+			int start_y = y1;
+			int end_x = x2 + dis3(gen);
+			int end_y = y2 + h2;
+			std::uniform_int_distribution<int> dis4(0, start_y - end_y); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+			int middle_y = end_y + dis4(gen);
+
+			for (int y = start_y; y >= middle_y; y--) {
+				if (_map[y][start_x] != 2)
+					_map[y][start_x] = 3;
+			}
+
+			for (int x = start_x; x <= end_x; x++) {
+				if (_map[middle_y][x] != 2)
+					_map[middle_y][x] = 3;
+			}
+
+			for (int y = middle_y; y >= end_y; y--) {
+				if (_map[y][end_x] != 2)
+					_map[y][end_x] = 3;
+			}
+		}
+		else if (choice == 3) { // ì˜¤ë¥¸ìª½, ì™¼ìª½
+			std::uniform_int_distribution<int> dis2(0, h1 - 1);
+			std::uniform_int_distribution<int> dis3(0, h2 - 1);
+			int start_x = x1 + w1;
+			int start_y = y1 + dis2(gen);
+			int end_x = x2;
+			int end_y = y2 + dis3(gen);
+			std::uniform_int_distribution<int> dis4(0, end_x - start_x); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+			int middle_x = start_x + dis4(gen);
+
+			for (int x = start_x; x <= middle_x; x++) {
+				if (_map[start_y][x] != 2)
+					_map[start_y][x] = 3;
+			}
+
+			for (int y = start_y; y >= end_y; y--) {
+				if (_map[y][middle_x] != 2)
+					_map[y][middle_x] = 3;
+			}
+
+			for (int x = middle_x; x <= end_x; x++) {
+				if (_map[end_y][x] != 2)
+					_map[end_y][x] = 3;
+			}
+		}
+		else if (choice == 4) { // ì˜¤ë¥¸ìª½, ì•„ë˜ìª½
+			std::uniform_int_distribution<int> dis2(0, h1 - 1);
+			std::uniform_int_distribution<int> dis3(0, w2 - 1);
+			int start_x = x1 + w1;
+			int start_y = y1 + dis2(gen);
+			int end_x = x2 + dis3(gen);
+			int end_y = y2 + h2;
+
+			for (int x = start_x; x <= end_x; x++) {
+				if (_map[start_y][x] != 2)
+					_map[start_y][x] = 3;
+			}
+
+			for (int y = start_y; y >= end_y; y--) {
+				if (_map[y][end_x] != 2)
+					_map[y][end_x] = 3;
+			}
+		}
+	}
+	if (room1->info.room_points_x >= room2->info.room_points_x && room1->info.room_points_y > room2->info.room_points_y) { // 4, 2 ë¶„ë©´ì— ìœ„ì¹˜í•œ ê²½ìš°
+		x1 = room2->info.room_points_x;
+		x2 = room1->info.room_points_x;
+		y1 = room2->info.room_points_y;
+		y2 = room1->info.room_points_y;
+		w1 = room2->info.room_width;
+		w2 = room1->info.room_width;
+		h1 = room2->info.room_height;
+		h2 = room1->info.room_height;
+
+		if (choice == 1) { // ì•„ë˜ìª½, ì™¼ìª½
+			std::uniform_int_distribution<int> dis2(0, w1 - 1);
+			std::uniform_int_distribution<int> dis3(0, h2 - 1);
+			int start_x = x1 + dis2(gen);
+			int start_y = y1 + h1;
+			int end_x = x2;
+			int end_y = y2 + dis3(gen);
+
+			for (int y = start_y; y <= end_y; y++) {
+				if (_map[y][start_x] != 2)
+					_map[y][start_x] = 3;
+			}
+
+			for (int x = start_x; x <= end_x; x++) {
+				if (_map[end_y][x] != 2)
+					_map[end_y][x] = 3;
+			}
+
+		}
+		else if (choice == 2) { // ì•„ë˜ìª½, ìœ„ìª½
+			std::uniform_int_distribution<int> dis2(0, w1 - 1);
+			std::uniform_int_distribution<int> dis3(0, w2 - 1);
+			int start_x = x1 + dis2(gen);
+			int start_y = y1 + h1;
+			int end_x = x2 + dis3(gen);
+			int end_y = y2;
+			std::uniform_int_distribution<int> dis4(0, end_y - start_y); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+			int middle_y = start_y + dis4(gen);
+
+			for (int y = start_y; y <= middle_y; y++) {
+				if (_map[y][start_x] != 2)
+					_map[y][start_x] = 3;
+			}
+
+			for (int x = start_x; x <= end_x; x++) {
+				if (_map[middle_y][x] != 2)
+					_map[middle_y][x] = 3;
+			}
+
+			for (int y = middle_y; y <= end_y; y++) {
+				if (_map[y][end_x] != 2)
+					_map[y][end_x] = 3;
+			}
+		}
+		else if (choice == 3) { // ì˜¤ë¥¸ìª½, ì™¼ìª½
+			std::uniform_int_distribution<int> dis2(0, h1 - 1);
+			std::uniform_int_distribution<int> dis3(0, h2 - 1);
+			int start_x = x1 + w1;
+			int start_y = y1 + dis2(gen);
+			int end_x = x2;
+			int end_y = y2 + dis3(gen);
+			std::uniform_int_distribution<int> dis4(0, end_x - start_x); // êº¾ì´ëŠ” ìœ„ì¹˜ ëœë¤ìœ¼ë¡œ êµ¬í•˜ê¸°
+			int middle_x = start_x + dis4(gen);
+
+			for (int x = start_x; x <= middle_x; x++) {
+				if (_map[start_y][x] != 2)
+					_map[start_y][x] = 3;
+			}
+
+			for (int y = start_y; y <= end_y; y++) {
+				if (_map[y][middle_x] != 2)
+					_map[y][middle_x] = 3;
+			}
+
+			for (int x = middle_x; x <= end_x; x++) {
+				if (_map[end_y][x] != 2)
+					_map[end_y][x] = 3;
+			}
+		}
+		else if (choice == 4) { // ì˜¤ë¥¸ìª½, ìœ„ìª½
+			std::uniform_int_distribution<int> dis2(0, h1 - 1);
+			std::uniform_int_distribution<int> dis3(0, w2 - 1);
+			int start_x = x1 + w1;
+			int start_y = y1 + dis2(gen);
+			int end_x = x2 + dis3(gen);
+			int end_y = y2;
+
+			for (int x = start_x; x <= end_x; x++) {
+				if (_map[start_y][x] != 2)
+					_map[start_y][x] = 3;
+			}
+
+			for (int y = start_y; y <= end_y; y++) {
+				if (_map[y][end_x] != 2)
+					_map[y][end_x] = 3;
+			}
+		}
 	}
 }
 
 void TreeNode::connectRoom_Y(int** _map, TreeNode* room1, TreeNode* room2) {
-	// °ãÄ¡´Â ºÎºĞ Ã£±â(XÁÂÇ¥)
+	// ê²¹ì¹˜ëŠ” ë¶€ë¶„ ì°¾ê¸°(Xì¢Œí‘œ)
 	int overlap_x_start;
 	int overlap_x_end;
 	for (int i = room2->info.room_points_x; i < room2->info.room_points_x + room2->info.room_width; i++) {
@@ -239,7 +969,7 @@ void TreeNode::connectRoom_Y(int** _map, TreeNode* room1, TreeNode* room2) {
 }
 
 void TreeNode::connectRoom_X(int** _map, TreeNode* room1, TreeNode* room2) {
-	// °ãÄ¡´Â ºÎºĞ Ã£±â(YÁÂÇ¥)
+	// ê²¹ì¹˜ëŠ” ë¶€ë¶„ ì°¾ê¸°(Yì¢Œí‘œ)
 	int overlap_y_start;
 	int overlap_y_end;
 	for (int i = room2->info.room_points_y; i < room2->info.room_points_y + room2->info.room_height; i++) {
@@ -264,50 +994,95 @@ void TreeNode::connectRoom_X(int** _map, TreeNode* room1, TreeNode* room2) {
 }
 
 void TreeNode::devide(int** _map, int _numOfRoom) {
-	if (this->info.parent_devide_type == 0) {
-		this->devide_row(_map);
-	}
-	else {
-		this->devide_col(_map);
+	int i = 1;
+	while (numOfRoom < _numOfRoom) {
+		TreeNode* location = this->goRoom(i);
+		if (location->info.parent_devide_type == 0) {
+			location->devide_row(_map);
+		}
+		else {
+			location->devide_col(_map);
+		}
+		i++;
 	}
 
-	if (numOfRoom < _numOfRoom / 2) {
-		this->leftNode->devide(_map, _numOfRoom);
-	}
-	else {
-		if (numOfRoom < _numOfRoom) {
-			this->goRoot()->rightNode->devide(_map, _numOfRoom);
+	room_queue = new int[_numOfRoom];
+
+	for (int i = numOfRoom; i < 2 * numOfRoom; i++) {
+		TreeNode* location = this->goRoom(i);
+		if (location->leftNode == NULL || location->rightNode == NULL) {
+			if (location->allocateRoom(_map) == 1) {
+				room_queue[index] = location->info.num;
+				index++;
+			}
 		}
 	}
-}
 
-// °¢ ¹æÀÇ Á¤º¸ ÇÁ¸°Æ®
-void TreeNode::printInfo() {
-	std::cout << "¹æ ³ôÀÌ: " << this->info.height << std::endl;
-	std::cout << "¹æ ±æÀÌ: " << this->info.width << std::endl;
-	std::cout << "¹æ xÁÂÇ¥: " << this->info.points_x << std::endl;
-	std::cout << "¹æ yÁÂÇ¥: " << this->info.points_y << std::endl;
-	/*
-	if (this->leftNode != NULL) {
-		std::cout << "¿ŞÂÊ ÀÚ½Ä ¹æ ³ôÀÌ: " << this->leftNode->info.height << std::endl;
-		std::cout << "¿ŞÂÊ ÀÚ½Ä ¹æ ±æÀÌ: " << this->leftNode->info.width << std::endl;
-		std::cout << "¿ŞÂÊ ÀÚ½Ä ¹æ xÁÂÇ¥: " << this->leftNode->info.points_x << std::endl;
-		std::cout << "¿ŞÂÊ ÀÚ½Ä ¹æ yÁÂÇ¥: " << this->leftNode->info.points_y << std::endl;
+	for (int i = numOfRoom; i < 2 * numOfRoom - 1; i++) {
+		TreeNode* location1 = this->goRoom(i);
+		TreeNode* location2 = this->goRoom(i + 1);
+
 	}
 
-	if (this->rightNode != NULL) {
-		std::cout << "¿À¸¥ÂÊ ÀÚ½Ä ¹æ ³ôÀÌ: " << this->rightNode->info.height << std::endl;
-		std::cout << "¿À¸¥ÂÊ ÀÚ½Ä ¹æ ±æÀÌ: " << this->rightNode->info.width << std::endl;
-		std::cout << "¿À¸¥ÂÊ ÀÚ½Ä ¹æ xÁÂÇ¥: " << this->rightNode->info.points_x << std::endl;
-		std::cout << "¿À¸¥ÂÊ ÀÚ½Ä ¹æ yÁÂÇ¥: " << this->rightNode->info.points_y << std::endl;
+	/*
+	for (int i = 0; i < index; i++) {
+		std::cout << room_queue[i] << std::endl;
+	}
+	*/
+
+
+	for (int i = 0; i < index - 1; i++) {
+		//std::cout << room_queue[i] << std::endl;
+		this->connectRoom4(_map, this->goRoom(room_queue[i]), this->goRoom(room_queue[i + 1]));
+	}
+
+
+	//std::cout << index << std::endl;
+
+	//this->connectRoom4(_map, this->goRoom(4), this->goRoom(5));
+	//this->connectRoom4(_map, this->goRoom(5), this->goRoom(6));
+	//this->connectRoom4(_map, this->goRoom(6), this->goRoom(7));
+
+	//this->connectRoom4(_map, this->goRoom(4), this->goRoom(7));
+
+	//this->connectRoom(_map, this->goRoom(65), this->goRoom(66));
+
+	/*
+	for (int i = numOfRoom; i < 2 * numOfRoom - 1; i++) {
+		TreeNode* location1 = this->goRoom(i);
+		TreeNode* location2 = this->goRoom(i + 1);
+		this->connectRoom(_map, location1, location2);
 	}
 	*/
 }
 
-// °¢ ÇÒ´çµÈ ¹æÀÇ Á¤º¸ ÇÁ¸°Æ®
+// ê° ë°©ì˜ ì •ë³´ í”„ë¦°íŠ¸
+void TreeNode::printInfo() {
+	std::cout << "ë°© ë†’ì´: " << this->info.height << std::endl;
+	std::cout << "ë°© ê¸¸ì´: " << this->info.width << std::endl;
+	std::cout << "ë°© xì¢Œí‘œ: " << this->info.points_x << std::endl;
+	std::cout << "ë°© yì¢Œí‘œ: " << this->info.points_y << std::endl;
+	/*
+	if (this->leftNode != NULL) {
+		std::cout << "ì™¼ìª½ ìì‹ ë°© ë†’ì´: " << this->leftNode->info.height << std::endl;
+		std::cout << "ì™¼ìª½ ìì‹ ë°© ê¸¸ì´: " << this->leftNode->info.width << std::endl;
+		std::cout << "ì™¼ìª½ ìì‹ ë°© xì¢Œí‘œ: " << this->leftNode->info.points_x << std::endl;
+		std::cout << "ì™¼ìª½ ìì‹ ë°© yì¢Œí‘œ: " << this->leftNode->info.points_y << std::endl;
+	}
+
+	if (this->rightNode != NULL) {
+		std::cout << "ì˜¤ë¥¸ìª½ ìì‹ ë°© ë†’ì´: " << this->rightNode->info.height << std::endl;
+		std::cout << "ì˜¤ë¥¸ìª½ ìì‹ ë°© ê¸¸ì´: " << this->rightNode->info.width << std::endl;
+		std::cout << "ì˜¤ë¥¸ìª½ ìì‹ ë°© xì¢Œí‘œ: " << this->rightNode->info.points_x << std::endl;
+		std::cout << "ì˜¤ë¥¸ìª½ ìì‹ ë°© yì¢Œí‘œ: " << this->rightNode->info.points_y << std::endl;
+	}
+	*/
+}
+
+// ê° í• ë‹¹ëœ ë°©ì˜ ì •ë³´ í”„ë¦°íŠ¸
 void TreeNode::printRoomInfo() {
-	std::cout << "ÇÒ´çµÈ ¹æ ³ôÀÌ: " << this->info.room_height << std::endl;
-	std::cout << "ÇÒ´çµÈ ¹æ ±æÀÌ: " << this->info.room_width << std::endl;
-	std::cout << "ÇÒ´çµÈ ¹æ xÁÂÇ¥: " << this->info.room_points_x << std::endl;
-	std::cout << "ÇÒ´çµÈ ¹æ yÁÂÇ¥: " << this->info.room_points_y << std::endl;
+	std::cout << "í• ë‹¹ëœ ë°© ë†’ì´: " << this->info.room_height << std::endl;
+	std::cout << "í• ë‹¹ëœ ë°© ê¸¸ì´: " << this->info.room_width << std::endl;
+	std::cout << "í• ë‹¹ëœ ë°© xì¢Œí‘œ: " << this->info.room_points_x << std::endl;
+	std::cout << "í• ë‹¹ëœ ë°© yì¢Œí‘œ: " << this->info.room_points_y << std::endl;
 }

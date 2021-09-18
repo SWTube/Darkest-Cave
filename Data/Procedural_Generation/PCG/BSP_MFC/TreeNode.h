@@ -2,19 +2,22 @@
 
 struct Info
 {
-	// ¿µ¿ª Á¤º¸
+	// ì´ì§„íŠ¸ë¦¬ë¥¼ ìœ„í•œ ë°© ë²ˆí˜¸
+	int num;
+
+	// ì˜ì—­ ì •ë³´
 	int height;
 	int width;
-	int points_x; // xÁÂÇ¥
-	int points_y; // yÁÂÇ¥
+	int points_x; // xì¢Œí‘œ
+	int points_y; // yì¢Œí‘œ
 
-	// ¹æ Á¤º¸
+	// ë°© ì •ë³´
 	int room_height;
 	int room_width;
-	int room_points_x; // xÁÂÇ¥
-	int room_points_y; // yÁÂÇ¥
+	int room_points_x; // xì¢Œí‘œ
+	int room_points_y; // yì¢Œí‘œ
 
-	int parent_devide_type; // ºÎ¸ğ°¡ Çà°ú ¿­ Áß ¾î¶² ±âÁØÀ¸·Î ³ª´µ¾ú´ÂÁö ³ªÅ¸³¿. 0ÀÌ¸é ¿­, 1ÀÌ¸é ÇàÀ¸·Î ³ª´¸.
+	int parent_devide_type; // ë¶€ëª¨ê°€ í–‰ê³¼ ì—´ ì¤‘ ì–´ë–¤ ê¸°ì¤€ìœ¼ë¡œ ë‚˜ë‰˜ì—ˆëŠ”ì§€ ë‚˜íƒ€ëƒ„. 0ì´ë©´ ì—´, 1ì´ë©´ í–‰ìœ¼ë¡œ ë‚˜ë‰¨.
 };
 
 class TreeNode {
@@ -31,14 +34,16 @@ public:
 	TreeNode* goRoot();
 	TreeNode* goLeftNode();
 	TreeNode* goRightNode();
+	TreeNode* goRoom(int _num);
 
 	int getHeight();
 	int getWidth();
 	int getX();
 	int getY();
 
-	void allocateRoom(int** _map);
+	int allocateRoom(int** _map);
 	void connectRoom(int** _map, TreeNode* room1, TreeNode* room2);
+	void connectRoom4(int** _map, TreeNode* room1, TreeNode* room2);
 	void connectRoom_X(int** _map, TreeNode* room1, TreeNode* room2);
 	void connectRoom_Y(int** _map, TreeNode* room1, TreeNode* room2);
 
