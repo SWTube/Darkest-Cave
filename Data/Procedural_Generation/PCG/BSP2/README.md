@@ -18,3 +18,6 @@
 ![image](https://user-images.githubusercontent.com/37788658/129476793-b6ce72d1-c1c2-4244-bba3-edf879ab343c.png)
 경로 자동생성
 ![image](https://user-images.githubusercontent.com/37788658/130612650-a29ef8e6-3b08-40bb-876f-5d602a8e9eef.png)
+걍로 생성 복잡화
+![image](https://user-images.githubusercontent.com/37788658/131242576-6bba715d-15f6-4e1d-85a7-d83bea92079e.png)
+

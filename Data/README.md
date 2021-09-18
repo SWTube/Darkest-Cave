@@ -1,5 +1,84 @@
 # Darkest-Cave Data texture making
 
+# Compair Model Paramter 
+
+## 모델 리스트
+
+ 1. VGG19 (Block1_conv1 ~ Block5_conv1, Block5_conv2)
+
+|  Operation|Filter|Parameters|Activations|layer|
+|:--:|:--:|:--:|:--:|:--:|
+| **Conv2d_1_1**|64| 1.7K| 3.2M |Style
+| Conv2d_1_2|64| 36K| 3.2M |
+| **max pooling**|||802K|
+|**Conv2d_2_1**|128| 73K| 1.6M |Style
+| Conv2d_2_2|128| 147K| 1.6M |
+| **max pooling**|||401K|
+| **Conv2d_3_1**|256| 300K| 802K |Style
+| Conv2d_3_2|256| 600K| 802K|
+| Conv2d_3_3|256| 600K| 802K|
+| Conv2d_3_4|256| 600K| 802K|
+| **max pooling**|
+| **Conv2d_4_1**|512| 1.1M| 401K|Style
+| Conv2d_4_2|512| 2.3M| 401K|
+| Conv2d_4_3|512| 2.3M| 401K|
+| Conv2d_4_4|512| 2.3M| 401K|
+| **max pooling**|
+| **Conv2d_5_1**|512| 2.3M| 100K |Style
+| **Conv2d_5_2**|512| 2.3M| 100K |Content
+
+---
+ 2. AdaIN (VGG19, Relu 4-1)
+
+|  Operation|Filter|Parameters|Activations|
+|:--:|:--:|:--:|:--:|
+| Conv2d|64| 1.7K| 3.2M |
+| ReflectionPad2d|
+| Conv2d|64| 36K| 3.2M |
+| **ReLu 1-1**|
+| Conv2d|64| 36K| 3.2M |
+| **ReLu 1-2**|
+| MaxPool2d|
+| ReflectionPad2d|
+
+### ... until Relu 4-1
+
+|  Operation|Filter|Parameters|Activations|
+|:--:|:--:|:--:|:--:|
+| ReflectionPad2d|
+| Conv2d|256| 600K| 802K |
+| **ReLu 3-4**|
+| Conv2d|512| 2.3M| 100K |
+| **ReLu 4-1**|
+---
+ 3. Inception-V3
+
+|  Operation|Kernel size|Stride|Feature maps|Padding|Nonlinearity|
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| Convolution |9| 1 | 32 |SAME	|ReLU	|
+| Convolution |3| 2 | 64 |SAME	|ReLU	|
+| Convolution |3| 2 | 128|SAME	|ReLU	|
+| Residual block|  |  | 128 |	|	|
+| Residual block|  |  | 128 |	|	|
+| Residual block|  |  | 128 |	|	|
+| Residual block|  |  | 128 |	|	|
+| Residual block|  |  | 128 |	|	|
+| Upsampling|  |  | 64|	|	|
+| Upsampling|  |  | 32|	|	|
+| Convolution|9| 1 | 3|SAME	|Sigmoid|
+| **Residual block**| **C feature maps** |
+| Convolution |3| 1 | C|SAME	|ReLU	|
+| Convolution |3| 1 | C|SAME	|Linear|
+| **Upsampling**| **C feature maps** |
+| Convolution |3| 1 | C|SAME	|Linear|
+
+ - Padding mode REFLECT
+ - Normalization Conditional instance normalization after every convolution
+ - Optimizer Adam (α = 0.001, β1 = 0.9, β2 = 0.999)
+ - Parameter updates 4M
+ - Batch size 8
+ - Weight initialization Isotropic gaussian (µ = 0, σ = 0.01)
+
 # 1. 커밋 내역 공유
 
 ## 1.1 절차적 맵생성

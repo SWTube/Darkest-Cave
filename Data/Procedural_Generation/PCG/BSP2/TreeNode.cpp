@@ -14,7 +14,7 @@ void TreeNode::setRoot(int** _map, int _height, int _width) {
 	this->info.height = _height;
 	this->info.width = _width;
 	this->info.points_x = 0;
-	this->info.points_y= 0;
+	this->info.points_y = 0;
 
 	// 자식, 부모 노드 초기화
 	this->leftNode = NULL;
@@ -80,7 +80,7 @@ void TreeNode::devide_row(int** _map) {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> dis(this->info.height * 4 / 10, this->info.height * 6 / 10);
-	
+
 	int _height;
 	do {
 		_height = dis(gen);
@@ -192,7 +192,7 @@ int TreeNode::allocateRoom(int** _map) {
 	// 벽에서 1,2,3칸 떨어짐
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(1,3);
+	std::uniform_int_distribution<int> dis(1, 3);
 
 	int start_h = this->info.points_y + dis(gen);
 	int end_h = this->info.points_y + this->info.height - dis(gen);
@@ -218,7 +218,7 @@ int TreeNode::allocateRoom(int** _map) {
 	else {
 		for (int i = start_h; i < end_h; i++) {
 			for (int j = start_w; j < end_w; j++) {
-				if(dis2(gen) == 1)
+				if (dis2(gen) == 1)
 					_map[i][j] = 4;
 				else
 					_map[i][j] = 2;
@@ -227,7 +227,7 @@ int TreeNode::allocateRoom(int** _map) {
 		//_map[start_h][start_w] = this->info.num;
 		return 1;
 	}
-	
+
 	//_map[start_h][start_w] = this->info.num;
 }
 
@@ -250,7 +250,7 @@ void TreeNode::connectRoom(int** _map, TreeNode* room1, TreeNode* room2) {
 				}
 				overlap_y_end = i;
 			}
-			
+
 			for (int i = room1->info.room_points_x + room1->info.room_width; i < room2->info.room_points_x; i++) {
 				_map[(overlap_y_start + overlap_y_end) / 2 - 1][i] = 3;
 				_map[(overlap_y_start + overlap_y_end) / 2][i] = 3;
@@ -292,7 +292,7 @@ void TreeNode::connectRoom4(int** _map, TreeNode* room1, TreeNode* room2) {
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(1, 4);
+	std::uniform_int_distribution<int> dis(1, 2);
 	// 2개의 방의 통로 유형은 총 4가지로 규정
 
 	int x1, x2, y1, y2, w1, w2, h1, h2, choice;
@@ -308,74 +308,198 @@ void TreeNode::connectRoom4(int** _map, TreeNode* room1, TreeNode* room2) {
 		w2 = room2->info.room_width;
 		h1 = room1->info.room_height;
 		h2 = room2->info.room_height;
-
+		
 		if (choice == 1) { // 위쪽, 왼쪽
-			std::uniform_int_distribution<int> dis2(0, w1 - 1);
-			std::uniform_int_distribution<int> dis3(0, h2 - 1);
-			int start_x = x1 + dis2(gen);
-			int start_y = y1;
-			int end_x = x2;
-			int end_y = y2 + dis3(gen);
+			if (y1 <= (y2 + h2)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(y2 - y1));
 
-			for (int y = start_y; y >= end_y; y--) {
-				if (_map[y][start_x] != 2)
-					_map[y][start_x] = 3;
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
 			}
+			else if (x2 <=  (x1 + w1)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(x2 - x1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
 
-			for (int x = start_x; x <= end_x; x++) {
-				if (_map[end_y][x] != 2)
-					_map[end_y][x] = 3;
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
 			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
 
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
 		}
 		else if (choice == 2) { // 위쪽, 아래쪽
-			std::uniform_int_distribution<int> dis2(0, w1 - 1);
-			std::uniform_int_distribution<int> dis3(0, w2 - 1);
-			int start_x = x1 + dis2(gen);
-			int start_y = y1;
-			int end_x = x2 + dis3(gen);
-			int end_y = y2 + h2;
-			std::uniform_int_distribution<int> dis4(0, start_y - end_y); // 꺾이는 위치 랜덤으로 구하기
-			int middle_y = end_y + dis4(gen);
+			if (y1 <= (y2 + h2)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(w2 - 1));
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2 + dis3(gen);
+				int end_y = y2 + h2;
+				std::uniform_int_distribution<int> dis4(0, 0); // 꺾이는 위치 랜덤으로 구하기
+				std::uniform_int_distribution<int> dis5(0, std::abs(x2 - x1 - w1));
+				int middle_y_1 = start_y - dis4(gen);
+				if (middle_y_1 < 0) {
+					middle_y_1 = start_y - dis4(gen);
+				}
+				int middle_y_2 = end_y + dis4(gen);
+				int middle_x = x1 + w1 + dis5(gen);
 
-			for (int y = start_y; y >= middle_y; y--) {
-				if (_map[y][start_x] != 2)
-					_map[y][start_x] = 3;
+				for (int y = start_y; y >= middle_y_1; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= middle_x; x++) {
+					if (_map[middle_y_1][x] != 2)
+						_map[middle_y_1][x] = 3;
+				}
+
+				for (int y = middle_y_1; y <= middle_y_2; y++) {
+					if (_map[y][middle_x] != 2)
+						_map[y][middle_x] = 3;
+				}
+
+				for (int x = middle_x; x <= end_x; x++) {
+					if (_map[middle_y_2][x] != 2)
+						_map[middle_y_2][x] = 3;
+				}
+
+				for (int y = middle_y_2; y >= end_y; y--) {
+					if (_map[y][end_x] != 2)
+						_map[y][end_x] = 3;
+				}
 			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(w2 - 1));
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2 + dis3(gen);
+				int end_y = y2 + h2;
+				std::uniform_int_distribution<int> dis4(0, start_y - end_y); // 꺾이는 위치 랜덤으로 구하기
+				int middle_y = end_y + dis4(gen);
 
-			for (int x = start_x; x <= end_x; x++) {
-				if (_map[middle_y][x] != 2)
-					_map[middle_y][x] = 3;
-			}
+				for (int y = start_y; y >= middle_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
 
-			for (int y = middle_y; y >= end_y; y--) {
-				if (_map[y][end_x] != 2)
-					_map[y][end_x] = 3;
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[middle_y][x] != 2)
+						_map[middle_y][x] = 3;
+				}
+
+				for (int y = middle_y; y >= end_y; y--) {
+					if (_map[y][end_x] != 2)
+						_map[y][end_x] = 3;
+				}
 			}
 		}
 		else if (choice == 3) { // 오른쪽, 왼쪽
-			std::uniform_int_distribution<int> dis2(0, h1 - 1);
-			std::uniform_int_distribution<int> dis3(0, h2 - 1);
-			int start_x = x1 + w1;
-			int start_y = y1 + dis2(gen);
-			int end_x = x2;
-			int end_y = y2 + dis3(gen);
-			std::uniform_int_distribution<int> dis4(0, end_x - start_x); // 꺾이는 위치 랜덤으로 구하기
-			int middle_x = start_x + dis4(gen);
+			if (x2 <= (x1 + w1)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(h1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
+				int start_x = x1 + w1;
+				int start_y = y1 + dis2(gen);
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+				std::uniform_int_distribution<int> dis4(0, 0); // 꺾이는 위치 랜덤으로 구하기
+				int middle_x_1 = start_x + dis4(gen);
+				int middle_x_2 = end_x - dis4(gen);
 
-			for (int x = start_x; x <= middle_x; x++) {
-				if (_map[start_y][x] != 2)
-					_map[start_y][x] = 3;
+				std::uniform_int_distribution<int> dis5(0, std::abs(y1 - y2 - h2));
+				int middle_y = y2 + h2 + 0;
+
+				for (int x = start_x; x <= middle_x_1; x++) {
+					if (_map[start_y][x] != 2)
+						_map[start_y][x] = 3;
+				}
+
+				for (int y = start_y; y >= middle_y; y--) {
+					if (_map[y][middle_x_1] != 2)
+						_map[y][middle_x_1] = 3;
+				}
+
+				for (int x = middle_x_1; x >= middle_x_2; x--) {
+					if (_map[middle_y][x] != 2)
+						_map[middle_y][x] = 3;
+				}
+
+				for (int y = middle_y; y >= end_y; y--) {
+					if (_map[y][middle_x_2] != 2)
+						_map[y][middle_x_2] = 3;
+				}
+
+				for (int x = middle_x_2; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
 			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, h1 - 1);
+				std::uniform_int_distribution<int> dis3(0, h2 - 1);
+				int start_x = x1 + w1;
+				int start_y = y1 + dis2(gen);
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+				std::uniform_int_distribution<int> dis4(0, end_x - start_x); // 꺾이는 위치 랜덤으로 구하기
+				int middle_x = start_x + dis4(gen);
 
-			for (int y = start_y; y >= end_y; y--) {
-				if (_map[y][middle_x] != 2)
-					_map[y][middle_x] = 3;
-			}
+				for (int x = start_x; x <= middle_x; x++) {
+					if (_map[start_y][x] != 2)
+						_map[start_y][x] = 3;
+				}
 
-			for (int x = middle_x; x <= end_x; x++) {
-				if (_map[end_y][x] != 2)
-					_map[end_y][x] = 3;
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][middle_x] != 2)
+						_map[y][middle_x] = 3;
+				}
+
+				for (int x = middle_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
 			}
 		}
 		else if (choice == 4) { // 오른쪽, 아래쪽
@@ -408,50 +532,173 @@ void TreeNode::connectRoom4(int** _map, TreeNode* room1, TreeNode* room2) {
 		h2 = room2->info.room_height;
 
 		if (choice == 1) { // 아래쪽, 왼쪽
-			std::uniform_int_distribution<int> dis2(0, w1 - 1);
-			std::uniform_int_distribution<int> dis3(0, h2 - 1);
-			int start_x = x1 + dis2(gen);
-			int start_y = y1 + h1;
-			int end_x = x2;
-			int end_y = y2 + dis3(gen);
+			if (y1 <= (y2 + h2)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(y2 - y1));
 
-			for (int y = start_y; y <= end_y; y++) {
-				if (_map[y][start_x] != 2)
-					_map[y][start_x] = 3;
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
 			}
+			else if (x2 <= (x1 + w1)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(x2 - x1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
 
-			for (int x = start_x; x <= end_x; x++) {
-				if (_map[end_y][x] != 2)
-					_map[end_y][x] = 3;
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
 			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
 
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2;
+				int end_y = y2 + dis3(gen);
+
+				for (int y = start_y; y >= end_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[end_y][x] != 2)
+						_map[end_y][x] = 3;
+				}
+			}
 		}
 		else if (choice == 2) { // 아래쪽, 위쪽
-			std::uniform_int_distribution<int> dis2(0, w1 - 1);
-			std::uniform_int_distribution<int> dis3(0, w2 - 1);
-			int start_x = x1 + dis2(gen);
-			int start_y = y1 + h1;
-			int end_x = x2 + dis3(gen);
-			int end_y = y2;
-			std::uniform_int_distribution<int> dis4(0, end_y - start_y); // 꺾이는 위치 랜덤으로 구하기
-			int middle_y = start_y + dis4(gen);
+			if (y1 <= (y2 + h2)) {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(w2 - 1));
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2 + dis3(gen);
+				int end_y = y2 + h2;
+				std::uniform_int_distribution<int> dis4(0, 0); // 꺾이는 위치 랜덤으로 구하기
+				std::uniform_int_distribution<int> dis5(0, std::abs(x2 - x1 - w1));
+				int middle_y_1 = start_y - dis4(gen);
+				if (middle_y_1 < 0) {
+					middle_y_1 = start_y - dis4(gen);
+				}
+				int middle_y_2 = end_y + dis4(gen);
+				int middle_x = x1 + w1 + dis5(gen);
 
-			for (int y = start_y; y <= middle_y; y++) {
-				if (_map[y][start_x] != 2)
-					_map[y][start_x] = 3;
+				for (int y = start_y; y >= middle_y_1; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= middle_x; x++) {
+					if (_map[middle_y_1][x] != 2)
+						_map[middle_y_1][x] = 3;
+				}
+
+				for (int y = middle_y_1; y <= middle_y_2; y++) {
+					if (_map[y][middle_x] != 2)
+						_map[y][middle_x] = 3;
+				}
+
+				for (int x = middle_x; x <= end_x; x++) {
+					if (_map[middle_y_2][x] != 2)
+						_map[middle_y_2][x] = 3;
+				}
+
+				for (int y = middle_y_2; y >= end_y; y--) {
+					if (_map[y][end_x] != 2)
+						_map[y][end_x] = 3;
+				}
+			}
+			else {
+				std::uniform_int_distribution<int> dis2(0, std::abs(w1 - 1));
+				std::uniform_int_distribution<int> dis3(0, std::abs(w2 - 1));
+				int start_x = x1 + dis2(gen);
+				int start_y = y1;
+				int end_x = x2 + dis3(gen);
+				int end_y = y2 + h2;
+				std::uniform_int_distribution<int> dis4(0, start_y - end_y); // 꺾이는 위치 랜덤으로 구하기
+				int middle_y = end_y + dis4(gen);
+
+				for (int y = start_y; y >= middle_y; y--) {
+					if (_map[y][start_x] != 2)
+						_map[y][start_x] = 3;
+				}
+
+				for (int x = start_x; x <= end_x; x++) {
+					if (_map[middle_y][x] != 2)
+						_map[middle_y][x] = 3;
+				}
+
+				for (int y = middle_y; y >= end_y; y--) {
+					if (_map[y][end_x] != 2)
+						_map[y][end_x] = 3;
+				}
+			}
+		}
+		else if (choice == 3) { // 오른쪽, 왼쪽
+		if (x2 <= (x1 + w1)) {
+			std::uniform_int_distribution<int> dis2(0, std::abs(h1 - 1));
+			std::uniform_int_distribution<int> dis3(0, std::abs(h2 - 1));
+			int start_x = x1 + w1;
+			int start_y = y1 + dis2(gen);
+			int end_x = x2;
+			int end_y = y2 + dis3(gen);
+			std::uniform_int_distribution<int> dis4(0, 0); // 꺾이는 위치 랜덤으로 구하기
+			int middle_x_1 = start_x + dis4(gen);
+			int middle_x_2 = end_x - dis4(gen);
+
+			std::uniform_int_distribution<int> dis5(0, std::abs(y2 - y1 - h1));
+			int middle_y = y1 + h1 + dis5(gen);
+
+			for (int x = start_x; x <= middle_x_1; x++) {
+				if (_map[start_y][x] != 2)
+					_map[start_y][x] = 3;
 			}
 
-			for (int x = start_x; x <= end_x; x++) {
+			for (int y = start_y; y <= middle_y; y++) {
+				if (_map[y][middle_x_1] != 2)
+					_map[y][middle_x_1] = 3;
+			}
+
+			for (int x = middle_x_1; x >= middle_x_2; x--) {
 				if (_map[middle_y][x] != 2)
 					_map[middle_y][x] = 3;
 			}
 
 			for (int y = middle_y; y <= end_y; y++) {
-				if (_map[y][end_x] != 2)
-					_map[y][end_x] = 3;
+				if (_map[y][middle_x_2] != 2)
+					_map[y][middle_x_2] = 3;
+			}
+
+			for (int x = middle_x_2; x <= end_x; x++) {
+				if (_map[end_y][x] != 2)
+					_map[end_y][x] = 3;
 			}
 		}
-		else if (choice == 3) { // 오른쪽, 왼쪽
+		else {
 			std::uniform_int_distribution<int> dis2(0, h1 - 1);
 			std::uniform_int_distribution<int> dis3(0, h2 - 1);
 			int start_x = x1 + w1;
@@ -475,6 +722,7 @@ void TreeNode::connectRoom4(int** _map, TreeNode* room1, TreeNode* room2) {
 				if (_map[end_y][x] != 2)
 					_map[end_y][x] = 3;
 			}
+		}
 		}
 		else if (choice == 4) { // 오른쪽, 위쪽
 			std::uniform_int_distribution<int> dis2(0, h1 - 1);
@@ -772,7 +1020,7 @@ void TreeNode::devide(int** _map, int _numOfRoom) {
 	for (int i = numOfRoom; i < 2 * numOfRoom - 1; i++) {
 		TreeNode* location1 = this->goRoom(i);
 		TreeNode* location2 = this->goRoom(i + 1);
-		
+
 	}
 
 	/*
@@ -781,12 +1029,12 @@ void TreeNode::devide(int** _map, int _numOfRoom) {
 	}
 	*/
 
-	
+
 	for (int i = 0; i < index - 1; i++) {
 		//std::cout << room_queue[i] << std::endl;
 		this->connectRoom4(_map, this->goRoom(room_queue[i]), this->goRoom(room_queue[i + 1]));
 	}
-	
+
 
 	//std::cout << index << std::endl;
 
@@ -820,7 +1068,7 @@ void TreeNode::printInfo() {
 		std::cout << "왼쪽 자식 방 x좌표: " << this->leftNode->info.points_x << std::endl;
 		std::cout << "왼쪽 자식 방 y좌표: " << this->leftNode->info.points_y << std::endl;
 	}
-	
+
 	if (this->rightNode != NULL) {
 		std::cout << "오른쪽 자식 방 높이: " << this->rightNode->info.height << std::endl;
 		std::cout << "오른쪽 자식 방 길이: " << this->rightNode->info.width << std::endl;
