@@ -240,6 +240,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\Assertion\Assert.h" />
+    <ClInclude Include="Core\Public\Containers\BinarySearchTree.h" />
     <ClInclude Include="Core\Public\Containers\ContainersFwd.h" />
     <ClInclude Include="Core\Public\Containers\LinkedList.h" />
     <ClInclude Include="Core\Public\Containers\Node.h" />
@@ -282,11 +283,14 @@
     <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
     <ClCompile Include="Core\Public\Containers\BinarySearchTree.ixx" />
+    <ClCompile Include="Core\Public\Containers\CompareItemType.ixx" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Array.ixx" />
     <ClCompile Include="Core\Public\Containers\HashTable.ixx" />
     <ClCompile Include="Core\Public\Containers\LinkedList.ixx" />
     <ClCompile Include="Core\Public\Containers\Pair.ixx" />
+    <ClCompile Include="Core\Public\Containers\PriorityQueue.ixx" />
+    <ClCompile Include="Core\Public\Containers\Queue.ixx" />
     <ClCompile Include="Core\Public\Containers\Stack.ixx" />
     <ClCompile Include="Core\Public\KeyboardInput\KeyboardInput.ixx" />
     <ClCompile Include="Core\Public\Math\Math.ixx" />
