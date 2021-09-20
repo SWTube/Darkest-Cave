@@ -2,21 +2,19 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-/*
-module;
+#pragma once
 
 #ifdef CAVE_BUILD_DEBUG
 
-#include "Utils/Crt.h"
 #include "Debug/Log.h"
 
 #endif
 
 #include "CoreGlobals.h"
 #include "Memory/MemoryPool.h"
+#include "Utils/Crt.h"
 
-export module cave.Core.Containers.BinarySearchTree;
-
+import cave.Core.Containers.CompareItemType;
 #ifdef CAVE_BUILD_DEBUG
 
 import cave.Core.String;
@@ -24,19 +22,12 @@ import cave.Core.String;
 #endif
 
 
-export namespace cave
+namespace cave
 {
 	enum class eBinarySearchTreeColor : bool
 	{
 		RED,
 		BLACK
-	};
-
-	enum class eCompareItem
-	{
-		LESS,
-		EQUAL,
-		GREATER
 	};
 
 	struct BinarySearchTreeNode
@@ -66,26 +57,9 @@ export namespace cave
 		}
 	};
 
-	eCompareItem DefaultComapreFunction(void* leftItem, void* rightItem)
-	{
-		if (leftItem < rightItem)
-		{
-			return eCompareItem::LESS;
-		}
-
-		if (leftItem > rightItem)
-		{
-			return eCompareItem::GREATER;
-		}
-		
-		return eCompareItem::EQUAL;
-	}
-
 	class BinarySearchTree final
 	{
 	public:
-		typedef eCompareItem(*CompareMethodType)(void*, void*);
-
 		constexpr BinarySearchTree();
 		constexpr BinarySearchTree(eCompareItem(*compareMethod)(void*, void*));
 		constexpr BinarySearchTree(MemoryPool& pool);
@@ -131,16 +105,16 @@ export namespace cave
 	BinarySearchTreeNode BinarySearchTree::msNilNode = BinarySearchTreeNode();
 
 	constexpr BinarySearchTree::BinarySearchTree()
-		: BinarySearchTree(DefaultComapreFunction, gCoreMemoryPool)
+		: BinarySearchTree(CompareItem::DefaultFunction, gCoreMemoryPool)
 	{ }
 
 	constexpr BinarySearchTree::BinarySearchTree(eCompareItem(*compareMethod)(void*, void*))
 		: BinarySearchTree(compareMethod, gCoreMemoryPool)
 	{ }
-	
+
 
 	constexpr BinarySearchTree::BinarySearchTree(MemoryPool& pool)
-		: BinarySearchTree(DefaultComapreFunction, pool)
+		: BinarySearchTree(CompareItem::DefaultFunction, pool)
 	{ }
 
 	constexpr BinarySearchTree::BinarySearchTree(eCompareItem(*compareMethod)(void*, void*), MemoryPool& pool)
@@ -193,6 +167,8 @@ export namespace cave
 
 	constexpr bool BinarySearchTree::Insert(void* item)
 	{
+		assert(item != nullptr);
+		
 		BinarySearchTreeNode* insertNode = nullptr;
 		BinarySearchTreeNode* tempNode = mRootNode;
 		BinarySearchTreeNode* parentTempNode = tempNode;
@@ -252,7 +228,7 @@ export namespace cave
 		}
 
 
-		if((deleteNode->mLeftChild != &msNilNode) && (deleteNode->mRightChild != &msNilNode))
+		if ((deleteNode->mLeftChild != &msNilNode) && (deleteNode->mRightChild != &msNilNode))
 		{
 			deleteNode->mItem = GetNextNode(deleteNode)->mItem;
 			deleteNode = GetNextNode(deleteNode);
@@ -289,7 +265,7 @@ export namespace cave
 			else
 			{
 				deleteNode->mParent->mRightChild = childNode;
-				
+
 			}
 
 			if (childNode != &msNilNode)
@@ -481,7 +457,7 @@ export namespace cave
 		}
 
 		mRootNode->mColor = eBinarySearchTreeColor::BLACK;
-		
+
 	}
 
 	constexpr void BinarySearchTree::DeleteColorFix(BinarySearchTreeNode* node, BinarySearchTreeNode* parentNode)
@@ -629,7 +605,7 @@ export namespace cave
 			return rightHeight + 1;
 		}
 	}
-	
+
 	constexpr bool BinarySearchTree::ColorCheck()
 	{
 		bool colorCheck = true;
@@ -666,7 +642,7 @@ export namespace cave
 		{
 			return leftBlackCount + 1;
 		}
-		
+
 		return leftBlackCount;
 	}
 
@@ -676,10 +652,6 @@ export namespace cave
 	namespace BinarySearchTreeTest
 	{
 		int32_t* itemTable;
-
-		size_t* insertCount;
-		size_t* deleteCount;
-		size_t* searchCount;
 
 		size_t tableSize;
 
@@ -706,13 +678,15 @@ export namespace cave
 			}
 
 			return eCompareItem::EQUAL;
-		}
+		}	
 
 		namespace Container
 		{
-			void Insert(BinarySearchTree& tree, size_t count)
+			void Insert(BinarySearchTree& tree)
 			{
-				for (size_t i = 0; i < insertCount[count]; ++i)
+				size_t insertCount = rand() % 32 + 1;	
+
+				for (size_t i = 0; i < insertCount; ++i)
 				{
 					size_t index = rand() % tableSize;
 
@@ -723,9 +697,11 @@ export namespace cave
 				}
 			}
 
-			void Delete(BinarySearchTree& tree, size_t count)
+			void Delete(BinarySearchTree& tree)
 			{
-				for (size_t i = 0; i < deleteCount[count]; ++i)
+				size_t deleteCount = rand() % 16 + 1;
+
+				for (size_t i = 0; i < deleteCount; ++i)
 				{
 					size_t index = rand() % tableSize;
 
@@ -736,9 +712,11 @@ export namespace cave
 				}
 			}
 
-			void Search(BinarySearchTree& tree, size_t count)
+			void Search(BinarySearchTree& tree)
 			{
-				for (size_t i = 0; i < searchCount[count]; ++i)
+				size_t searchCount = rand() % 16 + 1; 
+
+				for (size_t i = 0; i < searchCount; ++i)
 				{
 					size_t index = rand() % tableSize;
 
@@ -757,54 +735,37 @@ export namespace cave
 
 			itemTable = reinterpret_cast<int32_t*>(gCoreMemoryPool.Allocate(sizeof(int32_t) * tableSize));
 
-			insertCount = reinterpret_cast<size_t*>(gCoreMemoryPool.Allocate(sizeof(size_t) * containerTestCount));
-			deleteCount = reinterpret_cast<size_t*>(gCoreMemoryPool.Allocate(sizeof(size_t) * containerTestCount));
-			searchCount = reinterpret_cast<size_t*>(gCoreMemoryPool.Allocate(sizeof(size_t) * containerTestCount));
-
-			for (size_t i = 0; i < containerTestCount; ++i)
-			{
-
-				insertCount[i] = rand() % 100 + 1;
-				deleteCount[i] = rand() % 200 + 1;
-				searchCount[i] = rand() % 1 + 1;
-			}
-
 			for (size_t i = 0; i < tableSize; ++i)
 			{
-				itemTable[i] = rand();
+				itemTable[i] = i;
 			}
 
 			for (size_t i = 0; i < containerTestCount; ++i)
 			{
-				if (containerTestCase & TEST_INSERT) 
+				if (containerTestCase & TEST_INSERT)
 				{
-					Container::Insert(tree, i);
+					Container::Insert(tree);
 				}
 
 				if (containerTestCase & TEST_DELETE)
 				{
-					Container::Delete(tree, i);
+					Container::Delete(tree);
 				}
 
 				if (containerTestCase & TEST_SEARCH)
 				{
-					Container::Search(tree, i);
+					Container::Search(tree);
 				}
 
-				//tree.PrintInt32();
-				size_t sizeHeight = 0;
-				for (sizeHeight; (1 << sizeHeight) < tree.GetSize(); ++sizeHeight);
+				tree.PrintInt32();
+				//size_t sizeHeight = 0;
+				//for (sizeHeight; (1 << sizeHeight) < tree.GetSize(); ++sizeHeight);
 
-				LOGDF(eLogChannel::CORE_CONTAINER, "Size: %d, SizeHeight : %d, Height: %d,", tree.GetSize(), sizeHeight, tree.GetHeight());
+				//LOGDF(eLogChannel::CORE_CONTAINER, "Size: %d, SizeHeight : %d, Height: %d,", tree.GetSize(), sizeHeight, tree.GetHeight());
 			}
 
-			gCoreMemoryPool.Deallocate(itemTable, sizeof(int32_t) * tableSize);
-
-			gCoreMemoryPool.Deallocate(insertCount, sizeof(size_t) * containerTestCount);
-			gCoreMemoryPool.Deallocate(deleteCount, sizeof(size_t) * containerTestCount);
-			gCoreMemoryPool.Deallocate(searchCount, sizeof(size_t) * containerTestCount);
+			gCoreMemoryPool.Deallocate(itemTable, sizeof(int32_t) * tableSize);	
 		}
 	}
 #endif
 }
-*/
