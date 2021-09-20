@@ -103,7 +103,7 @@ export namespace cave
         constexpr const void** operator->() const;
     };
 
-    class Array final
+    class Array
     {
     public:
         using ConstIterator = ArrayConstIterator;
@@ -118,7 +118,7 @@ export namespace cave
         Array(const Array& other);
         Array(const Array& other, MemoryPool& pool);
         Array(Array&& other) noexcept;  
-        ~Array();
+        virtual ~Array();
 
         constexpr Array& operator=(const Array& other);
         constexpr Array& operator=(Array&& other);
@@ -132,16 +132,18 @@ export namespace cave
         Iterator Delete(ConstIterator position);
         Iterator Delete(ConstIterator first, ConstIterator last);
 
+        void InsertFront(void* item);
         constexpr void InsertBack(void* item);
 
+        void DeleteFront();
         constexpr void DeleteBack();
 
-        constexpr bool IsEmpty() const;
+        constexpr virtual bool IsEmpty() const;
 
-        constexpr size_t GetSize() const;
+        constexpr virtual size_t GetSize() const;
         constexpr void SetSize(size_t size, void* item);
 
-        constexpr size_t GetCapacity() const;
+        constexpr virtual size_t GetCapacity() const;
         constexpr void SetCapacity(size_t capacity);
 
         constexpr size_t GetMaxSize() const;
@@ -177,7 +179,7 @@ export namespace cave
 
         constexpr static size_t DEFAULT_CAPACITY = 8u;
 
-    private:
+    protected:
         MemoryPool* mPool;
         size_t mSize;
         size_t mCapacity;
@@ -633,6 +635,24 @@ export namespace cave
         return Iterator(*this, index);
     }
 
+    void Array::InsertFront(void* item)
+    {
+        assert(GetMaxSize() > 0);
+
+        size_t newMaxSize = mCapacity;
+
+        if (mSize + 1 > newMaxSize)
+        {
+            newMaxSize <<= 1;
+        }
+
+        SetCapacity(newMaxSize);
+
+        Memory::Memmove(mData + 1, mData, sizeof(void*) * (mSize));
+
+        mData[0] = item;
+        mSize++;
+    }
     
     constexpr void Array::InsertBack(void* item)
     {
@@ -651,6 +671,14 @@ export namespace cave
         mSize++;
     }
 
+    void Array::DeleteFront()
+    {
+        assert(!IsEmpty());
+
+        Memory::Memmove(mData, mData + 1, sizeof(void*) * (mSize - 1));
+
+        --mSize;
+    }
     
     constexpr void Array::DeleteBack()
     {
