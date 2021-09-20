@@ -109,8 +109,8 @@ int main(int32_t argc, char** argv)
 #endif
 
 #ifdef CAVE_BUILD_DEBUG
-	TicTocTimer clock = tic();
-	cave::FileSystemTest::Main();
+	//TicTocTimer clock = tic();
+	//cave::FileSystemTest::Main();
 	//RenderTest();
 	//cave::StringTest::Main();
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
@@ -126,7 +126,7 @@ int main(int32_t argc, char** argv)
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	//clock = tic();
-	//cave::HashTableTest::Main();
+	cave::HashTableTest::BucketInterface();
 	//cave::HashTable hashTable(sizeof(uint32_t));
 	//uint32_t keys[256];
 	//uint32_t values[256];
