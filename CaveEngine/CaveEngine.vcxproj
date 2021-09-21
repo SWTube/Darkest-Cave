@@ -272,6 +272,7 @@
     <ClInclude Include="Core\Public\Utils\Crt.h" />
     <ClInclude Include="Core\Public\Utils\Defines.h" />
     <ClInclude Include="Gameplay\Public\Game\GameInstance.h" />
+    <ClInclude Include="Gameplay\Public\Object\Controller.h" />
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Object.h" />
     <ClInclude Include="Gameplay\Public\Object\Player.h" />
@@ -393,6 +394,8 @@
     <ClCompile Include="Gameplay\Private\Object\Transform.cpp" />
     <ClCompile Include="Gameplay\Private\World\Level.cpp" />
     <ClCompile Include="Gameplay\Private\World\World.cpp" />
+    <ClCompile Include="Gameplay\Public\Event\Event.ixx" />
+    <ClCompile Include="Gameplay\Public\Event\EventHandler.ixx" />
     <ClCompile Include="Physics\Private\Body\PhysicsBody.cpp" />
     <ClCompile Include="Physics\Private\Body\RigidBody.cpp" />
     <ClCompile Include="Physics\Private\Body\StaticBody.cpp" />
