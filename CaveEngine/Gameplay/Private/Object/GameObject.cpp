@@ -15,6 +15,7 @@
 #include "Object/Script.h"
 #include "Object/Transform.h"
 #include "World/Level.h"
+#include "World/World.h"
 #include "Body/PhysicsBody.h"
 
 namespace cave
@@ -323,7 +324,7 @@ namespace cave
 			delete mPhysicsBody;
 		}
 		mPhysicsBody = &physicsBody;
-		mPhysicsBody->SetBody(mLevel->GetWorld->CreateBody(mPhysicsBody->GetBodyDef()));
+		mPhysicsBody->SetBody(mLevel->GetWorld()->GetPhysicsWorld()->CreateBody(mPhysicsBody->GetBodyDef()));
 	}
 
 	void GameObject::SetLevel(Level& level)

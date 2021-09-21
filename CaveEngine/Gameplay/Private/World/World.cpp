@@ -124,6 +124,11 @@ namespace cave
 		return mPhysicsWorld->GetGravity();
 	}
 
+	b2World* World::GetPhysicsWorld() const
+	{
+		return mPhysicsWorld;
+	}
+
 	void World::InitializeGameObjectsInWorld()
 	{
 		assert(IsValid());

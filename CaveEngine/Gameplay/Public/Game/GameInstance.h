@@ -23,8 +23,8 @@ namespace cave
 		GameInstance& operator=(GameInstance&&) = delete;
 
 		void Init();
-		void FixedUpdate(float updateTimestep);
-		void Update(float updateTimestep);
+		void FixedUpdate();
+		void Update();
 		void Shutdown();
 
 		void AddWorld(World& world);

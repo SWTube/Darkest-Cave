@@ -44,6 +44,8 @@ namespace cave
 		void SetGravity(b2Vec2 gravity);
 		b2Vec2 GetGravity() const;
 
+		b2World* GetPhysicsWorld() const;
+
 		void InitializeGameObjectsInWorld();
 		void UpdateGameObjectsInWorld();
 		void FixedUpdateGameObjectsInWorld();
