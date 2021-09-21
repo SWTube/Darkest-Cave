@@ -55,6 +55,8 @@ namespace cave
 
 		bool IsGameObjectInLevel(GameObject& gameObject);
 
+		World* GetWorld() const;
+
 	private:
 		void addActiveGameObject(GameObject& gameObject);
 		void removeActiveGameObject(GameObject& gameObject);

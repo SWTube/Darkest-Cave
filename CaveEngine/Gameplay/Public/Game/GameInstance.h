@@ -23,8 +23,8 @@ namespace cave
 		GameInstance& operator=(GameInstance&&) = delete;
 
 		void Init();
-		void FixedUpdate();
-		void Update();
+		void FixedUpdate(float updateTimestep);
+		void Update(float updateTimestep);
 		void Shutdown();
 
 		void AddWorld(World& world);
@@ -34,5 +34,6 @@ namespace cave
 
 	private:
 		std::unordered_map<std::string, World*> mWorlds;
+		World* mCurrentWorld;
 	};
 }

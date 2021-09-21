@@ -9,11 +9,13 @@
 #include "Object/Tag.h"
 #endif //CAVE_BUILD_DEBUG
 
+#include "Physics.h"
 #include "Object/GameObject.h"
 #include "Object/TagPool.h"
 #include "Object/Script.h"
 #include "Object/Transform.h"
 #include "World/Level.h"
+#include "Body/PhysicsBody.h"
 
 namespace cave
 {
@@ -321,6 +323,7 @@ namespace cave
 			delete mPhysicsBody;
 		}
 		mPhysicsBody = &physicsBody;
+		mPhysicsBody->SetBody(mLevel->GetWorld->CreateBody(mPhysicsBody->GetBodyDef()));
 	}
 
 	void GameObject::SetLevel(Level& level)
