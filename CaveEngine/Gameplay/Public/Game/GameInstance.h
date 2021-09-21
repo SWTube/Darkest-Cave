@@ -34,5 +34,6 @@ namespace cave
 
 	private:
 		std::unordered_map<std::string, World*> mWorlds;
+		World* mCurrentWorld;
 	};
 }

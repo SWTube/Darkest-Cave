@@ -10,14 +10,16 @@ namespace cave
 {
 	std::unordered_set<std::string> World::mGlobalUniqueName;
 
-	World::World(std::string& name) 
+	World::World(std::string& name)
 		: Object(name, mGlobalUniqueName)
+		, mPhysicsWorld(new b2World(b2Vec2{ 0, -10 }))
 	{
 		assert(IsValid());
 	}
 
 	World::World(const char* name) 
 		: Object(name, mGlobalUniqueName)
+		, mPhysicsWorld(new b2World(b2Vec2{ 0, -10 }))
 	{
 		assert(IsValid());
 	}
@@ -25,6 +27,12 @@ namespace cave
 	World::~World()
 	{
 		assert(IsValid());
+
+		if (mPhysicsWorld != nullptr)
+		{
+			delete mPhysicsWorld;
+		}
+
 		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
 		{
 			Level* level = iter->second;
@@ -104,6 +112,21 @@ namespace cave
 		{
 			RemoveLevel(*level);
 		}
+	}
+
+	void World::SetGravity(b2Vec2 gravity)
+	{
+		mPhysicsWorld->SetGravity(gravity);
+	}
+
+	b2Vec2 World::GetGravity() const
+	{
+		return mPhysicsWorld->GetGravity();
+	}
+
+	b2World* World::GetPhysicsWorld() const
+	{
+		return mPhysicsWorld;
 	}
 
 	void World::InitializeGameObjectsInWorld()

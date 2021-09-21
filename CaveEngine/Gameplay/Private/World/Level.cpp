@@ -229,6 +229,11 @@ namespace cave
 		return iter != mAllGameObjects.end() ? true : false;
 	}
 
+	World* Level::GetWorld() const
+	{
+		return mOwner;
+	}
+
 	void Level::addActiveGameObject(GameObject& gameObject)
 	{
 		assert(IsGameObjectInLevel(gameObject));

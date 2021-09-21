@@ -9,6 +9,7 @@
 #include <unordered_map>
 
 #include "CoreTypes.h"
+#include "Physics.h"
 #include "Object/Object.h"
 
 namespace cave
@@ -40,6 +41,11 @@ namespace cave
 		void RemoveLevel(const char* name);
 		void RemoveLevels(std::vector<Level*>& levels);
 
+		void SetGravity(b2Vec2 gravity);
+		b2Vec2 GetGravity() const;
+
+		b2World* GetPhysicsWorld() const;
+
 		void InitializeGameObjectsInWorld();
 		void UpdateGameObjectsInWorld();
 		void FixedUpdateGameObjectsInWorld();
@@ -49,5 +55,6 @@ namespace cave
 	private:
 		static std::unordered_set<std::string> mGlobalUniqueName;
 		std::unordered_map<std::string, Level*> mLevels;
+		b2World* mPhysicsWorld;
 	};
 }
