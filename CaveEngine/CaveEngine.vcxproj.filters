@@ -357,6 +357,12 @@
     <ClCompile Include="AI\Public\FiniteStateMachine\State.ixx">
       <Filter>Header Files\AI\FiniteStateMachine</Filter>
     </ClCompile>
+    <ClCompile Include="Gameplay\Public\Event\Event.ixx">
+      <Filter>Header Files\Gameplay\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay\Public\Event\EventHandler.ixx">
+      <Filter>Header Files\Gameplay\Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">
@@ -455,11 +461,11 @@
     <ClInclude Include="AI\Public\FiniteStateMachine\FiniteStateMachine.h">
       <Filter>Header Files\AI\FiniteStateMachine</Filter>
     </ClInclude>
+    <ClInclude Include="Gameplay\Public\Object\Controller.h">
+      <Filter>Header Files\Gameplay\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Private\Memory\Memory.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="EngineMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -567,9 +573,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Private\Memory\Memory.cpp">
-      <Filter>Source Files\Core\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="EngineMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -585,9 +588,6 @@
     <ClCompile Include="Gameplay\Private\Object\Tag.cpp">
       <Filter>Source Files\Gameplay\Object</Filter>
     </ClCompile>
-    <ClInclude Include="Graphics\Public\Renderer\WindowsRenderer.h">
-      <Filter>Header Files\Graphics\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Public\Test\Resource.h">
       <Filter>Header Files\Graphics\Test</Filter>
     </ClInclude>
@@ -596,9 +596,6 @@
     </ClInclude>
     <ClInclude Include="ThirdParty\lodepng\Public\lodepng.h">
       <Filter>Header Files\ThirdParty\lodepng</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\Hash.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core\Public\Shapes\Quadrant.h">
       <Filter>Header Files\Core\Shapes</Filter>
@@ -800,6 +797,9 @@
     </Filter>
     <Filter Include="Header Files\AI\FiniteStateMachine">
       <UniqueIdentifier>{b5cc92d1-63a9-41fa-8ed5-31a056c6b8c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\Event">
+      <UniqueIdentifier>{09242bc4-6a18-4d1d-bb8b-2f91a38bc0ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
