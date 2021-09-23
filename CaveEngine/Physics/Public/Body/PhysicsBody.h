@@ -23,6 +23,12 @@ namespace cave
 
         b2Body* GetBody();
         void SetBody(b2Body* body);
+
+        // Contact Filtering
+        void SetCategory(int16 category);
+        void SetMask(int16 mask);
+        void GroupIndex(int groupIndex);
+        void SetFilter(int16 category, int16 mask, int groupIndex);
     protected:
         b2BodyDef mBodyDef;
         b2Body* mBody;
