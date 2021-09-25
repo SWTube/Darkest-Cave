@@ -1,18 +1,16 @@
 ﻿module;
 
-#define UPDATE_TIMESTEP (0.002f)
-
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
-#include "Game/GameInstance.h"
 #include "GraphicsApiPch.h"
+#include "Game/GameInstance.h"
 
 export module Engine;
 
 import DeviceResources;
-import Timer;
 import Renderer;
 import Window;
+import cave.Core.Timer.Timer;
 
 
 namespace cave
@@ -34,25 +32,28 @@ namespace cave
 		eResult	Run();
 		void Destroy();
 
-		float GetElapsedTimestepFromLastUpdate();
-		float GetInterpolationTimestep();
-		float GetFixedUpdateTimestep() const;
-
-
 		Window* GetWindowHandle() const;
 		Renderer* GetRenderer() const;
 		GameInstance* GetGameInstance() const;
+
+	
 
 	private:
 		Engine();
 
 	private:
 		MemoryPool* mPool = nullptr;
+
 		Renderer* mRenderer = nullptr;
 		Window* mWindow = nullptr;
-		Timer* mTimer = nullptr;
+
+		float mUpdateTimestep =0.f;
+		Timer* mEngineTimer = nullptr;
 
 		GameInstance* mGameInstance = nullptr;
+
+
+		eResult mEngineState;
 
 		static HINSTANCE		msInstance;
 		static const wchar_t*	msWindowClassName;
@@ -64,8 +65,22 @@ namespace cave
 
 	Engine::Engine()
 		: mPool(&gCoreMemoryPool)
+		, mUpdateTimestep(0.002f)
 	{
+		mWindow = reinterpret_cast<Window*>(mPool->Allocate(sizeof(Window)));
+		new(mWindow) Window(1600u, 900u, L"Test", msInstance, StaticWindowProc);
 
+		// Instantiate the renderer.
+		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
+		new(mRenderer) Renderer();
+
+		mEngineTimer = reinterpret_cast<Timer*>(mPool->Allocate(sizeof(Timer)));
+		new(mEngineTimer) Timer();
+
+		mGameInstance = reinterpret_cast<GameInstance*>(mPool->Allocate(sizeof(GameInstance)));
+		new(mGameInstance) GameInstance();
+
+		mRenderer->Init(mWindow);
 	}
 
 	Engine::~Engine()
@@ -84,11 +99,11 @@ namespace cave
 			mGameInstance = nullptr;
 		}
 
-		if (mTimer != nullptr)
+		if (mEngineTimer != nullptr)
 		{
-			mTimer->~Timer();
-			mPool->Deallocate(mTimer, sizeof(Timer));
-			mTimer = nullptr;
+			mEngineTimer->~Timer();
+			mPool->Deallocate(mEngineTimer, sizeof(Timer));
+			mEngineTimer = nullptr;
 		}
 
 		if (mRenderer != nullptr)
@@ -161,13 +176,14 @@ namespace cave
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
 		new(mRenderer) Renderer();
 
-		mTimer = reinterpret_cast<Timer*>(mPool->Allocate(sizeof(Timer)));
-		new(mTimer) Timer();
+		mEngineTimer = reinterpret_cast<Timer*>(mPool->Allocate(sizeof(Timer)));
+		new(mEngineTimer) Timer();
 
 		mGameInstance = reinterpret_cast<GameInstance*>(mPool->Allocate(sizeof(GameInstance)));
 		new(mGameInstance) GameInstance();
 
 		mRenderer->Init(mWindow);
+		
 		//mRenderer->CreateDeviceDependentResources();
 
 		//// We have a window, so initialize window size-dependent resources.
@@ -189,9 +205,9 @@ namespace cave
 			mPool->Deallocate(mWindow, sizeof(Window));
 		}
 
-		if (mTimer != nullptr)
+		if (mEngineTimer != nullptr)
 		{
-			mPool->Deallocate(mTimer, sizeof(Timer));
+			mPool->Deallocate(mEngineTimer, sizeof(Timer));
 		}
 
 		if (mGameInstance != nullptr)
@@ -223,10 +239,10 @@ namespace cave
 		msg.message = WM_NULL;
 		PeekMessage(&msg, nullptr, 0u, 0u, PM_NOREMOVE);
 
-		double elapsedTime = 0.0;
+		float elapsedTime = 0.f;
 
 		mGameInstance->Init();
-		mTimer->Init();
+		mEngineTimer->Init();
 
 		while (WM_QUIT != msg.message)
 		{
@@ -241,42 +257,25 @@ namespace cave
 				DispatchMessage(&msg);
 			}
 
-			mTimer->Update();
-
-			elapsedTime += mTimer->GetElapsedTimestepFromLastUpdate();
-			while (elapsedTime >= UPDATE_TIMESTEP)
+			elapsedTime += mEngineTimer->GetMeasuredTime();
+			mEngineTimer->StartMeasuring();
+			while (elapsedTime >= mUpdateTimestep)
 			{
-				mGameInstance->FixedUpdate();
-				elapsedTime -= UPDATE_TIMESTEP;
+				mGameInstance->FixedUpdate(mUpdateTimestep);
+				elapsedTime -= mUpdateTimestep;
 			}
 
-			mGameInstance->Update();
+			mGameInstance->Update(elapsedTime);
 
 			// Render frames during idle time (when no messages are waiting).
 			mRenderer->Render();
-
-			// Present the frame to the screen.
-			//mDeviceResources->Present();  mDeviceResources�� Present ��� �ϴ� ������.
+			mEngineTimer->EndMeasuring();
 		}
 
 		return eResult::CAVE_OK;
 	}
 
-	float Engine::GetElapsedTimestepFromLastUpdate()
-	{
-		return mTimer->GetElapsedTimestepFromLastUpdate();
-	}
-
-	float Engine::GetInterpolationTimestep()
-	{
-		return mTimer->GetInterpolationTimestep();
-	}
-
-	float Engine::GetFixedUpdateTimestep() const
-	{
-		return UPDATE_TIMESTEP;
-	}
-
+	
 	Window* Engine::GetWindowHandle() const
 	{
 		return mWindow;

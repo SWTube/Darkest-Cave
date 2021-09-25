@@ -49,9 +49,9 @@ namespace cave
 		std::vector<GameObject*>&& FindGameObjectsByTag(std::string& tag);
 		std::vector<GameObject*>&& FindGameObjectsByTag(const char* tag);
 
-		void InitializeGameObjectsInLevel();
-		void UpdateGameObjectsInLevel();
-		void FixedUpdateGameObjectsInLevel();
+		void Init();
+		void Update(float elapsedTimestep);
+		void FixedUpdate(float elapsedTimestep);
 
 		bool IsGameObjectInLevel(GameObject& gameObject);
 

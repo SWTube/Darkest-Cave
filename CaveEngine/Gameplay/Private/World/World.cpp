@@ -116,47 +116,41 @@ namespace cave
 
 	void World::SetGravity(b2Vec2 gravity)
 	{
+		assert(IsValid());
 		mPhysicsWorld->SetGravity(gravity);
 	}
 
 	b2Vec2 World::GetGravity() const
 	{
+		assert(IsValid());
 		return mPhysicsWorld->GetGravity();
 	}
 
 	b2World* World::GetPhysicsWorld() const
 	{
+		assert(IsValid());
 		return mPhysicsWorld;
 	}
 
-	void World::InitializeGameObjectsInWorld()
+	void World::Init()
 	{
 		assert(IsValid());
-
 		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
 		{
-			iter->second->InitializeGameObjectsInLevel();
+			iter->second->Init();
 		}
 	}
 
-	void World::UpdateGameObjectsInWorld()
+	void World::FixedUpdate(float elapsedTimestep)
 	{
 		assert(IsValid());
-
-		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
-		{
-			iter->second->UpdateGameObjectsInLevel();
-		}
+		mPhysicsWorld->Step(elapsedTimestep, 10, 8);
 	}
 
-	void World::FixedUpdateGameObjectsInWorld()
+	void World::Update(float elapsedTimestep)
 	{
 		assert(IsValid());
-
-		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
-		{
-			iter->second->FixedUpdateGameObjectsInLevel();
-		}
+		
 	}
 
 	bool World::IsLevelInWorld(Level& level)

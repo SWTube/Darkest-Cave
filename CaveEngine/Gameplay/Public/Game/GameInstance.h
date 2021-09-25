@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <string>
 #include <unordered_map>
 
 namespace cave
@@ -23,14 +24,15 @@ namespace cave
 		GameInstance& operator=(GameInstance&&) = delete;
 
 		void Init();
-		void FixedUpdate();
-		void Update();
+		void FixedUpdate(float elapsedTimestep);
+		void Update(float elapsedTimestep);
 		void Shutdown();
 
 		void AddWorld(World& world);
-		void RemoveWorld(World& world);
+		void RemoveWorldByName(std::string& worldName);
 
-		bool IsWorldInGameInstance(World& world);
+		void SetCurrentWorld(std::string& worldName);
+		World* GetCurrentWorld() const;
 
 	private:
 		std::unordered_map<std::string, World*> mWorlds;

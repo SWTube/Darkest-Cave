@@ -23,24 +23,18 @@ namespace cave
 	{
 		for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
 		{
-			iter->second->InitializeGameObjectsInWorld();
+			iter->second->Init();
 		}
 	}
 
-	void GameInstance::FixedUpdate()
+	void GameInstance::FixedUpdate(float elapsedTimestep)
 	{
-		for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
-		{
-			iter->second->FixedUpdateGameObjectsInWorld();
-		}
+		mCurrentWorld->FixedUpdate(elapsedTimestep);
 	}
 
-	void GameInstance::Update()
+	void GameInstance::Update(float elapsedTimestep)
 	{
-		for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
-		{
-			iter->second->UpdateGameObjectsInWorld();
-		}
+		mCurrentWorld->Update(elapsedTimestep);
 	}
 
 	void GameInstance::Shutdown()
@@ -64,10 +58,9 @@ namespace cave
 		mWorlds.insert({ world.GetName(), &world });
 	}
 
-	void GameInstance::RemoveWorld(World& world)
+	void GameInstance::RemoveWorldByName(std::string& name)
 	{
-		assert(world.IsValid());
-		auto iter = mWorlds.find(world.GetName());
+		auto iter = mWorlds.find(name);
 		if (iter != mWorlds.end())
 		{
 			World* tmp = iter->second;
@@ -76,10 +69,15 @@ namespace cave
 		}
 	}
 
-	bool GameInstance::IsWorldInGameInstance(World& world)
+	void GameInstance::SetCurrentWorld(std::string& name)
 	{
-		assert(world.IsValid());
+		auto iter = mWorlds.find(name);
+		assert(iter != mWorlds.end());
+		mCurrentWorld = iter->second;
+	}
 
-		return mWorlds.find(world.GetName()) != mWorlds.end();
+	World* GameInstance::GetCurrentWorld() const
+	{
+		return mCurrentWorld;
 	}
 }

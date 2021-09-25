@@ -46,9 +46,9 @@ namespace cave
 
 		b2World* GetPhysicsWorld() const;
 
-		void InitializeGameObjectsInWorld();
-		void UpdateGameObjectsInWorld();
-		void FixedUpdateGameObjectsInWorld();
+		void Init();
+		void Update(float elapsedTimestep);
+		void FixedUpdate(float elapsedTimestep);
 
 		bool IsLevelInWorld(Level& level);
 

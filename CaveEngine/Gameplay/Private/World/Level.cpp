@@ -187,7 +187,7 @@ namespace cave
 		return std::move(result);
 	}
 
-	void Level::InitializeGameObjectsInLevel()
+	void Level::Init()
 	{
 		assert(IsValid());
 		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
@@ -196,7 +196,7 @@ namespace cave
 		}
 	}
 	
-	void Level::UpdateGameObjectsInLevel()
+	void Level::Update(float elapsedTimestep)
 	{
 		assert(IsValid());
 
@@ -208,7 +208,7 @@ namespace cave
 		destroyGameObjects();
 	}
 
-	void Level::FixedUpdateGameObjectsInLevel()
+	void Level::FixedUpdate(float elapsedTimestep)
 	{
 		assert(IsValid());
 
