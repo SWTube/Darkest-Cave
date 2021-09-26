@@ -9,16 +9,27 @@
 
 namespace cave
 {
+	constexpr int32 kMaxContactPoints = 2048;
+
+	struct ContactPoint
+	{
+		b2Fixture* fixtureA;
+		b2Fixture* fixtureB;
+		b2Vec2 normal;
+		b2Vec2 position;
+		b2PointState state;
+		float normalImpulse;
+		float tangentImpulse;
+		float separation;
+	};
+
 	class ContactListener : public b2ContactListener
 	{
 	public:
 		ContactListener();
 		virtual ~ContactListener();
 
-		virtual void BeginContact(b2Contact* contact) override
-		{
-			B2_NOT_USED(contact);
-		}
+		virtual void BeginContact(b2Contact* contact) override;
 		virtual void EndContact(b2Contact* contact) override
 		{
 			B2_NOT_USED(contact);
@@ -30,7 +41,14 @@ namespace cave
 			B2_NOT_USED(impulse);
 		}
 
-	protected:
+		virtual ContactPoint* Step();
 
+	private:
+		b2Body* mGroundBody;
+		b2AABB mWorldAABB;
+		ContactPoint mPoints[kMaxContactPoints];
+		int32 mPointCount;
+		b2World* mWorld;
+		int32 mStepCount;
 	};
 }

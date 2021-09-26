@@ -375,6 +375,9 @@
     <ClCompile Include="Physics\Private\Body\RigidBody.cpp">
       <Filter>Source Files\Physics\Body</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\Private\Collision\ContactListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">

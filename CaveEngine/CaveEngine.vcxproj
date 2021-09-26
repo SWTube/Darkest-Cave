@@ -400,6 +400,7 @@
     <ClCompile Include="Physics\Private\Body\PhysicsBody.cpp" />
     <ClCompile Include="Physics\Private\Body\RigidBody.cpp" />
     <ClCompile Include="Physics\Private\Body\StaticBody.cpp" />
+    <ClCompile Include="Physics\Private\Collision\ContactListener.cpp" />
     <ClCompile Include="Physics\Private\World\PhysicsWorld.cpp" />
     <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
