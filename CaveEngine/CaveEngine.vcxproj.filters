@@ -476,6 +476,9 @@
     <ClInclude Include="Gameplay\Public\Object\Controller.h">
       <Filter>Header Files\Gameplay\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Public\Collision\ContactListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineMain.cpp">

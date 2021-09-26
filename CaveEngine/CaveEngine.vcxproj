@@ -286,6 +286,7 @@
     <ClInclude Include="Physics\Public\Body\PhysicsBody.h" />
     <ClInclude Include="Physics\Public\Body\RigidBody.h" />
     <ClInclude Include="Physics\Public\Body\StaticBody.h" />
+    <ClInclude Include="Physics\Public\Collision\ContactListener.h" />
     <ClInclude Include="Physics\Public\Physics.h" />
     <ClInclude Include="Physics\Public\World\PhysicsWorld.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />
