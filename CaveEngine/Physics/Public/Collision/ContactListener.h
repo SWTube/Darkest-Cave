@@ -43,6 +43,8 @@ namespace cave
 
 		virtual ContactPoint* Step();
 
+		virtual b2Contact* GetContacts();
+
 	private:
 		b2Body* mGroundBody;
 		b2AABB mWorldAABB;

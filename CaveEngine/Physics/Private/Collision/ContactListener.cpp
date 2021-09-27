@@ -75,4 +75,9 @@ namespace cave
 	{
 		return mPoints;
 	}
+
+	b2Contact* ContactListener::GetContacts()
+	{
+		return ContactListener::mWorld->GetContactManager().m_contactList;
+	}
 }
