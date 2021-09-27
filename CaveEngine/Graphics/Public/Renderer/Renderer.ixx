@@ -42,7 +42,7 @@ namespace cave
 		void Render();
 		void Destroy();
 
-
+		bool CaptureScreenShot();
 		bool WindowShouldClose();
 		DeviceResources* GetDeviceResources() const;
 
@@ -310,5 +310,10 @@ namespace cave
 	bool Renderer::WindowShouldClose()
 	{
 		return false;
+	}
+
+	bool Renderer::CaptureScreenShot()
+	{
+		return mDeviceResources->SaveBufferToImage(L"./ScreenShots/test.jpg");
 	}
 }
