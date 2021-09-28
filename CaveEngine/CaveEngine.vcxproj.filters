@@ -175,6 +175,12 @@
     <ClCompile Include="Core\Public\Utils\FileSystem.ixx">
       <Filter>Header Files\Core\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Containers\HashSet.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\BitArray.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">

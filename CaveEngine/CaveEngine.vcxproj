@@ -280,8 +280,10 @@
     <ClCompile Include="Core\Private\Memory\MemoryPool.cpp" />
     <ClCompile Include="Core\Private\Shapes\Quadrant.cpp" />
     <ClCompile Include="Core\Private\Thread\Thread.cpp" />
+    <ClCompile Include="Core\Public\Containers\BitArray.ixx" />
     <ClCompile Include="Core\Public\Containers\Hash.ixx" />
     <ClCompile Include="Core\Public\Containers\Array.ixx" />
+    <ClCompile Include="Core\Public\Containers\HashSet.ixx" />
     <ClCompile Include="Core\Public\Containers\HashTable.ixx" />
     <ClCompile Include="Core\Public\Containers\LinkedList.ixx" />
     <ClCompile Include="Core\Public\Containers\Pair.ixx" />
