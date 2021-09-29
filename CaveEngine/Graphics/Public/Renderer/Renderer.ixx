@@ -4,6 +4,7 @@
  */
 module;
 #include <string>
+#include <vector>
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
@@ -15,13 +16,16 @@ import cave.Core.Types.Vertex;
 import cave.Core.String;
 import DeviceResources;
 import Camera;
-import Shader;
+import cave.Graphics.Shader.Shader;
+import cave.Graphics.Shader.ColorShader;
 import TextureManager;
 import BufferManager;
 import Sprite;
 import AnimatedSprite;
+import Renderable;
 import RenderQueue;
 import cave.Graphics.Resource.FontManager;
+import cave.Graphics.TileMap.TileMap;
 
 namespace cave
 {
@@ -38,10 +42,13 @@ namespace cave
 		eResult Init(Window* window);
 		eResult CreateDeviceDependentResources();
 		eResult CreateWindowSizeDependentResources(Window* window = nullptr);
+
 		void Update();
 		void Render();
 		void Destroy();
 
+		void AddRenderable(Renderable* renderable);
+		void RemoveRenderable(Renderable* renderable);
 
 		bool WindowShouldClose();
 		DeviceResources* GetDeviceResources() const;
@@ -68,6 +75,10 @@ namespace cave
 		IDWriteTextFormat* mTextFormat = nullptr;
 		
 		Shader* mShader = nullptr;
+		ColorShader* mColorShader = nullptr;
+
+		std::vector<Renderable*> mRenderables;
+
 	};
 
 	Renderer::Renderer()
@@ -95,6 +106,13 @@ namespace cave
 			mShader->~Shader();
 			mPool->Deallocate(mShader, sizeof(Shader));
 			mShader = nullptr;
+		}
+
+		if (mColorShader != nullptr)
+		{
+			mColorShader->~ColorShader();
+			mPool->Deallocate(mColorShader, sizeof(ColorShader));
+			mColorShader = nullptr;
 		}
 
 		if (mCamera != nullptr)
@@ -125,6 +143,17 @@ namespace cave
 			mPool = nullptr;
 		}
 
+	}
+
+	void Renderer::AddRenderable(Renderable* renderable)
+	{
+		renderable->init(mDeviceResources);
+		mRenderables.push_back(renderable);
+	}
+
+	void Renderer::RemoveRenderable(Renderable* renderable)
+	{
+		
 	}
 
 	DeviceResources* Renderer::GetDeviceResources() const
@@ -158,6 +187,10 @@ namespace cave
 		mBufferManager->Init(mDeviceResources, 1200);
 
 		//// set color shader
+		mColorShader = reinterpret_cast<ColorShader*>(mPool->Allocate(sizeof(ColorShader)));
+		new(mColorShader) cave::ColorShader(L"color.vs", L"color.ps", *mPool);
+		mColorShader->Compile(mDeviceResources->GetDevice());
+
 		//// set texture shader
 		mShader = reinterpret_cast<Shader*>(mPool->Allocate(sizeof(Shader)));
 		new(mShader) cave::Shader(L"DirectXTest.fxh", *mPool);
@@ -165,11 +198,6 @@ namespace cave
 
 		Sprite::SetScreenSize(mDeviceResources->GetWidth(), mDeviceResources->GetHeight());
 
-		//mDeviceResources->GetDWFactory()->CreateTextFormat(
-		//	L"궁서체", 0, DWRITE_FONT_WEIGHT::DWRITE_FONT_WEIGHT_NORMAL,
-		//	DWRITE_FONT_STYLE::DWRITE_FONT_STYLE_NORMAL,
-		//	DWRITE_FONT_STRETCH::DWRITE_FONT_STRETCH_NORMAL,
-		//	45, L"ko", &mTextFormat);
 
 		mDeviceResources->GetD2DRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(0,0,0,1), &mBrush);
 		
@@ -190,7 +218,7 @@ namespace cave
 
 		DirectX::XMMATRIX& worldMatrix = mDeviceResources->GetWorldMatrix();
 		const DirectX::XMMATRIX& viewMatrix = mCamera->GetViewMatrix();
-		//DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
+		DirectX::XMMATRIX& projection = mDeviceResources->GetProjectionMatrix();
 		DirectX::XMMATRIX& ortho = mDeviceResources->GetOrthoMatrix();
 
 		// 모든 2D 렌더링을 시작하려면 Z 버퍼를 끕니다.
@@ -256,6 +284,14 @@ namespace cave
 
 		}
 		
+		for (Renderable* r : mRenderables)
+		{
+			TileMap* map = reinterpret_cast<TileMap*>(r);
+			map->render(context);
+			Texture* tex = map->GetTileTexture();
+			mShader->Render(context, 6 * map->GetMapSize(), 0, worldMatrix, viewMatrix, ortho, tex->GetTexture());
+		}
+
 		mDeviceResources->TurnOffAlphaBlending();
 		//mDeviceResources->TurnZBufferOn();
 		// Present the frame to the screen.

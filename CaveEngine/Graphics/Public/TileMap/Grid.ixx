@@ -15,8 +15,8 @@ namespace cave
 		Grid(Float3 position, float width, float height, uint16_t cellSize);
 
 	private:
-		Line mHorizontalLine;
-		Line mVerticalLine;
+		//Line mHorizontalLine;
+		//Line mVerticalLine;
 
 	};
 

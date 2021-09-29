@@ -10,7 +10,9 @@ import AnimatedSprite;
 import Text;
 import cave.Graphics.Shape.Line;
 import cave.Core.String;
-
+import cave.Graphics.TileMap.TileSet;
+import cave.Graphics.TileMap.TileMap;
+import cave.Graphics.TileMap.TileManager;
 #ifdef __WIN32__
 
 namespace cave
@@ -72,7 +74,27 @@ namespace cave
 		as1.SetPosition({ 800,200 });
 		as1.SetAngle(90);
 
-		
+		//TileSet tileSet("dirt-tiles.png",32,32);
+		//TileSet tileSet("sengtile.png",16,16);
+		TileSet tileSet("global.png", 16, 16);
+		TileMap mapGround(50, 50, 16);
+		mapGround.SetPosition(-300, 400);
+		mRenderer->AddRenderable(&mapGround);
+
+		TileMap tileMap(50,50,16);
+		tileMap.SetPosition(-300, 400);
+		mRenderer->AddRenderable(&tileMap);
+
+		tileMap.LoadMap("D:\\Desktop\\SW-Project\\Darkist-Cave\\CaveEngine\\Graphics\\Resource\\testMap.txt");
+		tileMap.SetCell(15, 15, 40);
+		tileMap.SetCell(15, 16, 41);
+		tileMap.SetCell(16, 15, 53);
+		tileMap.SetCell(16, 16, 54);
+		mapGround.LoadMap("D:\\Desktop\\SW-Project\\Darkist-Cave\\CaveEngine\\Graphics\\Resource\\test2.txt");
+
+		//TileManager::GetInstance().GetTile(1);
+
+
 		cave::WString ws1 = L"이 글씨체는 무엇일까?";
 
 		//Text t1(L"한국어" , L"배달의민족 주아", 30);
@@ -103,13 +125,13 @@ namespace cave
 				
 				// Update the scene.
 				mRenderer->Update();
-				s1.Render();
-				as1.Render();
-				t1.Render();
-				t2.Render();
-				L1.Render();
-				L2.Render();
-				L3.Render();
+				//s1.Render();
+				//as1.Render();
+				//t1.Render();
+				//t2.Render();
+				//L1.Render();
+				//L2.Render();
+				//L3.Render();
 				// Render frames during idle time (when no messages are waiting).
 				mRenderer->Render();
 

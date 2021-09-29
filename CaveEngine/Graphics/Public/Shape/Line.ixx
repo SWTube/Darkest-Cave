@@ -23,7 +23,7 @@ namespace cave
 
 	protected:
 		void update();
-		// void creatRenderCommand();
+		//void creatRenderCommand();
 		//void makeRenderCommand();
 
 	private:

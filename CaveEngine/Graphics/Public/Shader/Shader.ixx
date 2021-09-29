@@ -5,17 +5,20 @@
 #include "GraphicsApiPch.h"
 
 #include "CoreGlobals.h"
-#include "CoreTypes.h"
+//#include "CoreTypes.h"
 #include "Memory/MemoryPool.h"
 
-export module Shader;
-
+export module cave.Graphics.Shader.Shader;
+import cave.Core.Types.Float;
+import cave.Core.Types.Vertex;
 import Sprite;
 
 namespace cave
 {
-	export class Shader final
+	export class Shader 
 	{
+
+	public:
 		struct MatrixBufferType
 		{
 			DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
@@ -39,7 +42,9 @@ namespace cave
 
 		void Destroy();
 
-	private:
+	protected:
+		virtual eResult setLayout(ID3D11Device* device, ID3DBlob* vsBlob, ID3DBlob* psBlob);
+		virtual eResult setSamplerState(ID3D11Device* device);
 		eResult compileShaderFromFile(const wchar_t* fileName, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut);
 		
 		MemoryPool* mPool = nullptr;
@@ -69,6 +74,8 @@ namespace cave
 	{
 		mShaderFilePath /= "CaveEngine\\Graphics\\Shader";
 		mShaderFilePath /= shaderFilePath;
+		mVertexShaderFilePath = mShaderFilePath;
+		mFragmentShaderFilePath = mShaderFilePath;
 	}
 
 	Shader::Shader(Shader&& other)
@@ -152,14 +159,8 @@ namespace cave
 	eResult Shader::Compile(ID3D11Device* device)
 	{
 		// 11. Compile Shaders ---------------------------------------------------------------------------------------------
-		//std::filesystem::path shaderPath = PROJECT_DIR;
-		std::filesystem::path shaderPath = mShaderFilePath;
-		//shaderPath += "CaveEngine\\Graphics\\Shader\\"; 
-		//shaderPath += mShaderFilePath;
-		//shaderPath += "DirectXTest.fxh";
-
 		ID3DBlob* vsBlob = nullptr;
-		eResult error = compileShaderFromFile(shaderPath.c_str(), "VS", "vs_4_0", &vsBlob);
+		eResult error = compileShaderFromFile(mVertexShaderFilePath.c_str(), "VS", "vs_4_0", &vsBlob);
 		if (error != eResult::CAVE_OK)
 		{
 			//LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
@@ -179,7 +180,7 @@ namespace cave
 
 		// Compile the pixel shader
 		ID3DBlob* psBlob = nullptr;
-		error = compileShaderFromFile(shaderPath.c_str(), "PS", "ps_4_0", &psBlob);
+		error = compileShaderFromFile(mFragmentShaderFilePath.c_str(), "PS", "ps_4_0", &psBlob);
 		if (error != eResult::CAVE_OK)
 		{
 			//LOGE(eLogChannel::GRAPHICS, "The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
@@ -202,6 +203,26 @@ namespace cave
 			psBlob = nullptr;
 			return eResult::CAVE_FAIL;
 		}
+		
+		error = setLayout(device, vsBlob, psBlob);
+
+		vsBlob->Release();
+		psBlob->Release();
+
+		vsBlob = nullptr;
+		psBlob = nullptr;
+
+		if (error != eResult::CAVE_OK)
+		{
+			return eResult::CAVE_FAIL;
+		}
+
+		return setSamplerState(device);
+	}
+
+	eResult Shader::setLayout(ID3D11Device* device, ID3DBlob* vsBlob,ID3DBlob* psBlob)
+	{
+		int32_t result;
 		// Define the input layout
 		D3D11_INPUT_ELEMENT_DESC layout[] =
 		{
@@ -233,22 +254,25 @@ namespace cave
 				.InstanceDataStepRate = 0
 			}
 		};
+
 		UINT numElements = ARRAYSIZE(layout);
 
 		// Create the input layout
 		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(),
 			vsBlob->GetBufferSize(), &mInputLayout);
 
-		vsBlob->Release();
-		psBlob->Release();
-		vsBlob = nullptr;
-		psBlob = nullptr;
-
 		if (FAILED(result))
 		{
 			return eResult::CAVE_FAIL;
 		}
 
+
+		return eResult::CAVE_OK;
+	}
+
+	eResult Shader::setSamplerState(ID3D11Device* device)
+	{
+		int32_t result;
 		// Create the constant buffers
 		D3D11_BUFFER_DESC bufferDesc = {};
 		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -268,12 +292,12 @@ namespace cave
 		// Create the sample state
 		D3D11_SAMPLER_DESC samplerDesc = {};
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-		//samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-		//samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-		//samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
-		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+		//samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		//samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		//samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
 		samplerDesc.MipLODBias = 0.0f;
 		samplerDesc.MaxAnisotropy = 1;
@@ -285,13 +309,14 @@ namespace cave
 		samplerDesc.MinLOD = 0;
 		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 		result = device->CreateSamplerState(&samplerDesc, &mSamplerLinear);
+
 		if (FAILED(result))
 		{
 			return static_cast<eResult>(result);
 		}
+		
 		return eResult::CAVE_OK;
 	}
-
 
 	void Shader::Render(ID3D11DeviceContext* context, uint32_t indexCount,uint32_t startIndex , const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
 	{

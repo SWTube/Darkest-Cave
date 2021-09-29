@@ -15,11 +15,21 @@ export import RenderQueue;
 
 import cave.Core.Types.Float;
 import cave.Core.Types.Vertex;
+import DeviceResources;
 
 namespace cave 
 {
+	enum RenderType 
+	{
+		UNKNOWN,
+		SPRITE,
+		TEXT,
+		TILEMAP
+	};
+
 	export class Renderable
 	{
+
 	public:
 		Renderable(/*gameObject owner*/);
 		Renderable(const Renderable& other);
@@ -45,18 +55,23 @@ namespace cave
 		constexpr Float2 GetPosition() const;
 
 	protected:
+		friend class Renderer;
+
+		virtual void init(DeviceResources* deviceResource) {};
 		virtual void update() = 0;
 		virtual void creatRenderCommand() = 0;
 		//virtual void destroyRenderCommand() = 0;
 		virtual void makeRenderCommand() = 0;
 
 	protected:
+		RenderType mType = RenderType::UNKNOWN;
 		uint32_t mZIndex = 0u;
 		Float3 mPosition = Float3(0, 0, 0);
 		float mAngle = 0.0f;
 
 	protected:
 		RenderCommand* mCommand = nullptr;
+
 	};
 
 	Renderable::Renderable()
