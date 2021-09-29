@@ -60,6 +60,9 @@ namespace cave
 	};
 
 	Renderable::Renderable()
+		:mZIndex(0u),
+		mPosition(Float3(0, 0, 0)),
+		mCommand(nullptr)
 	{
 
 	}

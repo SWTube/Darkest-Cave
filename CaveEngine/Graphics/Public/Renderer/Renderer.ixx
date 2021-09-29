@@ -3,7 +3,6 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 module;
-#include <wchar.h>
 #include <string>
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
@@ -13,6 +12,7 @@ module;
 export module Renderer;
 
 import cave.Core.Types.Vertex;
+import cave.Core.String;
 import DeviceResources;
 import Camera;
 import Shader;
@@ -21,7 +21,7 @@ import BufferManager;
 import Sprite;
 import AnimatedSprite;
 import RenderQueue;
-
+import cave.Graphics.Resource.FontManager;
 
 namespace cave
 {
@@ -42,13 +42,12 @@ namespace cave
 		void Render();
 		void Destroy();
 
-
+		bool CaptureScreenShot();
 		bool WindowShouldClose();
 		DeviceResources* GetDeviceResources() const;
 
 	private:
 		void drawText(TextCommand* command);
-
 	private:
 		static constexpr size_t RENDERER_MEMORY_SIZE = 1024ul * 1024ul * 10ul;
 		MemoryPool* mPool = nullptr;
@@ -64,6 +63,7 @@ namespace cave
 		uint32_t mIndexCount = 0u;
 		uint32_t mFrameCount = 0u;
 
+		IDWriteFontCollection1* mFontCollection = nullptr;
 		ID2D1SolidColorBrush* mBrush = nullptr;
 		IDWriteTextFormat* mTextFormat = nullptr;
 		
@@ -151,10 +151,11 @@ namespace cave
 
 		//set TextureManager device.
 		TextureManager::GetInstance().SetDevice(mDeviceResources->GetDevice());
+		FontManager::GetInstance().Init(mDeviceResources->GetDWFactory());
 
 		mBufferManager = reinterpret_cast<BufferManager*>(mPool->Allocate(sizeof(BufferManager)));
 		new(mBufferManager) BufferManager();
-		mBufferManager->Init(mDeviceResources, 1000);
+		mBufferManager->Init(mDeviceResources, 1200);
 
 		//// set color shader
 		//// set texture shader
@@ -193,7 +194,7 @@ namespace cave
 		DirectX::XMMATRIX& ortho = mDeviceResources->GetOrthoMatrix();
 
 		// 모든 2D 렌더링을 시작하려면 Z 버퍼를 끕니다.
-		//mDeviceResources->TurnZBufferOff(); 
+		mDeviceResources->TurnZBufferOff(); 
 		mDeviceResources->TurnOnAlphaBlending();
 
 		//std::vector<VertexT> vertexData;
@@ -212,6 +213,7 @@ namespace cave
 		mDeviceResources->GetD2DRenderTarget()->BeginDraw();
 		std::vector<VertexT> vertexData;
 		std::vector<RenderCommand*> commands = RenderQueue::GetInstance().GetRenderQueue();
+		uint32_t spriteCount = 0;
 		for (RenderCommand* command : commands) 
 		{
 			if (command->type == RenderCommand::eType::SPRITE_COMMAND)
@@ -221,13 +223,14 @@ namespace cave
 				{
 					vertexData.push_back(sc->vertexData[i]);
 				}
+				spriteCount++;
 			}
 
 		}
 
-		if(!vertexData.empty()) mBufferManager->UpdateVertexBuffer(vertexData.data(), commands.size());
+		if(!vertexData.empty()) mBufferManager->UpdateVertexBuffer(vertexData.data(), spriteCount);
 
-		int count = 0;
+		spriteCount = 0;
 		for (RenderCommand* command : commands)
 		{
 			if (command->type == RenderCommand::eType::SPRITE_COMMAND)
@@ -235,8 +238,8 @@ namespace cave
 				SpriteCommand* sc = reinterpret_cast<SpriteCommand*>(command);
 				Texture* tex = sc->texture;
 				if (tex != nullptr) // 나중에 texture가 nullptr이여도 색을 입혀서 그려주게 구현하고 싶음.
-					mShader->Render(context, 6, count * 6, worldMatrix, viewMatrix, ortho, tex->GetTexture());
-				count++;
+					mShader->Render(context, 6, spriteCount * 6, worldMatrix, viewMatrix, ortho, tex->GetTexture());
+				spriteCount++;
 			}
 			else if(command->type == RenderCommand::eType::TEXT_COMMAND)
 			{
@@ -255,30 +258,17 @@ namespace cave
 
 	}
 
+	
 	void Renderer::drawText(TextCommand* command)
 	{
-		IDWriteFactory* dwFactory = mDeviceResources->GetDWFactory();
 		ID2D1RenderTarget* renderTarget = mDeviceResources->GetD2DRenderTarget();
 
-		IDWriteTextLayout* layout;
-		//renderTarget->BeginDraw();
-		dwFactory->CreateTextFormat(
-			command->fontName, 0, DWRITE_FONT_WEIGHT::DWRITE_FONT_WEIGHT_NORMAL,
-			DWRITE_FONT_STYLE::DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH::DWRITE_FONT_STRETCH_NORMAL,
-			command->fontSize, L"ko", &mTextFormat);
-
-		dwFactory->CreateTextLayout(command->content, wcslen(command->content), mTextFormat, 800, 500, &layout);
-		layout->SetFontSize(command->fontSize, { 0, wcslen(command->content) });
 		mBrush->SetColor(command->color);
-		renderTarget->DrawTextLayout(D2D1::Point2F(command->position.X, command->position.Y), layout, mBrush);
+		renderTarget->DrawTextLayout(D2D1::Point2F(command->position.X, command->position.Y), command->textLayout, mBrush);
 
-		//renderTarget->EndDraw();
-		//brush->Release();
-		layout->Release();
-		mTextFormat->Release();
-
+		command->textLayout->Release();
 	}
+
 
 	eResult Renderer::CreateDeviceDependentResources()
 	{
@@ -320,5 +310,10 @@ namespace cave
 	bool Renderer::WindowShouldClose()
 	{
 		return false;
+	}
+
+	bool Renderer::CaptureScreenShot()
+	{
+		return mDeviceResources->SaveBufferToImage(L"./ScreenShots/test.jpg");
 	}
 }

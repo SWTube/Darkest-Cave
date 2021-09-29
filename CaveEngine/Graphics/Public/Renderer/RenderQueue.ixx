@@ -12,6 +12,7 @@ module;
 export module RenderQueue;
 
 import cave.Core.Types.Vertex;
+import cave.Core.String;
 import TextureManager;
 
 namespace cave 
@@ -36,9 +37,7 @@ namespace cave
 	};
 	export struct TextCommand : RenderCommand
 	{
-		LPCWSTR fontName = L"";
-		LPCWSTR content = L"";
-		float fontSize = 0.0f;
+		IDWriteTextLayout* textLayout;
 		Float3 position = { 0,0,0 };
 		D2D1::ColorF color = { 0,0,0,1 };
 	};

@@ -307,6 +307,7 @@
     <ClCompile Include="Gameplay\Private\World\World.cpp" />
     <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
+    <ClCompile Include="Graphics\Public\Device\ScreenGrab.ixx" />
     <ClCompile Include="Graphics\Public\Device\Window.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Camera.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Renderable.ixx" />
@@ -316,6 +317,7 @@
     <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
     <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx" />
     <ClCompile Include="Graphics\Public\UI\Text.ixx" />
+    <ClCompile Include="Graphics\Resource\FontManager.ixx" />
     <ClCompile Include="ResourceManager\Private\ResourceManagerTemp.cpp" />
     <ClCompile Include="ResourceManager\Public\Texture\DdsTextureLoader.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />

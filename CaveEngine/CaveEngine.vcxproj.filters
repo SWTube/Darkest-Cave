@@ -175,6 +175,10 @@
     <ClCompile Include="Core\Public\Utils\FileSystem.ixx">
       <Filter>Header Files\Core\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Resource\FontManager.ixx" />
+    <ClCompile Include="Graphics\Public\Device\ScreenGrab.ixx">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">

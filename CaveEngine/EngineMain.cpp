@@ -111,7 +111,7 @@ int main(int32_t argc, char** argv)
 #ifdef CAVE_BUILD_DEBUG
 	//TicTocTimer clock = tic();
 	//cave::FileSystemTest::Main();
-	//RenderTest();
+	RenderTest();
 	//cave::StringTest::Main();
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
 
@@ -271,7 +271,8 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 
-	
+	cave::Renderer* renderer = main.GetRenderer();
+
 	if (result == cave::eResult::CAVE_OK)
 	{
 		//// Go full-screen.
@@ -281,8 +282,10 @@ void RenderTest()
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
 	// 	// Run the program.
-	 	result = main.Run();
+		result = main.Run();
 	}
+
+	renderer->CaptureScreenShot();
 
 	main.Destroy();
 }
