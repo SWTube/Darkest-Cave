@@ -19,6 +19,7 @@ namespace cave
 {
 	HINSTANCE	WindowsEngine::msInstance = nullptr;
 
+	cave::Text testText(L"test", L"기본", 50);
 	eResult WindowsEngine::Init(uint32_t screenWidth, uint32_t screenHeight)
 	{
 		eResult result = eResult::CAVE_OK;
@@ -132,6 +133,7 @@ namespace cave
 				//L1.Render();
 				//L2.Render();
 				//L3.Render();
+				testText.Render();
 				// Render frames during idle time (when no messages are waiting).
 				mRenderer->Render();
 
@@ -167,6 +169,18 @@ namespace cave
 				msWindowClassName,
 				msInstance
 			);
+
+		case WM_MOUSEMOVE:
+			switch (wParam)
+			{
+			case VK_LBUTTON:
+			{
+				testText.SetPosition(LOWORD(lParam), HIWORD(lParam));
+			}
+
+			default:
+				break;
+			}
 			break;
 
 		case WM_DESTROY:
