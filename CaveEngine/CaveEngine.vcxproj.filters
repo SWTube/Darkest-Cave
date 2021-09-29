@@ -176,6 +176,9 @@
       <Filter>Header Files\Core\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Resource\FontManager.ixx" />
+    <ClCompile Include="Graphics\Public\Device\ScreenGrab.ixx">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\Public\Shape\Line.ixx" />
     <ClCompile Include="Graphics\Public\Shader\ColorShader.ixx" />
     <ClCompile Include="Graphics\Public\TileMap\Grid.ixx" />

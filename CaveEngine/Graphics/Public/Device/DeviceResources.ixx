@@ -6,6 +6,7 @@
 
 module;
 #include <wchar.h>
+#include <wincodec.h>
 #include "GraphicsApiPch.h"
 #include "CoreTypes.h"
 #include "Memory/MemoryPool.h"
@@ -14,6 +15,7 @@ export module DeviceResources;
 
 export import Window;
 import cave.Core.String;
+import ScreenGrab;
 
 namespace cave
 {
@@ -68,6 +70,8 @@ namespace cave
 
 		virtual void RenderStart();
 		virtual void RenderEnd();
+
+		bool SaveBufferToImage(LPCTSTR FileName);
 
 	private:
 		MemoryPool* mPool = nullptr;
@@ -1027,5 +1031,19 @@ namespace cave
 
 		// 알파 블렌딩을 켭니다.
 		mImmediateContext->OMSetBlendState(mAlphaDisableBlendingState, blendFactor, 0xffffffff);
+	}
+
+	bool DeviceResources::SaveBufferToImage(LPCTSTR FileName) 
+	{
+		HRESULT hr = cave::ScreenGrab::SaveWICTextureToFile(mImmediateContext, mBackBuffer, GUID_ContainerFormatJpeg, FileName);
+
+		if (SUCCEEDED(hr))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 } //namespace cave

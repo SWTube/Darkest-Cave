@@ -47,6 +47,7 @@ namespace cave
 		void Render();
 		void Destroy();
 
+		bool CaptureScreenShot();
 		void AddRenderable(Renderable* renderable);
 		void RemoveRenderable(Renderable* renderable);
 
@@ -354,5 +355,10 @@ namespace cave
 	bool Renderer::WindowShouldClose()
 	{
 		return false;
+	}
+
+	bool Renderer::CaptureScreenShot()
+	{
+		return mDeviceResources->SaveBufferToImage(L"./ScreenShots/test.jpg");
 	}
 }

@@ -126,7 +126,7 @@ int main(int32_t argc, char** argv)
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	//clock = tic();
-	//cave::HashTableTest::Main();
+	cave::HashTableTest::BucketInterface();
 	//cave::HashTable hashTable(sizeof(uint32_t));
 	//uint32_t keys[256];
 	//uint32_t values[256];
@@ -271,7 +271,7 @@ void RenderTest()
 	// Create a window.
 	cave::eResult result = main.Init(1600u, 900u);
 
-	cave::Renderer* renderer =  main.GetRenderer();
+	cave::Renderer* renderer = main.GetRenderer();
 
 	if (result == cave::eResult::CAVE_OK)
 	{
@@ -282,8 +282,10 @@ void RenderTest()
 		//// tell the renderer.
 		//renderer->CreateWindowSizeDependentResources();
 	// 	// Run the program.
-	 	result = main.Run();
+		result = main.Run();
 	}
+
+	renderer->CaptureScreenShot();
 
 	main.Destroy();
 }
