@@ -313,42 +313,4 @@ namespace cave
 
 		return (x - (a & ~(a >> (sizeof(size_t) * 8 - 1))));
 	}
-
-	export namespace MathTest
-	{
-		void Main()
-		{
-			float degree = 30.f * DEG_TO_RAD;
-
-			srand(static_cast<uint32_t>(time(NULL)));
-
-			for (uint32_t i = 0; i < 10; ++i)
-			{
-				float randomNumberFloat = static_cast<float>((rand() - rand()) / 100.f);
-				float randomNumberFloat_2 = static_cast<float>((rand() - rand()) / 100.f);
-				float randomNumberPositive = static_cast<float>(rand() / 100.f);
-				int32_t randomNumberInt = rand() - rand();
-				uint32_t expo = rand() % 10;
-
-				LOGDF(cave::eLogChannel::CORE_MATH, "Floor(%f): %d", randomNumberFloat, Math::Floor(randomNumberFloat));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Ceil(%f): %d", randomNumberFloat, Math::Ceil(randomNumberFloat));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Abs(%d): %d", randomNumberInt, Math::Abs(randomNumberInt));
-				LOGDF(cave::eLogChannel::CORE_MATH, "FAbs(%f): %f", randomNumberFloat, Math::FAbs(randomNumberFloat));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Pow(%f, %d): %f", randomNumberFloat, expo, Math::Pow(randomNumberFloat, expo));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Mod(%f, %f): %f", randomNumberFloat, randomNumberFloat_2, Math::Mod(randomNumberFloat, randomNumberFloat_2));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Sqrt(%f): %f", randomNumberPositive, Math::Sqrt(randomNumberPositive));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Exp(%f): %f", randomNumberFloat, Math::Exp(randomNumberFloat));
-				LOGDF(cave::eLogChannel::CORE_MATH, "Log(%f): %f", randomNumberPositive, Math::Log(randomNumberPositive));
-
-				LOGD(cave::eLogChannel::CORE_MATH, "\n");
-			}
-
-			LOGDF(cave::eLogChannel::CORE_MATH, "Sin(%f): %f", degree, Math::Sin(degree)); // 30 degree == 0.5235 radian
-			LOGDF(cave::eLogChannel::CORE_MATH, "Cos(%f): %f", degree, Math::Cos(degree));
-			LOGDF(cave::eLogChannel::CORE_MATH, "Tan(%f): %f", degree, Math::Tan(degree));
-			LOGDF(cave::eLogChannel::CORE_MATH, "ArcSin(%f): %f", degree, Math::ArcSin(degree));
-			LOGDF(cave::eLogChannel::CORE_MATH, "ArcCos(%f): %f", degree, Math::ArcCos(degree));
-			LOGDF(cave::eLogChannel::CORE_MATH, "ArcTan(%f): %f", degree, Math::ArcTan(degree));
-		}
-	}
 }

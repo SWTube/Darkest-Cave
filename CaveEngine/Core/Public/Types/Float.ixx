@@ -9,6 +9,8 @@ module;
 
 export module cave.Core.Types.Float;
 
+import cave.Core.Math;
+
 namespace cave
 {
 	//--------------------------------------------------------------------------------------
@@ -25,6 +27,8 @@ namespace cave
 		constexpr Float2(Float2&& other) noexcept;
 		constexpr Float2& operator=(Float2&& other) noexcept;
 		constexpr Float2 operator+(const Float2& other);
+		static float Distance(Float2& one, Float2& other);
+		static float Angle(Float2& from, Float2& to);
 		constexpr Float2(float x, float y);
 		constexpr Float2(float* array);
 	};
@@ -38,6 +42,8 @@ namespace cave
 		Float3& operator=(const Float3& other) = default;
 		constexpr Float3(Float3&& other) noexcept;
 		constexpr Float3& operator=(Float3&& other) noexcept;
+		static float Distance(Float3& one, Float3& other);
+		static float Angle(Float3& from, Float3& to);
 		constexpr Float3(float x, float y, float z);
 		constexpr Float3(float* array);
 
@@ -77,6 +83,24 @@ namespace cave
 		return *this;
 	}
 
+	float Float2::Distance(Float2& one, Float2& other)
+	{
+		return Math::Sqrt(Math::Pow(one.X - other.Y, 2) + Math::Pow(one.Y - other.Y, 2));
+	}
+
+	float Float2::Angle(Float2& from, Float2& to)
+	{
+		float angle = 0.f;
+
+		float scalarProduct = (from.X * to.X) + (from.Y * to.Y);
+		float fromLength = Math::Sqrt(Math::Pow(from.X, 2) + Math::Pow(from.Y, 2));
+		float toLength = Math::Sqrt(Math::Pow(to.X, 2) + Math::Pow(to.Y, 2));
+
+		angle = Math::ArcCos(scalarProduct / (fromLength * toLength));
+
+		return angle * RAD_TO_DEG;
+	}
+
 	constexpr Float2::Float2(float* array)
 		: X(array[0])
 		, Y(array[1])
@@ -107,6 +131,24 @@ namespace cave
 		}
 
 		return *this;
+	}
+
+	float Float3::Distance(Float3& one, Float3& other)
+	{
+		return Math::Sqrt(Math::Pow(one.X - other.Y, 2) + Math::Pow(one.Y - other.Y, 2) + Math::Pow(one.Z - other.Z, 2));
+	}
+
+	float Float3::Angle(Float3& from, Float3& to)
+	{
+		float angle = 0.f;
+
+		float scalarProduct = (from.X * to.X) + (from.Y * to.Y) + (from.Z * to.Z);
+		float fromLength = Math::Sqrt(Math::Pow(from.X, 2) + Math::Pow(from.Y, 2) + Math::Pow(from.Z, 2));
+		float toLength = Math::Sqrt(Math::Pow(to.X, 2) + Math::Pow(to.Y, 2) + Math::Pow(to.Z, 2));
+
+		angle = Math::ArcCos(scalarProduct / (fromLength * toLength));
+
+		return angle * RAD_TO_DEG;
 	}
 
 	constexpr Float3::Float3(float* array)
