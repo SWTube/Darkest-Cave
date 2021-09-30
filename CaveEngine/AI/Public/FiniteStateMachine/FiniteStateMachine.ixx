@@ -6,29 +6,34 @@
 module;
 
 #include <iostream>
-#include <string>
 #include <vector>
-
-#include "State.h"
-
+#include<unordered_map>
+#include<string>
 export module FiniteStateMachine;
 
+
+import State;
+import cave.Core.String;
+import cave.Core.Containers.Hash;
+import cave.Core.Containers.HashTable;
 export namespace cave
 {
+	typedef std::unordered_map<char, State* > hmap;
+	typedef std::unordered_map<State*, State*> lmap;
 	class FiniteStateMachine
 	{
 	public:
 		FiniteStateMachine()
 		{
 			mCurrentState = nullptr;
-			mNode.clear();
-			mCheckList.clear();
+			hm.clear();
+			lm.clear();
 		}
 		FiniteStateMachine(State* currentState)
 		{
 			mCurrentState = currentState;
-			mNode.clear();
-			mCheckList.clear();
+			hm.clear();
+			lm.clear();
 		}
 		~FiniteStateMachine()
 		{
@@ -36,13 +41,13 @@ export namespace cave
 		}
 		void AddState(State* state)
 		{
-			mNode.push_back(state);
-			mCheckList.push_back(std::pair<std::string, bool>(state->GetStateName(), false));
+			char c = state->GetTrigger();
+			hm.insert(hmap::value_type(c, state));	
 		}
 		void UpdateCurrentState(char trigger)
 		{
-			State* nextState = mCurrentState->SearchNewCurrentState(trigger);
-			if (nextState == nullptr)
+			State* nextState = hm.find(trigger)->second;
+			if (nextState == nullptr||mCurrentState->IsLink(nextState)==false)
 			{
 				return;
 			}
@@ -53,11 +58,13 @@ export namespace cave
 		{
 			return mCurrentState;
 		}
+		
 
 	private:
+		hmap hm;
+		lmap lm;
 		State* mCurrentState;
 		std::vector<State*> mNode;
-		std::vector<std::pair<std::string, bool>> mCheckList;
 	};
 }
 

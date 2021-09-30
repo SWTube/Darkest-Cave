@@ -7,13 +7,16 @@ module;
 
 #include <iostream>
 #include <vector>
-
+#include<unordered_map>
 export module State;
 
+import cave.Core.String;
 export namespace cave
 {
+	
 	class State
 	{
+	typedef std::unordered_map<State*,bool> hmap;
 	public:
 		State()
 		{
@@ -21,41 +24,36 @@ export namespace cave
 			mIsCurrent = false;
 			mTrigger = NULL;
 			mAnimation = 0;
-			mNeighborState.clear();
+			hm.clear();
 		}
-		State(std::string stateName)
+		State(String stateName)
 		{
 			mStateName = stateName;
 			mIsCurrent = false;
 			mTrigger = NULL;
 			mAnimation = 0;
-			mNeighborState.clear();
+			hm.clear();
 		}
-		State(std::string stateName, char trigger)
+		State(String stateName, char trigger)
 		{
 			mStateName = stateName;
 			mIsCurrent = false;
 			mTrigger = trigger;
 			mAnimation = 0;
-			mNeighborState.clear();
+			hm.clear();
 		}
-		State(std::string stateName, char trigger, int Animation)
+		State(String stateName, char trigger, int Animation)
 		{
 			mStateName = stateName;
 			mIsCurrent = false;
 			mTrigger = trigger;
 			mAnimation = Animation;
-			mNeighborState.clear();
+			hm.clear();
 		}
 		~State()
 		{
-			// delete ;
 		}
-		void LinkState(State* state)
-		{
-			mNeighborState.push_back(state);
-			state->mNeighborState.push_back(this);
-		}
+
 		void SetAnimation(int animation)
 		{
 			mAnimation = animation;
@@ -68,6 +66,20 @@ export namespace cave
 		{
 			mIsCurrent = false;
 		}
+		void LinkState(State* state,bool isSingle)
+		{
+			hm.insert(hmap::value_type(state,isSingle));
+		}
+		bool IsLink(State* state)
+		{
+			State* isFind = hm.find(state)->first;
+			if (isFind == nullptr)
+			{
+				return false;
+			}
+			return true;
+		}
+		/*
 		State* SearchNewCurrentState(char trigger)
 		{
 			for (int i = 0; i < mNeighborState.size(); ++i)
@@ -78,7 +90,7 @@ export namespace cave
 				}
 			}
 			return nullptr;
-		}
+		}*/
 		void UpdateState(State* newCurrentState)
 		{
 			if (newCurrentState == nullptr)
@@ -88,11 +100,11 @@ export namespace cave
 			mIsCurrent = false;
 			newCurrentState->SetBool(true);
 		}
-		void LinkStateOneway(State* state)
+		/*void LinkStateOneway(State* state)
 		{
 			mNeighborState.push_back(state);
-		}
-		std::string GetStateName()
+		}*/
+		String GetStateName()
 		{
 			return mStateName;
 		}
@@ -110,11 +122,11 @@ export namespace cave
 		}
 
 	private:
+		hmap hm;
 		int mAnimation;
 		bool mIsCurrent;
 		char mTrigger;
-		std::string mStateName;
-		std::vector<State*> mNeighborState;
+		String mStateName;
 
 	};
 }

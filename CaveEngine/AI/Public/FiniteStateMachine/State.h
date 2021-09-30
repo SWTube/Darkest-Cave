@@ -4,7 +4,7 @@
  */
 #pragma once
 #ifdef __WIN32__
-import State;
+import cave.Core.String;
 #else
 #include <iostream>
 #include <vector>
@@ -16,9 +16,9 @@ namespace cave
 	{
 	public:
 		State();
-		State(std::string stateName);
-		State(std::string stateName, char trigger);
-		State(std::string stateName, char trigger, int Animation);
+		State(String stateName);
+		State(String stateName, char trigger);
+		State(String stateName, char trigger, int Animation);
 		virtual ~State();
 		//void LinkState(State* state, FiniteStateMachine* hash);
 		//void LinkStateOneway(State* state, FiniteStateMachine* hash);
@@ -27,7 +27,7 @@ namespace cave
 		void CancelCurrentState();
 		//State* SearchNewCurrentState(char trigger);
 		void UpdateState(State* newCurrentState);
-		std::string GetStateName();
+		String GetStateName();
 		char GetTrigger();
 		void SetBool(bool boolState);
 		int ShowAnimation();
@@ -36,8 +36,8 @@ namespace cave
 		int mAnimation;
 		bool mIsCurrent;
 		char mTrigger;
-		std::string mStateName;
-		std::vector<State*> mNeighborState;
+		String mStateName;
+		//std::vector<State*> mNeighborState;
 
 	};
 }

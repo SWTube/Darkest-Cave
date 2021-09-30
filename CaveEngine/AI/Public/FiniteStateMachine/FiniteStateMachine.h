@@ -5,14 +5,16 @@
 #pragma once
 
 #ifdef __WIN32__
-import FiniteStateMachine;
+
 import cave.Core.Containers.HashTable;
 #else
 struct MAXHASH = 100;
 #include <iostream>
+#include<unordered_map>
 #include <string>
 #include <vector>
 #include "State.h"
+#include<unordered_map>
 namespace cave
 {
 	class FiniteStateMachine
@@ -28,7 +30,7 @@ namespace cave
 		State* ReturnCurrentState();
 		HshTable* ReturnHash();
 	private:
-		HashTable hashT(MAXHASH, 2);
+		
 		State* mCurrentState;
 		std::vector<State*> mNode;
 		std::vector<std::pair<std::string, bool>> mCheckList;
