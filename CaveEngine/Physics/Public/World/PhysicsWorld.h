@@ -7,6 +7,7 @@
 
 #include "Physics.h"
 #include "Body/PhysicsBody.h"
+#include "Collision/ContactListener.h"
 
 namespace cave
 {
@@ -20,6 +21,8 @@ namespace cave
         b2Vec2 GetGravity();
 
         void AddPhysicsObject(PhysicsBody* physicsBody);
+
+        void SetContactListener(ContactListener* listener);
 
         void Update(float step, float velocityIterations, float positionIterations);
     private:

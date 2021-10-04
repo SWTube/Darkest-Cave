@@ -27,6 +27,10 @@ namespace cave
 	{
 		physicsBody->SetBody(mWorld->CreateBody(physicsBody->GetBodyDef()));
 	}
+	void PhysicsWorld::SetContactListener(ContactListener* listener)
+	{
+		mWorld->SetContactListener(listener);
+	}
 	void PhysicsWorld::Update(float step, float velocityIterations, float positionIterations)
 	{
 		mWorld->Step(step, velocityIterations, positionIterations);
