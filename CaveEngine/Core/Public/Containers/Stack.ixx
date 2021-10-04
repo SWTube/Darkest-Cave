@@ -5,7 +5,6 @@
 
 module;
 
-#include "Utils/Crt.h"
 #include "CoreGlobals.h"
 #include "Debug/Log.h"
 #include "Memory/MemoryPool.h"
@@ -801,6 +800,8 @@ namespace cave
 	}
 
 #ifdef CAVE_BUILD_DEBUG
+	#include <time.h>
+
 	export namespace StackTest
 	{
 		// DECLARATIONS

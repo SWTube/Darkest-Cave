@@ -175,16 +175,10 @@
     <ClCompile Include="Core\Public\Utils\FileSystem.ixx">
       <Filter>Header Files\Core\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\BinarySearchTree.ixx">
+    <ClCompile Include="Core\Public\Containers\HashSet.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Public\Containers\Queue.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Public\Containers\PriorityQueue.ixx">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Public\Containers\CompareItemType.ixx">
+    <ClCompile Include="Core\Public\Containers\BitArray.ixx">
       <Filter>Header Files\Core\Containers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -281,12 +275,6 @@
     </ClInclude>
     <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h">
       <Filter>Header Files\Core\KeyboardInput</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\LinkedList.h">
-      <Filter>Header Files\Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Public\Containers\BinarySearchTree.h">
-      <Filter>Header Files\Core\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

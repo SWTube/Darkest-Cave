@@ -14,6 +14,5 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <wchar.h>
 #include <wctype.h>
