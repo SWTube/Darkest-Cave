@@ -175,6 +175,12 @@
     <ClCompile Include="Core\Public\Utils\FileSystem.ixx">
       <Filter>Header Files\Core\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Public\Containers\HashSet.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Public\Containers\BitArray.ixx">
+      <Filter>Header Files\Core\Containers</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\Resource\FontManager.ixx" />
     <ClCompile Include="Graphics\Public\Device\ScreenGrab.ixx">
       <Filter>Header Files\Graphics\Device</Filter>
