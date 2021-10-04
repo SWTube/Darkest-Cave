@@ -110,6 +110,7 @@ int main(int32_t argc, char** argv)
 #endif
 
 #ifdef CAVE_BUILD_DEBUG
+	cave::Log::Initialize();
 	TicTocTimer clock = tic();
 	//cave::HashTableTest::Main();
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "HashTable Test: Elapsed time %f seconds.", toc(&clock));
@@ -157,6 +158,7 @@ int main(int32_t argc, char** argv)
 	// _CrtDumpMemoryLeaks();
 
 #endif
+	cave::Log::Destroy();
 	// Cleanup is handled in destructors.
     return 0;
 }
