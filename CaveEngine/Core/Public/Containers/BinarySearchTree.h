@@ -15,6 +15,7 @@
 #include "Utils/Crt.h"
 
 import cave.Core.Containers.CompareItemType;
+import cave.Core.Containers.Queue;
 #ifdef CAVE_BUILD_DEBUG
 
 import cave.Core.String;
@@ -61,15 +62,25 @@ namespace cave
 	{
 	public:
 		constexpr BinarySearchTree();
-		constexpr BinarySearchTree(eCompareItem(*compareMethod)(void*, void*));
+		constexpr BinarySearchTree(CompareItem::Type compareMethod);
 		constexpr BinarySearchTree(MemoryPool& pool);
-		constexpr BinarySearchTree(eCompareItem(*compareMethod)(void*, void*), MemoryPool& pool);
+		constexpr BinarySearchTree(CompareItem::Type compareMethod, MemoryPool& pool);
+		constexpr BinarySearchTree(const BinarySearchTree& other);
+		constexpr BinarySearchTree(const BinarySearchTree& other, CompareItem::Type compareMethod);
+		constexpr BinarySearchTree(const BinarySearchTree& other, MemoryPool& pool);
+		constexpr BinarySearchTree(const BinarySearchTree& other, CompareItem::Type compareMethod, MemoryPool& pool);
+		constexpr BinarySearchTree(BinarySearchTree&& other);
 
 		~BinarySearchTree();
+
+		constexpr BinarySearchTree& operator=(const BinarySearchTree& other);
+		constexpr BinarySearchTree& operator=(BinarySearchTree&& other);
 
 		constexpr bool Insert(void* item);
 		constexpr bool Delete(void* item);
 		constexpr bool Search(void* item);
+
+		constexpr void Clear();
 
 		constexpr size_t GetSize() const;
 
@@ -86,6 +97,7 @@ namespace cave
 		constexpr void RightRotation(BinarySearchTreeNode* node);
 		constexpr void InsertColorFix(BinarySearchTreeNode* node);
 		constexpr void DeleteColorFix(BinarySearchTreeNode* node, BinarySearchTreeNode* parentNode);
+		constexpr void ClearSubTree(BinarySearchTreeNode*& node);
 
 #ifdef CAVE_BUILD_DEBUG
 		void PrintInt32Recursive(BinarySearchTreeNode* node, size_t space, size_t height);
@@ -97,9 +109,9 @@ namespace cave
 
 	private:
 		MemoryPool* mPool;
+		CompareItem::Type mCompareMethod;
 		BinarySearchTreeNode* mRootNode;
 		size_t mSize;
-		eCompareItem(*mCompareMethod)(void*, void*);
 	};
 
 	BinarySearchTreeNode BinarySearchTree::msNilNode = BinarySearchTreeNode();
@@ -108,7 +120,7 @@ namespace cave
 		: BinarySearchTree(CompareItem::DefaultFunction, gCoreMemoryPool)
 	{ }
 
-	constexpr BinarySearchTree::BinarySearchTree(eCompareItem(*compareMethod)(void*, void*))
+	constexpr BinarySearchTree::BinarySearchTree(CompareItem::Type compareMethod)
 		: BinarySearchTree(compareMethod, gCoreMemoryPool)
 	{ }
 
@@ -117,52 +129,191 @@ namespace cave
 		: BinarySearchTree(CompareItem::DefaultFunction, pool)
 	{ }
 
-	constexpr BinarySearchTree::BinarySearchTree(eCompareItem(*compareMethod)(void*, void*), MemoryPool& pool)
+	constexpr BinarySearchTree::BinarySearchTree(CompareItem::Type compareMethod, MemoryPool& pool)
 		: mPool(&pool)
+		, mCompareMethod(compareMethod)
 		, mRootNode(&msNilNode)
 		, mSize(0)
-		, mCompareMethod(compareMethod)
 	{ }
 
-	BinarySearchTree::~BinarySearchTree()
-	{
-		BinarySearchTreeNode* tempNode = mRootNode;
+	constexpr BinarySearchTree::BinarySearchTree(const BinarySearchTree& other)
+		: BinarySearchTree(other, other.mCompareMethod, *other.mPool)
+	{ }
 
-		if (tempNode == &msNilNode)
+	constexpr BinarySearchTree::BinarySearchTree(const BinarySearchTree& other, CompareItem::Type compareMethod)
+		: BinarySearchTree(other, compareMethod, *other.mPool)
+	{ }
+
+	constexpr BinarySearchTree::BinarySearchTree(const BinarySearchTree& other, MemoryPool& pool)
+		: BinarySearchTree(other, other.mCompareMethod, pool)
+	{ }
+
+	constexpr BinarySearchTree::BinarySearchTree(const BinarySearchTree& other, CompareItem::Type compareMethod, MemoryPool& pool)
+		: mPool(&pool)
+		, mCompareMethod(compareMethod)
+		, mRootNode(&msNilNode)
+		, mSize(other.mSize)
+	{
+		if (other.mRootNode == &msNilNode)
 		{
 			return;
 		}
 
-		while (tempNode != mRootNode || (tempNode->mLeftChild != &msNilNode) || (tempNode->mRightChild != &msNilNode))
-		{
-			if (tempNode->mLeftChild != &msNilNode)
-			{
-				tempNode = tempNode->mLeftChild;
-			}
-			else if (tempNode->mRightChild != &msNilNode)
-			{
-				tempNode = tempNode->mRightChild;
-			}
-			else
-			{
-				BinarySearchTreeNode* deleteNode = tempNode;
-				tempNode = tempNode->mParent;
+		Queue getterNodeQueue;
+		Queue setterNodeQueue;
 
-				if (tempNode->mLeftChild == deleteNode)
+		
+		mRootNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
+		new(mRootNode) BinarySearchTreeNode(other.mRootNode->mItem, &msNilNode, &msNilNode);
+
+		getterNodeQueue.Enqueue(other.mRootNode);
+		setterNodeQueue.Enqueue(mRootNode);
+
+		while (getterNodeQueue.GetSize() > 0)
+		{
+			BinarySearchTreeNode* getterNode = reinterpret_cast<BinarySearchTreeNode*>(getterNodeQueue.GetTop());
+			BinarySearchTreeNode* setterNode = reinterpret_cast<BinarySearchTreeNode*>(setterNodeQueue.GetTop());
+			getterNodeQueue.Dequeue();
+			setterNodeQueue.Dequeue();
+
+			if (getterNode->mLeftChild != &msNilNode)
+			{
+				BinarySearchTreeNode* newNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
+				new(newNode) BinarySearchTreeNode(getterNode->mLeftChild->mItem, setterNode, &msNilNode);
+				setterNode->mLeftChild = newNode;
+				getterNodeQueue.Enqueue(getterNode->mLeftChild);
+				setterNodeQueue.Enqueue(setterNode->mLeftChild);
+			}
+
+			if (getterNode->mRightChild != &msNilNode)
+			{
+				BinarySearchTreeNode* newNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
+				new(newNode) BinarySearchTreeNode(getterNode->mRightChild->mItem, setterNode, &msNilNode);
+				setterNode->mRightChild = newNode;
+				getterNodeQueue.Enqueue(getterNode->mRightChild);
+				setterNodeQueue.Enqueue(setterNode->mRightChild);
+			}
+		}
+	}
+
+	constexpr BinarySearchTree::BinarySearchTree(BinarySearchTree&& other)
+		: mPool(other.mPool)
+		, mCompareMethod(other.mCompareMethod)
+		, mRootNode(other.mRootNode)
+		, mSize(other.mSize)
+	{
+		other.mRootNode = &msNilNode;
+		other.mSize = 0;
+	}
+
+	BinarySearchTree::~BinarySearchTree()
+	{
+		Clear();
+	}
+
+	constexpr BinarySearchTree& BinarySearchTree::operator=(const BinarySearchTree& other)
+	{
+		if (this == &other)
+		{
+			return *this;
+		}
+
+		if (other.mRootNode == &msNilNode)
+		{
+			Clear();
+			return *this;
+		}
+
+		Queue getterNodeQueue;
+		Queue setterNodeQueue;
+
+		if (mRootNode == &msNilNode)
+		{
+			mRootNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
+			new(mRootNode) BinarySearchTreeNode(other.mRootNode->mItem, &msNilNode, &msNilNode);
+		}
+		else
+		{
+			mRootNode->mItem = other.mRootNode->mItem;
+		}
+
+		getterNodeQueue.Enqueue(other.mRootNode);
+		setterNodeQueue.Enqueue(mRootNode);
+
+		while (getterNodeQueue.GetSize() > 0)
+		{
+			BinarySearchTreeNode* getterNode = reinterpret_cast<BinarySearchTreeNode*>(getterNodeQueue.GetTop());
+			BinarySearchTreeNode* setterNode = reinterpret_cast<BinarySearchTreeNode*>(setterNodeQueue.GetTop());
+			getterNodeQueue.Dequeue();
+			setterNodeQueue.Dequeue();
+
+			if (getterNode->mLeftChild != &msNilNode)
+			{
+				if (setterNode->mLeftChild != &msNilNode)
 				{
-					tempNode->mLeftChild = &msNilNode;
+					setterNode->mLeftChild->mItem = getterNode->mLeftChild->mItem;
 				}
 				else
 				{
-					tempNode->mRightChild = &msNilNode;
+					BinarySearchTreeNode* newNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
+					new(newNode) BinarySearchTreeNode(getterNode->mLeftChild->mItem, setterNode, &msNilNode);
+					setterNode->mLeftChild = newNode;
 				}
+				getterNodeQueue.Enqueue(getterNode->mLeftChild);
+				setterNodeQueue.Enqueue(setterNode->mLeftChild);
+			}
+			else if (setterNode->mLeftChild != &msNilNode)
+			{
+				ClearSubTree(setterNode->mLeftChild);
+			}
 
-				mPool->Deallocate(deleteNode, sizeof(BinarySearchTreeNode));
+			if (getterNode->mRightChild != &msNilNode)
+			{
+				if (setterNode->mRightChild != &msNilNode)
+				{
+					setterNode->mRightChild->mItem = getterNode->mRightChild->mItem;
+				}
+				else
+				{
+					BinarySearchTreeNode* newNode = reinterpret_cast<BinarySearchTreeNode*>(mPool->Allocate(sizeof(BinarySearchTreeNode)));
+					new(newNode) BinarySearchTreeNode(getterNode->mRightChild->mItem, setterNode, &msNilNode);
+					setterNode->mRightChild = newNode;
+				}
+				getterNodeQueue.Enqueue(getterNode->mRightChild);
+				setterNodeQueue.Enqueue(setterNode->mRightChild);
+			}
+			else if (setterNode->mRightChild != &msNilNode)
+			{
+				ClearSubTree(setterNode->mRightChild);
 			}
 		}
 
-		mPool->Deallocate(tempNode, sizeof(BinarySearchTreeNode));
-		mRootNode = &msNilNode;
+		return *this;
+	}
+
+	constexpr BinarySearchTree& BinarySearchTree::operator=(BinarySearchTree&& other)
+	{
+		if (this == &other)
+		{
+			return *this;
+		}
+
+		MemoryPool* tempPool = mPool;
+		CompareItem::Type tempCompareMethod = mCompareMethod;
+		BinarySearchTreeNode* tempRootNode = mRootNode;
+		size_t tempSize = mSize;
+
+		mPool = other.mPool;
+		mCompareMethod = other.mCompareMethod;
+		mRootNode = other.mRootNode;
+		mSize = other.mSize;
+
+		other.mPool = tempPool;
+		other.mCompareMethod = tempCompareMethod;
+		other.mRootNode = tempRootNode;
+		other.mSize = tempSize;
+
+		return *this;
 	}
 
 	constexpr bool BinarySearchTree::Insert(void* item)
@@ -295,6 +446,11 @@ namespace cave
 		}
 
 		return false;
+	}
+
+	constexpr void BinarySearchTree::Clear()
+	{
+		ClearSubTree(mRootNode);
 	}
 
 	constexpr size_t BinarySearchTree::GetSize() const
@@ -547,6 +703,51 @@ namespace cave
 		node->mColor = eBinarySearchTreeColor::BLACK;
 	}
 
+	constexpr void BinarySearchTree::ClearSubTree(BinarySearchTreeNode*& node)
+	{
+		BinarySearchTreeNode* tempNode = node;
+		size_t deleteCount = 0;
+
+		if (tempNode == &msNilNode)
+		{
+			return;
+		}
+
+		while (tempNode != node || (tempNode->mLeftChild != &msNilNode) || (tempNode->mRightChild != &msNilNode))
+		{
+			if (tempNode->mLeftChild != &msNilNode)
+			{
+				tempNode = tempNode->mLeftChild;
+			}
+			else if (tempNode->mRightChild != &msNilNode)
+			{
+				tempNode = tempNode->mRightChild;
+			}
+			else
+			{
+				BinarySearchTreeNode* deleteNode = tempNode;
+				tempNode = tempNode->mParent;
+
+				if (tempNode->mLeftChild == deleteNode)
+				{
+					tempNode->mLeftChild = &msNilNode;
+				}
+				else
+				{
+					tempNode->mRightChild = &msNilNode;
+				}
+
+				mPool->Deallocate(deleteNode, sizeof(BinarySearchTreeNode));
+				++deleteCount;
+			}
+		}
+
+		mPool->Deallocate(tempNode, sizeof(BinarySearchTreeNode));
+		++deleteCount;
+		node = &msNilNode;
+		mSize -= deleteCount;
+	}
+
 #ifdef CAVE_BUILD_DEBUG
 
 	void BinarySearchTree::PrintInt32()
@@ -653,14 +854,17 @@ namespace cave
 	{
 		int32_t* itemTable;
 
-		size_t tableSize;
-
 		constexpr uint8_t TEST_ALL = 0b11111111;
 		constexpr uint8_t TEST_INSERT = 0b00000001;
 		constexpr uint8_t TEST_DELETE = 0b00000010;
 		constexpr uint8_t TEST_SEARCH = 0b00000100;
 
-		void Test(size_t containerTableSize, size_t containerTestCount, uint8_t containerTestCase);
+		size_t tableSize = 10000;
+		size_t testCount = 10;
+		uint8_t testCase = TEST_INSERT | TEST_DELETE;
+		BinarySearchTree* caveTreePointer = nullptr;
+
+		void Test();
 
 		eCompareItem TestCompareMethod(void* leftItem, void* rightItem)
 		{
@@ -682,7 +886,7 @@ namespace cave
 
 		namespace Container
 		{
-			void Insert(BinarySearchTree& tree)
+			void Insert()
 			{
 				size_t insertCount = rand() % 32 + 1;	
 
@@ -690,14 +894,14 @@ namespace cave
 				{
 					size_t index = rand() % tableSize;
 
-					if (tree.Insert(&itemTable[index]))
+					if (caveTreePointer->Insert(&itemTable[index]))
 					{
 						//LOGDF(eLogChannel::CORE_CONTAINER, "+%d", itemTable[index]);
 					}
 				}
 			}
 
-			void Delete(BinarySearchTree& tree)
+			void Delete()
 			{
 				size_t deleteCount = rand() % 16 + 1;
 
@@ -705,14 +909,14 @@ namespace cave
 				{
 					size_t index = rand() % tableSize;
 
-					if (tree.Delete(&itemTable[index]))
+					if (caveTreePointer->Delete(&itemTable[index]))
 					{
 						//LOGDF(eLogChannel::CORE_CONTAINER, "-%d", itemTable[index]);
 					}
 				}
 			}
 
-			void Search(BinarySearchTree& tree)
+			void Search()
 			{
 				size_t searchCount = rand() % 16 + 1; 
 
@@ -720,18 +924,18 @@ namespace cave
 				{
 					size_t index = rand() % tableSize;
 
-					LOGDF(eLogChannel::CORE_CONTAINER, "Search: %d | %d", itemTable[index], tree.Search(&itemTable[index]));
+					LOGDF(eLogChannel::CORE_CONTAINER, "Search: %d | %d", itemTable[index], caveTreePointer->Search(&itemTable[index]));
 				}
 			}
 		}
 
-		void Test(size_t containerTableSize, size_t containerTestCount, uint8_t containerTestCase)
+		void Test()
 		{
 			srand(time(NULL));
 
-			tableSize = containerTableSize;
+			BinarySearchTree caveTree(TestCompareMethod);
+			caveTreePointer = &caveTree;
 
-			BinarySearchTree tree(TestCompareMethod);
 
 			itemTable = reinterpret_cast<int32_t*>(gCoreMemoryPool.Allocate(sizeof(int32_t) * tableSize));
 
@@ -740,24 +944,29 @@ namespace cave
 				itemTable[i] = i;
 			}
 
-			for (size_t i = 0; i < containerTestCount; ++i)
+			for (size_t i = 0; i < testCount; ++i)
 			{
-				if (containerTestCase & TEST_INSERT)
+				if (testCase & TEST_INSERT)
 				{
-					Container::Insert(tree);
+					Container::Insert();
 				}
 
-				if (containerTestCase & TEST_DELETE)
+				if (testCase & TEST_DELETE)
 				{
-					Container::Delete(tree);
+					Container::Delete();
 				}
 
-				if (containerTestCase & TEST_SEARCH)
+				if (testCase & TEST_SEARCH)
 				{
-					Container::Search(tree);
+					Container::Search();
 				}
 
-				tree.PrintInt32();
+				caveTree.PrintInt32();
+				BinarySearchTree copyConstructTree = caveTree;
+				copyConstructTree.PrintInt32();
+				BinarySearchTree copyAssignTree;
+				copyAssignTree = caveTree;
+				copyAssignTree.PrintInt32();
 				//size_t sizeHeight = 0;
 				//for (sizeHeight; (1 << sizeHeight) < tree.GetSize(); ++sizeHeight);
 

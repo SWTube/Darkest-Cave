@@ -28,6 +28,12 @@ export namespace cave
 
 		Queue();
 		Queue(MemoryPool& pool);
+		Queue(const Queue& other);
+		Queue(const Queue& other, MemoryPool& pool);
+		Queue(Queue&& other);
+
+		constexpr Queue& operator=(const Queue& other);
+		constexpr Queue& operator=(Queue&& other);
 
 		constexpr void Enqueue(void* item);
 		constexpr void Dequeue();
@@ -54,6 +60,40 @@ export namespace cave
 		, mRear(0)
 	{ 
 		Base::mSize = Base::mCapacity;
+	}
+
+	Queue::Queue(const Queue& other)
+		: Queue(other, gCoreMemoryPool)
+	{ }
+
+	Queue::Queue(const Queue& other, MemoryPool& pool)
+		: Base(other, pool)
+		, mFront(other.mFront)
+		, mRear(other.mRear)
+	{ }
+
+	Queue::Queue(Queue&& other)
+		: Base(std::move(other))
+		, mFront(other.mFront)
+		, mRear(other.mRear)
+	{ }
+
+	constexpr Queue& Queue::operator=(const Queue& other)
+	{
+		Base::operator=(other);
+		mFront = other.mFront;
+		mRear = other.mRear;
+
+		return *this;
+	}
+
+	constexpr Queue& Queue::operator=(Queue&& other)
+	{
+		Base::operator=(std::move(other));
+		mFront = other.mFront;
+		mRear = other.mRear;
+
+		return *this;
 	}
 
 	constexpr void Queue::Enqueue(void* item)

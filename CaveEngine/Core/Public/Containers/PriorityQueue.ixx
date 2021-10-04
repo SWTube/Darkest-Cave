@@ -31,6 +31,14 @@ export namespace cave
 		PriorityQueue(CompareItem::Type compareMethod);
 		PriorityQueue(MemoryPool& pool);
 		PriorityQueue(CompareItem::Type compareMethod, MemoryPool& pool);
+		PriorityQueue(const PriorityQueue& other);
+		PriorityQueue(const PriorityQueue& other, CompareItem::Type compareMethod);
+		PriorityQueue(const PriorityQueue& other, MemoryPool& pool);
+		PriorityQueue(const PriorityQueue& other, CompareItem::Type compareMethod, MemoryPool& pool);
+		PriorityQueue(PriorityQueue&& other);
+
+		constexpr PriorityQueue& operator=(const PriorityQueue& other);
+		constexpr PriorityQueue& operator=(PriorityQueue&& other);
 
 		constexpr void Enqueue(void* item);
 		constexpr void Dequeue();
@@ -62,6 +70,44 @@ export namespace cave
 		: Base(pool)
 		, mCompareMethod(compareMethod)
 	{ }
+
+	PriorityQueue::PriorityQueue(const PriorityQueue& other)
+		: PriorityQueue(other, other.mCompareMethod, *other.mPool)
+	{ }
+
+	PriorityQueue::PriorityQueue(const PriorityQueue& other, CompareItem::Type compareMethod)
+		: PriorityQueue(other, compareMethod, *other.mPool)
+	{ }
+
+	PriorityQueue::PriorityQueue(const PriorityQueue& other, MemoryPool& pool)
+		: PriorityQueue(other, other.mCompareMethod, pool)
+	{ }
+
+	PriorityQueue::PriorityQueue(const PriorityQueue& other, CompareItem::Type compareMethod, MemoryPool& pool)
+		: Base(other, pool)
+		, mCompareMethod(compareMethod)
+	{ }
+
+	PriorityQueue::PriorityQueue(PriorityQueue&& other)
+		: Base(std::move(other))
+		, mCompareMethod(other.mCompareMethod)
+	{ }
+
+	constexpr PriorityQueue& PriorityQueue::operator=(const PriorityQueue& other)
+	{
+		Base::operator=(other);
+		mCompareMethod = other.mCompareMethod;
+
+		return *this;
+	}
+
+	constexpr PriorityQueue& PriorityQueue::operator=(PriorityQueue&& other)
+	{
+		Base::operator=(std::move(other));
+		mCompareMethod = other.mCompareMethod;
+
+		return *this;
+	}
 
 	constexpr void PriorityQueue::Enqueue(void* item)
 	{
