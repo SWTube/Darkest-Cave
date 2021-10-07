@@ -32,6 +32,11 @@ namespace cave
 	export class Math
 	{
 	public:
+		static size_t GetBitCount8(uint8_t data);
+		static size_t GetBitCount16(uint16_t data);
+		static size_t GetBitCount32(uint32_t data);
+		static size_t GetBitCount64(uint64_t data);
+
 		static uint32_t GetFibonacciNumber(uint32_t number, uint32_t* cache, size_t size);
 		static uint32_t GetFibonacciNumberRecursive(uint32_t number, uint32_t* cache, size_t size);
 		static FORCEINLINE constexpr size_t GetMaxSizeType(size_t x, size_t y);
@@ -63,6 +68,10 @@ namespace cave
 		static float InverseSqrt(float value);
 
 		static float Log(float value);
+
+		static float Lerp(const float one, const float other, float alpha);
+		static float NearestNeighbor(const float f0, const float f1, float t);
+		static float CatmullRomSpline(const float f0, const float f1, const float f2, const float f3, float f);
 	};
 
 	int32_t Math::RecursiveFactorial(int32_t number)
@@ -254,6 +263,30 @@ namespace cave
 
 			return 2.f * result;
 		}
+	}
+
+	float Math::Lerp(const float one, const float other, float alpha)
+	{
+		return (one * (1.f - alpha)) + (other * alpha);
+	}
+
+	float Math::NearestNeighbor(const float f0, const float f1, float t)
+	{
+		return (t < 0.5) ? f0 : f1;
+	}
+
+	float Math::CatmullRomSpline(const float f0, const float f1, const float f2, const float f3, float f)
+	{
+		float d1 = (f2 - f0) / 2.f;
+		float d2 = (f3 - f1) / 2.f;
+		float D1 = f2 - f1;
+
+		float a3 = d1 + d2 - 2.f * D1;
+		float a2 = 3.f * D1 - 2.f * d1 - d2;
+		float a1 = d1;
+		float a0 = f1;
+
+		return a3 * Pow(f, 3) + a2 * Pow(f, 2) + a1 * f + a0;
 	}
 
 	uint32_t Math::GetFibonacciNumber(uint32_t number, uint32_t* cache, size_t size)

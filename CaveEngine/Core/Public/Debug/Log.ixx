@@ -7,8 +7,13 @@ module;
 
 #include <cstdarg>
 #include <cstdio>
+#include <format>
 #include <iostream>
+#include <mutex>
+#include <queue>
+#include <sstream>
 #include <string>
+#include <thread>
 
 #include "Utils/Crt.h"
 
@@ -66,6 +71,12 @@ namespace cave
 		eLogVerbosity gCurrentVerbosity = eLogVerbosity::All;
 		char gBuffer[MAX_BUFFER] = { '\0', };
 		wchar_t gWBuffer[MAX_BUFFER] = { '\0', };
+		std::queue<std::string> gStringQueue;
+		std::queue<std::wstring> gWStringQueue;
+		bool gbStringPrinting = true;
+		bool gbWStringPrinting = true;
+		std::ostringstream gOs;
+		std::wostringstream gWOs;
 
 		export void SetVerbosity(eLogVerbosity verbosity)
 		{
@@ -73,8 +84,45 @@ namespace cave
 		}
 
 #ifdef __WIN32__
+		export void Initialize();
+		export void Destroy();
+		void ProcessLog();
 		void Log(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const char* message);
 		void WLog(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message);
+
+		std::thread gThread;
+		std::mutex gQueueMutex;
+
+		void Initialize()
+		{
+			gThread = std::thread(ProcessLog);
+		}
+
+		void Destroy()
+		{
+			gbStringPrinting = false;
+			gbWStringPrinting = false;
+			gThread.join();
+		}
+
+		void ProcessLog()
+		{
+			while (gbStringPrinting && gbWStringPrinting)
+			{	
+				std::lock_guard<std::mutex> lock(gQueueMutex);
+				while (!gStringQueue.empty())
+				{
+					OutputDebugStringA(gStringQueue.front().c_str());
+					gStringQueue.pop();
+				}
+
+				while (!gWStringQueue.empty())
+				{
+					OutputDebugStringW(gWStringQueue.front().c_str());
+					gWStringQueue.pop();
+				}
+			}
+		}
 
 		export void Verbose(eLogChannel channel, const char* fileName, const char* functionName, int32_t lineNumber, const char* message)
 		{
@@ -248,9 +296,10 @@ namespace cave
 
 		void Log(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const char* message)
 		{
+			std::lock_guard<std::mutex> lock(gQueueMutex);
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
 			{
-				static std::string buffer;
+				std::string buffer;
 
 				switch (channel)
 				{
@@ -325,17 +374,21 @@ namespace cave
 					break;
 				}
 
-				char output[255];
-				snprintf(output, 255, "%s%s/%s/line:%d :\t%s\n", buffer.c_str(), fileName, functionName, lineNumber, message);
-				OutputDebugStringA(output);
+				gOs.flush();
+				gOs.clear();
+
+				gOs << fileName << '/' << functionName << "line:" << lineNumber << " :\t" << message << std::endl;
+				buffer.append(gOs.str());
+				gStringQueue.push(buffer);
 			}
 		}
 
 		void WLog(eLogChannel channel, eLogVerbosity verbosity, const char* fileName, const char* functionName, int32_t lineNumber, const wchar_t* message)
 		{
+			std::lock_guard<std::mutex> lock(gQueueMutex);
 			if (gCurrentVerbosity == eLogVerbosity::All || verbosity == gCurrentVerbosity)
 			{
-				static std::wstring buffer;
+				std::wstring buffer;
 
 				switch (channel)
 				{
@@ -410,9 +463,12 @@ namespace cave
 					break;
 				}
 
-				wchar_t output[255];
-				swprintf(output, 255, L"%s%S/%S/line:%d :\t%s\n", buffer.c_str(), fileName, functionName, lineNumber, message);
-				OutputDebugStringW(output);
+				gWOs.flush();
+				gWOs.clear();
+
+				gWOs << fileName << L'/' << functionName << L"line:" << lineNumber << L" :\t" << message << std::endl;
+				buffer.append(gWOs.str());
+				gWStringQueue.push(buffer);
 			}
 		}
 #else

@@ -29,7 +29,7 @@ namespace cave
 	/// 
 	/// To consider: Allow the user to specify their own prime number array.
 	///
-	constexpr const uint32_t gPrimeNumberArray[] =
+	export constexpr const uint32_t gPrimeNumberArray[] =
 	{
 		2u, 3u, 5u, 7u, 11u, 13u, 17u, 19u, 23u, 29u, 31u,
 		37u, 41u, 43u, 47u, 53u, 59u, 61u, 67u, 71u, 73u, 79u,
@@ -79,7 +79,7 @@ namespace cave
 	///
 	/// The number of prime numbers in gPrimeNumberArray.
 	///
-	constexpr const size_t gPrimeCount = (sizeof(gPrimeNumberArray) / sizeof(gPrimeNumberArray[0]) - 1);
+	export constexpr const size_t gPrimeCount = (sizeof(gPrimeNumberArray) / sizeof(gPrimeNumberArray[0]) - 1);
 
 	export class HashTable final
 	{
@@ -128,7 +128,7 @@ namespace cave
 		void* operator[](void* key);
 		void* Find(const void* key);
 		const void* Find(const void* key) const;
-		constexpr bool Contains(const void* key) const;
+		bool Contains(const void* key) const;
 
 		// bucket interface
 		constexpr size_t GetBucketCount() const;
@@ -479,8 +479,18 @@ namespace cave
 		return nullptr;
 	}
 
-	constexpr bool HashTable::Contains(const void* key) const
+	bool HashTable::Contains(const void* key) const
 	{
+		uint32_t index = mHash->GetHash(key, mElementSize) % mBucketCount;
+
+		for (const Pair& pair : mData[index])
+		{
+			if (Memory::Memcmp(key, pair.GetFirst(), mElementSize) == 0)
+			{
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -500,7 +510,8 @@ namespace cave
 	}
 
 #ifdef CAVE_BUILD_DEBUG
-#include "Utils/Crt.h"
+#include <time.h>
+
 #include "Debug/Log.h"
 
 	export namespace HashTableTest

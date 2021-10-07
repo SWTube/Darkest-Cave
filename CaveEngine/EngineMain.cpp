@@ -41,6 +41,7 @@ constexpr uint32_t MEMORY_POOL_SIZE = 1638400;
 #ifdef __WIN32__
 import cave.Core.Containers.Array;
 import cave.Core.Containers.Hash;
+import cave.Core.Containers.HashSet;
 import cave.Core.Containers.HashTable;
 import cave.Core.Math;
 import cave.Core.Containers.Stack;
@@ -109,7 +110,17 @@ int main(int32_t argc, char** argv)
 #endif
 
 #ifdef CAVE_BUILD_DEBUG
-	//TicTocTimer clock = tic();
+	cave::Log::Initialize();
+	TicTocTimer clock = tic();
+	//cave::HashTableTest::Main();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "HashTable Test: Elapsed time %f seconds.", toc(&clock));
+
+	clock = tic();
+	cave::HashSet hashSet(sizeof(int));
+	int item = 3;
+	hashSet.Insert(&item);
+	assert(hashSet.Contains(&item));
+	LOGDF(cave::eLogChannel::CORE_TIMER, "HashSet Test: Elapsed time %f seconds.", toc(&clock));
 	//cave::FileSystemTest::Main();
 	//cave::MathTest::Main();
 	//RenderTest();
@@ -127,7 +138,7 @@ int main(int32_t argc, char** argv)
 	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
 
 	//clock = tic();
-	cave::HashTableTest::BucketInterface();
+	//cave::HashTableTest::BucketInterface();
 	//cave::HashTable hashTable(sizeof(uint32_t));
 	//uint32_t keys[256];
 	//uint32_t values[256];
@@ -148,6 +159,7 @@ int main(int32_t argc, char** argv)
 	// _CrtDumpMemoryLeaks();
 
 #endif
+	cave::Log::Destroy();
 	// Cleanup is handled in destructors.
     return 0;
 }
