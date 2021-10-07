@@ -267,6 +267,7 @@
     <ClInclude Include="Gameplay\Public\Object\Tag.h" />
     <ClInclude Include="Gameplay\Public\Tmp\Transform.h" />
     <ClInclude Include="Graphics\Public\GraphicsApiPch.h" />
+    <ClInclude Include="PathFinding.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerApiPch.h" />
     <ClInclude Include="ResourceManager\Public\ResourceManagerTemp.h" />
     <ClInclude Include="Graphics\Public\Test\Resource.h" />

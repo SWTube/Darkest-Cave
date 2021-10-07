@@ -274,6 +274,9 @@
     <ClInclude Include="Core\Public\KeyboardInput\KeyboardInput.h">
       <Filter>Header Files\Core\KeyboardInput</Filter>
     </ClInclude>
+    <ClInclude Include="PathFinding.h">
+      <Filter>Header Files\Gameplay\PathFinding</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Graphics\Resource\directx.ico">
@@ -456,6 +459,9 @@
     </Filter>
     <Filter Include="Header Files\Core\Types">
       <UniqueIdentifier>{5883785d-9e32-4cf3-b63c-730729a66c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay\PathFinding">
+      <UniqueIdentifier>{ccb5463c-02d7-4289-952a-9d52e345a18d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
