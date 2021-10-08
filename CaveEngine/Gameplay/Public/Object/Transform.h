@@ -4,7 +4,6 @@
  */
 #pragma once
 
-#include "CoreTypes.h"
 #include "Assertion/Assert.h"
 
 import cave.Core.Types.Float;
@@ -22,34 +21,13 @@ namespace cave
 		Transform& operator=(const Transform& other);
 		Transform& operator=(Transform&& other) noexcept;
 
-		FORCEINLINE Float2* GetPosition();
-		FORCEINLINE Float2* GetRotation();
-		FORCEINLINE Float2* GetScale();
+		Float2* GetPosition() const;
+		Float2* GetRotation() const;
+		Float2* GetScale() const;
 
 	private:
-		Float2 mPosition;
-		Float2 mRotation;
-		Float2 mScale;
+		Float2* mPosition;
+		Float2* mRotation;
+		Float2* mScale;
 	};
-
-	FORCEINLINE Float2* Transform::GetPosition()
-	{
-		return &mPosition;
-	}
-
-	FORCEINLINE Float2* Transform::GetRotation()
-	{
-		return &mRotation;
-	}
-
-	FORCEINLINE Float2* Transform::GetScale()
-	{
-		return &mScale;
-	}
-#ifdef CAVE_BUILD_DEBUG
-	namespace TransformTest
-	{
-		void Test();
-	}
-#endif //CAVE_BUILD_DEBUG
 }
