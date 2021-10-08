@@ -3,9 +3,10 @@
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
 #include "GraphicsApiPch.h"
+#include "Assertion/Assert.h"
 #include "Game/GameInstance.h"
 
-export module Engine;
+export module cave.Engine;
 
 import DeviceResources;
 import Renderer;
@@ -28,18 +29,22 @@ namespace cave
 		static LRESULT CALLBACK StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam);
 		static Engine* Instance();
 
-		eResult Init(uint32_t screenWidth, uint32_t screenHeight);
 		eResult	Run();
-		void Destroy();
 
 		Window* GetWindowHandle() const;
 		Renderer* GetRenderer() const;
 		GameInstance* GetGameInstance() const;
 
-	
+		void SetFixedUpdateTimestep(float timestep);
+		float GetFixedUpdateTimestep() const;
+
+		bool IsValid() const;
 
 	private:
 		Engine();
+
+		void init();
+		void destroy();
 
 	private:
 		MemoryPool* mPool = nullptr;
@@ -47,13 +52,13 @@ namespace cave
 		Renderer* mRenderer = nullptr;
 		Window* mWindow = nullptr;
 
-		float mUpdateTimestep =0.f;
+		float mFixedUpdateTimestep =0.f;
 		Timer* mEngineTimer = nullptr;
 
 		GameInstance* mGameInstance = nullptr;
 
-
-		eResult mEngineState;
+		eResult mEngineState = eResult::CAVE_FAIL;
+		bool mbInitialized = false;
 
 		static HINSTANCE		msInstance;
 		static const wchar_t*	msWindowClassName;
@@ -65,58 +70,33 @@ namespace cave
 
 	Engine::Engine()
 		: mPool(&gCoreMemoryPool)
-		, mUpdateTimestep(0.002f)
+		, mFixedUpdateTimestep(0.002f)
 	{
 		mWindow = reinterpret_cast<Window*>(mPool->Allocate(sizeof(Window)));
 		new(mWindow) Window(1600u, 900u, L"Test", msInstance, StaticWindowProc);
+		assert(mWindow != nullptr);
 
-		// Instantiate the renderer.
 		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
 		new(mRenderer) Renderer();
+		assert(mRenderer != nullptr);
 
 		mEngineTimer = reinterpret_cast<Timer*>(mPool->Allocate(sizeof(Timer)));
 		new(mEngineTimer) Timer();
+		assert(mEngineTimer != nullptr);
+
 
 		mGameInstance = reinterpret_cast<GameInstance*>(mPool->Allocate(sizeof(GameInstance)));
 		new(mGameInstance) GameInstance();
+		assert(mGameInstance != nullptr);
 
 		mRenderer->Init(mWindow);
+
+		mEngineState = eResult::CAVE_OK;
 	}
 
 	Engine::~Engine()
 	{
-		if (mWindow != nullptr)
-		{
-			mWindow->~Window();
-			mPool->Deallocate(mWindow, sizeof(Window));
-			mWindow = nullptr;
-		}
-
-		if (mGameInstance != nullptr)
-		{
-			mGameInstance->~GameInstance();
-			mPool->Deallocate(mGameInstance, sizeof(GameInstance));
-			mGameInstance = nullptr;
-		}
-
-		if (mEngineTimer != nullptr)
-		{
-			mEngineTimer->~Timer();
-			mPool->Deallocate(mEngineTimer, sizeof(Timer));
-			mEngineTimer = nullptr;
-		}
-
-		if (mRenderer != nullptr)
-		{
-			mRenderer->~Renderer();
-			mPool->Deallocate(mRenderer, sizeof(Renderer));
-			mRenderer = nullptr;
-		}
-
-		if (mPool != &gCoreMemoryPool)
-		{
-			delete mPool;
-		}
+		destroy();
 	}
 
 	LRESULT CALLBACK Engine::StaticWindowProc(HWND hWindow, uint32_t message, WPARAM wParam, LPARAM lParam)
@@ -165,64 +145,6 @@ namespace cave
 		return &instance;
 	}
 
-	eResult Engine::Init(uint32_t screenWidth, uint32_t screenHeight)
-	{
-		eResult result = eResult::CAVE_OK;
-
-		mWindow = reinterpret_cast<Window*>(mPool->Allocate(sizeof(Window)));
-		new(mWindow) Window(screenWidth, screenHeight, L"Test", msInstance, StaticWindowProc);
-
-		// Instantiate the renderer.
-		mRenderer = reinterpret_cast<Renderer*>(mPool->Allocate(sizeof(Renderer)));
-		new(mRenderer) Renderer();
-
-		mEngineTimer = reinterpret_cast<Timer*>(mPool->Allocate(sizeof(Timer)));
-		new(mEngineTimer) Timer();
-
-		mGameInstance = reinterpret_cast<GameInstance*>(mPool->Allocate(sizeof(GameInstance)));
-		new(mGameInstance) GameInstance();
-
-		mRenderer->Init(mWindow);
-		
-		//mRenderer->CreateDeviceDependentResources();
-
-		//// We have a window, so initialize window size-dependent resources.
-		//mDeviceResources->CreateWindowResources(mWindow);
-		//if (result != eResult::CAVE_OK)
-		//{
-		//	return result;
-		//}
-
-		//mRenderer->CreateWindowSizeDependentResources();
-
-		return result;
-	}
-
-	void Engine::Destroy()
-	{
-		if (mWindow != nullptr)
-		{
-			mPool->Deallocate(mWindow, sizeof(Window));
-		}
-
-		if (mEngineTimer != nullptr)
-		{
-			mPool->Deallocate(mEngineTimer, sizeof(Timer));
-		}
-
-		if (mGameInstance != nullptr)
-		{
-			mGameInstance->~GameInstance();
-			mPool->Deallocate(mGameInstance, sizeof(GameInstance));
-		}
-
-		if (mRenderer != nullptr)
-		{
-			mRenderer->Destroy();
-			mPool->Deallocate(mRenderer, sizeof(Renderer));
-		}
-	}
-
 	eResult Engine::Run()
 	{
 		int32_t hr = S_OK;
@@ -241,8 +163,9 @@ namespace cave
 
 		float elapsedTime = 0.f;
 
-		mGameInstance->Init();
-		mEngineTimer->Init();
+		uint8_t repeatFixedUpdateCount = 0;
+		
+		init();
 
 		while (WM_QUIT != msg.message)
 		{
@@ -259,16 +182,18 @@ namespace cave
 
 			elapsedTime += mEngineTimer->GetMeasuredTime();
 			mEngineTimer->StartMeasuring();
-			while (elapsedTime >= mUpdateTimestep)
+			
+			mGameInstance->Update(elapsedTime);
+			
+			mRenderer->Render();
+
+			while (elapsedTime >= mFixedUpdateTimestep)
 			{
-				mGameInstance->FixedUpdate(mUpdateTimestep);
-				elapsedTime -= mUpdateTimestep;
+				mGameInstance->FixedUpdate(mFixedUpdateTimestep);
+				elapsedTime -= mFixedUpdateTimestep;
 			}
 
-			mGameInstance->Update(elapsedTime);
-
 			// Render frames during idle time (when no messages are waiting).
-			mRenderer->Render();
 			mEngineTimer->EndMeasuring();
 		}
 
@@ -289,5 +214,67 @@ namespace cave
 	GameInstance* Engine::GetGameInstance() const
 	{
 		return mGameInstance;
+	}
+
+	void Engine::SetFixedUpdateTimestep(float timestep)
+	{
+		assert(timestep > 0.f && IsValid());
+		mFixedUpdateTimestep = timestep;
+	}
+
+	float Engine::GetFixedUpdateTimestep() const
+	{
+		assert(IsValid());
+		return mFixedUpdateTimestep;
+	}
+
+	bool Engine::IsValid() const
+	{
+		return mEngineState == eResult::CAVE_OK ? true : false;
+	}
+
+	void Engine::init()
+	{
+		assert(IsValid());
+		mGameInstance->Init();
+		mEngineTimer->Init();
+
+		mbInitialized = true;
+	}
+
+	void Engine::destroy()
+	{
+		if (mWindow != nullptr)
+		{
+			mWindow->~Window();
+			mPool->Deallocate(mWindow, sizeof(mWindow));
+			mWindow = nullptr;
+		}
+
+		if (mGameInstance != nullptr)
+		{
+			mGameInstance->~GameInstance();
+			mPool->Deallocate(mGameInstance, sizeof(*mGameInstance));
+			mGameInstance = nullptr;
+		}
+
+		if (mEngineTimer != nullptr)
+		{
+			mEngineTimer->~Timer();
+			mPool->Deallocate(mEngineTimer, sizeof(*mEngineTimer));
+			mEngineTimer = nullptr;
+		}
+
+		if (mRenderer != nullptr)
+		{
+			mRenderer->~Renderer();
+			mPool->Deallocate(mRenderer, sizeof(*mRenderer));
+			mRenderer = nullptr;
+		}
+
+		if (mPool != &gCoreMemoryPool)
+		{
+			delete mPool;
+		}
 	}
 }

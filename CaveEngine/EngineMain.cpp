@@ -25,7 +25,7 @@
 #include "Object/GameObject.h"
 #include "Object/Script.h"
 
-import Engine;
+import cave.Engine;
 
 template <size_t N>
 void MemoryTest1(cave::MemoryPool& pool);
@@ -268,11 +268,6 @@ void DemoTest()
 
 	// Instantiate the window manager class.
 	cave::Engine* main = cave::Engine::Instance();
-	// Create a window.
-	cave::eResult result = main->Init(1600u, 900u);
-
-	cave::Renderer* renderer = main->GetRenderer();
-
 											// index
 	//renderer->AddSprite("lapland.png");		// 0 sprite
 	//renderer->AddTexture("lapland_2.png");	// 1 texture
@@ -323,17 +318,6 @@ void DemoTest()
 	world->AddLevel(*level);
 	gameInstance->AddWorld(*world);*/
 
-
-	if (result == cave::eResult::CAVE_OK)
-	{
-		//// Go full-screen.
-		//deviceResources->GoFullScreen();
-
-		//// Whoops! We resized the "window" when we went full-screen. Better
-
-		// Run the program.
-		result = main->Run();
-	}
 	//main->Destroy();
 }
 
