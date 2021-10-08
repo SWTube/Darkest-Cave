@@ -20,11 +20,10 @@ namespace cave
 	class Level final : public Object
 	{
 	public:
-		friend class GameObject;
-
 		Level() = delete;
-		Level(std::string& name);
 		Level(const char* name);
+		Level(std::string& name);
+		Level(const std::string& name);
 		Level(const Level&) = delete;
 		Level(Level&&) = delete;
 
@@ -32,56 +31,35 @@ namespace cave
 		Level& operator=(const Level&) = delete;
 		Level& operator=(Level&&) = delete;
 
-		void AddGameObject(GameObject& gameObject);
-		void AddGameObjects(std::vector<GameObject*>& gameObjects);
+		void AddGameObject(const char* name);
+		void AddGameObject(std::string& name);
+		void AddGameObject(const std::string& name);
 
-		void RemoveGameObject(std::string& name);
-		void RemoveGameObject(const std::string& name);
-		void RemoveGameObject(const char* name);
-		void RemoveGameObject(GameObject& gameObject);
-		void RemoveGameObjects(std::vector<GameObject*>& gameObjects);
+		void AddRemoveGameObjectList(const char* name);
+		void AddRemoveGameObjectList(std::string& name);
+		void AddRemoveGameObjectList(const std::string& name);
 
-		GameObject* FindGameObjectByName(std::string& name);
+		void RemoveGameObjects();
+
 		GameObject* FindGameObjectByName(const char* name);
+		GameObject* FindGameObjectByName(std::string& name);
+		GameObject* FindGameObjectByName(const std::string& name);
 
-		GameObject* FindGameObjectByTag(std::string& tag);
-		GameObject* FindGameObjectByTag(const char* tag);
-		std::vector<GameObject*>&& FindGameObjectsByTag(std::string& tag);
 		std::vector<GameObject*>&& FindGameObjectsByTag(const char* tag);
+		std::vector<GameObject*>&& FindGameObjectsByTag(std::string& tag);
+		std::vector<GameObject*>&& FindGameObjectsByTag(const std::string& tag);
 
-		void Init();
-		void Update(float elapsedTimestep);
-		void FixedUpdate(float elapsedTimestep);
-
-		bool IsGameObjectInLevel(GameObject& gameObject);
-
-		World* GetWorld() const;
-
-	private:
-		void addActiveGameObject(GameObject& gameObject);
-		void removeActiveGameObject(GameObject& gameObject);
-
-		void addTagGameObject(GameObject& gameObject);
-		void removeTaggedGameObject(GameObject& gameObject);
-
-		void destroyGameObjects();
+		void SetWorldOwner(World* owner);
+		World* GetWorldOwner() const;
 
 	private:
 		static std::unordered_set<std::string> mGlobalUniqueNames;
 
-		std::unordered_map<std::string, GameObject*> mAllGameObjects;
-		std::unordered_map<std::string, GameObject*> mActiveGameObjects;
-		std::unordered_multimap<Tag*, GameObject*> mTaggedGameObjects;
+		std::unordered_map<std::string, GameObject*> mGameObjects;
+		std::vector<GameObject*> mRemoveGameObjectList;
 
-		std::vector<GameObject*> mGameObjectsToRemove;
+		bool mbInitialize = false;
 
-		World* mOwner;
+		World* mOwner = nullptr;
 	};
-
-#ifdef CAVE_BUILD_DEBUG
-	namespace LevelTest
-	{
-
-	}
-#endif //CAVE_BUILD_DEBUG
 }

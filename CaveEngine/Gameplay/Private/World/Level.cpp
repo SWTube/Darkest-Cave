@@ -14,21 +14,26 @@
 #include "Object/GameObject.h"
 #include "Object/TagPool.h"
 #include "World/Level.h"
+#include "World/World.h"
 
 namespace cave
 {
 	std::unordered_set<std::string> Level::mGlobalUniqueNames;
 
-	Level::Level(std::string& name) 
+	Level::Level(const char* name)
 		: Object(name, mGlobalUniqueNames)
-		, mOwner(nullptr)
 	{
 
 	}
 
-	Level::Level(const char* name)
+	Level::Level(std::string& name)
 		: Object(name, mGlobalUniqueNames)
-		, mOwner(nullptr)
+	{
+
+	}
+
+	Level::Level(const std::string& name)
+		: Object(name, mGlobalUniqueNames)
 	{
 
 	}
@@ -37,276 +42,163 @@ namespace cave
 	{
 		assert(IsValid());
 
-		mActiveGameObjects.clear();
-		mTaggedGameObjects.clear();
-		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
-		{
-			GameObject* gameObject = iter->second;
-			assert(gameObject != nullptr);
-			iter->second = nullptr;
-			delete gameObject;
-		}
-
-		mAllGameObjects.clear();
+		mGameObjects.clear();
 	}
 
-	void Level::AddGameObject(GameObject& gameObject)
+	void Level::AddGameObject(const char* name)
 	{
-		assert(IsValid() & gameObject.IsValid());
-		mAllGameObjects.insert({ gameObject.GetName(), &gameObject });
-		addTagGameObject(gameObject);
-		if (gameObject.IsActive())
-		{
-			addActiveGameObject(gameObject);
-		}
-		gameObject.SetLevel(*this);
+		assert(IsValid() && name != nullptr && mOwner != nullptr);
+		GameObject* gameObject = mOwner->FindGameObject(name);
+		assert(gameObject != nullptr);
+		mGameObjects.insert({ gameObject->GetName(), gameObject });
 	}
 
-	void Level::AddGameObjects(std::vector<GameObject*>& gameObjects)
+	void Level::AddGameObject(std::string& name)
 	{
-		for (auto& gameObject : gameObjects)
+		assert(IsValid() && mOwner != nullptr);
+		GameObject* gameObject = mOwner->FindGameObject(name);
+		assert(gameObject != nullptr);
+		mGameObjects.insert({ gameObject->GetName(), gameObject });
+	}
+
+	void Level::AddGameObject(const std::string& name)
+	{
+		assert(IsValid() && mOwner != nullptr);
+		GameObject* gameObject = mOwner->FindGameObject(name);
+		assert(gameObject != nullptr);
+		mGameObjects.insert({ gameObject->GetName(), gameObject });
+	}
+
+	void Level::AddRemoveGameObjectList(const char* name)
+	{
+		assert(IsValid() && name != nullptr);
+		auto iter = mGameObjects.find(name);
+		if (iter != mGameObjects.end())
 		{
-			AddGameObject(*gameObject);
+			mRemoveGameObjectList.push_back(iter->second);
 		}
 	}
 
-	void Level::RemoveGameObject(std::string& name)
+	void Level::AddRemoveGameObjectList(std::string& name)
 	{
 		assert(IsValid());
-		auto iter = mAllGameObjects.find(name);
-		if (iter != mAllGameObjects.end())
+		auto iter = mGameObjects.find(name);
+		if (iter != mGameObjects.end())
 		{
-			mGameObjectsToRemove.push_back(iter->second);
+			mRemoveGameObjectList.push_back(iter->second);
 		}
 	}
 
-	void Level::RemoveGameObject(const std::string& name)
+	void Level::AddRemoveGameObjectList(const std::string& name)
 	{
 		assert(IsValid());
-		auto iter = mAllGameObjects.find(name);
-		if (iter != mAllGameObjects.end())
+		auto iter = mGameObjects.find(name);
+		if (iter != mGameObjects.end())
 		{
-			mGameObjectsToRemove.push_back(iter->second);
+			mRemoveGameObjectList.push_back(iter->second);
 		}
 	}
 
-	void Level::RemoveGameObject(const char* name)
+	void Level::RemoveGameObjects()
 	{
 		assert(IsValid());
-		auto iter = mAllGameObjects.find(name);
-		if (iter != mAllGameObjects.end())
+		for (auto& gameObject : mRemoveGameObjectList)
 		{
-			mGameObjectsToRemove.push_back(iter->second);
+			mGameObjects.erase(gameObject->GetName());
 		}
-	}
-
-	void Level::RemoveGameObject(GameObject& gameObject)
-	{
-		assert(IsValid() & gameObject.IsValid());
-		mGameObjectsToRemove.push_back(&gameObject);
-	}
-
-	void Level::RemoveGameObjects(std::vector<GameObject*>& gameObjects)
-	{
-		for (auto& gameObject : gameObjects)
-		{
-			RemoveGameObject(*gameObject);
-		}
-	}
-
-	GameObject* Level::FindGameObjectByName(std::string& name)
-	{
-		assert(IsValid());
-		auto iter = mAllGameObjects.find(name);
-
-		return iter != mAllGameObjects.end() ? iter->second : nullptr;
 	}
 
 	GameObject* Level::FindGameObjectByName(const char* name)
 	{
-		assert(IsValid());
-		assert(name != nullptr);
+		assert(IsValid() && name != nullptr);
+		auto iter = mGameObjects.find(name);
 
-		auto iter = mAllGameObjects.find(name);
-
-		return iter != mAllGameObjects.end() ? iter->second : nullptr;
+		return iter != mGameObjects.end() ? iter->second : nullptr;
 	}
 
-	GameObject* Level::FindGameObjectByTag(std::string& name)
+
+	GameObject* Level::FindGameObjectByName(std::string& name)
 	{
 		assert(IsValid());
+		auto iter = mGameObjects.find(name);
+
+		return iter != mGameObjects.end() ? iter->second : nullptr;
+	}
+
+	GameObject* Level::FindGameObjectByName(const std::string& name)
+	{
+		assert(IsValid());
+		auto iter = mGameObjects.find(name);
+
+		return iter != mGameObjects.end() ? iter->second : nullptr;
+	}
+
+	std::vector<GameObject*>&& Level::FindGameObjectsByTag(const char* name)
+	{
+		assert(IsValid() && name != nullptr);
+		
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
 
-		auto iter = mTaggedGameObjects.find(tag);
+		std::vector<GameObject*> result;
+		for (auto iter = mGameObjects.begin(); iter != mGameObjects.end(); ++iter)
+		{
+			if (tag == iter->second->GetTag())
+			{
+				result.push_back(iter->second);
+			}
+		}
 
-		return iter != mTaggedGameObjects.end() ? iter->second : nullptr;
-	}
-
-	GameObject* Level::FindGameObjectByTag(const char* name)
-	{
-		assert(IsValid() && (name != nullptr));
-		Tag* tag = TagPool::FindTagByName(name);
-		assert(tag != nullptr);
-
-		auto iter = mTaggedGameObjects.find(tag);
-
-		return iter != mTaggedGameObjects.end() ? iter->second : nullptr;
+		return std::move(result);
 	}
 
 	std::vector<GameObject*>&& Level::FindGameObjectsByTag(std::string& name)
 	{
 		assert(IsValid());
+
 		Tag* tag = TagPool::FindTagByName(name);
 		assert(tag != nullptr);
 
-		auto range = mTaggedGameObjects.equal_range(tag);
 		std::vector<GameObject*> result;
-		for (; range.first != range.second; ++range.first)
+		for (auto iter = mGameObjects.begin(); iter != mGameObjects.end(); ++iter)
 		{
-			result.push_back(range.first->second);
-		}
-		
-		return std::move(result);
-	}
-
-	std::vector<GameObject*>&& Level::FindGameObjectsByTag(const char* name)
-	{
-		assert(IsValid() && (name != nullptr));
-		
-		Tag* tag = TagPool::FindTagByName(name);
-		assert(tag != nullptr);
-
-		auto range = mTaggedGameObjects.equal_range(tag);
-		std::vector<GameObject*> result;
-		for (; range.first != range.second; ++range.first)
-		{
-			result.push_back(range.first->second);
+			if (tag == iter->second->GetTag())
+			{
+				result.push_back(iter->second);
+			}
 		}
 
 		return std::move(result);
 	}
 
-	void Level::Init()
-	{
-		assert(IsValid());
-		for (auto iter = mAllGameObjects.begin(); iter != mAllGameObjects.end(); ++iter)
-		{
-			(iter->second)->InitializeScripts();
-		}
-	}
-	
-	void Level::Update(float elapsedTimestep)
+	std::vector<GameObject*>&& Level::FindGameObjectsByTag(const std::string& name)
 	{
 		assert(IsValid());
 
-		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
+		Tag* tag = TagPool::FindTagByName(name);
+		assert(tag != nullptr);
+
+		std::vector<GameObject*> result;
+		for (auto iter = mGameObjects.begin(); iter != mGameObjects.end(); ++iter)
 		{
-			assert((iter->second)->IsValid());
-			(iter->second)->UpdateScripts();
+			if (tag == iter->second->GetTag())
+			{
+				result.push_back(iter->second);
+			}
 		}
-		destroyGameObjects();
+
+		return std::move(result);
 	}
 
-	void Level::FixedUpdate(float elapsedTimestep)
+	void Level::SetWorldOwner(World* owner)
 	{
-		assert(IsValid());
-
-		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
-		{
-			assert((iter->second)->IsValid());
-			(iter->second)->FixedUpdateScripts();
-		}
-		destroyGameObjects();
+		assert(IsValid() && owner != nullptr);
+		mOwner = owner;
 	}
 
-	bool Level::IsGameObjectInLevel(GameObject& gameObject)
+	World* Level::GetWorldOwner() const
 	{
-		assert(IsValid() & gameObject.IsValid());
-
-		auto iter = mAllGameObjects.find(gameObject.GetName());
-
-		return iter != mAllGameObjects.end() ? true : false;
-	}
-
-	World* Level::GetWorld() const
-	{
+		assert(IsValid() && mOwner != nullptr);
 		return mOwner;
 	}
-
-	void Level::addActiveGameObject(GameObject& gameObject)
-	{
-		assert(IsGameObjectInLevel(gameObject));
-
-		mActiveGameObjects.insert({ gameObject.GetName(), &gameObject });
-	}
-
-	void Level::removeActiveGameObject(GameObject& gameObject)
-	{
-		assert(IsGameObjectInLevel(gameObject));
-
-		auto iter = mActiveGameObjects.find(gameObject.GetName());
-		
-		if (iter != mActiveGameObjects.end())
-		{
-			mActiveGameObjects.erase(iter);
-		}
-	}
-
-	void Level::addTagGameObject(GameObject& gameObject)
-	{
-		assert(IsGameObjectInLevel(gameObject));
-
-		mTaggedGameObjects.insert({ gameObject.GetTag(), &gameObject });
-	}
-
-	void Level::removeTaggedGameObject(GameObject& gameObject)
-	{
-		assert(IsGameObjectInLevel(gameObject));
-
-		auto range = mTaggedGameObjects.equal_range(gameObject.GetTag());
-		for (; range.first != range.second; ++range.first)
-		{
-			if (*(range.first->second) == gameObject)
-			{
-				mTaggedGameObjects.erase(range.first);
-				break;
-			}
-		}
-	}
-
-	void Level::destroyGameObjects()
-	{
-		assert(IsValid());
-
-		if (mGameObjectsToRemove.empty())
-		{
-			return;
-		}
-
-		for (size_t index = 0, end = mGameObjectsToRemove.size(); index != end; ++index)
-		{
-			GameObject* gameObject = mGameObjectsToRemove[index];
-			assert(gameObject != nullptr);
-
-			removeActiveGameObject(*gameObject);
-			removeTaggedGameObject(*gameObject);
-
-			auto iter = mAllGameObjects.find(gameObject->GetName());
-			
-			if (iter != mAllGameObjects.end())
-			{
-				mAllGameObjects.erase(iter);
-				delete gameObject;
-			}
-		}
-
-		mGameObjectsToRemove.clear();
-	}
-
-#ifdef CAVE_BUILD_DEBUG
-	namespace LevelTest
-	{
-	}
-#endif //CAVE_BUILD_DEBUG
 }
