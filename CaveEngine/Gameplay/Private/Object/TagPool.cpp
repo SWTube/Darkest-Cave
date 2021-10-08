@@ -43,22 +43,41 @@ namespace cave
 		mbValid = false;
 	}
 
+	void TagPool::AddTag(const char* name)
+	{
+		assert(IsValid() && !mTags.contains(name) && name != nullptr);
+		
+		Tag* tag = new Tag(name);
+		assert(tag != nullptr);
+		mTags.insert({ name, tag });
+	}
+
 	void TagPool::AddTag(std::string& name)
 	{
-		assert(IsValid() & (!mTags.contains(name)));
+		assert(IsValid() && !mTags.contains(name));
 
 		Tag* tag = new Tag(name);
 		assert(tag != nullptr);
 		mTags.insert({ name, tag });
 	}
 
-	void TagPool::AddTag(const char* name)
+	void TagPool::AddTag(const std::string& name)
 	{
-		assert(IsValid() & (!mTags.contains(name)));
-		
+		assert(IsValid() && !mTags.contains(name));
+
 		Tag* tag = new Tag(name);
 		assert(tag != nullptr);
 		mTags.insert({ name, tag });
+	}
+
+	void TagPool::RemoveTag(const char* name)
+	{
+		assert(IsValid() && name != nullptr);
+
+		Tag* tag = FindTagByName(name);
+		assert(tag != nullptr);
+		mTags.erase(name);
+		delete tag;
 	}
 
 	void TagPool::RemoveTag(std::string& name)
@@ -71,7 +90,7 @@ namespace cave
 		delete tag;
 	}
 
-	void TagPool::RemoveTag(const char* name)
+	void TagPool::RemoveTag(const std::string& name)
 	{
 		assert(IsValid());
 
@@ -79,6 +98,16 @@ namespace cave
 		assert(tag != nullptr);
 		mTags.erase(name);
 		delete tag;
+	}
+
+	Tag* TagPool::FindTagByName(const char* name)
+	{
+		assert(IsValid());
+		assert(name != nullptr);
+
+		auto iter = mTags.find(name);
+
+		return iter != mTags.end() ? iter->second : nullptr;
 	}
 
 	Tag* TagPool::FindTagByName(std::string& name)
@@ -90,10 +119,9 @@ namespace cave
 		return iter != mTags.end() ? iter->second : nullptr;
 	}
 
-	Tag* TagPool::FindTagByName(const char* name)
+	Tag* TagPool::FindTagByName(const std::string& name)
 	{
 		assert(IsValid());
-		assert(name != nullptr);
 
 		auto iter = mTags.find(name);
 

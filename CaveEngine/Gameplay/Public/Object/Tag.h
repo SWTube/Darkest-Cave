@@ -31,8 +31,9 @@ namespace cave
 		friend bool operator!=(const Tag& lhs, const char* rhs);
 
 	private:
-		Tag(std::string& name);
 		Tag(const char* name);
+		Tag(std::string& name);
+		Tag(const std::string& name);
 
 	private:
 		std::string mName;

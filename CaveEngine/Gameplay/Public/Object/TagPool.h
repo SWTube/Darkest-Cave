@@ -27,14 +27,17 @@ namespace cave
 		static void Init();
 		static void ShutDown();
 
-		static void AddTag(std::string& name);
 		static void AddTag(const char* name);
+		static void AddTag(std::string& name);
+		static void AddTag(const std::string& name);
 
-		static void RemoveTag(std::string& name);
 		static void RemoveTag(const char* name);
+		static void RemoveTag(std::string& name);
+		static void RemoveTag(const std::string& name);
 
-		static Tag* FindTagByName(std::string& name);
 		static Tag* FindTagByName(const char* name);
+		static Tag* FindTagByName(std::string& name);
+		static Tag* FindTagByName(const std::string& name);
 
 		static bool IsValid();
 

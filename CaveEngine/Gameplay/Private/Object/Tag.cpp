@@ -10,13 +10,19 @@
 
 namespace cave
 {
+	Tag::Tag(const char* name)
+		: mName(name)
+	{
+
+	}
+
 	Tag::Tag(std::string& name)
 		: mName(name)
 	{
 
 	}
 
-	Tag::Tag(const char* name)
+	Tag::Tag(const std::string& name)
 		: mName(name)
 	{
 
