@@ -8,24 +8,36 @@ namespace cave
 {
 	uint32_t Object::mNextGUID = 1;
 
-	Object::Object(std::string& name, std::unordered_set<std::string>& nameList)
+	Object::Object(const char* name, std::unordered_set<std::string>& nameList)
 		: mDuplicatedTarget(nullptr)
 		, mDuplicatedNum(1)
 		, mName(name)
 	{
-		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
+		assert(name != nullptr && mNextGUID > 0 && mNextGUID <= UINT32_MAX);
 		mGUID = mNextGUID;
 		assert(!nameList.contains(mName));
 		assert(IsValid());
 		++mNextGUID;
 	}
 
-	Object::Object(const char* name, std::unordered_set<std::string>& nameList)
+	Object::Object(std::string& name, std::unordered_set<std::string>& nameList)
 		: mDuplicatedTarget(nullptr)
 		, mDuplicatedNum(1)
 		, mName(name)
 	{
-		assert((name != nullptr) & (mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
+		assert(mNextGUID > 0 && mNextGUID <= UINT32_MAX);
+		mGUID = mNextGUID;
+		assert(!nameList.contains(mName));
+		assert(IsValid());
+		++mNextGUID;
+	}
+
+	Object::Object(const std::string& name, std::unordered_set<std::string>& nameList)
+		: mDuplicatedTarget(nullptr)
+		, mDuplicatedNum(1)
+		, mName(name)
+	{
+		assert(mNextGUID > 0 && mNextGUID <= UINT32_MAX);
 		mGUID = mNextGUID;
 		assert(!nameList.contains(mName));
 		assert(IsValid());
@@ -35,7 +47,7 @@ namespace cave
 	Object::Object(const Object& other, std::unordered_set<std::string>& nameList)
 		: mDuplicatedNum(1)
 	{
-		assert((mNextGUID > 0) & (mNextGUID <= UINT32_MAX));
+		assert(mNextGUID > 0 && mNextGUID <= UINT32_MAX);
 		mGUID = mNextGUID;
 		Object* iter = &const_cast<Object&>(other);
 		while (iter->mDuplicatedTarget != nullptr)
@@ -49,6 +61,18 @@ namespace cave
 		} while (nameList.contains(mName));
 		nameList.insert(mName);
 		assert(GetGUID() != other.GetGUID());
+		++mNextGUID;
+	}
+
+	Object::Object(Object&& other, std::unordered_set<std::string>& nameList) noexcept
+		: mDuplicatedTarget(nullptr)
+		, mDuplicatedNum(1)
+		, mName(other.GetName())
+	{
+		assert(mNextGUID > 0 && mNextGUID <= UINT32_MAX);
+		mGUID = mNextGUID;
+		assert(!nameList.contains(mName));
+		assert(IsValid());
 		++mNextGUID;
 	}
 

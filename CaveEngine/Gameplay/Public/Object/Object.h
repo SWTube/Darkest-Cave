@@ -21,20 +21,22 @@ namespace cave
 
 		virtual ~Object();
 
-		FORCEINLINE friend bool operator==(const Object& lhs, const Object& rhs);
-		FORCEINLINE friend bool operator!=(const Object& lhs, const Object& rhs);
-		FORCEINLINE friend bool operator<(const Object& lhs, const Object& rhs);
+		friend bool operator==(const Object& lhs, const Object& rhs);
+		friend bool operator!=(const Object& lhs, const Object& rhs);
+		friend bool operator<(const Object& lhs, const Object& rhs);
 
-		FORCEINLINE uint32_t GetGUID() const;
-		FORCEINLINE bool IsValid() const;
-		FORCEINLINE bool IsDuplicated() const;
+		uint32_t GetGUID() const;
+		virtual bool IsValid() const;
+		bool IsDuplicated() const;
 
-		FORCEINLINE const std::string& GetName() const;
+		const std::string& GetName() const;
 
 	protected:
-		Object(std::string& name, std::unordered_set<std::string>& nameList);
 		Object(const char* name, std::unordered_set<std::string>& nameList);
+		Object(std::string& name, std::unordered_set<std::string>& nameList);
+		Object(const std::string& name, std::unordered_set<std::string>& nameList);
 		Object(const Object& other, std::unordered_set<std::string>& nameList);
+		Object(Object&& other, std::unordered_set<std::string>& nameList) noexcept;
 
 		Object& operator=(const Object& other);
 		Object& operator=(Object&& other) noexcept;
@@ -42,9 +44,7 @@ namespace cave
 	protected:
 		uint32_t getDuplicatedNum() const;
 
-	private:
-		static uint32_t mNextGUID;
-
+	protected:
 		Object* mDuplicatedTarget;
 		uint32_t mDuplicatedNum;
 
@@ -52,6 +52,9 @@ namespace cave
 		uint32_t mGUID = 0;
 
 		std::string mName;
+
+	private:
+		static uint32_t mNextGUID;
 	};
 
 	FORCEINLINE bool operator==(const Object& lhs, const Object& rhs)
