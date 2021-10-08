@@ -473,9 +473,6 @@
     <ClInclude Include="AI\Public\FiniteStateMachine\FiniteStateMachine.h">
       <Filter>Header Files\AI\FiniteStateMachine</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay\Public\Object\Controller.h">
-      <Filter>Header Files\Gameplay\Object</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineMain.cpp">

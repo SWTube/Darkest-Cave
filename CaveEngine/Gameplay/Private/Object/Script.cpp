@@ -45,80 +45,13 @@ namespace cave
 
 	}
 
-	void Script::FixedUpdate(GameObject& gameObject)
-	{
-	}
-
-	void Script::Update(GameObject& gameObject)
-	{
-	}
-
-#ifdef CAVE_BUILD_DEBUG
-	namespace ScriptTest
-	{
-	}
-
-	TestScript::TestScript(const char* name, uint32_t spriteIndex, uint32_t textureIndex, float speed)
-		: Script(name)
-		, mSpriteIndex(spriteIndex)
-		, mTextureIndex(textureIndex)
-		, mNextTextureIndex(100)
-		, mSpeed(speed)
-	{
-		
-	}
-
-	TestScript::~TestScript()
+	void Script::FixedUpdate(GameObject& gameObject, float elapsedTime)
 	{
 
 	}
 
-	void TestScript::Init(GameObject& gameObject)
+	void Script::Update(GameObject& gameObject, float elapsedTime)
 	{
-		gameObject.GetTransform()->GetPosition()->Y = 200.f;
-	}
 
-	void TestScript::FixedUpdate(GameObject& gameObject)
-	{
-		/*gameObject.GetTransform()->GetPosition()->X += mSpeed;
-		if (gameObject.GetTransform()->GetPosition()->X > 250.f)
-		{
-			gameObject.GetRenderer()->SetSpriteTexture(mSpriteIndex, mNextTextureIndex);
-		}
-		gameObject.GetRenderer()->SetSpritePosition(mSpriteIndex, *(gameObject.GetTransform()->GetPosition()));
-		if (gameObject.GetTransform()->GetPosition()->X > 400.f)
-		{
-			gameObject.RemoveGameObjectInLevel();
-		}*/
 	}
-
-	void TestScript::Update(GameObject& gameObject)
-	{
-		/*gameObject.GetTransform()->GetPosition()->X += mSpeed;
-		if (gameObject.GetTransform()->GetPosition()->X > 250.f)
-		{
-			gameObject.GetRenderer()->SetSpriteTexture(mSpriteIndex, mNextTextureIndex);
-		}
-		gameObject.GetRenderer()->SetSpritePosition(mSpriteIndex, *(gameObject.GetTransform()->GetPosition()));
-		if (gameObject.GetTransform()->GetPosition()->X > 400.f)
-		{
-			gameObject.RemoveGameObjectInLevel();
-		}*/
-	}
-
-	void TestScript::SetSpriteIndex(uint32_t index)
-	{
-		mSpriteIndex = index;
-	}
-
-	uint32_t TestScript::GetTextureIndex() const
-	{
-		return mTextureIndex;
-	}
-
-	void TestScript::SetSpeed(float speed)
-	{
-		mSpeed = speed;
-	}
-#endif //CAVE_BUILD_DEBUG
 }

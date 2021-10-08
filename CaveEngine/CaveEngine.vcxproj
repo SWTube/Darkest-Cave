@@ -272,7 +272,6 @@
     <ClInclude Include="Core\Public\Utils\Crt.h" />
     <ClInclude Include="Core\Public\Utils\Defines.h" />
     <ClInclude Include="Gameplay\Public\Game\GameInstance.h" />
-    <ClInclude Include="Gameplay\Public\Object\Controller.h" />
     <ClInclude Include="Gameplay\Public\Object\GameObject.h" />
     <ClInclude Include="Gameplay\Public\Object\Object.h" />
     <ClInclude Include="Gameplay\Public\Object\Player.h" />

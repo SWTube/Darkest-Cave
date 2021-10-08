@@ -2,150 +2,61 @@
  * Copyright (c) 2021 SWTube. All rights reserved.
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
-#ifdef CAVE_BUILD_DEBUG
-#include <iostream>
-#include <random>
-#include <limits>
-#include "Object/Tag.h"
-#endif //CAVE_BUILD_DEBUG
-
 #include "Physics.h"
 #include "Object/GameObject.h"
 #include "Object/TagPool.h"
 #include "Object/Script.h"
 #include "Object/Transform.h"
-#include "World/Level.h"
-#include "World/World.h"
 #include "Body/PhysicsBody.h"
 
 namespace cave
 {
 	std::unordered_set<std::string> GameObject::mGlobalUniqueNames;
 
-	GameObject::GameObject(std::string& name)
-		: Object(name, mGlobalUniqueNames)
-		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
-		, mTag(TagPool::FindTagByName("None"))
-		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
-	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
-	}
-
 	GameObject::GameObject(const char* name)
 		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
 		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert(mTag != nullptr && mTransform != nullptr);
 	}
 
-	GameObject::GameObject(std::string& name, std::string& tag)
+	GameObject::GameObject(std::string& name)
 		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
-		, mTag(TagPool::FindTagByName(tag))
+		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert(mTag != nullptr && mTransform != nullptr);
 	}
 
-	GameObject::GameObject(std::string& name, const char* tag)
+	GameObject::GameObject(const std::string& name)
 		: Object(name, mGlobalUniqueNames)
 		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
-		, mTag(TagPool::FindTagByName(tag))
+		, mbStatic(false)
+		, mTag(TagPool::FindTagByName("None"))
 		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
-	}
-
-	GameObject::GameObject(std::string& name, Tag& tag)
-		: Object(name, mGlobalUniqueNames)
-		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
-		, mTag(&tag)
-		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
-	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
-	}
-
-	GameObject::GameObject(const char* name, std::string& tag)
-		: Object(name, mGlobalUniqueNames)
-		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
-		, mTag(TagPool::FindTagByName(tag))
-		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
-	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
-	}
-
-	GameObject::GameObject(const char* name, const char* tag)
-		: Object(name, mGlobalUniqueNames)
-		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
-		, mTag(TagPool::FindTagByName(tag))
-		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
-	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
-	}
-
-	GameObject::GameObject(const char* name, Tag& tag)
-		: Object(name, mGlobalUniqueNames)
-		, mbActive(true)
-		, mLayer(0)
-		, mScripts()
-		, mTag(&tag)
-		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(nullptr)
-	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert(mTag != nullptr && mTransform != nullptr);
 	}
 
 	GameObject::GameObject(const GameObject& other)
 		: Object(other, mGlobalUniqueNames)
-		, mbActive(other.IsActive())
-		, mLayer(other.GetLayer())
-		, mScripts()
-		, mTag(other.GetTag())
-		, mTransform(new Transform())
-		, mRenderable(nullptr)
-		, mPhysicsBody(nullptr)
-		, mLevel(other.GetLevel())
+		, mbActive(other.mbActive)
+		, mTag(other.mTag)
+		, mTransform(other.mTransform)
 	{
-		assert((mTag != nullptr) & (mTransform != nullptr));
+		assert(mTag != nullptr && mTransform != nullptr);
+	}
+
+	GameObject::GameObject(GameObject&& other) noexcept
+		: Object(std::move(other), mGlobalUniqueNames)
+		, mbActive(other.mbActive)
+		, mTag(other.mTag)
+		, mTransform(other.mTransform)
+	{
+		assert(mTag != nullptr && mTransform != nullptr);
 	}
 
 	GameObject::~GameObject()
@@ -158,8 +69,7 @@ namespace cave
 
 		for (auto& iter : mScripts)
 		{
-			Script* script = iter.second;
-			iter.second = nullptr;
+			Script* script = iter;
 			assert(script != nullptr);
 			delete script;
 		}
@@ -176,114 +86,73 @@ namespace cave
 		return *this;
 	}
 
-	void GameObject::InitializeScripts()
+	void GameObject::Init()
 	{
 		assert(IsValid());
 		for (auto& script : mScripts)
 		{
-			assert(script.second->IsValid());
-			script.second->Init(*this);
+			assert(script->IsValid());
+			script->Init(*this);
 		}
 	}
 
-	void GameObject::UpdateScripts()
+	void GameObject::Update(float elapsedTimestep)
 	{
 		assert(IsValid());
-		for (auto iter = mScripts.begin(); iter != mScripts.end(); ++iter)
+		for (auto& script : mScripts)
 		{
-			assert(iter->second->IsValid());
-			iter->second->Update(*this);
+			script->Update(*this, elapsedTimestep);
 		}
 	}
 
-	void GameObject::FixedUpdateScripts()
+	void GameObject::FixedUpdate(float elapsedTimestep)
 	{
 		assert(IsValid());
-		for (auto iter = mScripts.begin(); iter != mScripts.end(); ++iter)
+		for (auto& script : mScripts)
 		{
-			assert(iter->second->IsValid());
-			iter->second->FixedUpdate(*this);
+			script->FixedUpdate(*this, elapsedTimestep);
 		}
 	}
 
-	void GameObject::AddScript(Script& script)
+	void GameObject::AddScript(Script* script)
 	{
-		assert(IsValid() & script.IsValid());
-		mScripts.insert({ script.GetName(), &script });
+		assert(IsValid() && script != nullptr);
+		mScripts.push_back(script);
 	}
 
 	void GameObject::AddScripts(std::vector<Script*>& scripts)
 	{
 		for (auto& script : scripts)
 		{
-			AddScript(*script);
+			AddScript(script);
 		}
 	}
 
-	void GameObject::RemoveScript(std::string& name)
+	void GameObject::SetTag(const char* name)
+	{
+		assert(IsValid() && name != nullptr);
+		mTag = TagPool::FindTagByName(name);
+		assert(mTag != nullptr);
+	}
+
+	void GameObject::SetTag(std::string& name)
 	{
 		assert(IsValid());
-
-		auto iter = mScripts.find(name);
-		if (iter != mScripts.end())
-		{
-			Script* script = iter->second;
-			iter->second = nullptr;
-			assert(script != nullptr);
-			mScripts.erase(iter);
-			delete script;
-		}
+		mTag = TagPool::FindTagByName(name);
+		assert(mTag != nullptr);
 	}
 
-	void GameObject::RemoveScript(const char* name)
+	void GameObject::SetTag(const std::string& name)
 	{
 		assert(IsValid());
-		assert(name != nullptr);
-
-		auto iter = mScripts.find(name);
-		if (iter != mScripts.end())
-		{
-			Script* script = iter->second;
-			iter->second = nullptr;
-			assert(script != nullptr);
-			mScripts.erase(iter);
-			delete script;
-		}
+		mTag = TagPool::FindTagByName(name);
+		assert(mTag != nullptr);
 	}
 
-	void GameObject::RemoveScripts(std::vector<std::string>& names)
+	Tag* GameObject::GetTag() const
 	{
-		for (auto& name : names)
-		{
-			RemoveScript(name);
-		}
-	}
-
-	void GameObject::RemoveScripts(std::vector<const char*>& names)
-	{
-		for (auto& name : names)
-		{
-			RemoveScript(name);
-		}
-	}
-
-	Script* GameObject::FindScriptByName(std::string& name)
-	{
-		assert(IsValid());
-
-		auto iter = mScripts.find(name);
-
-		return iter != mScripts.end() ? iter->second : nullptr;
-	}
-
-	Script* GameObject::FindScriptByName(const char* name)
-	{
-		assert(IsValid());
-		assert(name != nullptr);
-
-		auto iter = mScripts.find(name);
-
-		return iter != mScripts.end() ? iter->second : nullptr;
+		assert(IsValid() && mTag != nullptr);
+		return mTag;
 	}
 
 	void GameObject::SetActive(bool state)
@@ -295,58 +164,78 @@ namespace cave
 		}
 
 		mbActive = state;
-		if (mLevel != nullptr)
-		{
-			if (!mbActive)
-			{
-				mLevel->removeActiveGameObject(*this);
-				return;
-			}
-			mLevel->addActiveGameObject(*this);
-		}
 	}
 
-	void GameObject::SetRenderer(Renderable& rendererable)
+	bool GameObject::IsActive() const
 	{
 		assert(IsValid());
+		return mbActive;
+	}
+
+	void GameObject::SetStatic(bool state)
+	{
+		assert(IsValid());
+		if (mbStatic == state)
+		{
+			return;
+		}
+
+		mbStatic = state;
+	}
+
+	bool GameObject::IsStatic() const
+	{
+		assert(IsValid());
+		return mbStatic;
+	}
+
+	Float2* GameObject::GetPosition() const
+	{
+		assert(IsValid());
+		return mTransform->GetPosition();
+	}
+
+	Float2* GameObject::GetRotation() const
+	{
+		assert(IsValid());
+		return mTransform->GetRotation();
+	}
+
+	Float2* GameObject::GetScale() const
+	{
+		assert(IsValid());
+		return mTransform->GetScale();
+	}
+
+	void GameObject::SetRenderable(Renderable* renderable)
+	{
+		assert(IsValid() && renderable != nullptr);
 		if (mRenderable != nullptr)
 		{
 			delete mRenderable;
 		}
-		mRenderable = &rendererable;
+		mRenderable = renderable;
 	}
 
-	void GameObject::SetPhysicsBody(PhysicsBody& physicsBody)
+	Renderable* GameObject::GetRenderable() const
 	{
 		assert(IsValid());
+		return mRenderable;
+	}
+
+	void GameObject::SetPhysicsBody(PhysicsBody* physicsBody)
+	{
+		assert(IsValid() && physicsBody != nullptr);
 		if (mPhysicsBody != nullptr)
 		{
-			delete mPhysicsBody;
+			delete physicsBody;
 		}
-		mPhysicsBody = &physicsBody;
-		mPhysicsBody->SetBody(mLevel->GetWorld()->GetPhysicsWorld()->CreateBody(mPhysicsBody->GetBodyDef()));
+		mPhysicsBody = physicsBody;
 	}
 
-	void GameObject::SetLevel(Level& level)
-	{
-		assert(IsValid() & level.IsValid());
-		mLevel = &level;
-	}
-
-	void GameObject::RemoveGameObjectInLevel()
+	PhysicsBody* GameObject::GetPhysicsBody() const
 	{
 		assert(IsValid());
-		assert(mLevel != nullptr);
-		mLevel->RemoveGameObject(*this);
+		return mPhysicsBody;
 	}
-
-#ifdef CAVE_BUILD_DEBUG
-	namespace GameObjectTest
-	{
-		void Test()
-		{
-			GameObject* gameObject = new GameObject("lapland");
-		}
-	}
-#endif //CAVE_BUILD_DEBUG
 }

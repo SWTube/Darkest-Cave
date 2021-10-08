@@ -28,40 +28,10 @@ namespace cave
 		Script& operator=(Script&& other) = delete;
 
 		virtual void Init(GameObject& gameObject);
-		virtual void FixedUpdate(GameObject& gameObject);
-		virtual void Update(GameObject& gameObject);
+		virtual void FixedUpdate(GameObject& gameObject, float elapsedTime);
+		virtual void Update(GameObject& gameObject, float elapsedTime);
 
 	private:
 		static std::unordered_set<std::string> mGlobalUniqueName;
     };
-
-#ifdef CAVE_BUILD_DEBUG
-	namespace ScriptTest
-	{
-
-	}
-
-	class TestScript : public Script
-	{
-	public:
-		TestScript(const char* name, uint32_t spriteIndex, uint32_t textureIndex, float speed);
-
-		virtual ~TestScript();
-
-		virtual void Init(GameObject& gameObject) override;
-		virtual void FixedUpdate(GameObject& gameObject) override;
-		virtual void Update(GameObject& gameObject) override;
-
-		uint32_t GetTextureIndex() const;
-
-		void SetSpeed(float speed);
-		void SetSpriteIndex(uint32_t index);
-
-	private:
-		uint32_t mSpriteIndex;
-		uint32_t mTextureIndex;
-		uint32_t mNextTextureIndex;
-		float mSpeed;
-	};
-#endif //CAVE_BUILD_DEBUG
 }
