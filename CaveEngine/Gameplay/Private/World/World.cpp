@@ -3,12 +3,20 @@
  * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
  */
 #include "Assertion/Assert.h"
+#include "Object/GameObject.h"
 #include "World/Level.h"
 #include "World/World.h"
 
 namespace cave
 {
 	std::unordered_set<std::string> World::mGlobalUniqueName;
+
+	World::World(const char* name) 
+		: Object(name, mGlobalUniqueName)
+		, mPhysicsWorld(new b2World(b2Vec2{ 0, -10 }))
+	{
+		assert(IsValid());
+	}
 
 	World::World(std::string& name)
 		: Object(name, mGlobalUniqueName)
@@ -17,7 +25,7 @@ namespace cave
 		assert(IsValid());
 	}
 
-	World::World(const char* name) 
+	World::World(const std::string& name)
 		: Object(name, mGlobalUniqueName)
 		, mPhysicsWorld(new b2World(b2Vec2{ 0, -10 }))
 	{
@@ -43,25 +51,28 @@ namespace cave
 		mLevels.clear();
 	}
 
-	void World::AddLevel(Level& level)
+	void World::AddLevel(const char* name)
 	{
-		assert(IsValid() & level.IsValid());
-
-		mLevels.insert({ level.GetName(), &level });
+		assert(IsValid() && IsInitialized() && name != nullptr);
+		Level* level = new Level(name);
+		assert(level != nullptr);
+		mLevels.insert({ level->GetName(), level });
 	}
 
-	void World::AddLevels(std::vector<Level*>& levels)
+	void World::AddLevel(std::string& name)
 	{
-		for (auto& level : levels)
-		{
-			AddLevel(*level);
-		}
+		assert(IsValid() && IsInitialized());
+		Level* level = new Level(name);
+		assert(level != nullptr);
+		mLevels.insert({ level->GetName(), level });
 	}
 
-	void World::RemoveLevel(Level& level)
+	void World::AddLevel(const std::string& name)
 	{
-		assert(level.IsValid());
-		RemoveLevel(level.GetName());
+		assert(IsValid() && IsInitialized());
+		Level* level = new Level(name);
+		assert(level != nullptr);
+		mLevels.insert({ level->GetName(), level });
 	}
 
 	void World::RemoveLevel(const std::string& name)
@@ -106,12 +117,145 @@ namespace cave
 		}
 	}
 
-	void World::RemoveLevels(std::vector<Level*>& levels)
+	Level* World::FindLevel(const char* name)
 	{
-		for (auto& level : levels)
+		assert(IsValid() && IsInitialized());
+
+		auto iter = mLevels.find(name);
+		return iter == mLevels.end() ? nullptr : iter->second;
+	}
+
+	Level* World::FindLevel(std::string& name)
+	{
+		assert(IsValid() && IsInitialized());
+
+		auto iter = mLevels.find(name);
+		return iter == mLevels.end() ? nullptr : iter->second;
+	}
+
+	Level* World::FindLevel(const std::string& name)
+	{
+		assert(IsValid() && IsInitialized());
+
+		auto iter = mLevels.find(name);
+		return iter == mLevels.end() ? nullptr : iter->second;
+	}
+
+	void World::AddGameObject(const char* name)
+	{
+		assert(IsValid() && IsInitialized() && name != nullptr);
+		GameObject* gameObject = new GameObject(name);
+		assert(gameObject != nullptr);
+		mAllGameObjects.insert({ gameObject->GetName(), gameObject });
+
+		if (gameObject->IsActive() && !gameObject->IsStatic())
 		{
-			RemoveLevel(*level);
+			mActiveGameObjects.insert({ gameObject->GetName(), gameObject });
 		}
+	}
+
+	void World::AddGameObject(std::string& name)
+	{
+		assert(IsValid() && IsInitialized());
+		GameObject* gameObject = new GameObject(name);
+		assert(gameObject != nullptr);
+		mAllGameObjects.insert({ gameObject->GetName(), gameObject });
+
+		if (gameObject->IsActive() && !gameObject->IsStatic())
+		{
+			mActiveGameObjects.insert({ gameObject->GetName(), gameObject });
+		}
+	}
+
+	void World::AddGameObject(const std::string& name)
+	{
+		assert(IsValid() && IsInitialized());
+		GameObject* gameObject = new GameObject(name);
+		assert(gameObject != nullptr);
+		mAllGameObjects.insert({ gameObject->GetName(), gameObject });
+
+		if (gameObject->IsActive() && !gameObject->IsStatic())
+		{
+			mActiveGameObjects.insert({ gameObject->GetName(), gameObject });
+		}
+	}
+
+	void World::RemoveGameObject(const char* name)
+	{
+		assert(IsValid() && IsInitialized() && name != nullptr);
+		auto iter = mActiveGameObjects.find(name);
+		if (iter != mActiveGameObjects.end())
+		{
+			mActiveGameObjects.erase(iter);
+		}
+
+		iter = mAllGameObjects.find(name);
+		if (iter != mAllGameObjects.end())
+		{
+			GameObject* gameObject = iter->second;
+			mAllGameObjects.erase(name);
+			delete gameObject;
+		}
+	}
+
+	void World::RemoveGameObject(std::string& name)
+	{
+		assert(IsValid() && IsInitialized());
+		auto iter = mActiveGameObjects.find(name);
+		if (iter != mActiveGameObjects.end())
+		{
+			mActiveGameObjects.erase(iter);
+		}
+
+		iter = mAllGameObjects.find(name);
+		if (iter != mAllGameObjects.end())
+		{
+			GameObject* gameObject = iter->second;
+			mAllGameObjects.erase(name);
+			delete gameObject;
+		}
+	}
+
+	void World::RemoveGameObject(const std::string& name)
+	{
+		assert(IsValid() && IsInitialized());
+		auto iter = mActiveGameObjects.find(name);
+		if (iter != mActiveGameObjects.end())
+		{
+			mActiveGameObjects.erase(iter);
+		}
+
+		iter = mAllGameObjects.find(name);
+		if (iter != mAllGameObjects.end())
+		{
+			GameObject* gameObject = iter->second;
+			mAllGameObjects.erase(name);
+			delete gameObject;
+		}
+	}
+
+	GameObject* World::FindGameObject(const char* name)
+	{
+		assert(IsValid() && IsInitialized() && name != nullptr);
+
+		auto iter = mAllGameObjects.find(name);
+		return iter == mAllGameObjects.end() ? nullptr : iter->second;
+	}
+
+	GameObject* World::FindGameObject(std::string& name)
+	{
+		assert(IsValid() && IsInitialized());
+
+		auto iter = mAllGameObjects.find(name);
+		return iter == mAllGameObjects.end() ? nullptr : iter->second;
+	}
+
+	GameObject* World::FindGameObject(const std::string& name)
+	{
+		assert(IsValid() && IsInitialized());
+
+		auto iter = mAllGameObjects.find(name);
+		return iter == mAllGameObjects.end() ? nullptr : iter->second;
 	}
 
 	void World::SetGravity(b2Vec2 gravity)
@@ -135,30 +279,34 @@ namespace cave
 	void World::Init()
 	{
 		assert(IsValid());
-		for (auto iter = mLevels.begin(); iter != mLevels.end(); ++iter)
+		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
 		{
 			iter->second->Init();
 		}
+		mbInitialized = true;
 	}
 
 	void World::FixedUpdate(float elapsedTimestep)
 	{
 		assert(IsValid());
 		mPhysicsWorld->Step(elapsedTimestep, 10, 8);
+		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
+		{
+			iter->second->FixedUpdate(elapsedTimestep);
+		}
 	}
 
 	void World::Update(float elapsedTimestep)
 	{
 		assert(IsValid());
-		
+		for (auto iter = mActiveGameObjects.begin(); iter != mActiveGameObjects.end(); ++iter)
+		{
+			iter->second->Update(elapsedTimestep);
+		}
 	}
 
-	bool World::IsLevelInWorld(Level& level)
+	bool World::IsInitialized() const
 	{
-		assert(IsValid() & level.IsValid());
-
-		auto iter = mLevels.find(level.GetName());
-
-		return iter != mLevels.end() ? true : false;
+		return mbInitialized;
 	}
 }
