@@ -28,14 +28,29 @@ namespace cave
 		void Update(float elapsedTimestep);
 		void Shutdown();
 
-		void AddWorld(World& world);
-		void RemoveWorldByName(std::string& worldName);
+		void AddWorld(const char* name);
+		void AddWorld(std::string& name);
+		void AddWorld(const std::string& name);
 
-		void SetCurrentWorld(std::string& worldName);
+		void RemoveWorld(const char* name);
+		void RemoveWorld(std::string& name);
+		void RemoveWorld(const std::string& name);
+
+		World* FindWorld(const char* name);
+		World* FindWorld(std::string& name);
+		World* FindWorld(const std::string& name);
+
+		void SetCurrentWorld(const char* name);
+		void SetCurrentWorld(std::string& name);
+		void SetCurrentWorld(const std::string& name);
 		World* GetCurrentWorld() const;
+
+		bool IsInitialized() const;
 
 	private:
 		std::unordered_map<std::string, World*> mWorlds;
-		World* mCurrentWorld;
+		World* mCurrentWorld = nullptr;
+
+		bool mbInitialized = false;
 	};
 }
