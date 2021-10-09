@@ -67,24 +67,25 @@ namespace cave
 		msg.message = WM_NULL;
 		PeekMessage(&msg, nullptr, 0u, 0u, PM_NOREMOVE);
 
-		Sprite s1;
-		s1.SetTextureWithFilePath("orange_mushroom.png");
-		s1.SetPosition({ 400,400 });
-		s1.SetAngle(90);
+		//Sprite s1;
+		//s1.SetTextureWithFilePath("orange_mushroom.png");
+		//s1.SetPosition({ 400,400 });
+		//s1.SetAngle(90);
 		
-		AnimatedSprite as1("default", "spaceship.dds", 4, 1, 3, true); // 애니메이션 이름,파일명, 가로 개수, 세로 개수, 재생시간, 반복여부.
-		as1.SetPosition({ 800,200 });
-		as1.SetAngle(90);
+		//AnimatedSprite as1("default", "spaceship.dds", 4, 1, 3, true); // 애니메이션 이름,파일명, 가로 개수, 세로 개수, 재생시간, 반복여부.
+		//as1.SetPosition({ 800,200 });
+		//as1.SetAngle(90);
 		
 		//TileSet tileSet("tiletest.png", 16, 16);
 		//TileSet tileSet2("sengtile.png", 16, 16);
 		//TileSet tileSet1("dirt-tiles.png",32,32);
-		TileSet tileSet3("global.png", 16, 16);
-		TileSet tileSet4("pipo.png", 32, 32);
+		//TileSet tileSet3("global.png", 16, 16);
+		//TileSet tileSet4("pipo.png", 32, 32);
 
-		uint16_t tiles1[4] = { tileSet4.GetTileId(8),tileSet4.GetTileId(9),tileSet4.GetTileId(16),tileSet4.GetTileId(17) };
-		TileGroup tg(2,2, tiles1);
+		//uint16_t tiles1[4] = { tileSet4.GetTileId(8),tileSet4.GetTileId(9),tileSet4.GetTileId(16),tileSet4.GetTileId(17) };
+		//TileGroup tg(2,2, tiles1);
 
+		/*
 		uint16_t tiles2[16] =
 		{
 			79, 80, 81, 82,
@@ -92,25 +93,26 @@ namespace cave
 			105, 106, 107, 108,
 			118, 119, 120, 121,
 		};
+		*/
 
-		TileGroup tg2(4, 4, tiles2);
+		//TileGroup tg2(4, 4, tiles2);
 
-		TileMap mapGround(100, 57, 16); 
-		mapGround.SetPosition(-800,450);
-		mRenderer->AddRenderable(&mapGround);
-		mapGround.FillMap(6);
-		mapGround.FillMap(tileSet4.GetTileId(0), 0, 30, 100, 57);
+	//	TileMap mapGround(100, 57, 16); 
+		//mapGround.SetPosition(-800,450);
+		//mRenderer->AddRenderable(&mapGround);
+		//mapGround.FillMap(6);
+		//mapGround.FillMap(tileSet4.GetTileId(0), 0, 30, 100, 57);
 		
-		TileMap tileMap(165,100,16);
-		tileMap.SetPosition(-800, 450);
-		mRenderer->AddRenderable(&tileMap);
-		tileMap.FillMap(43,20,0,40,20);
-		tileMap.FillMapWithTileGroup(tg2, 50, 1, 100, 26,2,2);
+		//TileMap tileMap(165,100,16);
+		//tileMap.SetPosition(-800, 450);
+		//mRenderer->AddRenderable(&tileMap);
+		//tileMap.FillMap(43,20,0,40,20);
+		//tileMap.FillMapWithTileGroup(tg2, 50, 1, 100, 26,2,2);
 
-		TileMap tileMap2(165, 50,32);
-		tileMap2.SetPosition(-800, 450);
-		mRenderer->AddRenderable(&tileMap2);
-		tileMap2.FillMapWithTileGroup(tg, 0, 15, 50, 40,1);
+		//TileMap tileMap2(165, 50,32);
+		//tileMap2.SetPosition(-800, 450);
+		//mRenderer->AddRenderable(&tileMap2);
+		//tileMap2.FillMapWithTileGroup(tg, 0, 15, 50, 40,1);
 
 
 		//tileMap2.LoadMap("D:\\Desktop\\SW-Project\\Darkist-Cave\\CaveEngine\\Graphics\\Resource\\map6.txt");
@@ -155,14 +157,14 @@ namespace cave
 				
 				// Update the scene.
 				mRenderer->Update();
-				s1.Render();
-				as1.Render();
+				//s1.Render();
+				//as1.Render();
 				//t1.Render();
 				//t2.Render();
 				//L1.Render();
 				//L2.Render();
 				//L3.Render();
-				testText.Render();
+				//testText.Render();
 				// Render frames during idle time (when no messages are waiting).
 				mRenderer->Render();
 
