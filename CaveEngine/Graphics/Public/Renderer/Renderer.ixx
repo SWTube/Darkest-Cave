@@ -5,6 +5,7 @@
 module;
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 #include "CoreTypes.h"
@@ -45,6 +46,7 @@ namespace cave
 
 		void Update();
 		void Render();
+		void Render(float deltaTime, std::unordered_map<std::string, Level*>& objects);
 		void Destroy();
 
 		bool CaptureScreenShot();
@@ -185,7 +187,7 @@ namespace cave
 
 		mBufferManager = reinterpret_cast<BufferManager*>(mPool->Allocate(sizeof(BufferManager)));
 		new(mBufferManager) BufferManager();
-		mBufferManager->Init(mDeviceResources, 1200);
+		mBufferManager->Init(mDeviceResources, 100);
 
 		//// set color shader
 		mColorShader = reinterpret_cast<ColorShader*>(mPool->Allocate(sizeof(ColorShader)));
@@ -205,7 +207,10 @@ namespace cave
 		return eResult::CAVE_OK;
 	}
 
+	void Renderer::Render(float deltaTime, std::unordered_map<std::string, Level*>& objects)
+	{
 
+	}
 	//--------------------------------------------------------------------------------------
 	// Render a frame
 	//--------------------------------------------------------------------------------------
@@ -254,7 +259,7 @@ namespace cave
 				}
 				spriteCount++;
 			}
-
+			 
 		}
 
 		if(!vertexData.empty()) mBufferManager->UpdateVertexBuffer(vertexData.data(), spriteCount);
@@ -289,8 +294,14 @@ namespace cave
 		{
 			TileMap* map = reinterpret_cast<TileMap*>(r);
 			map->render(context);
-			Texture* tex = map->GetTileTexture();
-			mShader->Render(context, 6 * map->GetMapSize(), 0, worldMatrix, viewMatrix, ortho, tex->GetTexture());
+			//Texture* tex = map->GetTileTexture(0,0);
+			uint32_t start = 0u;
+			for (auto i : map->GetUsedTexture())
+			{
+				mShader->Render(context, 6 * i.count, start, worldMatrix, viewMatrix, ortho, i.texture->GetTexture());
+				start += 6 * i.count;
+			}
+			//mShader->Render(context, 6 * map->GetMapSize(), 0, worldMatrix, viewMatrix, ortho, tex->GetTexture());
 		}
 
 		mDeviceResources->TurnOffAlphaBlending();

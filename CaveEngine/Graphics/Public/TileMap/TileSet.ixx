@@ -20,6 +20,7 @@ namespace cave
 	public:
 		TileSet(const std::filesystem::path& texturePath, uint16_t tileWidth, uint16_t tileHeight);
 		~TileSet();
+		constexpr uint16_t GetTileId(uint16_t index);
 
 	private:
 		Texture* mTileTexture;
@@ -62,6 +63,12 @@ namespace cave
 		}
 		mTiles.clear();
 
+	}
+
+	constexpr uint16_t TileSet::GetTileId(uint16_t index)
+	{
+		assert(index < mTiles.size());
+		return mTiles[index]->id;
 	}
 
 }
