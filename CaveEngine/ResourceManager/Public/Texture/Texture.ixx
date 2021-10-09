@@ -37,6 +37,7 @@ namespace cave
 		Texture(Texture&& other);
 		Texture& operator=(const Texture& other);
 		Texture& operator=(Texture&& other);
+	
 		virtual ~Texture();
 		MemoryPool* GetMemoryPool();
 
@@ -54,6 +55,7 @@ namespace cave
 		constexpr Float2 GetStartUV() const;
 		constexpr Float2 GetEndUV() const;
 
+		bool operator==(const Texture& other);
 
 	protected:
 		typedef struct TexturePointer
@@ -159,6 +161,11 @@ namespace cave
 	constexpr Float2 Texture::GetEndUV() const
 	{
 		return mEndUV;
+	}
+
+	bool Texture::operator==(const Texture& other)
+	{
+		return (this->mFilePath == other.mFilePath);
 	}
 
 	int32_t Texture::msTextureCount = -1;

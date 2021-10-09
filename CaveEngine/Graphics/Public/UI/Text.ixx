@@ -1,16 +1,24 @@
+/*!
+ * Copyright (c) 2021 SWTube. All rights reserved.
+ * Licensed under the GPL-3.0 License. See LICENSE file in the project root for license information.
+ */
+
 module;
+#include <wchar.h>
 #include "GraphicsApiPch.h"
 #include "CoreGlobals.h"
 export module Text;
 import Renderable;
+import cave.Core.String;
+import cave.Graphics.Resource.FontManager;
 
 namespace cave
 {
 	export class Text : public Renderable
 	{
 	public:
-		Text();
-		Text(LPCWSTR content, LPCWSTR fontName, float size);
+		Text() = delete;
+		Text(WString content, WString fontName, float size);
 		Text(const Text& other);
 		Text(Text&& other);
 		Text& operator=(const Text& other);
@@ -19,12 +27,12 @@ namespace cave
 
 		virtual void Destroy() override;
 
-		void SetContent(LPCWSTR content);
+		void SetContent(WString content);
 		void SetFontSize(float size);
 		void SetColor(float r,float g, float b, float a = 1.0f);
-		void SetFontName(LPCWSTR fontName);
-		LPCWSTR GetFontName();
-		LPCWSTR GetContent();
+		void SetFontName(WString fontName);
+		WString GetFontName();
+		WString GetContent();
 		D2D1::ColorF GetColor();
 
 	protected:
@@ -33,10 +41,16 @@ namespace cave
 		void makeRenderCommand() override;
 
 	private:
+		void updateLayout();
+	
+	private:
 		float mFontSize = 0.0f;
-		LPCWSTR mFontName = L"";
-		LPCWSTR mContent = L"";
+		WString mFontName = L"";
+		WString mContent = L"";
 		D2D1::ColorF mColor = D2D1::ColorF(0, 0, 0, 1);
+
+		IDWriteTextLayout* mLayout = nullptr;
+
 	};
 
 	void Text::update()
@@ -54,24 +68,27 @@ namespace cave
 
 	void Text::makeRenderCommand()
 	{
+		if (mLayout == nullptr)
+		{
+			updateLayout();
+		}
+
 		TextCommand* command = reinterpret_cast<TextCommand*>(mCommand);
 		command->type = RenderCommand::eType::TEXT_COMMAND;
-		command->fontName = mFontName;
-		command->content = mContent;
-		command->fontSize = mFontSize;
+		command->textLayout = mLayout;
+		mLayout->AddRef();
 		command->position = mPosition;
 		command->color = mColor;
 	}
 	
-	Text::Text()
-	{
 
-	}
-
-	Text::Text(LPCWSTR content, LPCWSTR fontName, float size)
-		:mFontSize(size),
+	Text::Text(WString content, WString fontName, float size)
+		:Renderable(),
+		mFontSize(size),
 		mFontName(fontName),
-		mContent(content)
+		mContent(content),
+		mColor(D2D1::ColorF(0, 0, 0, 1)),
+		mLayout(nullptr)
 	{
 
 	}
@@ -83,7 +100,11 @@ namespace cave
 		mContent(other.mContent),
 		mColor(other.mColor)
 	{
-
+		if (mLayout != nullptr)
+		{
+			mLayout->Release();
+			mLayout = nullptr;
+		}
 	}
 
 	Text::Text(Text&& other)
@@ -105,7 +126,10 @@ namespace cave
 			mContent = other.mContent;
 			mFontName = other.mFontName;
 			mColor = other.mColor;
+
+			mLayout = nullptr;
 			mCommand = nullptr;
+
 		}
 		return *this;
 	}
@@ -119,6 +143,8 @@ namespace cave
 			mContent = other.mContent;
 			mFontName = other.mFontName;
 			mColor = other.mColor;
+
+			mLayout = nullptr;
 			mCommand = nullptr;
 		}
 		return *this;
@@ -137,22 +163,45 @@ namespace cave
 			gCoreMemoryPool.Deallocate(mCommand, sizeof(TextCommand));
 			mCommand = nullptr;
 		}
-
+		if (mLayout != nullptr)
+		{
+			mLayout->Release();
+			mLayout = nullptr;
+		}
 	}
 
-	void Text::SetContent(LPCWSTR content)
+	void Text::updateLayout()
 	{
-		mContent = content;
+		if (mLayout != nullptr)
+		{
+			mLayout->Release();
+			mLayout = nullptr;
+		}
+		FontManager::GetInstance().GetFactory()->CreateTextLayout(mContent.GetCString(),mContent.GetLength(),
+			FontManager::GetInstance().GetFont(mFontName.GetCString()), 800, 500, &mLayout);
+		mLayout->SetFontSize(mFontSize, { 0,mContent.GetLength() });
 	}
 
-	void Text::SetFontName(LPCWSTR fontName)
+	void Text::SetContent(WString content)
+	{
+		if (mContent != content)
+		{
+			mContent = content;
+			updateLayout();
+		}
+	}
+
+	void Text::SetFontName(WString fontName)
 	{
 		mFontName = fontName;
+		updateLayout();
 	}
 
 	void Text::SetFontSize(float size)
 	{
 		mFontSize = size;
+
+		mLayout->SetFontSize(mFontSize, { 0,mContent.GetLength() });
 	}
 
 	void Text::SetColor(float r, float g, float b, float a)

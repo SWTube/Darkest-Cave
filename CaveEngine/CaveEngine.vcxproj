@@ -401,15 +401,24 @@
     <ClCompile Include="Physics\Private\World\PhysicsWorld.cpp" />
     <ClCompile Include="Graphics\Public\Device\BufferManager.ixx" />
     <ClCompile Include="Graphics\Public\Device\DeviceResources.ixx" />
+    <ClCompile Include="Graphics\Public\Device\ScreenGrab.ixx" />
     <ClCompile Include="Graphics\Public\Device\Window.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Camera.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Renderable.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\Renderer.ixx" />
     <ClCompile Include="Graphics\Public\Renderer\RenderQueue.ixx" />
+    <ClCompile Include="Graphics\Public\Shader\ColorShader.ixx" />
     <ClCompile Include="Graphics\Public\Shader\Shader.ixx" />
+    <ClCompile Include="Graphics\Public\Shape\Line.ixx" />
     <ClCompile Include="Graphics\Public\Sprite\AnimatedSprite.ixx" />
     <ClCompile Include="Graphics\Public\Sprite\Sprite.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\Grid.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\Tile.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\TileManager.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\TileMap.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\TileSet.ixx" />
     <ClCompile Include="Graphics\Public\UI\Text.ixx" />
+    <ClCompile Include="Graphics\Resource\FontManager.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\MultiTexture.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\Texture.ixx" />
     <ClCompile Include="ResourceManager\Public\Texture\TextureManager.ixx" />
@@ -433,6 +442,8 @@
     <FxCompile Include="Graphics\Shader\DirectXTestVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Graphics\Shader\color.ps" />
+    <None Include="Graphics\Shader\color.vs" />
     <None Include="Graphics\Shader\DirectXTest.fxh" />
     <None Include="Graphics\Shader\sprite.frag" />
     <None Include="Graphics\Shader\sprite.vert" />

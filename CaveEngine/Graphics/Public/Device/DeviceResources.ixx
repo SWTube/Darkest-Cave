@@ -6,6 +6,7 @@
 
 module;
 #include <wchar.h>
+#include <wincodec.h>
 #include "GraphicsApiPch.h"
 #include "CoreTypes.h"
 #include "Memory/MemoryPool.h"
@@ -14,6 +15,7 @@ export module DeviceResources;
 
 export import Window;
 import cave.Core.String;
+import ScreenGrab;
 
 namespace cave
 {
@@ -57,7 +59,7 @@ namespace cave
 		ID3D11RenderTargetView* GetRenderTarget();
 		ID3D11DepthStencilView* GetDepthStencil();
 		
-		IDWriteFactory* GetDWFactory();
+		IDWriteFactory3* GetDWFactory();
 		ID2D1RenderTarget* GetD2DRenderTarget();
 
 		virtual void TurnZBufferOn();
@@ -68,6 +70,8 @@ namespace cave
 
 		virtual void RenderStart();
 		virtual void RenderEnd();
+
+		bool SaveBufferToImage(LPCTSTR FileName);
 
 	private:
 		MemoryPool* mPool = nullptr;
@@ -104,7 +108,7 @@ namespace cave
 		// D2D 
 		//-----------------------------------------------------------------------------
 
-		IDWriteFactory* mDwFactory = nullptr;
+		IDWriteFactory3* mDwFactory = nullptr;
 		//IDWriteTextFormat* mTextFormat = nullptr;
 		ID2D1RenderTarget* mD2RenderTarget = nullptr;
 
@@ -672,7 +676,7 @@ namespace cave
 
 		DWriteCreateFactory(
 			DWRITE_FACTORY_TYPE_SHARED,
-			__uuidof(IDWriteFactory),
+			__uuidof(IDWriteFactory3),
 			reinterpret_cast<IUnknown**>(&mDwFactory)
 		);
 
@@ -832,7 +836,7 @@ namespace cave
 		return mDepthStencilView;
 	}
 
-	IDWriteFactory* DeviceResources::GetDWFactory()
+	IDWriteFactory3* DeviceResources::GetDWFactory()
 	{
 		return mDwFactory;
 	}
@@ -1027,5 +1031,19 @@ namespace cave
 
 		// 알파 블렌딩을 켭니다.
 		mImmediateContext->OMSetBlendState(mAlphaDisableBlendingState, blendFactor, 0xffffffff);
+	}
+
+	bool DeviceResources::SaveBufferToImage(LPCTSTR FileName) 
+	{
+		HRESULT hr = cave::ScreenGrab::SaveWICTextureToFile(mImmediateContext, mBackBuffer, GUID_ContainerFormatJpeg, FileName);
+
+		if (SUCCEEDED(hr))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 } //namespace cave
