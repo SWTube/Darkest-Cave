@@ -379,13 +379,30 @@
     <ClCompile Include="Graphics\Public\Device\ScreenGrab.ixx">
       <Filter>Header Files\Graphics\Device</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Public\Shape\Line.ixx" />
-    <ClCompile Include="Graphics\Public\Shader\ColorShader.ixx" />
-    <ClCompile Include="Graphics\Public\TileMap\Grid.ixx" />
-    <ClCompile Include="Graphics\Public\TileMap\TileMap.ixx" />
-    <ClCompile Include="Graphics\Public\TileMap\TileSet.ixx" />
-    <ClCompile Include="Graphics\Public\TileMap\TileManager.ixx" />
-    <ClCompile Include="Graphics\Public\TileMap\Tile.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\Grid.ixx">
+      <Filter>Header Files\Graphics\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\TileMap\Tile.ixx">
+      <Filter>Header Files\Graphics\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\TileMap\TileManager.ixx">
+      <Filter>Header Files\Graphics\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\TileMap\TileMap.ixx">
+      <Filter>Header Files\Graphics\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\TileMap\TileSet.ixx">
+      <Filter>Header Files\Graphics\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Shader\ColorShader.ixx">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Resource\FontManager.ixx">
+      <Filter>Header Files\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Shape\Line.ixx">
+      <Filter>Header Files\Graphics\Shape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">
@@ -780,8 +797,12 @@
     <None Include="Graphics\Shader\sprite.vert">
       <Filter>Shader</Filter>
     </None>
-    <None Include="Graphics\Shader\color.ps" />
-    <None Include="Graphics\Shader\color.vs" />
+    <None Include="Graphics\Shader\color.vs">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Graphics\Shader\color.ps">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -981,6 +1002,12 @@
     </Filter>
     <Filter Include="Header Files\ThirdParty\box2d">
       <UniqueIdentifier>{3a94edc1-bcdd-459b-8216-48bb0276d23b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\TileMap">
+      <UniqueIdentifier>{8f83bc43-64c4-4f06-9a99-6aaef1637946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Shape">
+      <UniqueIdentifier>{0aba43fc-c934-4c52-be64-df302b1191ef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
