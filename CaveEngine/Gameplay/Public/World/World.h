@@ -45,6 +45,8 @@ namespace cave
 		Level* FindLevel(std::string& name);
 		Level* FindLevel(const std::string& name);
 
+		std::unordered_map<std::string, Level*>& GetStreamingLevels();
+
 		void AddGameObject(const char* name);
 		void AddGameObject(std::string& name);
 		void AddGameObject(const std::string& name);
@@ -77,6 +79,7 @@ namespace cave
 		std::vector<GameObject*> mRemoveGameObjectList;
 
 		std::unordered_map<std::string, Level*> mLevels;
+		std::unordered_map<std::string, Level*> mStreamingLevels;
 		
 		b2World* mPhysicsWorld = nullptr;
 		bool mbInitialized = false;

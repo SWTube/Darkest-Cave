@@ -190,6 +190,12 @@ namespace cave
 		return std::move(result);
 	}
 
+	std::unordered_map<std::string, GameObject*>& Level::GetGameObjects()
+	{
+		assert(IsValid());
+		return mGameObjects;
+	}
+
 	void Level::SetWorldOwner(World* owner)
 	{
 		assert(IsValid() && owner != nullptr);

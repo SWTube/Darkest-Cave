@@ -141,6 +141,12 @@ namespace cave
 		return iter == mLevels.end() ? nullptr : iter->second;
 	}
 
+	std::unordered_map<std::string, Level*>& World::GetStreamingLevels()
+	{
+		assert(IsValid() && IsInitialized());
+		return mStreamingLevels;
+	}
+
 	void World::AddGameObject(const char* name)
 	{
 		assert(IsValid() && IsInitialized() && name != nullptr);

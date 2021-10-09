@@ -49,6 +49,8 @@ namespace cave
 		std::vector<GameObject*>&& FindGameObjectsByTag(std::string& tag);
 		std::vector<GameObject*>&& FindGameObjectsByTag(const std::string& tag);
 
+		std::unordered_map<std::string, GameObject*>& GetGameObjects();
+
 		void SetWorldOwner(World* owner);
 		World* GetWorldOwner() const;
 
