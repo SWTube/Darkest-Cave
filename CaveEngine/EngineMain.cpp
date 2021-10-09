@@ -109,7 +109,43 @@ int main(int32_t argc, char** argv)
 	//DemoTest();
 	//RenderTest();
 #ifdef CAVE_BUILD_DEBUG
-	
+	//TicTocTimer clock = tic();
+	//cave::FileSystemTest::Main();
+	RenderTest();
+	//cave::StringTest::Main();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "String Test: Elapsed time %f seconds.", toc(&clock));
+
+	//clock = tic();
+	//cave::WStringTest::Main();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "WString Test: Elapsed time %f seconds.", toc(&clock));
+
+	//KeyboardTest();
+
+	//clock = tic();
+	//cave::StackTest::Main();
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "Elapsed time %f seconds.", toc(&clock));
+
+	//clock = tic();
+	cave::HashTableTest::BucketInterface();
+	//cave::HashTable hashTable(sizeof(uint32_t));
+	//uint32_t keys[256];
+	//uint32_t values[256];
+	//srand(time(nullptr));
+
+	//double averageInsertionTime = 0.0;
+	//for (uint32_t i = 0u; i < 256u; ++i)
+	//{
+	//	keys[i] = i;
+	//	values[i] = static_cast<uint32_t>(rand());
+	//	clock = tic();
+	//	hashTable.Insert(&keys[i], &values[i]);
+	//	double insertionTime = toc(&clock);
+	//	LOGDF(cave::eLogChannel::CORE_TIMER, "%3u: HashTable Insert elapsed time %lf seconds.", i, insertionTime);
+	//	averageInsertionTime += insertionTime;
+	//}
+	//LOGDF(cave::eLogChannel::CORE_TIMER, "HashTable Insert average elapsed time %lf seconds.", averageInsertionTime / 256.0);
+	// _CrtDumpMemoryLeaks();
+
 #endif
 	// Cleanup is handled in destructors.
     return 0;
@@ -323,6 +359,7 @@ void DemoTest()
 	world->AddLevel(*level);
 	gameInstance->AddWorld(*world);*/
 
+	cave::Renderer* renderer = main.GetRenderer();
 
 	if (result == cave::eResult::CAVE_OK)
 	{
@@ -330,11 +367,15 @@ void DemoTest()
 		//deviceResources->GoFullScreen();
 
 		//// Whoops! We resized the "window" when we went full-screen. Better
-
-		// Run the program.
-		result = main->Run();
+		//// tell the renderer.
+		//renderer->CreateWindowSizeDependentResources();
+	// 	// Run the program.
+		result = main.Run();
 	}
-	//main->Destroy();
+
+	renderer->CaptureScreenShot();
+
+	main.Destroy();
 }
 
 //void KeyboardTest()

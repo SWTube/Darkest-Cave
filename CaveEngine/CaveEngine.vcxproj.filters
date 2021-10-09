@@ -375,6 +375,17 @@
     <ClCompile Include="Physics\Private\Body\RigidBody.cpp">
       <Filter>Source Files\Physics\Body</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Resource\FontManager.ixx" />
+    <ClCompile Include="Graphics\Public\Device\ScreenGrab.ixx">
+      <Filter>Header Files\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Public\Shape\Line.ixx" />
+    <ClCompile Include="Graphics\Public\Shader\ColorShader.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\Grid.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\TileMap.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\TileSet.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\TileManager.ixx" />
+    <ClCompile Include="Graphics\Public\TileMap\Tile.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Public\CoreGlobals.h">
@@ -769,6 +780,8 @@
     <None Include="Graphics\Shader\sprite.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Graphics\Shader\color.ps" />
+    <None Include="Graphics\Shader\color.vs" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
