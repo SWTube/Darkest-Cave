@@ -30,14 +30,6 @@ namespace cave
 		mWorld = NULL;
 	}
 
-	void ContactListener::BeginContact(b2Contact* contact)
-	{
-		b2Fixture* fixtureA = contact->GetFixtureA();
-		b2Fixture* fixtureB = contact->GetFixtureB();
-		b2Body* bodyA = fixtureA->GetBody();
-		b2Body* bodyB = fixtureB->GetBody();
-	}
-
 	void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 	{
 		const b2Manifold* manifold = contact->GetManifold();

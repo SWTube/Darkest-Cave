@@ -29,7 +29,10 @@ namespace cave
 		ContactListener();
 		virtual ~ContactListener();
 
-		virtual void BeginContact(b2Contact* contact) override;
+		virtual void BeginContact(b2Contact* contact) override
+		{
+			B2_NOT_USED(contact);
+		}
 		virtual void EndContact(b2Contact* contact) override
 		{
 			B2_NOT_USED(contact);
