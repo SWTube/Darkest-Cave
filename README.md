@@ -35,7 +35,7 @@ Game Team develops the custom engine for the game, and the game application itse
 ### Gameplay
 * [Nuonlee](https://github.com/Nuonlee) - Senior Gameplay Engineer
 * [JinnnK](https://github.com/JinnnK) - Gameplay Engineer
-* [seungjunpark-khu](https://github.com/seungjunpark-khu) - Gameplay Engineer
+* [seungjunpark-khu](https://github.com/seungjun-Park) - Gameplay Engineer
 
 ### Core
 * [Alegruz](https://github.com/Alegruz) - Senior Core Engineer
